@@ -1,4 +1,4 @@
-package com.ecosense.android.ui.theme
+package com.ecosense.android.core.layers.presentation.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.MaterialTheme

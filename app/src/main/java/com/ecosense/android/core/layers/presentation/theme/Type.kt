@@ -1,4 +1,4 @@
-package com.ecosense.android.ui.theme
+package com.ecosense.android.core.layers.presentation.theme
 
 import androidx.compose.material.Typography
 import androidx.compose.ui.text.TextStyle
