@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "700975405784",
+    "project_id": "ecosense-bangkit",
+    "storage_bucket": "ecosense-bangkit.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:700975405784:android:6300c12025925e018e55ad",
+        "android_client_info": {
+          "package_name": "com.ecosense.android"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "700975405784-turn28oap23hefqq9aij0j74e36skkus.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCmV5lb6jxiu_NnM2kpiiHWX1A2J0jf6BQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "700975405784-turn28oap23hefqq9aij0j74e36skkus.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
