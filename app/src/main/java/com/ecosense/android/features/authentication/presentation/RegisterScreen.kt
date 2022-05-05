@@ -14,9 +14,9 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
 @Composable
 @Destination
-fun SignUpScreen(
+fun RegisterScreen(
     navigator: DestinationsNavigator,
-    viewModel: SignUpViewModel = hiltViewModel()
+    viewModel: RegisterViewModel = hiltViewModel()
 ) {
     val scaffoldState = rememberScaffoldState()
 
