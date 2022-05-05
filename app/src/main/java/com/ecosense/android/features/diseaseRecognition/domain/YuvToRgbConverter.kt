@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ecosense.android.features.diseaseRecognition.presentation
+package com.ecosense.android.features.diseaseRecognition.domain
 
 import android.content.Context
 import android.graphics.Bitmap

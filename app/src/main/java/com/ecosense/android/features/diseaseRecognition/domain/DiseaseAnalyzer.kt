@@ -1,4 +1,4 @@
-package com.ecosense.android.features.diseaseRecognition.presentation
+package com.ecosense.android.features.diseaseRecognition.domain
 
 import android.content.Context
 import android.graphics.Bitmap
@@ -6,7 +6,6 @@ import android.graphics.Matrix
 import androidx.camera.core.ExperimentalGetImage
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageProxy
-import com.ecosense.android.features.diseaseRecognition.domain.RecognisedDisease
 import com.ecosense.android.ml.FlowerModel
 import org.tensorflow.lite.gpu.CompatibilityList
 import org.tensorflow.lite.support.image.TensorImage
