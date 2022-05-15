@@ -3,4 +3,6 @@
     <string name="discover_campaign">Discover campaign</string>
     <string name="plant_disease_recognition">Plant disease recognition</string>
     <string name="profile">Profile</string>
+    <string name="campaign">Campaign</string>
+    <string name="plant">Plant</string>
 </resources>
