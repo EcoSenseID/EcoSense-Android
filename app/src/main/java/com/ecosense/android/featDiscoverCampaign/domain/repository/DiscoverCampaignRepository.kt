@@ -6,4 +6,5 @@ import kotlinx.coroutines.flow.Flow
 
 interface DiscoverCampaignRepository {
     fun getCampaigns(): Flow<Resource<List<Campaign>>>
+    fun getBrowseCampaign(): Flow<Resource<List<Campaign>>>
 }
