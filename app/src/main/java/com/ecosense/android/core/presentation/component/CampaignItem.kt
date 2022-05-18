@@ -1,4 +1,4 @@
-package com.ecosense.android.featDiscoverCampaign.presentation.component
+package com.ecosense.android.core.presentation.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable

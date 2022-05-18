@@ -12,7 +12,7 @@ import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.ecosense.android.featDiscoverCampaign.presentation.component.CampaignItem
+import com.ecosense.android.core.presentation.component.CampaignItem
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
