@@ -11,8 +11,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val authenticationRepository: AuthenticationRepository
+    authenticationRepository: AuthenticationRepository
 ) : ViewModel() {
     val isLoggedIn: StateFlow<Boolean> = authenticationRepository.isLoggedIn()
-        .stateIn(viewModelScope, SharingStarted.Lazily, false)
+        .stateIn(viewModelScope, SharingStarted.Eagerly, true)
 }

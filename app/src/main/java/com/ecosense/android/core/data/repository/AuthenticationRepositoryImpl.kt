@@ -1,17 +1,36 @@
 package com.ecosense.android.core.data.repository
 
-import com.ecosense.android.core.domain.model.LoginResult
+import android.util.Log
+import com.ecosense.android.R
+import com.ecosense.android.core.data.util.toUser
+import com.ecosense.android.core.domain.model.User
 import com.ecosense.android.core.domain.repository.AuthenticationRepository
 import com.ecosense.android.core.util.Resource
 import com.ecosense.android.core.util.SimpleResource
+import com.ecosense.android.core.util.UIText
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
-import kotlinx.coroutines.flow.flow
 
 class AuthenticationRepositoryImpl : AuthenticationRepository {
+
     private val firebaseAuth = FirebaseAuth.getInstance()
+
+    override fun getUser(): Flow<User> = callbackFlow {
+        val authStateListener = FirebaseAuth.AuthStateListener {
+            it.currentUser?.let { firebaseUser ->
+                trySend(firebaseUser.toUser())
+            }
+        }
+
+        firebaseAuth.addAuthStateListener(authStateListener)
+
+        awaitClose {
+            firebaseAuth.removeAuthStateListener(authStateListener)
+            channel.close()
+        }
+    }
 
     override fun isLoggedIn(): Flow<Boolean> = callbackFlow {
         val authStateListener = FirebaseAuth.AuthStateListener {
@@ -19,21 +38,55 @@ class AuthenticationRepositoryImpl : AuthenticationRepository {
         }
 
         firebaseAuth.addAuthStateListener(authStateListener)
-        awaitClose { firebaseAuth.removeAuthStateListener(authStateListener) }
+
+        awaitClose {
+            firebaseAuth.removeAuthStateListener(authStateListener)
+            channel.close()
+        }
     }
 
     override fun login(
         email: String,
         password: String
-    ): Flow<Resource<LoginResult>> = flow {
-        // TODO: implement login with email
+    ): Flow<SimpleResource> = callbackFlow {
+        firebaseAuth
+            .signInWithEmailAndPassword(email, password)
+            .addOnCompleteListener {
+                when {
+                    it.isSuccessful -> trySend(Resource.Success(Unit))
+                    else -> {
+                        Log.d("AuthRepo", "login: ${it.exception}")
+                        trySend(Resource.Error(UIText.StringResource(R.string.login_failed)))
+                    }
+                }
+            }
+        awaitClose {
+            channel.close()
+        }
+    }
+
+    override fun loginWithGoogle(): Flow<SimpleResource> = callbackFlow {
+        // TODO implement
     }
 
     override fun register(
-        name: String,
         email: String,
         password: String
-    ): Flow<SimpleResource> = flow {
-        // TODO: implement register with email
+    ): Flow<SimpleResource> = callbackFlow {
+        firebaseAuth
+            .createUserWithEmailAndPassword(email, password)
+            .addOnCompleteListener {
+                when {
+                    it.isSuccessful -> trySend(Resource.Success(Unit))
+                    else -> {
+                        Log.d("AuthRepo", "login: ${it.exception}")
+                        trySend(Resource.Error(UIText.StringResource(R.string.register_failed)))
+                    }
+                }
+            }
+    }
+
+    override fun logout() {
+        firebaseAuth.signOut()
     }
 }
