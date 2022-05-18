@@ -9,10 +9,10 @@ object Faker {
         for (i in 1..50) {
             result.add(
                 Campaign(
-                    posterUrl = "https://cdn.statically.io/og/poster_$i.jpg",
+                    posterUrl = "https://cdn.statically.io/og/theme=dark/Campaign$i.jpg",
                     title = "Lorem Ipsum $i",
                     endDate = "2022-05-${i}T00:00:00.000Z",
-                    category = "Dolor $i",
+                    category = listOf("Dolor $i"),
                     participantsCount = (1000..5000).random(),
                     isTrending = i < 3,
                     isNew = i < 5
