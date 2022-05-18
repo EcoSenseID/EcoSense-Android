@@ -24,12 +24,19 @@ class LoginViewModel @Inject constructor(
     private val _password = mutableStateOf("")
     val password: State<String> = _password
 
+    private val _isPasswordVisible = mutableStateOf(false)
+    val isPasswordVisible: State<Boolean> = _isPasswordVisible
+
     fun onEmailValueChange(value: String) {
         _email.value = value
     }
 
     fun onPasswordValueChange(value: String) {
         _password.value = value
+    }
+
+    fun onChangePasswordVisibility() {
+        _isPasswordVisible.value = !isPasswordVisible.value
     }
 
     private var onLoginClickJob: Job? = null

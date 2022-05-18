@@ -14,4 +14,6 @@
     <string name="register_failed">Register failed</string>
     <string name="email">Email</string>
     <string name="logout">Logout</string>
+    <string name="hide_password">Hide password</string>
+    <string name="show_password">Show password</string>
 </resources>

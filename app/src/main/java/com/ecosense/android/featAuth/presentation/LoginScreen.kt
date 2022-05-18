@@ -1,17 +1,17 @@
 package com.ecosense.android.featAuth.presentation
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.ecosense.android.R
 import com.ecosense.android.core.presentation.AuthNavGraph
 import com.ecosense.android.core.presentation.theme.spacing
+import com.ecosense.android.featAuth.presentation.component.EmailTextField
+import com.ecosense.android.featAuth.presentation.component.PasswordTextField
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
@@ -33,22 +33,18 @@ fun LoginScreen(
 
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
 
-            TextField(
+            EmailTextField(
                 value = viewModel.email.value,
-                onValueChange = { viewModel.onEmailValueChange(it) },
-                modifier = Modifier.fillMaxWidth(),
-                placeholder = { Text(text = stringResource(id = R.string.email)) },
-                shape = RoundedCornerShape(8.dp)
+                onValueChange = viewModel::onEmailValueChange
             )
 
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
 
-            TextField(
+            PasswordTextField(
                 value = viewModel.password.value,
-                onValueChange = { viewModel.onPasswordValueChange(it) },
-                modifier = Modifier.fillMaxWidth(),
-                placeholder = { Text(text = stringResource(R.string.password)) },
-                shape = RoundedCornerShape(8.dp)
+                isVisible = viewModel.isPasswordVisible.value,
+                onValueChange = viewModel::onPasswordValueChange,
+                onChangeVisibility = viewModel::onChangePasswordVisibility
             )
 
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
