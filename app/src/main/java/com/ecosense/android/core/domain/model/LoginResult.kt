@@ -1,4 +1,4 @@
-package com.ecosense.android.featAuthentication.domain.model
+package com.ecosense.android.core.domain.model
 
 data class LoginResult(
     val name: String,
