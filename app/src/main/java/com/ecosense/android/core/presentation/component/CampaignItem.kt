@@ -10,7 +10,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
@@ -18,6 +17,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import coil.size.Scale
+import com.ecosense.android.core.presentation.theme.spacing
 import com.ecosense.android.featDiscoverCampaign.domain.model.Campaign
 
 @Composable
@@ -29,11 +29,15 @@ fun CampaignItem(
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
-            .padding(start = 16.dp, end = 16.dp, bottom = 16.dp)
+            .padding(
+                start = MaterialTheme.spacing.medium,
+                end = MaterialTheme.spacing.medium,
+                bottom = MaterialTheme.spacing.medium
+            )
             .clip(shape = RoundedCornerShape(8.dp))
             .clickable(onClick = onClick)
             .background(MaterialTheme.colors.surface)
-            .padding(16.dp)
+            .padding(MaterialTheme.spacing.medium)
             .fillMaxWidth()
     ) {
         Column(
@@ -65,7 +69,7 @@ fun CampaignItem(
             }
         }
 
-        Spacer(modifier = Modifier.width(16.dp))
+        Spacer(modifier = Modifier.width(MaterialTheme.spacing.medium))
 
         Column(modifier = Modifier.fillMaxWidth()) {
             Text(
