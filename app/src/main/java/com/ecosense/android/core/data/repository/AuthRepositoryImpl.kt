@@ -4,7 +4,7 @@ import android.util.Log
 import com.ecosense.android.R
 import com.ecosense.android.core.data.util.toUser
 import com.ecosense.android.core.domain.model.User
-import com.ecosense.android.core.domain.repository.AuthenticationRepository
+import com.ecosense.android.core.domain.repository.AuthRepository
 import com.ecosense.android.core.util.Resource
 import com.ecosense.android.core.util.SimpleResource
 import com.ecosense.android.core.util.UIText
@@ -13,7 +13,7 @@ import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 
-class AuthenticationRepositoryImpl : AuthenticationRepository {
+class AuthRepositoryImpl : AuthRepository {
 
     private val firebaseAuth = FirebaseAuth.getInstance()
 

@@ -38,7 +38,7 @@ class MainActivity : ComponentActivity() {
                         .background(MaterialTheme.colors.background)
                 ) { scaffoldPadding ->
                     DestinationsNavHost(
-                        navGraph = if (isLoggedIn) NavGraphs.root else NavGraphs.authentication,
+                        navGraph = if (isLoggedIn) NavGraphs.root else NavGraphs.auth,
                         engine = engine,
                         navController = navController,
                         modifier = Modifier.padding(scaffoldPadding)

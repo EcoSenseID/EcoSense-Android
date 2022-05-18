@@ -1,4 +1,4 @@
-package com.ecosense.android.featAuthentication.presentation
+package com.ecosense.android.featAuth.presentation
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -9,13 +9,13 @@ import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.ecosense.android.core.presentation.AuthenticationNavGraph
+import com.ecosense.android.core.presentation.AuthNavGraph
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
 @Composable
 @Destination
-@AuthenticationNavGraph
+@AuthNavGraph
 fun RegisterScreen(
     navigator: DestinationsNavigator,
     viewModel: RegisterViewModel = hiltViewModel()

@@ -1,7 +1,7 @@
 package com.ecosense.android.di
 
-import com.ecosense.android.core.data.repository.AuthenticationRepositoryImpl
-import com.ecosense.android.core.domain.repository.AuthenticationRepository
+import com.ecosense.android.core.data.repository.AuthRepositoryImpl
+import com.ecosense.android.core.domain.repository.AuthRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -15,9 +15,8 @@ import javax.inject.Singleton
 object CoreModule {
     @Provides
     @Singleton
-    fun provideAuthenticationRepository(): AuthenticationRepository =
-        AuthenticationRepositoryImpl()
-
+    fun provideAuthRepository(): AuthRepository =
+        AuthRepositoryImpl()
 
     @Provides
     @Singleton

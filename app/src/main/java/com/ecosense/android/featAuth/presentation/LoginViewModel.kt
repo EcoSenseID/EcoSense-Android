@@ -1,11 +1,11 @@
-package com.ecosense.android.featAuthentication.presentation
+package com.ecosense.android.featAuth.presentation
 
 import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.ecosense.android.core.domain.repository.AuthenticationRepository
+import com.ecosense.android.core.domain.repository.AuthRepository
 import com.ecosense.android.core.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
@@ -16,7 +16,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val repository: AuthenticationRepository
+    private val repository: AuthRepository
 ) : ViewModel() {
     private val _email = mutableStateOf("")
     val email: State<String> = _email

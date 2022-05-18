@@ -1,4 +1,4 @@
-package com.ecosense.android.featAuthentication.presentation
+package com.ecosense.android.featAuth.presentation
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -10,14 +10,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.ecosense.android.R
-import com.ecosense.android.core.presentation.AuthenticationNavGraph
+import com.ecosense.android.core.presentation.AuthNavGraph
 import com.ecosense.android.core.presentation.theme.spacing
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
 @Composable
 @Destination
-@AuthenticationNavGraph(start = true)
+@AuthNavGraph(start = true)
 fun LoginScreen(
     navigator: DestinationsNavigator,
     viewModel: LoginViewModel = hiltViewModel()
