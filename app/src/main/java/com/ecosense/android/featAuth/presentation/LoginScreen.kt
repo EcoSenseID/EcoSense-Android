@@ -1,5 +1,7 @@
 package com.ecosense.android.featAuth.presentation
 
+import android.util.Log
+import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
@@ -13,8 +15,11 @@ import com.ecosense.android.R
 import com.ecosense.android.core.presentation.AuthNavGraph
 import com.ecosense.android.core.presentation.theme.spacing
 import com.ecosense.android.destinations.RegisterScreenDestination
+import com.ecosense.android.featAuth.domain.GoogleSignInContract
 import com.ecosense.android.featAuth.presentation.component.EmailTextField
 import com.ecosense.android.featAuth.presentation.component.PasswordTextField
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.GoogleAuthProvider
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
@@ -25,6 +30,23 @@ fun LoginScreen(
     navigator: DestinationsNavigator,
     viewModel: LoginViewModel = hiltViewModel()
 ) {
+    val signInLauncher = rememberLauncherForActivityResult(
+        contract = GoogleSignInContract()
+    ) { account ->
+        try {
+            if (account != null) {
+                val credential = GoogleAuthProvider.getCredential(account.idToken, null)
+                val firebaseAuth = FirebaseAuth.getInstance()
+                firebaseAuth.signInWithCredential(credential)
+                Log.d("TAG", "LoginScreen: SUCCESS ${firebaseAuth.currentUser?.email}")
+            } else {
+                Log.d("TAG", "LoginScreen: ERROR failed to get account")
+            }
+        } catch (e: Exception) {
+            Log.d("TAG", "LoginScreen: ERROR ${e.message}")
+        }
+    }
+
     val scaffoldState = rememberScaffoldState()
 
     Scaffold(
@@ -92,7 +114,10 @@ fun LoginScreen(
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
 
             Button(
-                onClick = { viewModel.onLoginWithGoogleClick() },
+                onClick = {
+                    viewModel.onLoginWithGoogleClick()
+                    signInLauncher.launch(0)
+                },
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(text = stringResource(R.string.login_with_google))
