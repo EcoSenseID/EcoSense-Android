@@ -12,6 +12,7 @@ import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.OnFailureListener
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.GoogleAuthProvider
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
@@ -94,8 +95,41 @@ class AuthRepositoryImpl : AuthRepository {
         }
     }
 
-    override fun loginWithGoogle(): Flow<SimpleResource> = callbackFlow {
-        // TODO implement
+    override fun loginWithGoogle(
+        idToken: String
+    ): Flow<SimpleResource> = callbackFlow {
+
+        trySend(Resource.Loading())
+
+        try {
+            val credential = GoogleAuthProvider.getCredential(idToken, null)
+
+            val onCompleteListener = OnCompleteListener<AuthResult> {
+                when {
+                    it.isSuccessful -> trySend(Resource.Success(Unit))
+                    else -> {
+                        trySend(Resource.Error(UIText.StringResource(R.string.login_failed)))
+                        Log.d("AuthRepo", "login: ${it.exception}")
+                    }
+                }
+            }
+
+            val onFailureListener = OnFailureListener {
+                trySend(Resource.Error(UIText.StringResource(R.string.login_failed)))
+                Log.d("AuthRepo", "login: ${it.message}")
+            }
+
+            firebaseAuth
+                .signInWithCredential(credential)
+                .addOnCompleteListener(onCompleteListener)
+                .addOnFailureListener(onFailureListener)
+
+        } catch (t: Throwable) {
+            trySend(Resource.Error(UIText.StringResource(R.string.login_failed)))
+            Log.d("TAG", "login: ${t.message}")
+        }
+
+        awaitClose { channel.close() }
     }
 
     override fun register(

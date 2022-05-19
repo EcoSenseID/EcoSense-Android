@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ecosense.android.core.domain.repository.AuthRepository
 import com.ecosense.android.core.util.Resource
+import com.ecosense.android.featAuth.domain.usecase.LoginUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.launchIn
@@ -16,6 +17,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
+    private val loginUseCases: LoginUseCases,
     private val repository: AuthRepository
 ) : ViewModel() {
     private val _email = mutableStateOf("")
@@ -63,7 +65,23 @@ class LoginViewModel @Inject constructor(
         }
     }
 
-    fun onLoginWithGoogleClick() {
-        Log.d("TAG", "onLoginWithGoogleClick: ")
+    private var onGoogleSignInResultJob: Job? = null
+    fun onGoogleSignInResult(idToken: String?) {
+        onGoogleSignInResultJob?.cancel()
+        onGoogleSignInResultJob = viewModelScope.launch {
+            loginUseCases.googleSignInUseCase(idToken = idToken).onEach { result ->
+                when (result) {
+                    is Resource.Error -> {
+                        Log.d("TAG", "onGoogleSignInResult: LOGIN ERROR")
+                    }
+                    is Resource.Loading -> {
+                        Log.d("TAG", "onGoogleSignInResult: LOGIN LOADING")
+                    }
+                    is Resource.Success -> {
+                        Log.d("TAG", "onGoogleSignInResult: LOGIN SUCCESS")
+                    }
+                }
+            }.launchIn(this)
+        }
     }
 }

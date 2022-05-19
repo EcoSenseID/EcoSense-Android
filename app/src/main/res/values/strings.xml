@@ -25,4 +25,5 @@
     <string name="em_email_blank">Email can not be blank</string>
     <string name="em_password_blank">Password can not be blank</string>
     <string name="em_password_not_match">Passwords don\'t match</string>
+    <string name="web_client_id">700975405784-turn28oap23hefqq9aij0j74e36skkus.apps.googleusercontent.com</string>
 </resources>
