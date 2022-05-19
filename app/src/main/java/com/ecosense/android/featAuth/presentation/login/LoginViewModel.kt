@@ -1,4 +1,4 @@
-package com.ecosense.android.featAuth.presentation
+package com.ecosense.android.featAuth.presentation.login
 
 import android.util.Log
 import androidx.compose.runtime.State
@@ -18,7 +18,7 @@ import javax.inject.Inject
 @HiltViewModel
 class LoginViewModel @Inject constructor(
     private val loginUseCases: LoginUseCases,
-    private val repository: AuthRepository
+    private val authRepository: AuthRepository
 ) : ViewModel() {
     // TODO: create a use case for email based login
     // TODO: create a SharedFlow to send error message
@@ -44,16 +44,11 @@ class LoginViewModel @Inject constructor(
         _isPasswordVisible.value = !isPasswordVisible.value
     }
 
-    fun onForgotPasswordClick() {
-        // TODO: implement forgot password functionality
-        Log.d("TAG", "onForgotPasswordClick: ")
-    }
-
     private var onLoginWithEmailClickJob: Job? = null
     fun onLoginWithEmailClick() {
         onLoginWithEmailClickJob?.cancel()
         onLoginWithEmailClickJob = viewModelScope.launch {
-            repository.loginWithEmail(email = email.value, password = password.value)
+            authRepository.loginWithEmail(email = email.value, password = password.value)
                 .onEach { result ->
                     when (result) {
                         is Resource.Error -> {

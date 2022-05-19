@@ -1,4 +1,4 @@
-package com.ecosense.android.featAuth.presentation
+package com.ecosense.android.featAuth.presentation.register
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*

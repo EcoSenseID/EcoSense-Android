@@ -1,4 +1,4 @@
-package com.ecosense.android.featAuth.presentation
+package com.ecosense.android.featAuth.presentation.register
 
 import android.util.Log
 import androidx.compose.runtime.State
@@ -16,7 +16,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class RegisterViewModel @Inject constructor(
-    private val repository: AuthRepository
+    private val authRepository: AuthRepository
 ) : ViewModel() {
     private val _email = mutableStateOf("")
     val email: State<String> = _email
@@ -57,7 +57,7 @@ class RegisterViewModel @Inject constructor(
     fun onRegisterClick() {
         onRegisterClickJob?.cancel()
         onRegisterClickJob = viewModelScope.launch {
-            repository.registerWithEmail(
+            authRepository.registerWithEmail(
                 email = email.value,
                 password = password.value,
                 passwordVerif = passwordVerif.value

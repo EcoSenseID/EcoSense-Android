@@ -1,4 +1,4 @@
-package com.ecosense.android.featAuth.presentation
+package com.ecosense.android.featAuth.presentation.login
 
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.compose.foundation.clickable
@@ -14,9 +14,10 @@ import com.ecosense.android.R
 import com.ecosense.android.core.presentation.AuthNavGraph
 import com.ecosense.android.core.presentation.theme.spacing
 import com.ecosense.android.destinations.RegisterScreenDestination
-import com.ecosense.android.featAuth.presentation.contract.GoogleSignInContract
+import com.ecosense.android.destinations.ResetPasswordScreenDestination
 import com.ecosense.android.featAuth.presentation.component.EmailTextField
 import com.ecosense.android.featAuth.presentation.component.PasswordTextField
+import com.ecosense.android.featAuth.presentation.login.contract.GoogleSignInContract
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
@@ -65,7 +66,9 @@ fun LoginScreen(
                 Text(
                     text = stringResource(R.string.forgot_password),
                     color = MaterialTheme.colors.primary,
-                    modifier = Modifier.clickable { viewModel.onForgotPasswordClick() }
+                    modifier = Modifier.clickable {
+                        navigator.navigate(ResetPasswordScreenDestination)
+                    }
                 )
             }
 

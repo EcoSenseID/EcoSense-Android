@@ -1,4 +1,4 @@
-package com.ecosense.android.featAuth.presentation.contract
+package com.ecosense.android.featAuth.presentation.login.contract
 
 import android.app.Activity
 import android.content.Context
