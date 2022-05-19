@@ -20,6 +20,9 @@ class LoginViewModel @Inject constructor(
     private val loginUseCases: LoginUseCases,
     private val repository: AuthRepository
 ) : ViewModel() {
+    // TODO: create a use case for email based login
+    // TODO: create a SharedFlow to send error message
+
     private val _email = mutableStateOf("")
     val email: State<String> = _email
 
@@ -42,6 +45,7 @@ class LoginViewModel @Inject constructor(
     }
 
     fun onForgotPasswordClick() {
+        // TODO: implement forgot password functionality
         Log.d("TAG", "onForgotPasswordClick: ")
     }
 
