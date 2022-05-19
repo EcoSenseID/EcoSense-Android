@@ -25,4 +25,8 @@ interface AuthRepository {
     ): Flow<SimpleResource>
 
     fun logout()
+
+    fun sendPasswordResetEmail(
+        email: String
+    ): Flow<SimpleResource>
 }

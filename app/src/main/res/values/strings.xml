@@ -26,4 +26,7 @@
     <string name="em_password_blank">Password can not be blank</string>
     <string name="em_password_not_match">Passwords don\'t match</string>
     <string name="web_client_id">700975405784-turn28oap23hefqq9aij0j74e36skkus.apps.googleusercontent.com</string>
+    <string name="em_unknown">Something went wrong</string>
+    <string name="send_instruction">Send instruction</string>
+    <string name="reset_password">Reset password</string>
 </resources>

@@ -185,4 +185,39 @@ class AuthRepositoryImpl : AuthRepository {
     override fun logout() {
         firebaseAuth.signOut()
     }
+
+    override fun sendPasswordResetEmail(
+        email: String
+    ): Flow<SimpleResource> = when {
+        email.isBlank() -> flow {
+            emit(Resource.Error(UIText.StringResource(R.string.em_email_blank)))
+        }
+
+        else -> callbackFlow {
+            trySend(Resource.Loading())
+
+            try {
+                val onCompleteListener = OnCompleteListener<Void> {
+                    trySend(
+                        if (it.isSuccessful) Resource.Success(Unit)
+                        else Resource.Error(UIText.StringResource(R.string.em_unknown))
+                    )
+                }
+
+                val onFailureListener = OnFailureListener {
+                    trySend(Resource.Error(UIText.StringResource(R.string.em_unknown)))
+                }
+
+                firebaseAuth
+                    .sendPasswordResetEmail(email)
+                    .addOnCompleteListener(onCompleteListener)
+                    .addOnFailureListener(onFailureListener)
+
+            } catch (e: Exception) {
+                trySend(Resource.Error(UIText.StringResource(R.string.em_unknown)))
+            }
+
+            awaitClose { channel.close() }
+        }
+    }
 }
