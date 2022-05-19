@@ -9,6 +9,6 @@ interface AuthRepository {
     fun isLoggedIn(): Flow<Boolean>
     fun login(email: String, password: String): Flow<SimpleResource>
     fun loginWithGoogle(): Flow<SimpleResource>
-    fun register(email: String, password: String): Flow<SimpleResource>
+    fun register(email: String, password: String, passwordVerif: String): Flow<SimpleResource>
     fun logout()
 }

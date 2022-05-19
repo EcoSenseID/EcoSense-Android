@@ -21,13 +21,15 @@ fun PasswordTextField(
     isVisible: Boolean,
     onValueChange: (String) -> Unit,
     onChangeVisibility: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    label: @Composable () -> Unit = { Text(text = stringResource(id = R.string.password)) },
+    placeholder: @Composable () -> Unit = { Text(text = stringResource(id = R.string.password)) }
 ) {
     AuthTextField(
         value = value,
         onValueChange = onValueChange,
-        label = { Text(text = stringResource(id = R.string.password)) },
-        placeholder = { Text(text = stringResource(id = R.string.password)) },
+        label = label,
+        placeholder = placeholder,
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
         modifier = modifier,
         trailingIcon = {

@@ -19,4 +19,10 @@
     <string name="forgot_password">Forgot password?</string>
     <string name="new_here">New here?</string>
     <string name="create_an_account">Create an account</string>
+    <string name="register">Register</string>
+    <string name="retype_password">Retype Password</string>
+    <string name="already_have_an_account">Already have an account?</string>
+    <string name="em_email_blank">Email can not be blank</string>
+    <string name="em_password_blank">Password can not be blank</string>
+    <string name="em_password_not_match">Passwords don\'t match</string>
 </resources>
