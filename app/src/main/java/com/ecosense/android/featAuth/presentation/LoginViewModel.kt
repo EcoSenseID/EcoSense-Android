@@ -39,6 +39,10 @@ class LoginViewModel @Inject constructor(
         _isPasswordVisible.value = !isPasswordVisible.value
     }
 
+    fun onForgotPasswordClick() {
+        Log.d("TAG", "onForgotPasswordClick: ")
+    }
+
     private var onLoginClickJob: Job? = null
     fun onLoginClick() {
         onLoginClickJob?.cancel()

@@ -16,4 +16,7 @@
     <string name="logout">Logout</string>
     <string name="hide_password">Hide password</string>
     <string name="show_password">Show password</string>
+    <string name="forgot_password">Forgot password?</string>
+    <string name="new_here">New here?</string>
+    <string name="create_an_account">Create an account</string>
 </resources>
