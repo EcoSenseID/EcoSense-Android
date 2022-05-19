@@ -57,7 +57,7 @@ class RegisterViewModel @Inject constructor(
     fun onRegisterClick() {
         onRegisterClickJob?.cancel()
         onRegisterClickJob = viewModelScope.launch {
-            repository.register(
+            repository.registerWithEmail(
                 email = email.value,
                 password = password.value,
                 passwordVerif = passwordVerif.value

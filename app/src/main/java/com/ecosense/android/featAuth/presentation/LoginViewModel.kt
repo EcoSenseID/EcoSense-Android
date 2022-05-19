@@ -49,23 +49,24 @@ class LoginViewModel @Inject constructor(
         Log.d("TAG", "onForgotPasswordClick: ")
     }
 
-    private var onLoginClickJob: Job? = null
-    fun onLoginClick() {
-        onLoginClickJob?.cancel()
-        onLoginClickJob = viewModelScope.launch {
-            repository.login(email = email.value, password = password.value).onEach { result ->
-                when (result) {
-                    is Resource.Error -> {
-                        Log.d("TAG", "onLoginClick: ERROR")
+    private var onLoginWithEmailClickJob: Job? = null
+    fun onLoginWithEmailClick() {
+        onLoginWithEmailClickJob?.cancel()
+        onLoginWithEmailClickJob = viewModelScope.launch {
+            repository.loginWithEmail(email = email.value, password = password.value)
+                .onEach { result ->
+                    when (result) {
+                        is Resource.Error -> {
+                            Log.d("TAG", "onLoginClick: ERROR")
+                        }
+                        is Resource.Loading -> {
+                            Log.d("TAG", "onLoginClick: LOADING")
+                        }
+                        is Resource.Success -> {
+                            Log.d("TAG", "onLoginClick: SUCCESS")
+                        }
                     }
-                    is Resource.Loading -> {
-                        Log.d("TAG", "onLoginClick: LOADING")
-                    }
-                    is Resource.Success -> {
-                        Log.d("TAG", "onLoginClick: SUCCESS")
-                    }
-                }
-            }.launchIn(this)
+                }.launchIn(this)
         }
     }
 

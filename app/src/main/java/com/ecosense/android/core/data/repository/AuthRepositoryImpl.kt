@@ -50,7 +50,7 @@ class AuthRepositoryImpl : AuthRepository {
         }
     }
 
-    override fun login(
+    override fun loginWithEmail(
         email: String,
         password: String
     ): Flow<SimpleResource> = when {
@@ -132,7 +132,7 @@ class AuthRepositoryImpl : AuthRepository {
         awaitClose { channel.close() }
     }
 
-    override fun register(
+    override fun registerWithEmail(
         email: String,
         password: String,
         passwordVerif: String

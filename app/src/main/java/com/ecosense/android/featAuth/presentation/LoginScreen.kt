@@ -72,7 +72,7 @@ fun LoginScreen(
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
 
             Button(
-                onClick = { viewModel.onLoginClick() },
+                onClick = { viewModel.onLoginWithEmailClick() },
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(text = stringResource(R.string.login))
