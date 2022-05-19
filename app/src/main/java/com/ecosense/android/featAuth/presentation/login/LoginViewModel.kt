@@ -13,6 +13,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import logcat.logcat
 import javax.inject.Inject
 
 @HiltViewModel
@@ -72,13 +73,13 @@ class LoginViewModel @Inject constructor(
             loginUseCases.googleSignInUseCase(idToken = idToken).onEach { result ->
                 when (result) {
                     is Resource.Error -> {
-                        Log.d("TAG", "onGoogleSignInResult: LOGIN ERROR")
+                        logcat { "onGoogleSignInResult: LOGIN ERROR" }
                     }
                     is Resource.Loading -> {
-                        Log.d("TAG", "onGoogleSignInResult: LOGIN LOADING")
+                        logcat { "onGoogleSignInResult: LOGIN LOADING" }
                     }
                     is Resource.Success -> {
-                        Log.d("TAG", "onGoogleSignInResult: LOGIN SUCCESS")
+                        logcat { "onGoogleSignInResult: LOGIN SUCCESS" }
                     }
                 }
             }.launchIn(this)

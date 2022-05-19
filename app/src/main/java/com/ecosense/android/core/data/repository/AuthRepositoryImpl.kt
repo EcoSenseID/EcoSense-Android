@@ -1,6 +1,5 @@
 package com.ecosense.android.core.data.repository
 
-import android.util.Log
 import com.ecosense.android.R
 import com.ecosense.android.core.data.util.toUser
 import com.ecosense.android.core.domain.model.User
@@ -17,6 +16,8 @@ import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.flow
+import logcat.asLog
+import logcat.logcat
 
 class AuthRepositoryImpl : AuthRepository {
 
@@ -72,14 +73,14 @@ class AuthRepositoryImpl : AuthRepository {
                         it.isSuccessful -> trySend(Resource.Success(Unit))
                         else -> {
                             trySend(Resource.Error(UIText.StringResource(R.string.login_failed)))
-                            Log.d("AuthRepo", "login: ${it.exception}")
+                            logcat { "loginWithEmail: ${it.exception?.asLog()}" }
                         }
                     }
                 }
 
                 val onFailureListener = OnFailureListener {
                     trySend(Resource.Error(UIText.StringResource(R.string.login_failed)))
-                    Log.d("AuthRepo", "login: ${it.message}")
+                    logcat { "loginWithEmail: ${it.asLog()}" }
                 }
 
                 firebaseAuth
@@ -88,7 +89,8 @@ class AuthRepositoryImpl : AuthRepository {
                     .addOnFailureListener(onFailureListener)
             } catch (t: Throwable) {
                 trySend(Resource.Error(UIText.StringResource(R.string.login_failed)))
-                Log.d("TAG", "login: ${t.message}")
+                logcat { "loginWithEmail: ${t.asLog()}" }
+
             }
 
             awaitClose { channel.close() }
@@ -109,14 +111,15 @@ class AuthRepositoryImpl : AuthRepository {
                     it.isSuccessful -> trySend(Resource.Success(Unit))
                     else -> {
                         trySend(Resource.Error(UIText.StringResource(R.string.login_failed)))
-                        Log.d("AuthRepo", "login: ${it.exception}")
+                        logcat { "loginWithGoogle: ${it.exception?.asLog()}" }
                     }
                 }
             }
 
             val onFailureListener = OnFailureListener {
                 trySend(Resource.Error(UIText.StringResource(R.string.login_failed)))
-                Log.d("AuthRepo", "login: ${it.message}")
+                logcat { "loginWithGoogle: ${it.asLog()}" }
+
             }
 
             firebaseAuth
@@ -126,7 +129,7 @@ class AuthRepositoryImpl : AuthRepository {
 
         } catch (t: Throwable) {
             trySend(Resource.Error(UIText.StringResource(R.string.login_failed)))
-            Log.d("TAG", "login: ${t.message}")
+            logcat { "loginWithGoogle: ${t.asLog()}" }
         }
 
         awaitClose { channel.close() }
@@ -159,14 +162,14 @@ class AuthRepositoryImpl : AuthRepository {
                         it.isSuccessful -> trySend(Resource.Success(Unit))
                         else -> {
                             trySend(Resource.Error(UIText.StringResource(R.string.login_failed)))
-                            Log.d("AuthRepo", "register: ${it.exception}")
+                            logcat { "registerWithEmail: ${it.exception?.asLog()}" }
                         }
                     }
                 }
 
                 val onFailureListener = OnFailureListener {
                     trySend(Resource.Error(UIText.StringResource(R.string.login_failed)))
-                    Log.d("AuthRepo", "register: ${it.message}")
+                    logcat { "registerWithEmail: ${it.asLog()}" }
                 }
 
                 firebaseAuth
@@ -175,7 +178,8 @@ class AuthRepositoryImpl : AuthRepository {
                     .addOnFailureListener(onFailureListener)
             } catch (t: Throwable) {
                 trySend(Resource.Error(UIText.StringResource(R.string.login_failed)))
-                Log.d("TAG", "register: ${t.message}")
+                logcat { "registerWithEmail: ${t.asLog()}" }
+
             }
 
             awaitClose { channel.close() }
@@ -202,10 +206,13 @@ class AuthRepositoryImpl : AuthRepository {
                         if (it.isSuccessful) Resource.Success(Unit)
                         else Resource.Error(UIText.StringResource(R.string.em_unknown))
                     )
+
+                    logcat { "sendPasswordResetEmail: ${it.exception?.asLog()}" }
                 }
 
                 val onFailureListener = OnFailureListener {
                     trySend(Resource.Error(UIText.StringResource(R.string.em_unknown)))
+                    logcat { "sendPasswordResetEmail: ${it.asLog()}" }
                 }
 
                 firebaseAuth
@@ -213,8 +220,9 @@ class AuthRepositoryImpl : AuthRepository {
                     .addOnCompleteListener(onCompleteListener)
                     .addOnFailureListener(onFailureListener)
 
-            } catch (e: Exception) {
+            } catch (t: Throwable) {
                 trySend(Resource.Error(UIText.StringResource(R.string.em_unknown)))
+                logcat { "sendPasswordResetEmail: ${t.asLog()}" }
             }
 
             awaitClose { channel.close() }

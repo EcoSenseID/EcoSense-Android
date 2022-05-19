@@ -3,12 +3,13 @@ package com.ecosense.android.featAuth.presentation.login.contract
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.util.Log
 import androidx.activity.result.contract.ActivityResultContract
 import com.ecosense.android.R
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
+import logcat.asLog
+import logcat.logcat
 
 object GoogleSignInContract : ActivityResultContract<Int?, String?>() {
 
@@ -33,7 +34,7 @@ object GoogleSignInContract : ActivityResultContract<Int?, String?>() {
                         .getResult(ApiException::class.java)
                         .idToken
                 } catch (e: Exception) {
-                    Log.d("GoogleSignInContract", "Unexpected error parsing sign-in result")
+                    logcat { e.asLog() }
                     null
                 }
             }

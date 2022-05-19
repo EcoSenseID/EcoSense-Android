@@ -12,6 +12,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import logcat.logcat
 import javax.inject.Inject
 
 @HiltViewModel
@@ -64,13 +65,13 @@ class RegisterViewModel @Inject constructor(
             ).onEach { result ->
                 when (result) {
                     is Resource.Error -> {
-                        Log.d("TAG", "onRegisterClick: ERROR")
+                        logcat { "onRegisterClick: ERROR" }
                     }
                     is Resource.Loading -> {
-                        Log.d("TAG", "onRegisterClick: LOADING")
+                        logcat { "onRegisterClick: LOADING" }
                     }
                     is Resource.Success -> {
-                        Log.d("TAG", "onRegisterClick: SUCCESS")
+                        logcat { "onRegisterClick: SUCCESS" }
                     }
                 }
             }.launchIn(this)

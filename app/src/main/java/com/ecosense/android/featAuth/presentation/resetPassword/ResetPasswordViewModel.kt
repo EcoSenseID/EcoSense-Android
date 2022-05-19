@@ -1,6 +1,5 @@
 package com.ecosense.android.featAuth.presentation.resetPassword
 
-import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -12,6 +11,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import logcat.logcat
 import javax.inject.Inject
 
 @HiltViewModel
@@ -33,13 +33,13 @@ class ResetPasswordViewModel @Inject constructor(
                 when (result) {
                     // TODO: implement result handling
                     is Resource.Error -> {
-                        Log.d("TAG", "onSendInstructionClick: ERROR")
+                        logcat { "onSendInstructionClick: ERROR" }
                     }
                     is Resource.Loading -> {
-                        Log.d("TAG", "onSendInstructionClick: LOADING")
+                        logcat { "onSendInstructionClick: LOADING" }
                     }
                     is Resource.Success -> {
-                        Log.d("TAG", "onSendInstructionClick: SUCCESS")
+                        logcat { "onSendInstructionClick: SUCCESS" }
                     }
                 }
             }.launchIn(this)
