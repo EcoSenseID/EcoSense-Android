@@ -15,7 +15,7 @@ interface AuthRepository {
     ): Flow<SimpleResource>
 
     fun loginWithGoogle(
-        idToken: String
+        idToken: String?
     ): Flow<SimpleResource>
 
     fun registerWithEmail(
