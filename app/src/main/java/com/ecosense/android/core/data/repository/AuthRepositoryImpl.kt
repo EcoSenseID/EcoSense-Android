@@ -8,8 +8,6 @@ import com.ecosense.android.core.domain.repository.AuthRepository
 import com.ecosense.android.core.util.Resource
 import com.ecosense.android.core.util.SimpleResource
 import com.ecosense.android.core.util.UIText
-import com.google.android.gms.tasks.OnCompleteListener
-import com.google.android.gms.tasks.OnFailureListener
 import com.google.firebase.auth.*
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
@@ -68,28 +66,18 @@ class AuthRepositoryImpl : AuthRepository {
             trySend(Resource.Loading())
 
             try {
-                val onCompleteListener = OnCompleteListener<AuthResult> {
-                    trySend(
-                        if (it.isSuccessful) Resource.Success(Unit)
-                        else Resource.Error(UIText.StringResource(R.string.em_unknown))
-                    )
-                }
-
-                val onFailureListener = OnFailureListener { exception ->
-                    UIText.StringResource(
-                        when (exception) {
-                            is FirebaseAuthInvalidUserException -> R.string.em_email_login_invalid_user
-                            is FirebaseAuthInvalidCredentialsException -> R.string.wrong_password
-                            else -> R.string.em_unknown
-                        }
-                    ).let { trySend(Resource.Error(it)) }
-                }
-
                 firebaseAuth
                     .signInWithEmailAndPassword(email, password)
-                    .addOnCompleteListener(onCompleteListener)
-                    .addOnFailureListener(onFailureListener)
-
+                    .addOnCompleteListener { task ->
+                        when {
+                            task.isSuccessful -> trySend(Resource.Success(Unit))
+                            else -> when (task.exception) {
+                                is FirebaseAuthInvalidUserException -> R.string.em_email_login_invalid_user
+                                is FirebaseAuthInvalidCredentialsException -> R.string.wrong_password
+                                else -> R.string.em_unknown
+                            }.let { trySend(Resource.Error(UIText.StringResource(it))) }
+                        }
+                    }
             } catch (t: Throwable) {
                 trySend(Resource.Error(UIText.StringResource(R.string.em_unknown)))
                 logcat { t.asLog() }
@@ -113,29 +101,19 @@ class AuthRepositoryImpl : AuthRepository {
             try {
                 val credential = GoogleAuthProvider.getCredential(idToken, null)
 
-                val onCompleteListener = OnCompleteListener<AuthResult> {
-                    trySend(
-                        if (it.isSuccessful) Resource.Success(Unit)
-                        else Resource.Error(UIText.StringResource(R.string.em_unknown))
-                    )
-                }
-
-                val onFailureListener = OnFailureListener { exception ->
-                    UIText.StringResource(
-                        when (exception) {
-                            is FirebaseAuthInvalidUserException -> R.string.em_google_sign_in_invalid_user
-                            is FirebaseAuthInvalidCredentialsException -> R.string.em_google_sign_in_invalid_credential
-                            is FirebaseAuthUserCollisionException -> R.string.em_google_sign_in_collision
-                            else -> R.string.em_unknown
-                        }
-                    ).let { trySend(Resource.Error(it)) }
-                }
-
                 firebaseAuth
                     .signInWithCredential(credential)
-                    .addOnCompleteListener(onCompleteListener)
-                    .addOnFailureListener(onFailureListener)
-
+                    .addOnCompleteListener { task ->
+                        when {
+                            task.isSuccessful -> trySend(Resource.Success(Unit))
+                            else -> when (task.exception) {
+                                is FirebaseAuthInvalidUserException -> R.string.em_google_sign_in_invalid_user
+                                is FirebaseAuthInvalidCredentialsException -> R.string.em_google_sign_in_invalid_credential
+                                is FirebaseAuthUserCollisionException -> R.string.em_google_sign_in_collision
+                                else -> R.string.em_unknown
+                            }.let { trySend(Resource.Error(UIText.StringResource(it))) }
+                        }
+                    }
             } catch (t: Throwable) {
                 trySend(Resource.Error(UIText.StringResource(R.string.em_unknown)))
                 logcat { t.asLog() }
@@ -175,29 +153,19 @@ class AuthRepositoryImpl : AuthRepository {
             trySend(Resource.Loading())
 
             try {
-                val onCompleteListener = OnCompleteListener<AuthResult> {
-                    trySend(
-                        if (it.isSuccessful) Resource.Success(Unit)
-                        else Resource.Error(UIText.StringResource(R.string.em_unknown))
-                    )
-                }
-
-                val onFailureListener = OnFailureListener { exception ->
-                    UIText.StringResource(
-                        when (exception) {
-                            is FirebaseAuthWeakPasswordException -> R.string.em_register_weak_password
-                            is FirebaseAuthInvalidCredentialsException -> R.string.em_register_invalid_email
-                            is FirebaseAuthUserCollisionException -> R.string.em_register_email_registered
-                            else -> R.string.em_unknown
-                        }
-                    ).let { trySend(Resource.Error(it)) }
-                }
-
                 firebaseAuth
                     .createUserWithEmailAndPassword(email, password)
-                    .addOnCompleteListener(onCompleteListener)
-                    .addOnFailureListener(onFailureListener)
-
+                    .addOnCompleteListener { task ->
+                        when {
+                            task.isSuccessful -> trySend(Resource.Success(Unit))
+                            else -> when (task.exception) {
+                                is FirebaseAuthWeakPasswordException -> R.string.em_register_weak_password
+                                is FirebaseAuthInvalidCredentialsException -> R.string.em_register_invalid_email
+                                is FirebaseAuthUserCollisionException -> R.string.em_register_email_registered
+                                else -> R.string.em_unknown
+                            }.let { trySend(Resource.Error(UIText.StringResource(it))) }
+                        }
+                    }
             } catch (t: Throwable) {
                 trySend(Resource.Error(UIText.StringResource(R.string.em_unknown)))
                 logcat { t.asLog() }
@@ -226,27 +194,17 @@ class AuthRepositoryImpl : AuthRepository {
             trySend(Resource.Loading())
 
             try {
-                val onCompleteListener = OnCompleteListener<Void> {
-                    trySend(
-                        if (it.isSuccessful) Resource.Success(Unit)
-                        else Resource.Error(UIText.StringResource(R.string.em_unknown))
-                    )
-                }
-
-                val onFailureListener = OnFailureListener { exception ->
-                    UIText.StringResource(
-                        when (exception) {
-                            is FirebaseAuthInvalidUserException -> R.string.em_reset_password_unregistered_email
-                            else -> R.string.em_unknown
-                        }
-                    ).let { trySend(Resource.Error(it)) }
-                }
-
                 firebaseAuth
                     .sendPasswordResetEmail(email)
-                    .addOnCompleteListener(onCompleteListener)
-                    .addOnFailureListener(onFailureListener)
-
+                    .addOnCompleteListener { task ->
+                        when {
+                            task.isSuccessful -> trySend(Resource.Success(Unit))
+                            else -> when (task.exception) {
+                                is FirebaseAuthInvalidUserException -> R.string.em_reset_password_unregistered_email
+                                else -> R.string.em_unknown
+                            }.let { trySend(Resource.Error(UIText.StringResource(it))) }
+                        }
+                    }
             } catch (t: Throwable) {
                 trySend(Resource.Error(UIText.StringResource(R.string.em_unknown)))
                 logcat { t.asLog() }
