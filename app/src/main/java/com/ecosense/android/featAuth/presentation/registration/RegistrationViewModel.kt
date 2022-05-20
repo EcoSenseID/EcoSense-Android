@@ -5,52 +5,48 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ecosense.android.core.domain.repository.AuthRepository
+import com.ecosense.android.core.presentation.util.UIEvent
 import com.ecosense.android.core.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
-import logcat.logcat
 import javax.inject.Inject
 
 @HiltViewModel
 class RegistrationViewModel @Inject constructor(
     private val authRepository: AuthRepository
 ) : ViewModel() {
-    private val _email = mutableStateOf("")
-    val email: State<String> = _email
 
-    private val _password = mutableStateOf("")
-    val password: State<String> = _password
+    private val _state = mutableStateOf(RegistrationScreenState.defaultValue)
+    val state: State<RegistrationScreenState> = _state
 
-    private val _isPasswordVisible = mutableStateOf(false)
-    val isPasswordVisible: State<Boolean> = _isPasswordVisible
-
-    private val _repeatedPassword = mutableStateOf("")
-    val repeatedPassword: State<String> = _repeatedPassword
-
-    private val _isRepeatedPasswordVisible = mutableStateOf(false)
-    val isRepeatedPasswordVisible: State<Boolean> = _isRepeatedPasswordVisible
+    private val _eventFlow = Channel<UIEvent>()
+    val eventFlow = _eventFlow.receiveAsFlow()
 
     fun onEmailValueChange(value: String) {
-        _email.value = value
+        _state.value = state.value.copy(email = value)
     }
 
     fun onPasswordValueChange(value: String) {
-        _password.value = value
+        _state.value = state.value.copy(password = value)
     }
 
     fun onRepeatedPasswordValueChange(value: String) {
-        _repeatedPassword.value = value
+        _state.value = state.value.copy(repeatedPassword = value)
     }
 
-    fun onChangePasswordVisibility() {
-        _isPasswordVisible.value = !isPasswordVisible.value
+    fun onTogglePasswordVisibility() {
+        _state.value = state.value.copy(isPasswordVisible = !state.value.isPasswordVisible)
     }
 
-    fun onChangeRepeatedPasswordVisibility() {
-        _isRepeatedPasswordVisible.value = !isRepeatedPasswordVisible.value
+    fun onToggleRepeatedPasswordVisibility() {
+        _state.value = state.value.copy(
+            isRepeatedPasswordVisible = !state.value.isRepeatedPasswordVisible
+        )
     }
 
     private var onRegisterClickJob: Job? = null
@@ -58,19 +54,21 @@ class RegistrationViewModel @Inject constructor(
         onRegisterClickJob?.cancel()
         onRegisterClickJob = viewModelScope.launch {
             authRepository.registerWithEmail(
-                email = email.value,
-                password = password.value,
-                repeatedPassword = repeatedPassword.value
+                email = state.value.email,
+                password = state.value.password,
+                repeatedPassword = state.value.repeatedPassword
             ).onEach { result ->
                 when (result) {
                     is Resource.Error -> {
-                        logcat { "onRegisterClick: ERROR" }
+                        _state.value = state.value.copy(isLoading = false)
+                        result.uiText?.let { _eventFlow.trySend(UIEvent.ShowSnackbar(it)) }
                     }
                     is Resource.Loading -> {
-                        logcat { "onRegisterClick: LOADING" }
+                        _state.value = state.value.copy(isLoading = true)
+                        _eventFlow.trySend(UIEvent.HideKeyboard)
                     }
                     is Resource.Success -> {
-                        logcat { "onRegisterClick: SUCCESS" }
+                        _state.value = state.value.copy(isLoading = false)
                     }
                 }
             }.launchIn(this)

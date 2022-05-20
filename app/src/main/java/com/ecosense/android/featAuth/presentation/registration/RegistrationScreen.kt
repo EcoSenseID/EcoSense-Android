@@ -4,16 +4,22 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.ecosense.android.R
 import com.ecosense.android.core.presentation.AuthNavGraph
 import com.ecosense.android.core.presentation.theme.spacing
+import com.ecosense.android.core.presentation.util.UIEvent
+import com.ecosense.android.core.presentation.util.asString
 import com.ecosense.android.featAuth.presentation.component.EmailTextField
 import com.ecosense.android.featAuth.presentation.component.PasswordTextField
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 @Destination
@@ -23,6 +29,28 @@ fun RegistrationScreen(
     viewModel: RegistrationViewModel = hiltViewModel()
 ) {
     val scaffoldState = rememberScaffoldState()
+
+    val focusManager = LocalFocusManager.current
+    val context = LocalContext.current
+
+    val state = viewModel.state.value
+
+    LaunchedEffect(key1 = true) {
+        viewModel.eventFlow.collectLatest { event ->
+            when (event) {
+                is UIEvent.ShowSnackbar -> {
+                    focusManager.clearFocus()
+                    scaffoldState.snackbarHostState.showSnackbar(
+                        message = event.uiText.asString(context)
+                    )
+                }
+
+                is UIEvent.HideKeyboard -> {
+                    focusManager.clearFocus()
+                }
+            }
+        }
+    }
 
     Scaffold(
         scaffoldState = scaffoldState,
@@ -34,26 +62,26 @@ fun RegistrationScreen(
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
 
             EmailTextField(
-                value = viewModel.email.value,
+                value = state.email,
                 onValueChange = { viewModel.onEmailValueChange(it) }
             )
 
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
 
             PasswordTextField(
-                value = viewModel.password.value,
-                isVisible = viewModel.isPasswordVisible.value,
+                value = state.password,
+                isVisible = state.isPasswordVisible,
                 onValueChange = { viewModel.onPasswordValueChange(it) },
-                onChangeVisibility = { viewModel.onChangePasswordVisibility() }
+                onToggleVisibility = { viewModel.onTogglePasswordVisibility() }
             )
 
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
 
             PasswordTextField(
-                value = viewModel.repeatedPassword.value,
-                isVisible = viewModel.isRepeatedPasswordVisible.value,
+                value = state.repeatedPassword,
+                isVisible = state.isRepeatedPasswordVisible,
                 onValueChange = { viewModel.onRepeatedPasswordValueChange(it) },
-                onChangeVisibility = { viewModel.onChangeRepeatedPasswordVisibility() },
+                onToggleVisibility = { viewModel.onToggleRepeatedPasswordVisibility() },
                 label = { Text(text = stringResource(R.string.repeat_password)) },
                 placeholder = { Text(text = stringResource(R.string.repeat_password)) }
             )
@@ -61,10 +89,16 @@ fun RegistrationScreen(
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
 
             Button(
+                enabled = !state.isLoading,
                 onClick = { viewModel.onRegisterClick() },
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text(text = stringResource(R.string.register))
+                Text(
+                    text = stringResource(
+                        if (state.isLoading) R.string.registering_an_account
+                        else R.string.register
+                    )
+                )
             }
 
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))

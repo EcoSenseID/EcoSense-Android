@@ -145,6 +145,10 @@ class AuthRepositoryImpl : AuthRepository {
             emit(Resource.Error(UIText.StringResource(R.string.em_register_password_too_short)))
         }
 
+        repeatedPassword.isBlank() -> flow {
+            emit(Resource.Error(UIText.StringResource(R.string.em_repeat_password_blank)))
+        }
+
         !password.contentEquals(repeatedPassword) -> flow {
             emit(Resource.Error(UIText.StringResource(R.string.em_password_not_match)))
         }
