@@ -14,4 +14,19 @@
     <string name="register_failed">Register failed</string>
     <string name="email">Email</string>
     <string name="logout">Logout</string>
+    <string name="hide_password">Hide password</string>
+    <string name="show_password">Show password</string>
+    <string name="forgot_password">Forgot password?</string>
+    <string name="new_here">New here?</string>
+    <string name="create_an_account">Create an account</string>
+    <string name="register">Register</string>
+    <string name="retype_password">Retype Password</string>
+    <string name="already_have_an_account">Already have an account?</string>
+    <string name="em_email_blank">Email can not be blank</string>
+    <string name="em_password_blank">Password can not be blank</string>
+    <string name="em_password_not_match">Passwords don\'t match</string>
+    <string name="web_client_id">700975405784-turn28oap23hefqq9aij0j74e36skkus.apps.googleusercontent.com</string>
+    <string name="em_unknown">Something went wrong</string>
+    <string name="send_instruction">Send instruction</string>
+    <string name="reset_password">Reset password</string>
 </resources>
