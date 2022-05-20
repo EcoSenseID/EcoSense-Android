@@ -78,9 +78,9 @@ class AuthRepositoryImpl : AuthRepository {
                             }.let { trySend(Resource.Error(UIText.StringResource(it))) }
                         }
                     }
-            } catch (t: Throwable) {
+            } catch (e: Exception) {
                 trySend(Resource.Error(UIText.StringResource(R.string.em_unknown)))
-                logcat { t.asLog() }
+                logcat { e.asLog() }
             } finally {
                 awaitClose { channel.close() }
             }
@@ -114,9 +114,9 @@ class AuthRepositoryImpl : AuthRepository {
                             }.let { trySend(Resource.Error(UIText.StringResource(it))) }
                         }
                     }
-            } catch (t: Throwable) {
+            } catch (e: Exception) {
                 trySend(Resource.Error(UIText.StringResource(R.string.em_unknown)))
-                logcat { t.asLog() }
+                logcat { e.asLog() }
             } finally {
                 awaitClose { channel.close() }
             }
@@ -166,9 +166,9 @@ class AuthRepositoryImpl : AuthRepository {
                             }.let { trySend(Resource.Error(UIText.StringResource(it))) }
                         }
                     }
-            } catch (t: Throwable) {
+            } catch (e: Exception) {
                 trySend(Resource.Error(UIText.StringResource(R.string.em_unknown)))
-                logcat { t.asLog() }
+                logcat { e.asLog() }
             } finally {
                 awaitClose { channel.close() }
             }
@@ -205,9 +205,9 @@ class AuthRepositoryImpl : AuthRepository {
                             }.let { trySend(Resource.Error(UIText.StringResource(it))) }
                         }
                     }
-            } catch (t: Throwable) {
+            } catch (e: Exception) {
                 trySend(Resource.Error(UIText.StringResource(R.string.em_unknown)))
-                logcat { t.asLog() }
+                logcat { e.asLog() }
             } finally {
                 awaitClose { channel.close() }
             }
