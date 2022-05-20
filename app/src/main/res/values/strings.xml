@@ -47,4 +47,7 @@
     <string name="logging_in">Logging in…</string>
     <string name="registering_an_account">Registering an account…</string>
     <string name="em_repeat_password_blank">Please repeat your password in the given field</string>
+    <string name="sending_instruction">Sending instruction…</string>
+    <string name="reset_password_caption">Enter your account email address below and an email will be sent with instructions on how to reset your password.</string>
+    <string name="sm_reset_password">Reset password instructions has been sent to your email.</string>
 </resources>
