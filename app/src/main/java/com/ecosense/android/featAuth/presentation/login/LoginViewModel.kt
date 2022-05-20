@@ -7,7 +7,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ecosense.android.core.domain.repository.AuthRepository
 import com.ecosense.android.core.util.Resource
-import com.ecosense.android.featAuth.domain.usecase.LoginUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.launchIn
@@ -18,10 +17,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val loginUseCases: LoginUseCases,
     private val authRepository: AuthRepository
 ) : ViewModel() {
-    // TODO: create a use case for email based login
     // TODO: create a SharedFlow to send error message
 
     private val _email = mutableStateOf("")
@@ -70,7 +67,7 @@ class LoginViewModel @Inject constructor(
     fun onGoogleSignInResult(idToken: String?) {
         onGoogleSignInResultJob?.cancel()
         onGoogleSignInResultJob = viewModelScope.launch {
-            loginUseCases.googleSignInUseCase(idToken = idToken).onEach { result ->
+            authRepository.loginWithGoogle(idToken = idToken).onEach { result ->
                 when (result) {
                     is Resource.Error -> {
                         logcat { "onGoogleSignInResult: LOGIN ERROR" }
