@@ -50,12 +50,12 @@ fun RegisterScreen(
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
 
             PasswordTextField(
-                value = viewModel.passwordVerif.value,
-                isVisible = viewModel.isPasswordVerifVisible.value,
-                onValueChange = { viewModel.onPasswordVerifValueChange(it) },
-                onChangeVisibility = { viewModel.onChangePasswordVerifVisibility() },
-                label = { Text(text = stringResource(R.string.retype_password)) },
-                placeholder = { Text(text = stringResource(R.string.retype_password)) }
+                value = viewModel.repeatedPassword.value,
+                isVisible = viewModel.isRepeatedPasswordVisible.value,
+                onValueChange = { viewModel.onRepeatedPasswordValueChange(it) },
+                onChangeVisibility = { viewModel.onChangeRepeatedPasswordVisibility() },
+                label = { Text(text = stringResource(R.string.repeat_password)) },
+                placeholder = { Text(text = stringResource(R.string.repeat_password)) }
             )
 
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))

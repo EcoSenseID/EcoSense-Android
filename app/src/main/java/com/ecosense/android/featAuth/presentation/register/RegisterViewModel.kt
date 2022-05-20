@@ -1,6 +1,5 @@
 package com.ecosense.android.featAuth.presentation.register
 
-import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -28,11 +27,11 @@ class RegisterViewModel @Inject constructor(
     private val _isPasswordVisible = mutableStateOf(false)
     val isPasswordVisible: State<Boolean> = _isPasswordVisible
 
-    private val _passwordVerif = mutableStateOf("")
-    val passwordVerif: State<String> = _passwordVerif
+    private val _repeatedPassword = mutableStateOf("")
+    val repeatedPassword: State<String> = _repeatedPassword
 
-    private val _isPasswordVerifVisible = mutableStateOf(false)
-    val isPasswordVerifVisible: State<Boolean> = _isPasswordVerifVisible
+    private val _isRepeatedPasswordVisible = mutableStateOf(false)
+    val isRepeatedPasswordVisible: State<Boolean> = _isRepeatedPasswordVisible
 
     fun onEmailValueChange(value: String) {
         _email.value = value
@@ -42,16 +41,16 @@ class RegisterViewModel @Inject constructor(
         _password.value = value
     }
 
-    fun onPasswordVerifValueChange(value: String) {
-        _passwordVerif.value = value
+    fun onRepeatedPasswordValueChange(value: String) {
+        _repeatedPassword.value = value
     }
 
     fun onChangePasswordVisibility() {
         _isPasswordVisible.value = !isPasswordVisible.value
     }
 
-    fun onChangePasswordVerifVisibility() {
-        _isPasswordVerifVisible.value = !isPasswordVerifVisible.value
+    fun onChangeRepeatedPasswordVisibility() {
+        _isRepeatedPasswordVisible.value = !isRepeatedPasswordVisible.value
     }
 
     private var onRegisterClickJob: Job? = null
@@ -61,7 +60,7 @@ class RegisterViewModel @Inject constructor(
             authRepository.registerWithEmail(
                 email = email.value,
                 password = password.value,
-                passwordVerif = passwordVerif.value
+                repeatedPassword = repeatedPassword.value
             ).onEach { result ->
                 when (result) {
                     is Resource.Error -> {

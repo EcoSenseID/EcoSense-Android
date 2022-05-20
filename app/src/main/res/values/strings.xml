@@ -29,4 +29,5 @@
     <string name="em_unknown">Something went wrong</string>
     <string name="send_instruction">Send instruction</string>
     <string name="reset_password">Reset password</string>
+    <string name="repeat_password">Repeat password</string>
 </resources>

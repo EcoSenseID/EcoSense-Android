@@ -138,7 +138,7 @@ class AuthRepositoryImpl : AuthRepository {
     override fun registerWithEmail(
         email: String,
         password: String,
-        passwordVerif: String
+        repeatedPassword: String
     ): Flow<SimpleResource> = when {
 
         email.isBlank() -> flow {
@@ -149,7 +149,7 @@ class AuthRepositoryImpl : AuthRepository {
             emit(Resource.Error(UIText.StringResource(R.string.em_password_blank)))
         }
 
-        !password.contentEquals(passwordVerif) -> flow {
+        !password.contentEquals(repeatedPassword) -> flow {
             emit(Resource.Error(UIText.StringResource(R.string.em_password_not_match)))
         }
 
