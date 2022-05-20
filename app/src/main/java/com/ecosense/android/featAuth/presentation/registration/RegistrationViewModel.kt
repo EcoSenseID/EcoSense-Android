@@ -1,4 +1,4 @@
-package com.ecosense.android.featAuth.presentation.register
+package com.ecosense.android.featAuth.presentation.registration
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
@@ -15,7 +15,7 @@ import logcat.logcat
 import javax.inject.Inject
 
 @HiltViewModel
-class RegisterViewModel @Inject constructor(
+class RegistrationViewModel @Inject constructor(
     private val authRepository: AuthRepository
 ) : ViewModel() {
     private val _email = mutableStateOf("")

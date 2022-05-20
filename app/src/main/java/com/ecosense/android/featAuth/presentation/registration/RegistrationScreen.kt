@@ -1,4 +1,4 @@
-package com.ecosense.android.featAuth.presentation.register
+package com.ecosense.android.featAuth.presentation.registration
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -18,9 +18,9 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 @Composable
 @Destination
 @AuthNavGraph
-fun RegisterScreen(
+fun RegistrationScreen(
     navigator: DestinationsNavigator,
-    viewModel: RegisterViewModel = hiltViewModel()
+    viewModel: RegistrationViewModel = hiltViewModel()
 ) {
     val scaffoldState = rememberScaffoldState()
 

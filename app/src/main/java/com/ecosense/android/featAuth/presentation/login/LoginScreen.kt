@@ -13,7 +13,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.ecosense.android.R
 import com.ecosense.android.core.presentation.AuthNavGraph
 import com.ecosense.android.core.presentation.theme.spacing
-import com.ecosense.android.destinations.RegisterScreenDestination
+import com.ecosense.android.destinations.RegistrationScreenDestination
 import com.ecosense.android.destinations.ResetPasswordScreenDestination
 import com.ecosense.android.featAuth.presentation.component.EmailTextField
 import com.ecosense.android.featAuth.presentation.component.PasswordTextField
@@ -117,7 +117,7 @@ fun LoginScreen(
                 Text(
                     text = stringResource(R.string.create_an_account),
                     color = MaterialTheme.colors.primary,
-                    modifier = Modifier.clickable { navigator.navigate(RegisterScreenDestination) }
+                    modifier = Modifier.clickable { navigator.navigate(RegistrationScreenDestination) }
                 )
             }
         }
