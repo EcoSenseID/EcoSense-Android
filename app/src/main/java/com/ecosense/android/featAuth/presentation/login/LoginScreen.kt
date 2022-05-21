@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.ecosense.android.R
@@ -22,6 +23,7 @@ import com.ecosense.android.destinations.RegistrationScreenDestination
 import com.ecosense.android.destinations.ResetPasswordScreenDestination
 import com.ecosense.android.featAuth.presentation.component.EmailTextField
 import com.ecosense.android.featAuth.presentation.component.PasswordTextField
+import com.ecosense.android.featAuth.presentation.component.RoundedEndsButton
 import com.ecosense.android.featAuth.presentation.login.contract.GoogleSignInContract
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -66,11 +68,25 @@ fun LoginScreen(
         scaffoldState = scaffoldState,
         modifier = Modifier.fillMaxSize()
     ) {
-        Column(modifier = Modifier.padding(MaterialTheme.spacing.medium)) {
+        Column(
+            modifier = Modifier
+                .padding(MaterialTheme.spacing.large)
+                .fillMaxSize()
+        ) {
+            Text(
+                text = stringResource(R.string.login_screen_title),
+                style = MaterialTheme.typography.h5,
+                fontWeight = FontWeight.SemiBold,
+            )
 
-            Text(text = stringResource(id = R.string.login))
+            Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
 
-            Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
+            Text(
+                text = stringResource(R.string.login_screen_caption),
+                style = MaterialTheme.typography.body2,
+            )
+
+            Spacer(modifier = Modifier.height(MaterialTheme.spacing.large))
 
             EmailTextField(
                 value = state.email,
@@ -103,7 +119,7 @@ fun LoginScreen(
 
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
 
-            Button(
+            RoundedEndsButton(
                 enabled = !state.isLoading,
                 onClick = { viewModel.onLoginWithEmailClick() },
                 modifier = Modifier.fillMaxWidth()
@@ -135,7 +151,7 @@ fun LoginScreen(
 
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
 
-            Button(
+            RoundedEndsButton(
                 enabled = !state.isLoading,
                 onClick = { googleSignInLauncher.launch(0) },
                 modifier = Modifier.fillMaxWidth()

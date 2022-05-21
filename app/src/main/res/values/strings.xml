@@ -48,6 +48,13 @@
     <string name="registering_an_account">Registering an account…</string>
     <string name="em_repeat_password_blank">Please repeat your password in the given field</string>
     <string name="sending_instruction">Sending instruction…</string>
-    <string name="reset_password_caption">Enter your account email address below and an email will be sent with instructions on how to reset your password.</string>
+    <string name="reset_password_screen_caption">Enter your account email address below and an email will be sent with instructions on how to reset your password.</string>
     <string name="sm_reset_password">Reset password instructions has been sent to your email.</string>
+    <string name="cd_taking_care_of_earth">Taking care of earth</string>
+    <string name="cd_ecosense_logo">EcoSense logo</string>
+    <string name="login_screen_title">Yeay! You\'re back</string>
+    <string name="login_screen_caption">Let\'s get you logged in first</string>
+    <string name="registration_screen_title">Welcome!</string>
+    <string name="registration_screen_caption">We\'re glad to have you here</string>
+    <string name="reset_password_screen_title">Don\'t worry! We got you</string>
 </resources>

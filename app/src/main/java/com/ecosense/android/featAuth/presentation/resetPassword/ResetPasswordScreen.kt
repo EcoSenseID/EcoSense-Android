@@ -1,13 +1,17 @@
 package com.ecosense.android.featAuth.presentation.resetPassword
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.ecosense.android.R
 import com.ecosense.android.core.presentation.AuthNavGraph
@@ -15,6 +19,7 @@ import com.ecosense.android.core.presentation.theme.spacing
 import com.ecosense.android.core.presentation.util.UIEvent
 import com.ecosense.android.core.presentation.util.asString
 import com.ecosense.android.featAuth.presentation.component.EmailTextField
+import com.ecosense.android.featAuth.presentation.component.RoundedEndsButton
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlinx.coroutines.flow.collectLatest
@@ -54,14 +59,23 @@ fun ResetPasswordScreen(
         scaffoldState = scaffoldState,
         modifier = Modifier.fillMaxSize()
     ) {
-        Column(modifier = Modifier.padding(MaterialTheme.spacing.medium)) {
-            Text(text = stringResource(R.string.reset_password))
+        Column(
+            modifier = Modifier
+                .padding(MaterialTheme.spacing.large)
+                .fillMaxSize()
+        ) {
 
-            Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
+            Text(
+                text = stringResource(R.string.reset_password_screen_title),
+                style = MaterialTheme.typography.h5,
+                fontWeight = FontWeight.SemiBold,
+            )
 
-            Text(text = stringResource(R.string.reset_password_caption))
+            Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
 
-            Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
+            Text(text = stringResource(R.string.reset_password_screen_caption))
+
+            Spacer(modifier = Modifier.height(MaterialTheme.spacing.large))
 
             EmailTextField(
                 value = state.email,
@@ -70,7 +84,7 @@ fun ResetPasswordScreen(
 
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
 
-            Button(
+            RoundedEndsButton(
                 enabled = !state.isLoading,
                 onClick = { viewModel.onSendInstructionClick() },
                 modifier = Modifier.fillMaxWidth()
