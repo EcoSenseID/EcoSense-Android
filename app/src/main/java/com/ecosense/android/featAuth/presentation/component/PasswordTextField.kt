@@ -20,7 +20,7 @@ fun PasswordTextField(
     value: String,
     isVisible: Boolean,
     onValueChange: (String) -> Unit,
-    onChangeVisibility: () -> Unit,
+    onToggleVisibility: () -> Unit,
     modifier: Modifier = Modifier,
     label: @Composable () -> Unit = { Text(text = stringResource(id = R.string.password)) },
     placeholder: @Composable () -> Unit = { Text(text = stringResource(id = R.string.password)) }
@@ -33,7 +33,7 @@ fun PasswordTextField(
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
         modifier = modifier,
         trailingIcon = {
-            IconButton(onClick = onChangeVisibility) {
+            IconButton(onClick = onToggleVisibility) {
                 Icon(
                     imageVector = if (isVisible) Icons.Filled.Visibility else
                         Icons.Filled.VisibilityOff,

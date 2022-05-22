@@ -1,8 +1,7 @@
-package com.ecosense.android.featAuth.presentation.resetPassword
+package com.ecosense.android.featAuth.presentation.registration
 
-import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
@@ -14,7 +13,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.ecosense.android.R
 import com.ecosense.android.core.presentation.AuthNavGraph
@@ -22,6 +20,7 @@ import com.ecosense.android.core.presentation.theme.spacing
 import com.ecosense.android.core.presentation.util.UIEvent
 import com.ecosense.android.core.presentation.util.asString
 import com.ecosense.android.featAuth.presentation.component.EmailTextField
+import com.ecosense.android.featAuth.presentation.component.PasswordTextField
 import com.ecosense.android.featAuth.presentation.component.RoundedEndsButton
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -30,9 +29,9 @@ import kotlinx.coroutines.flow.collectLatest
 @Composable
 @Destination
 @AuthNavGraph
-fun ResetPasswordScreen(
+fun RegistrationScreen(
     navigator: DestinationsNavigator,
-    viewModel: ResetPasswordViewModel = hiltViewModel()
+    viewModel: RegistrationViewModel = hiltViewModel()
 ) {
     val scaffoldState = rememberScaffoldState()
 
@@ -67,16 +66,15 @@ fun ResetPasswordScreen(
                 .padding(MaterialTheme.spacing.large)
                 .fillMaxSize()
         ) {
-
             Text(
-                text = stringResource(R.string.reset_password_screen_title),
+                text = stringResource(R.string.registration_screen_title),
                 style = MaterialTheme.typography.h5,
                 fontWeight = FontWeight.SemiBold,
             )
 
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
 
-            Text(text = stringResource(R.string.reset_password_screen_caption))
+            Text(text = stringResource(R.string.registration_screen_caption))
 
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.large))
 
@@ -87,31 +85,52 @@ fun ResetPasswordScreen(
 
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
 
+            PasswordTextField(
+                value = state.password,
+                isVisible = state.isPasswordVisible,
+                onValueChange = { viewModel.onPasswordValueChange(it) },
+                onToggleVisibility = { viewModel.onTogglePasswordVisibility() }
+            )
+
+            Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
+
+            PasswordTextField(
+                value = state.repeatedPassword,
+                isVisible = state.isRepeatedPasswordVisible,
+                onValueChange = { viewModel.onRepeatedPasswordValueChange(it) },
+                onToggleVisibility = { viewModel.onToggleRepeatedPasswordVisibility() },
+                label = { Text(text = stringResource(R.string.repeat_password)) },
+                placeholder = { Text(text = stringResource(R.string.repeat_password)) }
+            )
+
+            Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
+
             RoundedEndsButton(
                 enabled = !state.isLoading,
-                onClick = { viewModel.onSendInstructionClick() },
+                onClick = { viewModel.onRegisterClick() },
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(
                     text = stringResource(
-                        if (state.isLoading) R.string.sending_instruction
-                        else R.string.send_instruction
+                        if (state.isLoading) R.string.registering_an_account
+                        else R.string.register
                     )
                 )
             }
 
-            Spacer(modifier = Modifier.height(MaterialTheme.spacing.large))
+            Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
 
-            if (state.isSuccessful) Text(
-                text = stringResource(R.string.sm_reset_password),
-                modifier = Modifier
-                    .border(
-                        width = 2.dp,
-                        color = MaterialTheme.colors.primary,
-                        shape = RoundedCornerShape(8.dp)
-                    )
-                    .padding(MaterialTheme.spacing.medium)
-            )
+            Row(
+                horizontalArrangement = Arrangement.Center,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(text = stringResource(R.string.already_have_an_account).plus(" "))
+                Text(
+                    text = stringResource(R.string.login),
+                    color = MaterialTheme.colors.primary,
+                    modifier = Modifier.clickable { navigator.popBackStack() }
+                )
+            }
         }
     }
 }

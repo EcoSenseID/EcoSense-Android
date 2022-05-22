@@ -8,6 +8,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -16,7 +17,8 @@ import javax.inject.Inject
 class ProfileViewModel @Inject constructor(
     private val authRepository: AuthRepository
 ) : ViewModel() {
-    val user: StateFlow<User> = authRepository.getUser()
+    val user: StateFlow<User> = authRepository.getCurrentUser()
+        .map { it ?: User.defaultValue }
         .stateIn(viewModelScope, SharingStarted.Lazily, User.defaultValue)
 
     private var onLogoutClickJob: Job? = null

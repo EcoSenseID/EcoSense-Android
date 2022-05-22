@@ -1,68 +1,66 @@
 package com.ecosense.android.featAuth.presentation.login
 
-import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ecosense.android.core.domain.repository.AuthRepository
+import com.ecosense.android.core.presentation.util.UIEvent
 import com.ecosense.android.core.util.Resource
-import com.ecosense.android.featAuth.domain.usecase.LoginUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
-import logcat.logcat
 import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val loginUseCases: LoginUseCases,
     private val authRepository: AuthRepository
 ) : ViewModel() {
-    // TODO: create a use case for email based login
-    // TODO: create a SharedFlow to send error message
 
-    private val _email = mutableStateOf("")
-    val email: State<String> = _email
+    private val _state = mutableStateOf(LoginScreenState.defaultValue)
+    val state: State<LoginScreenState> = _state
 
-    private val _password = mutableStateOf("")
-    val password: State<String> = _password
-
-    private val _isPasswordVisible = mutableStateOf(false)
-    val isPasswordVisible: State<Boolean> = _isPasswordVisible
+    private val _eventFlow = Channel<UIEvent>()
+    val eventFlow = _eventFlow.receiveAsFlow()
 
     fun onEmailValueChange(value: String) {
-        _email.value = value
+        _state.value = state.value.copy(email = value)
     }
 
     fun onPasswordValueChange(value: String) {
-        _password.value = value
+        _state.value = state.value.copy(password = value)
     }
 
-    fun onChangePasswordVisibility() {
-        _isPasswordVisible.value = !isPasswordVisible.value
+    fun onTogglePasswordVisibility() {
+        _state.value = state.value.copy(isPasswordVisible = !state.value.isPasswordVisible)
     }
 
     private var onLoginWithEmailClickJob: Job? = null
     fun onLoginWithEmailClick() {
         onLoginWithEmailClickJob?.cancel()
         onLoginWithEmailClickJob = viewModelScope.launch {
-            authRepository.loginWithEmail(email = email.value, password = password.value)
-                .onEach { result ->
-                    when (result) {
-                        is Resource.Error -> {
-                            Log.d("TAG", "onLoginClick: ERROR")
-                        }
-                        is Resource.Loading -> {
-                            Log.d("TAG", "onLoginClick: LOADING")
-                        }
-                        is Resource.Success -> {
-                            Log.d("TAG", "onLoginClick: SUCCESS")
-                        }
+            authRepository.loginWithEmail(
+                email = state.value.email,
+                password = state.value.password
+            ).onEach { result ->
+                when (result) {
+                    is Resource.Error -> {
+                        _state.value = state.value.copy(isLoadingEmailLogin = false)
+                        result.uiText?.let { _eventFlow.send(UIEvent.ShowSnackbar(it)) }
                     }
-                }.launchIn(this)
+                    is Resource.Loading -> {
+                        _state.value = state.value.copy(isLoadingEmailLogin = true)
+                        _eventFlow.send(UIEvent.HideKeyboard)
+                    }
+                    is Resource.Success -> {
+                        _state.value = state.value.copy(isLoadingEmailLogin = false)
+                    }
+                }
+            }.launchIn(this)
         }
     }
 
@@ -70,16 +68,18 @@ class LoginViewModel @Inject constructor(
     fun onGoogleSignInResult(idToken: String?) {
         onGoogleSignInResultJob?.cancel()
         onGoogleSignInResultJob = viewModelScope.launch {
-            loginUseCases.googleSignInUseCase(idToken = idToken).onEach { result ->
+            authRepository.loginWithGoogle(idToken = idToken).onEach { result ->
                 when (result) {
                     is Resource.Error -> {
-                        logcat { "onGoogleSignInResult: LOGIN ERROR" }
+                        _state.value = state.value.copy(isLoadingGoogleLogin = false)
+                        result.uiText?.let { _eventFlow.send(UIEvent.ShowSnackbar(it)) }
                     }
                     is Resource.Loading -> {
-                        logcat { "onGoogleSignInResult: LOGIN LOADING" }
+                        _state.value = state.value.copy(isLoadingGoogleLogin = true)
+                        _eventFlow.send(UIEvent.HideKeyboard)
                     }
                     is Resource.Success -> {
-                        logcat { "onGoogleSignInResult: LOGIN SUCCESS" }
+                        _state.value = state.value.copy(isLoadingGoogleLogin = false)
                     }
                 }
             }.launchIn(this)

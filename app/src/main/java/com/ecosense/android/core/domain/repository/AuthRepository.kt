@@ -5,28 +5,26 @@ import com.ecosense.android.core.util.SimpleResource
 import kotlinx.coroutines.flow.Flow
 
 interface AuthRepository {
-    fun getUser(): Flow<User>
-
-    fun isLoggedIn(): Flow<Boolean>
+    fun getCurrentUser(): Flow<User?>
 
     fun loginWithEmail(
         email: String,
-        password: String
+        password: String,
     ): Flow<SimpleResource>
 
     fun loginWithGoogle(
-        idToken: String
+        idToken: String?,
     ): Flow<SimpleResource>
 
     fun registerWithEmail(
         email: String,
         password: String,
-        passwordVerif: String
+        repeatedPassword: String,
+    ): Flow<SimpleResource>
+
+    fun sendPasswordResetEmail(
+        email: String,
     ): Flow<SimpleResource>
 
     fun logout()
-
-    fun sendPasswordResetEmail(
-        email: String
-    ): Flow<SimpleResource>
 }
