@@ -1,6 +1,8 @@
 package com.ecosense.android.featAuth.presentation.resetPassword
 
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
@@ -12,6 +14,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.ecosense.android.R
 import com.ecosense.android.core.presentation.AuthNavGraph
@@ -97,9 +100,18 @@ fun ResetPasswordScreen(
                 )
             }
 
-            Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
+            Spacer(modifier = Modifier.height(MaterialTheme.spacing.large))
 
-            if (state.isSuccessful) Text(text = stringResource(R.string.sm_reset_password))
+            if (state.isSuccessful) Text(
+                text = stringResource(R.string.sm_reset_password),
+                modifier = Modifier
+                    .border(
+                        width = 2.dp,
+                        color = MaterialTheme.colors.primary,
+                        shape = RoundedCornerShape(8.dp)
+                    )
+                    .padding(MaterialTheme.spacing.medium)
+            )
         }
     }
 }
