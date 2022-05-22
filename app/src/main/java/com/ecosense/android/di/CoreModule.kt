@@ -1,6 +1,8 @@
 package com.ecosense.android.di
 
+import com.ecosense.android.core.data.api.FirebaseAuthApi
 import com.ecosense.android.core.data.repository.AuthRepositoryImpl
+import com.ecosense.android.core.domain.api.AuthApi
 import com.ecosense.android.core.domain.repository.AuthRepository
 import dagger.Module
 import dagger.Provides
@@ -15,8 +17,14 @@ import javax.inject.Singleton
 object CoreModule {
     @Provides
     @Singleton
-    fun provideAuthRepository(): AuthRepository =
-        AuthRepositoryImpl()
+    fun provideAuthApi(): AuthApi = FirebaseAuthApi()
+
+    @Provides
+    @Singleton
+    fun provideAuthRepository(
+        authApi: AuthApi
+    ): AuthRepository =
+        AuthRepositoryImpl(authApi = authApi)
 
     @Provides
     @Singleton

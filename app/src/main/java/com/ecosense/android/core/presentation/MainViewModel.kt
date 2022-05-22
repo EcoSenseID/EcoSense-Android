@@ -6,6 +6,7 @@ import com.ecosense.android.core.domain.repository.AuthRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
@@ -13,6 +14,7 @@ import javax.inject.Inject
 class MainViewModel @Inject constructor(
     authRepository: AuthRepository
 ) : ViewModel() {
-    val isLoggedIn: StateFlow<Boolean> = authRepository.isLoggedIn()
+    val isLoggedIn: StateFlow<Boolean> = authRepository.getCurrentUser()
+        .map { it != null }
         .stateIn(viewModelScope, SharingStarted.Eagerly, true)
 }

@@ -61,11 +61,11 @@ class RegistrationViewModel @Inject constructor(
                 when (result) {
                     is Resource.Error -> {
                         _state.value = state.value.copy(isLoading = false)
-                        result.uiText?.let { _eventFlow.trySend(UIEvent.ShowSnackbar(it)) }
+                        result.uiText?.let { _eventFlow.send(UIEvent.ShowSnackbar(it)) }
                     }
                     is Resource.Loading -> {
                         _state.value = state.value.copy(isLoading = true)
-                        _eventFlow.trySend(UIEvent.HideKeyboard)
+                        _eventFlow.send(UIEvent.HideKeyboard)
                     }
                     is Resource.Success -> {
                         _state.value = state.value.copy(isLoading = false)

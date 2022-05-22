@@ -2,219 +2,148 @@ package com.ecosense.android.core.data.repository
 
 import android.util.Patterns
 import com.ecosense.android.R
-import com.ecosense.android.core.data.util.toUser
+import com.ecosense.android.core.domain.api.AuthApi
 import com.ecosense.android.core.domain.model.User
 import com.ecosense.android.core.domain.repository.AuthRepository
 import com.ecosense.android.core.util.Resource
 import com.ecosense.android.core.util.SimpleResource
 import com.ecosense.android.core.util.UIText
-import com.google.firebase.auth.*
-import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.flow
-import logcat.asLog
-import logcat.logcat
 
-class AuthRepositoryImpl : AuthRepository {
-
-    private val firebaseAuth = FirebaseAuth.getInstance()
-
-    override fun getUser(): Flow<User> = callbackFlow {
-        val authStateListener = FirebaseAuth.AuthStateListener {
-            it.currentUser?.let { firebaseUser -> trySend(firebaseUser.toUser()) }
-        }
-
-        firebaseAuth.addAuthStateListener(authStateListener)
-
-        awaitClose {
-            firebaseAuth.removeAuthStateListener(authStateListener)
-            channel.close()
-        }
-    }
-
-    override fun isLoggedIn(): Flow<Boolean> = callbackFlow {
-        val authStateListener = FirebaseAuth.AuthStateListener {
-            trySend(it.currentUser != null)
-        }
-
-        firebaseAuth.addAuthStateListener(authStateListener)
-
-        awaitClose {
-            firebaseAuth.removeAuthStateListener(authStateListener)
-            channel.close()
-        }
-    }
+class AuthRepositoryImpl(
+    private val authApi: AuthApi
+) : AuthRepository {
+    override fun getCurrentUser(): Flow<User?> = authApi.getCurrentUser()
 
     override fun loginWithEmail(
         email: String,
-        password: String
-    ): Flow<SimpleResource> = when {
-        email.isBlank() -> flow {
-            emit(Resource.Error(UIText.StringResource(R.string.em_email_blank)))
-        }
+        password: String,
+    ): Flow<SimpleResource> = flow {
+        emit(Resource.Loading())
 
-        !Patterns.EMAIL_ADDRESS.matcher(email).matches() -> flow {
-            emit(Resource.Error(UIText.StringResource(R.string.em_invalid_email)))
-        }
-
-        password.isBlank() -> flow {
-            emit(Resource.Error(UIText.StringResource(R.string.em_password_blank)))
-        }
-
-        else -> callbackFlow {
-            trySend(Resource.Loading())
-
-            try {
-                firebaseAuth
-                    .signInWithEmailAndPassword(email, password)
-                    .addOnCompleteListener { task ->
-                        when {
-                            task.isSuccessful -> trySend(Resource.Success(Unit))
-                            else -> when (task.exception) {
-                                is FirebaseAuthInvalidUserException -> R.string.em_email_login_invalid_user
-                                is FirebaseAuthInvalidCredentialsException -> R.string.wrong_password
-                                else -> R.string.em_unknown
-                            }.let { trySend(Resource.Error(UIText.StringResource(it))) }
-                        }
-                    }
-            } catch (e: Exception) {
-                trySend(Resource.Error(UIText.StringResource(R.string.em_unknown)))
-                logcat { e.asLog() }
-            } finally {
-                awaitClose { channel.close() }
+        when {
+            email.isBlank() -> {
+                emit(Resource.Error(UIText.StringResource(R.string.em_email_blank)))
+                return@flow
             }
+            !Patterns.EMAIL_ADDRESS.matcher(email).matches() -> {
+                emit(Resource.Error(UIText.StringResource(R.string.em_invalid_email)))
+                return@flow
+            }
+            password.isBlank() -> {
+                emit(Resource.Error(UIText.StringResource(R.string.em_password_blank)))
+                return@flow
+            }
+        }
+
+        try {
+            authApi
+                .loginWithEmail(email = email, password = password)
+                .also { emit(it) }
+        } catch (e: Exception) {
+            emit(Resource.Error(UIText.StringResource(R.string.em_unknown)))
         }
     }
 
     override fun loginWithGoogle(
-        idToken: String?
-    ): Flow<SimpleResource> = when {
+        idToken: String?,
+    ): Flow<SimpleResource> = flow {
+        emit(Resource.Loading())
 
-        idToken.isNullOrBlank() -> flow {
-            emit(Resource.Error(UIText.StringResource(R.string.em_google_sign_in)))
+        when {
+            idToken.isNullOrBlank() -> {
+                emit(Resource.Error(UIText.StringResource(R.string.em_google_sign_in)))
+                return@flow
+            }
         }
 
-        else -> callbackFlow {
-            trySend(Resource.Loading())
-
-            try {
-                val credential = GoogleAuthProvider.getCredential(idToken, null)
-
-                firebaseAuth
-                    .signInWithCredential(credential)
-                    .addOnCompleteListener { task ->
-                        when {
-                            task.isSuccessful -> trySend(Resource.Success(Unit))
-                            else -> when (task.exception) {
-                                is FirebaseAuthInvalidUserException -> R.string.em_google_sign_in_invalid_user
-                                is FirebaseAuthInvalidCredentialsException -> R.string.em_google_sign_in_invalid_credential
-                                is FirebaseAuthUserCollisionException -> R.string.em_google_sign_in_collision
-                                else -> R.string.em_unknown
-                            }.let { trySend(Resource.Error(UIText.StringResource(it))) }
-                        }
-                    }
-            } catch (e: Exception) {
-                trySend(Resource.Error(UIText.StringResource(R.string.em_unknown)))
-                logcat { e.asLog() }
-            } finally {
-                awaitClose { channel.close() }
-            }
+        try {
+            authApi
+                .loginWithGoogle(idToken = idToken)
+                .also { emit(it) }
+        } catch (e: Exception) {
+            emit(Resource.Error(UIText.StringResource(R.string.em_unknown)))
         }
     }
 
     override fun registerWithEmail(
         email: String,
         password: String,
-        repeatedPassword: String
-    ): Flow<SimpleResource> = when {
+        repeatedPassword: String,
+    ): Flow<SimpleResource> = flow {
+        emit(Resource.Loading())
 
-        email.isBlank() -> flow {
-            emit(Resource.Error(UIText.StringResource(R.string.em_email_blank)))
-        }
+        when {
+            email.isBlank() -> {
+                emit(Resource.Error(UIText.StringResource(R.string.em_email_blank)))
+                return@flow
+            }
 
-        !Patterns.EMAIL_ADDRESS.matcher(email).matches() -> flow {
-            emit(Resource.Error(UIText.StringResource(R.string.em_invalid_email)))
-        }
+            !Patterns.EMAIL_ADDRESS.matcher(email).matches() -> {
+                emit(Resource.Error(UIText.StringResource(R.string.em_invalid_email)))
+                return@flow
+            }
 
-        password.isBlank() -> flow {
-            emit(Resource.Error(UIText.StringResource(R.string.em_password_blank)))
-        }
+            password.isBlank() -> {
+                emit(Resource.Error(UIText.StringResource(R.string.em_password_blank)))
+                return@flow
+            }
 
-        password.length < 6 -> flow {
-            emit(Resource.Error(UIText.StringResource(R.string.em_register_password_too_short)))
-        }
+            password.length < MINIMUM_PASSWORD_LENGTH -> {
+                emit(Resource.Error(UIText.StringResource(R.string.em_register_password_too_short)))
+                return@flow
+            }
 
-        repeatedPassword.isBlank() -> flow {
-            emit(Resource.Error(UIText.StringResource(R.string.em_repeat_password_blank)))
-        }
+            repeatedPassword.isBlank() -> {
+                emit(Resource.Error(UIText.StringResource(R.string.em_repeat_password_blank)))
+                return@flow
+            }
 
-        !password.contentEquals(repeatedPassword) -> flow {
-            emit(Resource.Error(UIText.StringResource(R.string.em_password_not_match)))
-        }
-
-        else -> callbackFlow {
-            trySend(Resource.Loading())
-
-            try {
-                firebaseAuth
-                    .createUserWithEmailAndPassword(email, password)
-                    .addOnCompleteListener { task ->
-                        when {
-                            task.isSuccessful -> trySend(Resource.Success(Unit))
-                            else -> when (task.exception) {
-                                is FirebaseAuthWeakPasswordException -> R.string.em_register_weak_password
-                                is FirebaseAuthInvalidCredentialsException -> R.string.em_register_invalid_email
-                                is FirebaseAuthUserCollisionException -> R.string.em_register_email_registered
-                                else -> R.string.em_unknown
-                            }.let { trySend(Resource.Error(UIText.StringResource(it))) }
-                        }
-                    }
-            } catch (e: Exception) {
-                trySend(Resource.Error(UIText.StringResource(R.string.em_unknown)))
-                logcat { e.asLog() }
-            } finally {
-                awaitClose { channel.close() }
+            !password.contentEquals(repeatedPassword) -> {
+                emit(Resource.Error(UIText.StringResource(R.string.em_password_not_match)))
+                return@flow
             }
         }
-    }
 
-    override fun logout() {
-        firebaseAuth.signOut()
+        try {
+            authApi
+                .registerWithEmail(email = email, password = password)
+                .also { emit(it) }
+        } catch (e: Exception) {
+            emit(Resource.Error(UIText.StringResource(R.string.em_unknown)))
+        }
     }
 
     override fun sendPasswordResetEmail(
-        email: String
-    ): Flow<SimpleResource> = when {
-        email.isBlank() -> flow {
-            emit(Resource.Error(UIText.StringResource(R.string.em_email_blank)))
-        }
+        email: String,
+    ): Flow<SimpleResource> = flow {
+        emit(Resource.Loading())
 
-        !Patterns.EMAIL_ADDRESS.matcher(email).matches() -> flow {
-            emit(Resource.Error(UIText.StringResource(R.string.em_invalid_email)))
-        }
+        when {
+            email.isBlank() -> {
+                emit(Resource.Error(UIText.StringResource(R.string.em_email_blank)))
+                return@flow
+            }
 
-        else -> callbackFlow {
-            trySend(Resource.Loading())
-
-            try {
-                firebaseAuth
-                    .sendPasswordResetEmail(email)
-                    .addOnCompleteListener { task ->
-                        when {
-                            task.isSuccessful -> trySend(Resource.Success(Unit))
-                            else -> when (task.exception) {
-                                is FirebaseAuthInvalidUserException -> R.string.em_reset_password_unregistered_email
-                                else -> R.string.em_unknown
-                            }.let { trySend(Resource.Error(UIText.StringResource(it))) }
-                        }
-                    }
-            } catch (e: Exception) {
-                trySend(Resource.Error(UIText.StringResource(R.string.em_unknown)))
-                logcat { e.asLog() }
-            } finally {
-                awaitClose { channel.close() }
+            !Patterns.EMAIL_ADDRESS.matcher(email).matches() -> {
+                emit(Resource.Error(UIText.StringResource(R.string.em_invalid_email)))
+                return@flow
             }
         }
+
+        try {
+            authApi
+                .sendPasswordResetEmail(email = email)
+                .also { emit(it) }
+        } catch (e: Exception) {
+            emit(Resource.Error(UIText.StringResource(R.string.em_unknown)))
+        }
+    }
+
+    override fun logout() = authApi.logout()
+
+    companion object {
+        private const val MINIMUM_PASSWORD_LENGTH = 6
     }
 }
