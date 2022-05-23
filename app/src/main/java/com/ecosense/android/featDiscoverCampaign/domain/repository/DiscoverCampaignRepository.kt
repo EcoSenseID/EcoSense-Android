@@ -1,7 +1,7 @@
 package com.ecosense.android.featDiscoverCampaign.domain.repository
 
 import com.ecosense.android.core.util.Resource
-import com.ecosense.android.featDiscoverCampaign.domain.model.Campaign
+import com.ecosense.android.core.domain.model.Campaign
 import kotlinx.coroutines.flow.Flow
 
 interface DiscoverCampaignRepository {

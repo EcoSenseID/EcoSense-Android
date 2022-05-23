@@ -2,7 +2,7 @@ package com.ecosense.android.featDiscoverCampaign.data.repository
 
 import com.ecosense.android.core.util.Resource
 import com.ecosense.android.featDiscoverCampaign.data.util.Faker
-import com.ecosense.android.featDiscoverCampaign.domain.model.Campaign
+import com.ecosense.android.core.domain.model.Campaign
 import com.ecosense.android.featDiscoverCampaign.domain.repository.DiscoverCampaignRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
