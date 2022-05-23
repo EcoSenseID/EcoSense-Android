@@ -50,23 +50,32 @@ fun ProfileScreen(
     val scaffoldState = rememberScaffoldState()
     val coroutineScope = rememberCoroutineScope()
 
-    val tabItems = listOf(
-        TabItem(
-            title = stringResource(id = R.string.experiences),
-            content = { ExperiencesTab() }
-        ),
-        TabItem(
-            title = stringResource(id = R.string.history),
-            content = { HistoryTab(navigator = navigator) }
-        )
-    )
-
-    val pagerState = rememberPagerState(pageCount = tabItems.size)
-
     val focusManager = LocalFocusManager.current
     val context = LocalContext.current
 
     val state = viewModel.state.value
+
+    val tabItems = listOf(
+        TabItem(
+            title = stringResource(id = R.string.experiences),
+            content = {
+                ExperiencesTab(
+                    experiences = state.contributions.experiences
+                )
+            }
+        ),
+        TabItem(
+            title = stringResource(id = R.string.history),
+            content = {
+                HistoryTab(
+                    campaigns = state.contributions.completedCampaigns,
+                    navigator = navigator
+                )
+            }
+        )
+    )
+
+    val pagerState = rememberPagerState(pageCount = tabItems.size)
 
     LaunchedEffect(key1 = true) {
         viewModel.eventFlow.collectLatest { event ->
@@ -144,7 +153,7 @@ fun ProfileScreen(
 
                 state.user.phoneNumber?.let { Text(text = it) }
 
-                Spacer(modifier = Modifier.height(MaterialTheme.spacing.large))
+                Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
 
                 TabRow(
                     selectedTabIndex = pagerState.currentPage,
@@ -183,8 +192,6 @@ fun ProfileScreen(
                     }
                 }
             }
-
-            Spacer(modifier = Modifier.height(MaterialTheme.spacing.large))
 
             HorizontalPager(
                 state = pagerState,
