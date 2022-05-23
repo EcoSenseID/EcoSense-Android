@@ -18,7 +18,7 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import coil.size.Scale
 import com.ecosense.android.core.presentation.theme.spacing
-import com.ecosense.android.featDiscoverCampaign.domain.model.Campaign
+import com.ecosense.android.core.domain.model.Campaign
 
 @Composable
 fun CampaignItem(

@@ -1,6 +1,7 @@
-package com.ecosense.android.featDiscoverCampaign.domain.model
+package com.ecosense.android.core.domain.model
 
 data class Campaign(
+    val id: Int,
     val posterUrl: String,
     val title: String,
     val endDate: String,
