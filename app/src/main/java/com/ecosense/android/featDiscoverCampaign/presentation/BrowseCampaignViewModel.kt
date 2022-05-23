@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ecosense.android.core.util.Resource
 import com.ecosense.android.core.util.UIText
-import com.ecosense.android.featDiscoverCampaign.domain.model.Campaign
+import com.ecosense.android.core.domain.model.Campaign
 import com.ecosense.android.featDiscoverCampaign.domain.repository.DiscoverCampaignRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn

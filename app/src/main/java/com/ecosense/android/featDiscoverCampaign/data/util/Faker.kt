@@ -1,6 +1,6 @@
 package com.ecosense.android.featDiscoverCampaign.data.util
 
-import com.ecosense.android.featDiscoverCampaign.domain.model.Campaign
+import com.ecosense.android.core.domain.model.Campaign
 
 object Faker {
     fun getBrowseCampaign(): List<Campaign> {
@@ -9,6 +9,7 @@ object Faker {
         for (i in 1..50) {
             result.add(
                 Campaign(
+                    id = i,
                     posterUrl = "https://cdn.statically.io/og/theme=dark/Campaign$i.jpg",
                     title = "Lorem Ipsum $i",
                     endDate = "2022-05-${i}T00:00:00.000Z",
