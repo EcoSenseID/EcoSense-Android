@@ -57,4 +57,12 @@
     <string name="registration_screen_title">Welcome!</string>
     <string name="registration_screen_caption">We\'re glad to have you here</string>
     <string name="reset_password_screen_title">Don\'t worry! We got you</string>
+    <string name="em_io_exception">Couldn\'t reach server. Please check your internet connection.</string>
+    <string name="cd_profile_picture">Profile picture</string>
+    <string name="cd_options_menu">Options menu</string>
+    <string name="ecosense_user">EcoSense User</string>
+    <string name="completed_campaigns">Completed Campaigns</string>
+    <string name="experiences">Experiences</string>
+    <string name="history">History</string>
+    <string name="edit_profile">Edit profile</string>
 </resources>

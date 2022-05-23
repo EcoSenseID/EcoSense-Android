@@ -155,4 +155,8 @@ dependencies {
 
     // Logcat
     implementation 'com.squareup.logcat:logcat:0.1'
+
+    // Accompanist-Pager
+    implementation "com.google.accompanist:accompanist-pager:0.13.0"
+    implementation "com.google.accompanist:accompanist-pager-indicators:0.13.0"
 }
