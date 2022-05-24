@@ -1,8 +1,10 @@
 package com.ecosense.android.di
 
 import com.ecosense.android.core.data.api.FirebaseAuthApi
+import com.ecosense.android.core.data.api.FirebaseStorageApi
 import com.ecosense.android.core.data.repository.AuthRepositoryImpl
 import com.ecosense.android.core.domain.api.AuthApi
+import com.ecosense.android.core.domain.api.CloudStorageApi
 import com.ecosense.android.core.domain.repository.AuthRepository
 import dagger.Module
 import dagger.Provides
@@ -18,6 +20,10 @@ object CoreModule {
     @Provides
     @Singleton
     fun provideAuthApi(): AuthApi = FirebaseAuthApi()
+
+    @Provides
+    @Singleton
+    fun provideCloudStorageApi(): CloudStorageApi = FirebaseStorageApi()
 
     @Provides
     @Singleton

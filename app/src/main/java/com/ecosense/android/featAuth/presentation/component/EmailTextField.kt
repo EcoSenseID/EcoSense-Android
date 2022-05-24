@@ -13,7 +13,8 @@ fun EmailTextField(
     value: String,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
-    onValueChange: (String) -> Unit = {}
+    onValueChange: (String) -> Unit = {},
+    trailingIcon: @Composable (() -> Unit)? = null
 ) {
     AuthTextField(
         value = value,
@@ -22,6 +23,7 @@ fun EmailTextField(
         label = { Text(text = stringResource(id = R.string.email)) },
         placeholder = { Text(text = stringResource(id = R.string.email)) },
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
-        modifier = modifier
+        modifier = modifier,
+        trailingIcon = trailingIcon
     )
 }
