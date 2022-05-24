@@ -135,8 +135,8 @@ class FirebaseAuthApi : AuthApi {
     }
 
     override suspend fun updateProfile(
-        displayName: String?,
-        photoUrl: String?,
+        newDisplayName: String?,
+        newPhotoUri: Uri?,
     ): SimpleResource = suspendCoroutine { cont ->
         val user = firebaseAuth.currentUser
 
@@ -146,8 +146,8 @@ class FirebaseAuthApi : AuthApi {
         }
 
         val profileUpdates = userProfileChangeRequest {
-            setDisplayName(displayName ?: user.displayName)
-            photoUri = photoUrl?.let { Uri.parse(it) } ?: user.photoUrl
+            displayName = newDisplayName ?: user.displayName
+            photoUri = newPhotoUri ?: user.photoUrl
         }
 
         user.updateProfile(profileUpdates).addOnCompleteListener { task ->
