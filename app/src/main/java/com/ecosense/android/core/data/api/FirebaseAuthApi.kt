@@ -35,20 +35,17 @@ class FirebaseAuthApi : AuthApi {
         }
 
     override suspend fun getCurrentUser(): User? = suspendCoroutine { cont ->
-        firebaseAuth.currentUser?.reload()?.addOnCompleteListener { task ->
+        firebaseAuth.currentUser?.reload()?.addOnCompleteListener {
             val firebaseUser = firebaseAuth.currentUser
-            when {
-                task.isSuccessful -> cont.resume(
-                    User(
-                        uid = firebaseUser?.uid,
-                        displayName = firebaseUser?.displayName,
-                        email = firebaseUser?.email,
-                        photoUrl = firebaseUser?.photoUrl?.toString(),
-                        isEmailVerified = firebaseUser?.isEmailVerified
-                    )
+            cont.resume(
+                User(
+                    uid = firebaseUser?.uid,
+                    displayName = firebaseUser?.displayName,
+                    email = firebaseUser?.email,
+                    photoUrl = firebaseUser?.photoUrl?.toString(),
+                    isEmailVerified = firebaseUser?.isEmailVerified
                 )
-                else -> cont.resume(null)
-            }
+            )
         }
     }
 
