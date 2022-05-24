@@ -4,9 +4,12 @@ data class Campaign(
     val id: Int,
     val posterUrl: String,
     val title: String,
+    val description: String,
+    val startDate: String,
     val endDate: String,
     val category: List<String>,
     val participantsCount: Int,
     val isTrending: Boolean,
-    val isNew: Boolean
+    val isNew: Boolean,
+    val isJoined: Boolean
 )

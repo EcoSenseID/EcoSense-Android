@@ -1,4 +1,4 @@
-package com.ecosense.android.featDiscoverCampaign.presentation
+package com.ecosense.android.featDiscoverCampaign.presentation.discover
 
 import androidx.lifecycle.ViewModel
 import com.ecosense.android.featDiscoverCampaign.domain.repository.DiscoverCampaignRepository

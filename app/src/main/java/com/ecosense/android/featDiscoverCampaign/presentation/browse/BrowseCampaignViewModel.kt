@@ -1,4 +1,4 @@
-package com.ecosense.android.featDiscoverCampaign.presentation
+package com.ecosense.android.featDiscoverCampaign.presentation.browse
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf

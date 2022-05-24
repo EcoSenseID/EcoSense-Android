@@ -1,4 +1,4 @@
-package com.ecosense.android.featDiscoverCampaign.presentation
+package com.ecosense.android.featDiscoverCampaign.presentation.browse
 
 import android.util.Log
 import androidx.compose.foundation.layout.Column
