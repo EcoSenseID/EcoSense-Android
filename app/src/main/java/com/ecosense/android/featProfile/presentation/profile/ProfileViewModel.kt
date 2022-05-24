@@ -17,7 +17,6 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
-import logcat.logcat
 import javax.inject.Inject
 
 @HiltViewModel
@@ -41,9 +40,8 @@ class ProfileViewModel @Inject constructor(
     private fun getProfile() {
         getProfileJob?.cancel()
         getProfileJob = viewModelScope.launch {
-            authRepository.getCurrentUser().onEach { user ->
-                user?.let { _state.value = state.value.copy(user = it) }
-            }.launchIn(this)
+            val user = authRepository.getCurrentUser()
+            user?.let { _state.value = state.value.copy(user = it) }
         }
     }
 
@@ -52,7 +50,6 @@ class ProfileViewModel @Inject constructor(
         getContributionsJob?.cancel()
         getContributionsJob = viewModelScope.launch {
             profileRepository.getContributions().onEach { result ->
-                logcat { result::class.java.name }
                 when (result) {
                     is Resource.Error -> {
                         _state.value = state.value.copy(isLoadingContributions = false)
@@ -69,7 +66,6 @@ class ProfileViewModel @Inject constructor(
                             contributions = result.data ?: Contributions.defaultValue,
                             isLoadingContributions = false
                         )
-                        logcat { result.data?.completedCampaigns?.joinToString() + result.data?.experiences?.joinToString() }
                     }
                 }
             }.launchIn(this)

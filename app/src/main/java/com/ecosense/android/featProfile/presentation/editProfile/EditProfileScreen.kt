@@ -1,11 +1,17 @@
 package com.ecosense.android.featProfile.presentation.editProfile
 
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Warning
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
@@ -38,7 +44,12 @@ fun EditProfileScreen(
     navigator: DestinationsNavigator,
     viewModel: EditProfileViewModel = hiltViewModel()
 ) {
+    // TODO: navigate back when successfully saved
     val scaffoldState = rememberScaffoldState()
+
+    val imagePickerLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent()
+    ) { uri: Uri? -> viewModel.onImagePicked(uri) }
 
     val focusManager = LocalFocusManager.current
     val context = LocalContext.current
@@ -90,6 +101,7 @@ fun EditProfileScreen(
                 AsyncImage(
                     model = ImageRequest.Builder(LocalContext.current)
                         .data(state.photoUrl)
+                        .placeholder(R.drawable.ic_ecosense_logo)
                         .error(R.drawable.ic_ecosense_logo)
                         .crossfade(true)
                         .scale(Scale.FILL)
@@ -103,7 +115,9 @@ fun EditProfileScreen(
 
                 Spacer(modifier = Modifier.width(MaterialTheme.spacing.medium))
 
-                Button(onClick = { viewModel.onChangeProfilePictureClick() }) {
+                Button(onClick = {
+                    imagePickerLauncher.launch(context.getString(R.string.content_type_image))
+                }) {
                     Text(text = stringResource(R.string.change_profile_picture))
                 }
             }
@@ -123,6 +137,17 @@ fun EditProfileScreen(
             EmailTextField(
                 value = state.email ?: "",
                 enabled = false,
+                trailingIcon = {
+                    Icon(
+                        imageVector =
+                        if (state.isEmailVerified == true) Icons.Default.Check
+                        else Icons.Default.Warning,
+                        contentDescription = stringResource(
+                            if (state.isEmailVerified == true) R.string.email_is_verified
+                            else R.string.email_is_unverified
+                        )
+                    )
+                }
             )
 
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))

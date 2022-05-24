@@ -1,11 +1,14 @@
 package com.ecosense.android.core.domain.api
 
+import android.net.Uri
 import com.ecosense.android.core.domain.model.User
 import com.ecosense.android.core.util.SimpleResource
 import kotlinx.coroutines.flow.Flow
 
 interface AuthApi {
-    fun getCurrentUser(): Flow<User?>
+    val isLoggedIn: Flow<Boolean>
+
+    suspend fun getCurrentUser(): User?
 
     suspend fun getIdToken(
         forceRefresh: Boolean,
@@ -32,8 +35,8 @@ interface AuthApi {
     fun logout()
 
     suspend fun updateProfile(
-        displayName: String?,
-        photoUrl: String?,
+        newDisplayName: String?,
+        newPhotoUri: Uri?,
     ): SimpleResource
 
     suspend fun sendEmailVerification(): SimpleResource

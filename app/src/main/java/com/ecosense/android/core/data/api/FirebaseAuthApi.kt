@@ -20,28 +20,35 @@ class FirebaseAuthApi : AuthApi {
 
     private val firebaseAuth = FirebaseAuth.getInstance().apply { useAppLanguage() }
 
-    override fun getCurrentUser(): Flow<User?> = callbackFlow {
-        val authStateListener = FirebaseAuth.AuthStateListener {
-            val user: User? = it.currentUser?.let { firebaseUser ->
-                User(
-                    uid = firebaseUser.uid,
-                    displayName = firebaseUser.displayName,
-                    email = firebaseUser.email,
-                    photoUrl = firebaseUser.photoUrl.toString(),
-                    isEmailVerified = firebaseUser.isEmailVerified,
-                )
+    override val isLoggedIn: Flow<Boolean>
+        get() = callbackFlow {
+            val authStateListener = FirebaseAuth.AuthStateListener {
+                trySend(it.currentUser != null)
             }
 
-            trySend(user)
+            firebaseAuth.addAuthStateListener(authStateListener)
+
+            awaitClose {
+                firebaseAuth.removeAuthStateListener(authStateListener)
+                channel.close()
+            }
         }
 
-        firebaseAuth.addAuthStateListener(authStateListener)
-
-        awaitClose {
-            firebaseAuth.removeAuthStateListener(authStateListener)
-            channel.close()
+    override suspend fun getCurrentUser(): User? = suspendCoroutine { cont ->
+        firebaseAuth.currentUser?.reload()?.addOnCompleteListener {
+            val firebaseUser = firebaseAuth.currentUser
+            cont.resume(
+                User(
+                    uid = firebaseUser?.uid,
+                    displayName = firebaseUser?.displayName,
+                    email = firebaseUser?.email,
+                    photoUrl = firebaseUser?.photoUrl?.toString(),
+                    isEmailVerified = firebaseUser?.isEmailVerified
+                )
+            )
         }
     }
+
 
     override suspend fun getIdToken(
         forceRefresh: Boolean,
@@ -135,8 +142,8 @@ class FirebaseAuthApi : AuthApi {
     }
 
     override suspend fun updateProfile(
-        displayName: String?,
-        photoUrl: String?,
+        newDisplayName: String?,
+        newPhotoUri: Uri?,
     ): SimpleResource = suspendCoroutine { cont ->
         val user = firebaseAuth.currentUser
 
@@ -146,8 +153,8 @@ class FirebaseAuthApi : AuthApi {
         }
 
         val profileUpdates = userProfileChangeRequest {
-            setDisplayName(displayName ?: user.displayName)
-            photoUri = photoUrl?.let { Uri.parse(it) } ?: user.photoUrl
+            displayName = newDisplayName ?: user.displayName
+            photoUri = newPhotoUri ?: user.photoUrl
         }
 
         user.updateProfile(profileUpdates).addOnCompleteListener { task ->

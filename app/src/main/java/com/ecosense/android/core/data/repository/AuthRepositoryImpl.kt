@@ -14,7 +14,10 @@ import kotlinx.coroutines.flow.flow
 class AuthRepositoryImpl(
     private val authApi: AuthApi
 ) : AuthRepository {
-    override fun getCurrentUser(): Flow<User?> = authApi.getCurrentUser()
+
+    override val isLoggedIn: Flow<Boolean> = authApi.isLoggedIn
+
+    override suspend fun getCurrentUser(): User? = authApi.getCurrentUser()
 
     override fun loginWithEmail(
         email: String,

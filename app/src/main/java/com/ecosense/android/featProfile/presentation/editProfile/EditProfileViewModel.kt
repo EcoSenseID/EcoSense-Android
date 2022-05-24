@@ -1,5 +1,6 @@
 package com.ecosense.android.featProfile.presentation.editProfile
 
+import android.net.Uri
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -35,17 +36,17 @@ class EditProfileViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            authRepository.getCurrentUser().collect { user ->
-                _state.value = state.value.copy(
-                    uid = user?.uid,
-                    displayName = user?.displayName,
-                    email = user?.email,
-                    photoUrl = user?.photoUrl,
-                    isEmailVerified = user?.isEmailVerified
-                )
+            val user = authRepository.getCurrentUser()
 
-                _initState.value = state.value
-            }
+            _state.value = state.value.copy(
+                uid = user?.uid,
+                displayName = user?.displayName,
+                email = user?.email,
+                photoUrl = user?.photoUrl,
+                isEmailVerified = user?.isEmailVerified
+            )
+
+            _initState.value = state.value
         }
     }
 
@@ -60,12 +61,12 @@ class EditProfileViewModel @Inject constructor(
             val newDisplayName = if (_initState.value.displayName != state.value.displayName)
                 state.value.displayName else null
 
-            val newPhotoUrl = if (_initState.value.photoUrl != state.value.photoUrl)
-                state.value.photoUrl else null
+            val newPhotoUri: Uri? = if (_initState.value.photoUrl != state.value.photoUrl)
+                Uri.parse(state.value.photoUrl) else null
 
             profileRepository.updateProfile(
-                displayName = newDisplayName,
-                photoUrl = newPhotoUrl
+                newDisplayName = newDisplayName,
+                newPhotoUri = newPhotoUri
             ).onEach { result ->
                 when (result) {
                     is Resource.Error -> {
@@ -84,13 +85,6 @@ class EditProfileViewModel @Inject constructor(
                 }
             }.launchIn(this)
         }
-    }
-
-    fun onChangeProfilePictureClick() {
-        // TODO: implement image picker
-        val newPhotoUrl = "https://i.ibb.co/QXBQfXg/1067981407.jpg"
-
-        _state.value = state.value.copy(photoUrl = newPhotoUrl)
     }
 
     private var onSendEmailVerificationClickJob: Job? = null
@@ -115,5 +109,9 @@ class EditProfileViewModel @Inject constructor(
                 }
             }.launchIn(this)
         }
+    }
+
+    fun onImagePicked(uri: Uri?) {
+        uri?.let { _state.value = state.value.copy(photoUrl = it.toString()) }
     }
 }

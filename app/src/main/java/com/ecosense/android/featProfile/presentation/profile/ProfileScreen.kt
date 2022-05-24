@@ -1,15 +1,14 @@
 package com.ecosense.android.featProfile.presentation.profile
 
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.icons.filled.Warning
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -131,19 +130,31 @@ fun ProfileScreen(
                         end = MaterialTheme.spacing.medium,
                     )
             ) {
-                AsyncImage(
-                    model = ImageRequest.Builder(LocalContext.current)
-                        .data(state.user.photoUrl)
-                        .error(R.drawable.ic_ecosense_logo)
-                        .crossfade(true)
-                        .scale(Scale.FILL)
-                        .build(),
-                    contentDescription = stringResource(R.string.cd_profile_picture),
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier
-                        .size(90.dp)
-                        .clip(CircleShape)
-                )
+                Box(modifier = Modifier.size(90.dp)) {
+                    val padding by animateDpAsState(if (state.isLoadingContributions) 4.dp else 0.dp)
+                    AsyncImage(
+                        model = ImageRequest.Builder(LocalContext.current)
+                            .data(state.user.photoUrl)
+                            .placeholder(R.drawable.ic_ecosense_logo)
+                            .error(R.drawable.ic_ecosense_logo)
+                            .crossfade(true)
+                            .scale(Scale.FILL)
+                            .build(),
+                        contentDescription = stringResource(R.string.cd_profile_picture),
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(padding)
+                            .clip(CircleShape)
+                    )
+
+                    if (state.isLoadingContributions) {
+                        CircularProgressIndicator(
+                            modifier = Modifier.fillMaxSize(),
+                            strokeWidth = 4.dp
+                        )
+                    }
+                }
 
                 Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
 
@@ -156,26 +167,6 @@ fun ProfileScreen(
                 )
 
                 state.user.email?.let { Text(text = it) }
-
-                Row(
-                    horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    Icon(
-                        imageVector =
-                        if (state.user.isEmailVerified == true) Icons.Default.Check
-                        else Icons.Default.Warning,
-                        contentDescription = null,
-                    )
-
-                    Text(
-                        text = stringResource(
-                            if (state.user.isEmailVerified == true) R.string.verified
-                            else R.string.unverified
-                        ).uppercase(),
-                        style = MaterialTheme.typography.caption,
-                    )
-                }
 
                 Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
 

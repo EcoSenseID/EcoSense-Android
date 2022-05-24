@@ -80,4 +80,7 @@
     <string name="sm_email_verification_sent">Email verification is sent to your email address. Please check your inbox and spam/junk folder.</string>
     <string name="sending">Sending…</string>
     <string name="em_too_many_request">You have already requested email verification</string>
+    <string name="email_is_verified">Email is verified</string>
+    <string name="email_is_unverified">Email is unverified</string>
+    <string name="content_type_image">image/*</string>
 </resources>
