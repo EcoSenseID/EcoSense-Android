@@ -1,19 +1,23 @@
-package com.ecosense.android.core.domain.model
+package com.ecosense.android.featProfile.presentation.editProfile
 
-data class User(
+data class EditProfileScreenState(
     val uid: String?,
     val displayName: String?,
     val email: String?,
     val photoUrl: String?,
+    val isSavingProfileLoading: Boolean,
     val isEmailVerified: Boolean?,
+    val isEmailVerificationLoading: Boolean,
 ) {
     companion object {
-        val defaultValue = User(
+        val defaultValue = EditProfileScreenState(
             uid = null,
             displayName = null,
             email = null,
             photoUrl = null,
+            isSavingProfileLoading = false,
             isEmailVerified = null,
+            isEmailVerificationLoading = false
         )
     }
 }

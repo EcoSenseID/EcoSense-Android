@@ -66,4 +66,18 @@
     <string name="history">History</string>
     <string name="edit_profile">Edit profile</string>
     <string name="level">Level</string>
+    <string name="name">Name</string>
+    <string name="phone_number">Phone number</string>
+    <string name="back">Back</string>
+    <string name="save">Save</string>
+    <string name="change_profile_picture">Change profile picture</string>
+    <string name="user">User</string>
+    <string name="unverified">Unverified</string>
+    <string name="verified">Verified</string>
+    <string name="send_email_verification">Send email verification</string>
+    <string name="email_is_not_verified">Email is not verified</string>
+    <string name="sm_changes_saved">Changes saved successfully</string>
+    <string name="sm_email_verification_sent">Email verification is sent to your email address. Please check your inbox and spam/junk folder.</string>
+    <string name="sending">Sending…</string>
+    <string name="em_too_many_request">You have already requested email verification</string>
 </resources>

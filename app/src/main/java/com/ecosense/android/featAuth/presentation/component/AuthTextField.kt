@@ -19,12 +19,14 @@ fun AuthTextField(
     placeholder: @Composable (() -> Unit),
     keyboardOptions: KeyboardOptions,
     modifier: Modifier = Modifier,
+    enabled: Boolean = true,
     trailingIcon: @Composable (() -> Unit)? = null,
     visualTransformation: VisualTransformation = VisualTransformation.None,
 ) {
     TextField(
         value = value,
         label = label,
+        enabled = enabled,
         singleLine = true,
         placeholder = placeholder,
         onValueChange = onValueChange,
@@ -34,7 +36,8 @@ fun AuthTextField(
         shape = RoundedCornerShape(8.dp),
         colors = TextFieldDefaults.textFieldColors(
             focusedIndicatorColor = Color.Transparent,
-            unfocusedIndicatorColor = Color.Transparent
+            unfocusedIndicatorColor = Color.Transparent,
+            disabledIndicatorColor = Color.Transparent
         ),
         visualTransformation = visualTransformation,
     )
