@@ -1,4 +1,4 @@
-package com.ecosense.android.featProfile.presentation
+package com.ecosense.android.featProfile.presentation.profile
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
@@ -9,7 +9,7 @@ import com.ecosense.android.core.presentation.util.UIEvent
 import com.ecosense.android.core.util.Resource
 import com.ecosense.android.featProfile.domain.model.Contributions
 import com.ecosense.android.featProfile.domain.repository.ProfileRepository
-import com.ecosense.android.featProfile.presentation.model.ProfileScreenState
+import com.ecosense.android.featProfile.presentation.profile.model.ProfileScreenState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel

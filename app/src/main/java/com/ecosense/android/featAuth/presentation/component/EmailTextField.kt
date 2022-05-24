@@ -11,11 +11,13 @@ import com.ecosense.android.R
 @Composable
 fun EmailTextField(
     value: String,
-    onValueChange: (String) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
+    onValueChange: (String) -> Unit = {}
 ) {
     AuthTextField(
         value = value,
+        enabled = enabled,
         onValueChange = onValueChange,
         label = { Text(text = stringResource(id = R.string.email)) },
         placeholder = { Text(text = stringResource(id = R.string.email)) },

@@ -1,12 +1,15 @@
 package com.ecosense.android.core.data.api
 
+import android.net.Uri
 import com.ecosense.android.R
 import com.ecosense.android.core.domain.api.AuthApi
 import com.ecosense.android.core.domain.model.User
 import com.ecosense.android.core.util.Resource
 import com.ecosense.android.core.util.SimpleResource
 import com.ecosense.android.core.util.UIText
+import com.google.firebase.FirebaseTooManyRequestsException
 import com.google.firebase.auth.*
+import com.google.firebase.auth.ktx.userProfileChangeRequest
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
@@ -15,16 +18,17 @@ import kotlin.coroutines.suspendCoroutine
 
 class FirebaseAuthApi : AuthApi {
 
-    private val firebaseAuth = FirebaseAuth.getInstance()
+    private val firebaseAuth = FirebaseAuth.getInstance().apply { useAppLanguage() }
 
     override fun getCurrentUser(): Flow<User?> = callbackFlow {
         val authStateListener = FirebaseAuth.AuthStateListener {
             val user: User? = it.currentUser?.let { firebaseUser ->
                 User(
+                    uid = firebaseUser.uid,
                     displayName = firebaseUser.displayName,
                     email = firebaseUser.email,
                     photoUrl = firebaseUser.photoUrl.toString(),
-                    phoneNumber = firebaseUser.phoneNumber,
+                    isEmailVerified = firebaseUser.isEmailVerified,
                 )
             }
 
@@ -128,5 +132,51 @@ class FirebaseAuthApi : AuthApi {
 
     override fun logout() {
         firebaseAuth.signOut()
+    }
+
+    override suspend fun updateProfile(
+        displayName: String?,
+        photoUrl: String?,
+    ): SimpleResource = suspendCoroutine { cont ->
+        val user = firebaseAuth.currentUser
+
+        if (user == null) {
+            cont.resume(Resource.Error(UIText.StringResource(R.string.em_unknown)))
+            return@suspendCoroutine
+        }
+
+        val profileUpdates = userProfileChangeRequest {
+            setDisplayName(displayName ?: user.displayName)
+            photoUri = photoUrl?.let { Uri.parse(it) } ?: user.photoUrl
+        }
+
+        user.updateProfile(profileUpdates).addOnCompleteListener { task ->
+            when {
+                task.isSuccessful -> cont.resume(Resource.Success(Unit))
+                else -> when (task.exception) {
+                    is FirebaseAuthInvalidUserException -> R.string.em_invalid_credentials
+                    else -> R.string.em_unknown
+                }.let { cont.resume(Resource.Error(UIText.StringResource(it))) }
+            }
+        }
+    }
+
+    override suspend fun sendEmailVerification(): SimpleResource = suspendCoroutine { cont ->
+        val user = firebaseAuth.currentUser
+
+        if (user == null) {
+            cont.resume(Resource.Error(UIText.StringResource(R.string.em_unknown)))
+            return@suspendCoroutine
+        }
+
+        user.sendEmailVerification().addOnCompleteListener { task ->
+            when {
+                task.isSuccessful -> cont.resume(Resource.Success(Unit))
+                else -> when (task.exception) {
+                    is FirebaseTooManyRequestsException -> R.string.em_too_many_request
+                    else -> R.string.em_unknown
+                }.let { cont.resume(Resource.Error(UIText.StringResource(it))) }
+            }
+        }
     }
 }

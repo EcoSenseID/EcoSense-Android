@@ -1,4 +1,4 @@
-package com.ecosense.android.featProfile.presentation.model
+package com.ecosense.android.featProfile.presentation.profile.model
 
 import com.ecosense.android.core.domain.model.User
 import com.ecosense.android.featProfile.domain.model.Contributions

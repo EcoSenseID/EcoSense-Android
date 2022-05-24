@@ -30,4 +30,11 @@ interface AuthApi {
     ): SimpleResource
 
     fun logout()
+
+    suspend fun updateProfile(
+        displayName: String?,
+        photoUrl: String?,
+    ): SimpleResource
+
+    suspend fun sendEmailVerification(): SimpleResource
 }
