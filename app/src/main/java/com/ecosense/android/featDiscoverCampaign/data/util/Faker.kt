@@ -1,6 +1,8 @@
 package com.ecosense.android.featDiscoverCampaign.data.util
 
 import com.ecosense.android.core.domain.model.Campaign
+import com.ecosense.android.featDiscoverCampaign.domain.model.Category
+import com.ecosense.android.featDiscoverCampaign.domain.model.Task
 
 object Faker {
     fun getBrowseCampaign(): List<Campaign> {
@@ -20,6 +22,42 @@ object Faker {
                     isTrending = i < 3,
                     isNew = i < 5,
                     isJoined = i < 10
+                )
+            )
+        }
+
+        return result
+    }
+
+    fun getCategory(): List<Category> {
+        val result = mutableListOf<Category>()
+
+        for (i in 1..8) {
+            result.add(
+                Category(
+                    id = i,
+                    photoUrl = "https://cdn.statically.io/og/theme=dark/Category$i.jpg",
+                    name = "Category $i"
+                )
+            )
+        }
+
+        return result
+    }
+
+    fun getTask(): List<Task> {
+        val result = mutableListOf<Task>()
+
+        for (i in 1..10) {
+            result.add(
+                Task(
+                    id = i,
+                    name = "Task $i",
+                    taskDescription = "Attach the proof by submitting a photo of $i",
+                    completed = i < 4,
+                    proofPhotoUrl = "https://cdn.statically.io/og/theme=dark/TaskProof$i.jpg",
+                    proofCaption = "I've done the $i task",
+                    completedTimeStamp = "2022-04-${i}T00:00:00.000Z",
                 )
             )
         }
