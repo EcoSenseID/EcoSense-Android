@@ -27,7 +27,7 @@ fun BrowseCampaignScreen(
     Scaffold(scaffoldState = scaffoldState) {
         Column(modifier = Modifier.fillMaxSize()) {
             Row {
-                Text("Browser Campaign")
+                Text("Browse Campaign")
             }
 
             Row {

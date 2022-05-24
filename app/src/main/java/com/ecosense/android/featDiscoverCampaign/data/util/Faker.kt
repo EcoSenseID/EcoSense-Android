@@ -1,6 +1,7 @@
 package com.ecosense.android.featDiscoverCampaign.data.util
 
 import com.ecosense.android.core.domain.model.Campaign
+import com.ecosense.android.featDiscoverCampaign.domain.model.CampaignDetail
 import com.ecosense.android.featDiscoverCampaign.domain.model.Category
 import com.ecosense.android.featDiscoverCampaign.domain.model.Task
 
@@ -11,6 +12,27 @@ object Faker {
         for (i in 1..50) {
             result.add(
                 Campaign(
+                    id = i,
+                    posterUrl = "https://cdn.statically.io/og/theme=dark/Campaign$i.jpg",
+                    title = "Lorem Ipsum $i",
+                    endDate = "2022-05-${i}T00:00:00.000Z",
+                    category = listOf("Dolor $i"),
+                    participantsCount = (1000..5000).random(),
+                    isTrending = i < 3,
+                    isNew = i < 5
+                )
+            )
+        }
+
+        return result
+    }
+
+    fun getCampaignDetail(): List<CampaignDetail> {
+        val result = mutableListOf<CampaignDetail>()
+
+        for (i in 1..50) {
+            result.add(
+                CampaignDetail(
                     id = i,
                     posterUrl = "https://cdn.statically.io/og/theme=dark/Campaign$i.jpg",
                     title = "Lorem Ipsum $i",
@@ -37,7 +59,7 @@ object Faker {
                 Category(
                     id = i,
                     photoUrl = "https://cdn.statically.io/og/theme=dark/Category$i.jpg",
-                    name = "Category $i"
+                    name = "Category No.$i"
                 )
             )
         }
@@ -52,7 +74,7 @@ object Faker {
             result.add(
                 Task(
                     id = i,
-                    name = "Task $i",
+                    name = "Task No.$i",
                     taskDescription = "Attach the proof by submitting a photo of $i",
                     completed = i < 4,
                     proofPhotoUrl = "https://cdn.statically.io/og/theme=dark/TaskProof$i.jpg",

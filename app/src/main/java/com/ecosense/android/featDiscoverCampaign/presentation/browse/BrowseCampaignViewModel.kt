@@ -19,8 +19,8 @@ class BrowseCampaignViewModel @Inject constructor(
     private val repository: DiscoverCampaignRepository
 ) : ViewModel() {
 
-    private val _campaignsList = mutableStateOf(emptyList<Campaign>())
-    val campaignList: State<List<Campaign>> = _campaignsList
+    private val _campaignList = mutableStateOf(emptyList<Campaign>())
+    val campaignList: State<List<Campaign>> = _campaignList
 
     private val _isLoading = mutableStateOf(false)
     val isLoading: State<Boolean> = _isLoading
@@ -34,17 +34,17 @@ class BrowseCampaignViewModel @Inject constructor(
                 when (result) {
                     is Resource.Error -> {
                         result.uiText?.let { _errorMessage.value = it }
-                        result.data?.let { _campaignsList.value = it }
+                        result.data?.let { _campaignList.value = it }
                         _isLoading.value = false
                     }
 
                     is Resource.Loading -> {
-                        result.data?.let { _campaignsList.value = it }
+                        result.data?.let { _campaignList.value = it }
                         _isLoading.value = true
                     }
 
                     is Resource.Success -> {
-                        result.data?.let { _campaignsList.value = it }
+                        result.data?.let { _campaignList.value = it }
                         _isLoading.value = false
                     }
                 }
