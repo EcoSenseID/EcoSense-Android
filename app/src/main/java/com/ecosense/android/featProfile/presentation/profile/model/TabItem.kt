@@ -1,4 +1,4 @@
-package com.ecosense.android.featProfile.presentation.model
+package com.ecosense.android.featProfile.presentation.profile.model
 
 import androidx.compose.runtime.Composable
 

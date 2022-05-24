@@ -1,10 +1,13 @@
-package com.ecosense.android.featProfile.presentation
+package com.ecosense.android.featProfile.presentation.profile
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Warning
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
@@ -26,10 +29,11 @@ import com.ecosense.android.R
 import com.ecosense.android.core.presentation.theme.spacing
 import com.ecosense.android.core.presentation.util.UIEvent
 import com.ecosense.android.core.presentation.util.asString
-import com.ecosense.android.featProfile.presentation.component.ExperiencesTab
-import com.ecosense.android.featProfile.presentation.component.HistoryTab
-import com.ecosense.android.featProfile.presentation.component.ProfileTopBar
-import com.ecosense.android.featProfile.presentation.model.TabItem
+import com.ecosense.android.destinations.EditProfileScreenDestination
+import com.ecosense.android.featProfile.presentation.profile.component.ExperiencesTab
+import com.ecosense.android.featProfile.presentation.profile.component.HistoryTab
+import com.ecosense.android.featProfile.presentation.profile.component.ProfileTopBar
+import com.ecosense.android.featProfile.presentation.profile.model.TabItem
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.pagerTabIndicatorOffset
@@ -38,7 +42,6 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import logcat.logcat
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
@@ -47,6 +50,7 @@ fun ProfileScreen(
     navigator: DestinationsNavigator,
     viewModel: ProfileViewModel = hiltViewModel()
 ) {
+    // TODO: show isLoadingContributions state
     val scaffoldState = rememberScaffoldState()
     val coroutineScope = rememberCoroutineScope()
 
@@ -103,9 +107,8 @@ fun ProfileScreen(
                 onDropdownMenuDismissRequest = { viewModel.setExpandDropdownMenu(false) }
             ) {
                 DropdownMenuItem(onClick = {
-                    // TODO: navigate to edit profile screen
-                    logcat("Profile Screen") { "Edit profile clicked" }
                     viewModel.setExpandDropdownMenu(false)
+                    navigator.navigate(EditProfileScreenDestination)
                 }) {
                     Text(text = stringResource(R.string.edit_profile))
                 }
@@ -131,6 +134,7 @@ fun ProfileScreen(
                 AsyncImage(
                     model = ImageRequest.Builder(LocalContext.current)
                         .data(state.user.photoUrl)
+                        .error(R.drawable.ic_ecosense_logo)
                         .crossfade(true)
                         .scale(Scale.FILL)
                         .build(),
@@ -144,14 +148,34 @@ fun ProfileScreen(
                 Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
 
                 Text(
-                    text = state.user.displayName ?: stringResource(R.string.ecosense_user),
+                    text =
+                    if (!state.user.displayName.isNullOrBlank()) state.user.displayName
+                    else stringResource(R.string.ecosense_user),
                     style = MaterialTheme.typography.h5,
                     fontWeight = FontWeight.SemiBold,
                 )
 
                 state.user.email?.let { Text(text = it) }
 
-                state.user.phoneNumber?.let { Text(text = it) }
+                Row(
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Icon(
+                        imageVector =
+                        if (state.user.isEmailVerified == true) Icons.Default.Check
+                        else Icons.Default.Warning,
+                        contentDescription = null,
+                    )
+
+                    Text(
+                        text = stringResource(
+                            if (state.user.isEmailVerified == true) R.string.verified
+                            else R.string.unverified
+                        ).uppercase(),
+                        style = MaterialTheme.typography.caption,
+                    )
+                }
 
                 Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
 

@@ -1,4 +1,4 @@
-package com.ecosense.android.featProfile.presentation.component
+package com.ecosense.android.featProfile.presentation.profile.component
 
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
