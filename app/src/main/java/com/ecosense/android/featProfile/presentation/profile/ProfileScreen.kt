@@ -135,6 +135,7 @@ fun ProfileScreen(
                     AsyncImage(
                         model = ImageRequest.Builder(LocalContext.current)
                             .data(state.user.photoUrl)
+                            .placeholder(R.drawable.ic_ecosense_logo)
                             .error(R.drawable.ic_ecosense_logo)
                             .crossfade(true)
                             .scale(Scale.FILL)
