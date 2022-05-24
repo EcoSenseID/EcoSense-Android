@@ -36,17 +36,17 @@ class EditProfileViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            authRepository.getCurrentUser().collect { user ->
-                _state.value = state.value.copy(
-                    uid = user?.uid,
-                    displayName = user?.displayName,
-                    email = user?.email,
-                    photoUrl = user?.photoUrl,
-                    isEmailVerified = user?.isEmailVerified
-                )
+            val user = authRepository.getCurrentUser()
 
-                _initState.value = state.value
-            }
+            _state.value = state.value.copy(
+                uid = user?.uid,
+                displayName = user?.displayName,
+                email = user?.email,
+                photoUrl = user?.photoUrl,
+                isEmailVerified = user?.isEmailVerified
+            )
+
+            _initState.value = state.value
         }
     }
 

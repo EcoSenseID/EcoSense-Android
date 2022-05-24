@@ -6,7 +6,9 @@ import com.ecosense.android.core.util.SimpleResource
 import kotlinx.coroutines.flow.Flow
 
 interface AuthApi {
-    fun getCurrentUser(): Flow<User?>
+    val isLoggedIn: Flow<Boolean>
+
+    suspend fun getCurrentUser(): User?
 
     suspend fun getIdToken(
         forceRefresh: Boolean,

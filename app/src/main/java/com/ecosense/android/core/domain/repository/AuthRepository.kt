@@ -5,7 +5,9 @@ import com.ecosense.android.core.util.SimpleResource
 import kotlinx.coroutines.flow.Flow
 
 interface AuthRepository {
-    fun getCurrentUser(): Flow<User?>
+    val isLoggedIn: Flow<Boolean>
+
+    suspend fun getCurrentUser(): User?
 
     fun loginWithEmail(
         email: String,

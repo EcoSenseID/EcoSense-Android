@@ -20,28 +20,38 @@ class FirebaseAuthApi : AuthApi {
 
     private val firebaseAuth = FirebaseAuth.getInstance().apply { useAppLanguage() }
 
-    override fun getCurrentUser(): Flow<User?> = callbackFlow {
-        val authStateListener = FirebaseAuth.AuthStateListener {
-            val user: User? = it.currentUser?.let { firebaseUser ->
-                User(
-                    uid = firebaseUser.uid,
-                    displayName = firebaseUser.displayName,
-                    email = firebaseUser.email,
-                    photoUrl = firebaseUser.photoUrl.toString(),
-                    isEmailVerified = firebaseUser.isEmailVerified,
-                )
+    override val isLoggedIn: Flow<Boolean>
+        get() = callbackFlow {
+            val authStateListener = FirebaseAuth.AuthStateListener {
+                trySend(it.currentUser != null)
             }
 
-            trySend(user)
+            firebaseAuth.addAuthStateListener(authStateListener)
+
+            awaitClose {
+                firebaseAuth.removeAuthStateListener(authStateListener)
+                channel.close()
+            }
         }
 
-        firebaseAuth.addAuthStateListener(authStateListener)
-
-        awaitClose {
-            firebaseAuth.removeAuthStateListener(authStateListener)
-            channel.close()
+    override suspend fun getCurrentUser(): User? = suspendCoroutine { cont ->
+        firebaseAuth.currentUser?.reload()?.addOnCompleteListener { task ->
+            val firebaseUser = firebaseAuth.currentUser
+            when {
+                task.isSuccessful -> cont.resume(
+                    User(
+                        uid = firebaseUser?.uid,
+                        displayName = firebaseUser?.displayName,
+                        email = firebaseUser?.email,
+                        photoUrl = firebaseUser?.photoUrl?.toString(),
+                        isEmailVerified = firebaseUser?.isEmailVerified
+                    )
+                )
+                else -> cont.resume(null)
+            }
         }
     }
+
 
     override suspend fun getIdToken(
         forceRefresh: Boolean,
