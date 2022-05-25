@@ -29,17 +29,10 @@ class DiseaseRecognitionRepositoryImpl(
     override fun analyzeDiseases(
         bitmap: Bitmap
     ): List<RecognisedDisease> {
-        val tfImage = TensorImage.fromBitmap(bitmap)
-
-        val categoryList = flowerModel.process(tfImage)
+        return flowerModel
+            .process(TensorImage.fromBitmap(bitmap))
             .probabilityAsCategoryList
             .apply { sortByDescending { it.score } }
-
-        return categoryList.map {
-            RecognisedDisease(
-                label = it.label,
-                confidence = it.score,
-            )
-        }
+            .map { RecognisedDisease(label = it.label, confidence = it.score) }
     }
 }
