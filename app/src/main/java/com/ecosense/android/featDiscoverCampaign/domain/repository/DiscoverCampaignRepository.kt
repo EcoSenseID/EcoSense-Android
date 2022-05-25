@@ -15,6 +15,4 @@ interface DiscoverCampaignRepository {
     fun getCampaignDetail(): Flow<Resource<List<CampaignDetail>>>
 
     fun getCategory(): Flow<Resource<List<Category>>>
-
-    fun getTask(): Flow<Resource<List<Task>>>
 }

@@ -53,7 +53,8 @@ fun CampaignItem(
                         .scale(Scale.FILL)
                         .build(),
                     contentDescription = campaign.title,
-                    contentScale = ContentScale.Crop,
+                    // FIXME: ContentScale.CROP make bug (may be caused by the Detail Scale differences)
+                    contentScale = ContentScale.FillWidth,
                     modifier = Modifier.fillMaxSize()
                 )
                 Column(modifier = Modifier.background(MaterialTheme.colors.primary)) {

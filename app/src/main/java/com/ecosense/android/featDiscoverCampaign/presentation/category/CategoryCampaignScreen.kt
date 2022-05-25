@@ -17,15 +17,15 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import coil.size.Scale
-import com.ecosense.android.core.presentation.component.CampaignItem
 import com.ecosense.android.core.presentation.theme.spacing
+import com.ecosense.android.destinations.BrowseCampaignScreenDestination
+import com.ecosense.android.destinations.CategoryCampaignScreenDestination
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
@@ -40,7 +40,7 @@ fun CategoryCampaignScreen(
     Scaffold(scaffoldState = scaffoldState) {
         Column(modifier = Modifier.fillMaxSize()) {
             Row {
-               Text("CategoryCampaign")
+               Text("Choose a Category")
             }
             Row {
                 LazyColumn(modifier = Modifier.fillMaxWidth()) {
@@ -56,11 +56,8 @@ fun CategoryCampaignScreen(
                                 )
                                 .clip(shape = RoundedCornerShape(8.dp))
                                 .clickable(onClick = {
-                                    // TODO: navigate to category id sorted BrowseCampaignScreen
-                                    Log.d(
-                                        "TAG",
-                                        "BrowseCampaignScreen: clicked $i"
-                                    )
+                                    navigator.navigate(BrowseCampaignScreenDestination)
+                                    Log.d("TAG", "CategoryCampaignScreen: clicked $i")
                                 })
                                 .background(MaterialTheme.colors.surface)
                                 .padding(MaterialTheme.spacing.small)

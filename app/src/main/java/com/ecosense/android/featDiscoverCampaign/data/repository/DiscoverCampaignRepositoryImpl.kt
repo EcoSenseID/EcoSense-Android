@@ -40,13 +40,4 @@ class DiscoverCampaignRepositoryImpl : DiscoverCampaignRepository {
 
         emit(Resource.Success(response))
     }
-
-    override fun getTask(): Flow<Resource<List<Task>>> = flow {
-        emit(Resource.Loading())
-
-        // Request api di sini
-        val response = Faker.getTask()
-
-        emit(Resource.Success(response))
-    }
 }

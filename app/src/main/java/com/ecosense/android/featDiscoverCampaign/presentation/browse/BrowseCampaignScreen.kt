@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.ecosense.android.core.presentation.component.CampaignItem
+import com.ecosense.android.destinations.DetailCampaignScreenDestination
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
@@ -36,7 +37,7 @@ fun BrowseCampaignScreen(
                         CampaignItem(
                             campaign = viewModel.campaignList.value[i],
                             onClick = {
-                                // TODO: navigate to CampaignDetailScreen
+                                navigator.navigate(DetailCampaignScreenDestination(id = viewModel.campaignList.value[i].id))
                                 Log.d("TAG", "BrowseCampaignScreen: clicked $i")
                             }
                         )

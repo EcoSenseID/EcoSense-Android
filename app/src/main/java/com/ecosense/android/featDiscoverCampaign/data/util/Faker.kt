@@ -15,8 +15,8 @@ object Faker {
                     id = i,
                     posterUrl = "https://cdn.statically.io/og/theme=dark/Campaign$i.jpg",
                     title = "Lorem Ipsum $i",
-                    endDate = "2022-05-${i}T00:00:00.000Z",
-                    category = listOf("Dolor $i"),
+                    endDate = "2022-10-2${i%2}T00:00:00.000Z",
+                    category = listOf("#Dolor$i"),
                     participantsCount = (1000..5000).random(),
                     isTrending = i < 3,
                     isNew = i < 5
@@ -35,15 +35,17 @@ object Faker {
                 CampaignDetail(
                     id = i,
                     posterUrl = "https://cdn.statically.io/og/theme=dark/Campaign$i.jpg",
+                    initiator = "Olaf Number $i",
                     title = "Lorem Ipsum $i",
-                    description = "Attach the proof by submitting $i photo",
-                    startDate = "2022-04-${i}T00:00:00.000Z",
-                    endDate = "2022-05-${i}T00:00:00.000Z",
-                    category = listOf("Dolor $i"),
+                    description = "This $i campaign aims to reduce food waste that is categorized as a catalyst in increasing global warming. This is due to the increase of food industries that have some oogabooga workers.",
+                    startDate = "2022-09-2${i%2}T00:00:00.000Z",
+                    endDate = "2022-10-2${i%2}T00:00:00.000Z",
+                    category = listOf("#Dolor$i", "#AirPollution", "#FoodWaste"),
                     participantsCount = (1000..5000).random(),
                     isTrending = i < 3,
                     isNew = i < 5,
-                    isJoined = i < 10
+                    isJoined = i < 10,
+                    tasks = getTask()
                 )
             )
         }
@@ -67,7 +69,7 @@ object Faker {
         return result
     }
 
-    fun getTask(): List<Task> {
+    private fun getTask(): List<Task> {
         val result = mutableListOf<Task>()
 
         for (i in 1..10) {
