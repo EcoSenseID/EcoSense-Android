@@ -34,7 +34,7 @@ import coil.compose.AsyncImage
 import com.ecosense.android.R
 import com.ecosense.android.core.presentation.component.RoundedEndsButton
 import com.ecosense.android.core.presentation.theme.spacing
-import com.ecosense.android.featDiseaseRecognition.presentation.analyzer.DiseaseAnalyzer
+import com.ecosense.android.featDiseaseRecognition.presentation.util.toBitmap
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberPermissionState
 import com.ramcosta.composedestinations.annotation.Destination
@@ -136,12 +136,11 @@ fun DiseaseRecognitionScreen(
                                 .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
                                 .build()
                                 .apply {
-                                    setAnalyzer(
-                                        cameraExecutor,
-                                        DiseaseAnalyzer(context) { diseases ->
-                                            viewModel.onAnalysisResult(diseases)
-                                        }
-                                    )
+                                    setAnalyzer(cameraExecutor) { imageProxy ->
+                                        val bitmap = imageProxy.toBitmap(context)
+                                        bitmap?.let { viewModel.onAnalyze(it) }
+                                        imageProxy.close()
+                                    }
                                 }
 
                             val cameraSelector =
