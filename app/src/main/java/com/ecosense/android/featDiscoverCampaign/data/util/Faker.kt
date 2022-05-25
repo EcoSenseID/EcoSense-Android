@@ -80,8 +80,8 @@ object Faker {
                     taskDescription = "Attach the proof by submitting a photo of $i",
                     completed = i < 4,
                     proofPhotoUrl = "https://cdn.statically.io/og/theme=dark/TaskProof$i.jpg",
-                    proofCaption = "I've done the $i task",
-                    completedTimeStamp = "2022-04-${i}T00:00:00.000Z",
+                    proofCaption = "I've done the task $i",
+                    completedTimeStamp = "2022-12-2${i%2}T00:00:00.000Z",
                 )
             )
         }

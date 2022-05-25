@@ -3,20 +3,24 @@ package com.ecosense.android.featDiscoverCampaign.presentation.detail
 import android.os.Build
 import android.util.Log
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -24,10 +28,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import coil.size.Scale
-import com.ecosense.android.core.presentation.component.CampaignItem
 import com.ecosense.android.core.presentation.theme.spacing
-import com.ecosense.android.destinations.BrowseCampaignScreenDestination
-import com.ecosense.android.destinations.DetailCampaignScreenDestination
 import com.ecosense.android.featDiscoverCampaign.data.util.dateFormatter
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -40,8 +41,26 @@ fun DetailCampaignScreen(
     viewModel: DetailCampaignViewModel = hiltViewModel()
 ) {
     val scaffoldState = rememberScaffoldState()
+    val inputValue = remember { mutableStateOf(TextFieldValue()) }
 
-    Scaffold(scaffoldState = scaffoldState) {
+    Scaffold(
+        scaffoldState = scaffoldState,
+        floatingActionButtonPosition = FabPosition.Center,
+        floatingActionButton = {
+            // TODO: change onClick to change isJoined value in the database (at the moment the real database haven't finished yet, so it can't be simulated)
+            ExtendedFloatingActionButton(
+                text = { Text(
+                    text = "Join Campaign",
+                    color = MaterialTheme.colors.onPrimary
+                ) },
+                backgroundColor = MaterialTheme.colors.primary,
+                onClick = {
+                    Log.d("TAG", "DetailCampaignScreen: FAB Clicked")
+                }
+            )
+        }
+    ) {
+        // TODO: find a way to make it scrollable, currently can't do scroll because I used lazycolumn and lazyrow (which makes them the only things that scrollable)
         Column(modifier = Modifier.fillMaxSize()) {
             Row {
                Text("Detail Campaign")
@@ -70,7 +89,7 @@ fun DetailCampaignScreen(
                                        .crossfade(true)
                                        .scale(Scale.FILL)
                                        .build(),
-                                   contentDescription = "Poster of {$campaign.title} campaign.",
+                                   contentDescription = "Poster of ${campaign.title} campaign.",
                                    contentScale = ContentScale.FillWidth,
                                    modifier = Modifier
                                        .fillMaxSize()
@@ -274,17 +293,13 @@ fun DetailCampaignScreen(
                                                         .padding(bottom = MaterialTheme.spacing.small)
                                                 )
                                             }
-                                            Row {
+                                            Row(modifier = Modifier.padding(horizontal = MaterialTheme.spacing.medium)) {
                                                 LazyColumn(modifier = Modifier.fillMaxWidth()) {
                                                     items(campaign.tasks.size) { i ->
                                                         val task = campaign.tasks[i]
                                                         Row(
                                                             verticalAlignment = Alignment.CenterVertically,
-                                                            modifier = Modifier
-                                                                .padding(
-                                                                    vertical = MaterialTheme.spacing.small,
-                                                                    horizontal = MaterialTheme.spacing.medium
-                                                                )
+                                                            modifier = Modifier.padding(bottom = MaterialTheme.spacing.small)
                                                         ) {
                                                             Column {
                                                                 Text(
@@ -298,14 +313,155 @@ fun DetailCampaignScreen(
                                                             }
                                                             Column {
                                                                 Text(
-                                                                    text = campaign.tasks[i].name,
+                                                                    text = task.name,
                                                                     textAlign = TextAlign.Justify,
-                                                                    fontSize = 12.sp
+                                                                    fontSize = 16.sp
                                                                 )
                                                             }
+                                                            if (campaign.isJoined && task.completed) {
+                                                                Column(
+                                                                    modifier = Modifier.fillMaxWidth(),
+                                                                    horizontalAlignment = Alignment.End
+                                                                ) {
+                                                                    Text(
+                                                                        text = "Completed",
+                                                                        textAlign = TextAlign.Right,
+                                                                        fontWeight = FontWeight.Bold,
+                                                                        fontStyle = FontStyle.Italic,
+                                                                        fontSize = 12.sp,
+                                                                        color = Color.Green
+                                                                    )
+                                                                }
+                                                            }
                                                         }
-                                                        Row {
-                                                            Divider(color = Color.Gray, thickness = 1.dp)
+                                                        Row(modifier = Modifier.padding(bottom = MaterialTheme.spacing.small)) {
+                                                            Text(
+                                                                text = task.taskDescription,
+                                                                textAlign = TextAlign.Justify,
+                                                                fontSize = 12.sp
+                                                            )
+                                                        }
+                                                        if (campaign.isJoined) {
+                                                            if (task.completed) {
+                                                                Row(
+                                                                    modifier = Modifier
+                                                                        .fillMaxWidth()
+                                                                        .height(100.dp)
+                                                                        .padding(bottom = MaterialTheme.spacing.small)
+                                                                ) {
+                                                                    AsyncImage(
+                                                                        model = ImageRequest.Builder(
+                                                                            LocalContext.current
+                                                                        )
+                                                                            .data(task.proofPhotoUrl)
+                                                                            .crossfade(true)
+                                                                            .scale(Scale.FILL)
+                                                                            .build(),
+                                                                        contentDescription = "Proof of ${task.name} task completion.",
+                                                                        contentScale = ContentScale.FillWidth,
+                                                                        modifier = Modifier
+                                                                            .fillMaxSize()
+                                                                            .clip(
+                                                                                shape = RoundedCornerShape(
+                                                                                    8.dp
+                                                                                )
+                                                                            )
+                                                                    )
+                                                                }
+                                                                Row(
+                                                                    modifier = Modifier.padding(
+                                                                        bottom = MaterialTheme.spacing.small
+                                                                    )
+                                                                ) {
+                                                                    Text(
+                                                                        text = "\"${task.proofCaption}\"",
+                                                                        fontStyle = FontStyle.Italic,
+                                                                        fontSize = 12.sp
+                                                                    )
+                                                                }
+                                                                Row {
+                                                                    Text(
+                                                                        text = "Finished on " +
+                                                                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+                                                                                    dateFormatter(
+                                                                                        task.completedTimeStamp
+                                                                                    )
+                                                                                else
+                                                                                    task.completedTimeStamp,
+                                                                        fontSize = 12.sp,
+                                                                        color = MaterialTheme.colors.primary
+                                                                    )
+                                                                }
+                                                            } else {
+                                                                // FIXME: still haven't figured out how to make the submission only available for the next uncompleted task
+                                                                Row(
+                                                                    modifier = Modifier.padding(
+                                                                        bottom = MaterialTheme.spacing.small
+                                                                    )
+                                                                ) {
+                                                                    Button(
+                                                                        onClick = {
+                                                                            Log.d(
+                                                                                "TAG",
+                                                                                "DetailCampaignScreen: Add Picture Button Clicked"
+                                                                            )
+                                                                        },
+                                                                        modifier = Modifier
+                                                                            .fillMaxWidth()
+                                                                            .clip(
+                                                                                shape = RoundedCornerShape(
+                                                                                    8.dp
+                                                                                )
+                                                                            )
+                                                                    ) {
+                                                                        Text("Select Image")
+                                                                    }
+                                                                }
+                                                                Row(
+                                                                    modifier = Modifier.padding(
+                                                                        bottom = MaterialTheme.spacing.small
+                                                                    )
+                                                                ) {
+                                                                    OutlinedTextField(
+                                                                        value = inputValue.value,
+                                                                        onValueChange = {
+                                                                            inputValue.value = it
+                                                                        },
+                                                                        label = { Text("Add Caption") },
+                                                                        modifier = Modifier.fillMaxSize(),
+                                                                        textStyle = TextStyle(
+                                                                            fontSize = 12.sp
+                                                                        ),
+                                                                        singleLine = true
+                                                                    )
+                                                                }
+                                                                Row(
+                                                                    modifier = Modifier.padding(
+                                                                        bottom = MaterialTheme.spacing.small
+                                                                    )
+                                                                ) {
+                                                                    Button(
+                                                                        onClick = {
+                                                                            Log.d(
+                                                                                "TAG",
+                                                                                "DetailCampaignScreen: Submit Button Clicked"
+                                                                            )
+                                                                        },
+                                                                        modifier = Modifier
+                                                                            .fillMaxWidth()
+                                                                            .clip(
+                                                                                shape = RoundedCornerShape(
+                                                                                    8.dp
+                                                                                )
+                                                                            )
+                                                                    ) {
+                                                                        Text("Submit")
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                        Row(modifier = Modifier.padding(vertical = MaterialTheme.spacing.small)) {
+                                                            Divider(color = Color.Gray, thickness = 1.dp,)
                                                         }
                                                     }
                                                 }
