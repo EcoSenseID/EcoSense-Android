@@ -4,9 +4,7 @@ import android.Manifest
 import android.content.Intent
 import android.net.Uri
 import android.provider.Settings
-import android.util.Log
 import android.util.Size
-import androidx.camera.core.Camera
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.Preview
@@ -20,7 +18,8 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.rememberScaffoldState
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -35,11 +34,13 @@ import coil.compose.AsyncImage
 import com.ecosense.android.R
 import com.ecosense.android.core.presentation.component.RoundedEndsButton
 import com.ecosense.android.core.presentation.theme.spacing
-import com.ecosense.android.featDiseaseRecognition.domain.DiseaseAnalyzer
+import com.ecosense.android.featDiseaseRecognition.presentation.analyzer.DiseaseAnalyzer
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberPermissionState
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import logcat.asLog
+import logcat.logcat
 import java.util.concurrent.Executors
 
 @OptIn(ExperimentalPermissionsApi::class)
@@ -57,13 +58,8 @@ fun DiseaseRecognitionScreen(
     val scaffoldState = rememberScaffoldState()
     val camPermission = rememberPermissionState(permission = Manifest.permission.CAMERA)
 
-    var preview by remember { mutableStateOf<Preview?>(null) }
-    var imageAnalyzer by remember { mutableStateOf<ImageAnalysis?>(null) }
-    var camera by remember { mutableStateOf<Camera?>(null) }
-
-    val cameraExecutor = Executors.newSingleThreadExecutor()
-
     val cameraProviderFuture = remember { ProcessCameraProvider.getInstance(context) }
+    val cameraExecutor = Executors.newSingleThreadExecutor()
 
     Scaffold(
         scaffoldState = scaffoldState,
@@ -129,26 +125,21 @@ fun DiseaseRecognitionScreen(
 
             AnimatedVisibility(visible = camPermission.hasPermission) {
                 Box {
-                    AndroidView(modifier = Modifier.fillMaxSize(), factory = { ctx ->
-                        val previewView = PreviewView(ctx)
+                    AndroidView(modifier = Modifier.fillMaxSize(), factory = {
+                        val previewView = PreviewView(context)
 
                         cameraProviderFuture.addListener({
-                            // Used to bind the lifecycle of cameras to the lifecycle owner
                             val cameraProvider: ProcessCameraProvider = cameraProviderFuture.get()
-
-                            preview = Preview.Builder().build()
-
-                            imageAnalyzer = ImageAnalysis.Builder()
+                            val preview = Preview.Builder().build()
+                            val imageAnalysis = ImageAnalysis.Builder()
                                 .setTargetResolution(Size(224, 224))
                                 .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
                                 .build()
-                                .also { analysisUseCase: ImageAnalysis ->
-                                    analysisUseCase.setAnalyzer(
+                                .apply {
+                                    setAnalyzer(
                                         cameraExecutor,
-                                        DiseaseAnalyzer(context) { items ->
-                                            viewModel.updateData(
-                                                items
-                                            )
+                                        DiseaseAnalyzer(context) { diseases ->
+                                            viewModel.onAnalysisResult(diseases)
                                         }
                                     )
                                 }
@@ -159,22 +150,14 @@ fun DiseaseRecognitionScreen(
                                 else CameraSelector.DEFAULT_FRONT_CAMERA
 
                             try {
-                                // Unbind use cases before rebinding
                                 cameraProvider.unbindAll()
-
-                                // Bind use cases to camera - try to bind everything at once and CameraX will find
-                                // the best combination.
-                                camera = cameraProvider.bindToLifecycle(
-                                    lifecycleOwner, cameraSelector, preview, imageAnalyzer
+                                cameraProvider.bindToLifecycle(
+                                    lifecycleOwner, cameraSelector, preview, imageAnalysis
                                 )
-
-                                // Attach the preview to preview view, aka View Finder
-                                preview?.setSurfaceProvider(previewView.surfaceProvider)
-
-                            } catch (exc: Exception) {
-                                Log.e("TAG", "Use case binding failed", exc)
+                                preview.setSurfaceProvider(previewView.surfaceProvider)
+                            } catch (e: Exception) {
+                                logcat { e.asLog() }
                             }
-
                         }, ContextCompat.getMainExecutor(context))
 
                         previewView

@@ -1,6 +1,6 @@
 package com.ecosense.android.featDiseaseRecognition.presentation
 
-import com.ecosense.android.featDiseaseRecognition.domain.RecognisedDisease
+import com.ecosense.android.featDiseaseRecognition.domain.model.RecognisedDisease
 
 data class DiseaseRecognitionState(
     val recognisedDiseasesList: List<RecognisedDisease>
