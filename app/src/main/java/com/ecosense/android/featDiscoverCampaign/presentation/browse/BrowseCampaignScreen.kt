@@ -21,6 +21,7 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 @Destination
 fun BrowseCampaignScreen(
     navigator: DestinationsNavigator,
+    category: String?,
     viewModel: BrowseCampaignViewModel = hiltViewModel()
 ) {
     val scaffoldState = rememberScaffoldState()
@@ -36,6 +37,7 @@ fun BrowseCampaignScreen(
                     items(viewModel.campaignList.value.size) { i ->
                         CampaignItem(
                             campaign = viewModel.campaignList.value[i],
+                            category = category,
                             onClick = {
                                 navigator.navigate(DetailCampaignScreenDestination(id = viewModel.campaignList.value[i].id))
                                 Log.d("TAG", "BrowseCampaignScreen: clicked $i")

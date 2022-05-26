@@ -16,7 +16,12 @@ object Faker {
                     posterUrl = "https://cdn.statically.io/og/theme=dark/Campaign$i.jpg",
                     title = "Lorem Ipsum $i",
                     endDate = "2022-10-2${i%2}T00:00:00.000Z",
-                    category = listOf("#Dolor$i"),
+                    category = if (i < 3)
+                        listOf("#AirPollution")
+                    else if (i < 6)
+                        listOf("#FoodWaste")
+                    else
+                        listOf("#AirPollution", "#FoodWaste", "#Dolor"),
                     participantsCount = (1000..5000).random(),
                     isTrending = i < 3,
                     isNew = i < 5
@@ -40,7 +45,12 @@ object Faker {
                     description = "This $i campaign aims to reduce food waste that is categorized as a catalyst in increasing global warming. This is due to the increase of food industries that have some oogabooga workers.",
                     startDate = "2022-09-2${i%2}T00:00:00.000Z",
                     endDate = "2022-10-2${i%2}T00:00:00.000Z",
-                    category = listOf("#Dolor$i", "#AirPollution", "#FoodWaste"),
+                    category = if (i < 3)
+                        listOf("#AirPollution")
+                    else if (i < 6)
+                        listOf("#FoodWaste")
+                    else
+                        listOf("#AirPollution", "#FoodWaste", "#Dolor"),
                     participantsCount = (1000..5000).random(),
                     isTrending = i < 3,
                     isNew = i < 5,
@@ -56,12 +66,16 @@ object Faker {
     fun getCategory(): List<Category> {
         val result = mutableListOf<Category>()
 
-        for (i in 1..8) {
+        for (i in 1..3) {
             result.add(
                 Category(
                     id = i,
                     photoUrl = "https://cdn.statically.io/og/theme=dark/Category$i.jpg",
-                    name = "Category No.$i"
+                    name = when (i) {
+                        1 -> "#AirPollution"
+                        2 -> "#FoodWaste"
+                        else -> "#Dolor"
+                    }
                 )
             )
         }

@@ -33,7 +33,7 @@ fun DiscoverCampaignScreen(
             }
             Row {
                 Button(onClick = {
-                    navigator.navigate(BrowseCampaignScreenDestination)
+                    navigator.navigate(BrowseCampaignScreenDestination(category = null)) // null = show all
                 }) {
                     Text("View all")
                 }

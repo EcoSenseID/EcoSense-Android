@@ -56,7 +56,7 @@ fun CategoryCampaignScreen(
                                 )
                                 .clip(shape = RoundedCornerShape(8.dp))
                                 .clickable(onClick = {
-                                    navigator.navigate(BrowseCampaignScreenDestination)
+                                    navigator.navigate(BrowseCampaignScreenDestination(category = category.name))
                                     Log.d("TAG", "CategoryCampaignScreen: clicked $i")
                                 })
                                 .background(MaterialTheme.colors.surface)

@@ -17,14 +17,36 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import coil.size.Scale
-import com.ecosense.android.core.presentation.theme.spacing
 import com.ecosense.android.core.domain.model.Campaign
+import com.ecosense.android.core.presentation.theme.spacing
 
 @Composable
 fun CampaignItem(
     campaign: Campaign,
+    category: String?,
+    onClick: () -> Unit
+) {
+    if (category == null) { // show all
+        ShowItem(
+            campaign = campaign,
+            onClick = onClick
+        )
+    }
+    else {
+        if (category in campaign.category) {
+            ShowItem(
+                campaign = campaign,
+                onClick = onClick
+            )
+        }
+    }
+}
+
+@Composable
+fun ShowItem(
+    campaign: Campaign,
     onClick: () -> Unit,
-    modifier: Modifier = Modifier,
+    modifier: Modifier = Modifier
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
