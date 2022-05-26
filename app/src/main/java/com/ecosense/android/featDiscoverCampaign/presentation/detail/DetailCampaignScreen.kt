@@ -1,20 +1,26 @@
 package com.ecosense.android.featDiscoverCampaign.presentation.detail
 
+import android.graphics.Bitmap
+import android.graphics.ImageDecoder
+import android.net.Uri
 import android.os.Build
+import android.provider.MediaStore
 import android.util.Log
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
@@ -43,31 +49,45 @@ fun DetailCampaignScreen(
     val scaffoldState = rememberScaffoldState()
     val inputValue = remember { mutableStateOf(TextFieldValue()) }
 
-    Scaffold(
-        scaffoldState = scaffoldState,
-        floatingActionButtonPosition = FabPosition.Center,
-        floatingActionButton = {
-            // TODO: change onClick to change isJoined value in the database (at the moment the real database haven't finished yet, so it can't be simulated)
-            ExtendedFloatingActionButton(
-                text = { Text(
-                    text = "Join Campaign",
-                    color = MaterialTheme.colors.onPrimary
-                ) },
-                backgroundColor = MaterialTheme.colors.primary,
-                onClick = {
-                    Log.d("TAG", "DetailCampaignScreen: FAB Clicked")
-                }
-            )
-        }
-    ) {
-        // TODO: find a way to make it scrollable, currently can't do scroll because I used lazycolumn and lazyrow (which makes them the only things that scrollable)
-        Column(modifier = Modifier.fillMaxSize()) {
-            Row {
-               Text("Detail Campaign")
-            }
+    var imageUri by remember { mutableStateOf<Uri?>(null) }
+    val context = LocalContext.current
+    val bitmap =  remember {
+        mutableStateOf<Bitmap?>(null)
+    }
 
-            for (campaign in viewModel.campaignDetailList.value) {
-                if (campaign.id == id) {
+    val launcher = rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent()) { uri: Uri? ->
+        imageUri = uri
+    }
+
+    for (campaign in viewModel.campaignDetailList.value) {
+        if (campaign.id == id) {
+            Scaffold(
+                scaffoldState = scaffoldState,
+                floatingActionButtonPosition = FabPosition.Center,
+                floatingActionButton = {
+                    if (!campaign.isJoined) {
+                        ExtendedFloatingActionButton(
+                            text = {
+                                Text(
+                                    text = "Join Campaign",
+                                    color = MaterialTheme.colors.onPrimary
+                                )
+                            },
+                            backgroundColor = MaterialTheme.colors.primary,
+                            onClick = {
+                                // TODO: change onClick to change isJoined value in the database (at the moment the real database haven't finished yet, so it can't be simulated)
+                                Log.d("TAG", "DetailCampaignScreen: FAB Clicked")
+                            }
+                        )
+                    }
+                }
+            ) {
+                // TODO: find a way to make it scrollable, currently can't do scroll because I used lazycolumn and lazyrow (which makes them the only things that scrollable)
+                Column(modifier = Modifier.fillMaxSize()) {
+                    Row {
+                        Text("Detail Campaign")
+                    }
+
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier
@@ -82,66 +102,66 @@ fun DetailCampaignScreen(
                                 .fillMaxWidth()
                                 .height(200.dp)
                         ) {
-                           Box(modifier = Modifier.fillMaxSize()) {
-                               AsyncImage(
-                                   model = ImageRequest.Builder(LocalContext.current)
-                                       .data(campaign.posterUrl)
-                                       .crossfade(true)
-                                       .scale(Scale.FILL)
-                                       .build(),
-                                   contentDescription = "Poster of ${campaign.title} campaign.",
-                                   contentScale = ContentScale.FillWidth,
-                                   modifier = Modifier
-                                       .fillMaxSize()
-                                       .clip(shape = RoundedCornerShape(8.dp))
-                               )
-                               Column(
-                                   modifier = Modifier
-                                       .fillMaxSize()
-                                       .padding(MaterialTheme.spacing.small),
-                                   verticalArrangement = Arrangement.Bottom,
-                                   horizontalAlignment = Alignment.Start
-                               ) {
-                                   Row {
-                                       Text(
-                                           text = campaign.participantsCount.toString(),
-                                           fontSize = 14.sp,
-                                           color = MaterialTheme.colors.onPrimary
-                                       )
-                                   }
-                                   Row {
-                                       LazyRow(modifier = Modifier.fillMaxWidth()) {
-                                           items(campaign.category.size) { i ->
-                                               Text(
-                                                   text = campaign.category[i],
-                                                   fontSize = 12.sp,
-                                                   color = MaterialTheme.colors.onPrimary,
-                                                   modifier = Modifier
-                                                       .padding(end = MaterialTheme.spacing.extraSmall)
-                                                       .background(
-                                                           if (campaign.category[i] == "#AirPollution") {
-                                                               Color.Green
-                                                           } else if (campaign.category[i] == "#FoodWaste") {
-                                                               Color.Magenta
-                                                           } else {
-                                                               MaterialTheme.colors.primary
-                                                           }
-                                                       )
-                                               )
-                                           }
-                                       }
-                                   }
-                                   Row {
-                                       Text(
-                                           text = campaign.title,
-                                           fontSize = 24.sp,
-                                           fontWeight = FontWeight.Bold,
-                                           color = MaterialTheme.colors.onPrimary
-                                       )
-                                   }
+                            Box(modifier = Modifier.fillMaxSize()) {
+                                AsyncImage(
+                                    model = ImageRequest.Builder(LocalContext.current)
+                                        .data(campaign.posterUrl)
+                                        .crossfade(true)
+                                        .scale(Scale.FILL)
+                                        .build(),
+                                    contentDescription = "Poster of ${campaign.title} campaign.",
+                                    contentScale = ContentScale.FillWidth,
+                                    modifier = Modifier
+                                        .fillMaxSize()
+                                        .clip(shape = RoundedCornerShape(8.dp))
+                                )
+                                Column(
+                                    modifier = Modifier
+                                        .fillMaxSize()
+                                        .padding(MaterialTheme.spacing.small),
+                                    verticalArrangement = Arrangement.Bottom,
+                                    horizontalAlignment = Alignment.Start
+                                ) {
+                                    Row {
+                                        Text(
+                                            text = campaign.participantsCount.toString(),
+                                            fontSize = 14.sp,
+                                            color = MaterialTheme.colors.onPrimary
+                                        )
+                                    }
+                                    Row {
+                                        LazyRow(modifier = Modifier.fillMaxWidth()) {
+                                            items(campaign.category.size) { i ->
+                                                Text(
+                                                    text = campaign.category[i],
+                                                    fontSize = 12.sp,
+                                                    color = MaterialTheme.colors.onPrimary,
+                                                    modifier = Modifier
+                                                        .padding(end = MaterialTheme.spacing.extraSmall)
+                                                        .background(
+                                                            if (campaign.category[i] == "#AirPollution") {
+                                                                Color.Green
+                                                            } else if (campaign.category[i] == "#FoodWaste") {
+                                                                Color.Magenta
+                                                            } else {
+                                                                MaterialTheme.colors.primary
+                                                            }
+                                                        )
+                                                )
+                                            }
+                                        }
+                                    }
+                                    Row {
+                                        Text(
+                                            text = campaign.title,
+                                            fontSize = 24.sp,
+                                            fontWeight = FontWeight.Bold,
+                                            color = MaterialTheme.colors.onPrimary
+                                        )
+                                    }
 
-                               }
-                           }
+                                }
+                            }
                         }
                     }
                     Row(
@@ -299,11 +319,13 @@ fun DetailCampaignScreen(
                                                         val task = campaign.tasks[i]
                                                         Row(
                                                             verticalAlignment = Alignment.CenterVertically,
-                                                            modifier = Modifier.padding(bottom = MaterialTheme.spacing.small)
+                                                            modifier = Modifier.padding(
+                                                                bottom = MaterialTheme.spacing.small
+                                                            )
                                                         ) {
                                                             Column {
                                                                 Text(
-                                                                    text = "${i+1}",
+                                                                    text = "${i + 1}",
                                                                     fontSize = 18.sp,
                                                                     fontWeight = FontWeight.Bold,
                                                                     color = MaterialTheme.colors.primary,
@@ -334,7 +356,11 @@ fun DetailCampaignScreen(
                                                                 }
                                                             }
                                                         }
-                                                        Row(modifier = Modifier.padding(bottom = MaterialTheme.spacing.small)) {
+                                                        Row(
+                                                            modifier = Modifier.padding(
+                                                                bottom = MaterialTheme.spacing.small
+                                                            )
+                                                        ) {
                                                             Text(
                                                                 text = task.taskDescription,
                                                                 textAlign = TextAlign.Justify,
@@ -401,10 +427,10 @@ fun DetailCampaignScreen(
                                                                 ) {
                                                                     Button(
                                                                         onClick = {
-                                                                            Log.d(
-                                                                                "TAG",
-                                                                                "DetailCampaignScreen: Add Picture Button Clicked"
-                                                                            )
+                                                                            // TODO: currently can only pick image from gallery, find a way to make it able to use camera x too
+                                                                            launcher.launch("image/*")
+
+                                                                            Log.d("TAG", "DetailCampaignScreen: Add Picture Button Clicked")
                                                                         },
                                                                         modifier = Modifier
                                                                             .fillMaxWidth()
@@ -413,10 +439,38 @@ fun DetailCampaignScreen(
                                                                                     8.dp
                                                                                 )
                                                                             )
+                                                                    ) { Text("Select Image") }
+                                                                }
+
+                                                                // show the image if there's any
+                                                                if (imageUri != null) {
+                                                                    Row(
+                                                                        modifier = Modifier
+                                                                            .fillMaxWidth()
+                                                                            .height(100.dp)
+                                                                            .padding(bottom = MaterialTheme.spacing.small)
                                                                     ) {
-                                                                        Text("Select Image")
+                                                                        imageUri?.let {
+                                                                            if (Build.VERSION.SDK_INT < 28) {
+                                                                                bitmap.value = MediaStore.Images
+                                                                                    .Media.getBitmap(context.contentResolver,it)
+
+                                                                            } else {
+                                                                                val source = ImageDecoder
+                                                                                    .createSource(context.contentResolver,it)
+                                                                                bitmap.value = ImageDecoder.decodeBitmap(source)
+                                                                            }
+
+                                                                            bitmap.value?.let {  btm ->
+                                                                                Image(bitmap = btm.asImageBitmap(),
+                                                                                    contentScale = ContentScale.FillWidth,
+                                                                                    contentDescription = "Unsubmitted proof of ${task.name} task completion.",
+                                                                                    modifier = Modifier.fillMaxSize().clip(shape = RoundedCornerShape(8.dp)))
+                                                                            }
+                                                                        }
                                                                     }
                                                                 }
+
                                                                 Row(
                                                                     modifier = Modifier.padding(
                                                                         bottom = MaterialTheme.spacing.small
@@ -425,7 +479,8 @@ fun DetailCampaignScreen(
                                                                     OutlinedTextField(
                                                                         value = inputValue.value,
                                                                         onValueChange = {
-                                                                            inputValue.value = it
+                                                                            inputValue.value =
+                                                                                it
                                                                         },
                                                                         label = { Text("Add Caption") },
                                                                         modifier = Modifier.fillMaxSize(),
@@ -460,8 +515,15 @@ fun DetailCampaignScreen(
                                                                 }
                                                             }
                                                         }
-                                                        Row(modifier = Modifier.padding(vertical = MaterialTheme.spacing.small)) {
-                                                            Divider(color = Color.Gray, thickness = 1.dp,)
+                                                        Row(
+                                                            modifier = Modifier.padding(
+                                                                vertical = MaterialTheme.spacing.small
+                                                            )
+                                                        ) {
+                                                            Divider(
+                                                                color = Color.Gray,
+                                                                thickness = 1.dp,
+                                                            )
                                                         }
                                                     }
                                                 }
@@ -473,10 +535,9 @@ fun DetailCampaignScreen(
                         }
                     }
                 }
-                else {
-                    Log.d("TAG", "DetailCampaignScreen: Detail not Found")
-                }
             }
+        } else {
+            Log.d("TAG", "DetailCampaignScreen: Detail not Found")
         }
     }
 }

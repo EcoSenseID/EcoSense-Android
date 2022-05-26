@@ -44,7 +44,7 @@ object Faker {
                     participantsCount = (1000..5000).random(),
                     isTrending = i < 3,
                     isNew = i < 5,
-                    isJoined = i < 10,
+                    isJoined = i < 3,
                     tasks = getTask()
                 )
             )
