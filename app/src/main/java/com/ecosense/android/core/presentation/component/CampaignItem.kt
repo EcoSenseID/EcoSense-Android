@@ -24,16 +24,42 @@ import com.ecosense.android.core.presentation.theme.spacing
 fun CampaignItem(
     campaign: Campaign,
     category: String?,
+    sort: String?,
     onClick: () -> Unit
 ) {
+
     if (category == null) { // show all
+        SortItem(sort = sort, campaign = campaign, onClick = onClick)
+    }
+    else {
+        if (category in campaign.category) {
+            SortItem(sort = sort, campaign = campaign, onClick = onClick)
+        }
+    }
+}
+
+@Composable
+fun SortItem(
+    sort: String?,
+    campaign: Campaign,
+    onClick: () -> Unit
+) {
+    if (sort == "" || sort == "Show All Campaign") {
         ShowItem(
             campaign = campaign,
             onClick = onClick
         )
     }
-    else {
-        if (category in campaign.category) {
+    else if (sort == "New Campaign") {
+        if (campaign.isNew) {
+            ShowItem(
+                campaign = campaign,
+                onClick = onClick
+            )
+        }
+    }
+    else if (sort == "Trending Campaign") {
+        if (campaign.isTrending) {
             ShowItem(
                 campaign = campaign,
                 onClick = onClick
