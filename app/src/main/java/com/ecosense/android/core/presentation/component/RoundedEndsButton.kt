@@ -1,4 +1,4 @@
-package com.ecosense.android.featAuth.presentation.component
+package com.ecosense.android.core.presentation.component
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.interaction.MutableInteractionSource

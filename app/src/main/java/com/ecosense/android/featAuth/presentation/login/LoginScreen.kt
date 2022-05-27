@@ -23,7 +23,7 @@ import com.ecosense.android.destinations.RegistrationScreenDestination
 import com.ecosense.android.destinations.ResetPasswordScreenDestination
 import com.ecosense.android.featAuth.presentation.component.EmailTextField
 import com.ecosense.android.featAuth.presentation.component.PasswordTextField
-import com.ecosense.android.featAuth.presentation.component.RoundedEndsButton
+import com.ecosense.android.core.presentation.component.RoundedEndsButton
 import com.ecosense.android.featAuth.presentation.login.contract.GoogleSignInContract
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator

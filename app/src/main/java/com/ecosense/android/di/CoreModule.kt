@@ -1,7 +1,10 @@
 package com.ecosense.android.di
 
+import android.app.Application
+import androidx.room.Room
 import com.ecosense.android.core.data.api.FirebaseAuthApi
 import com.ecosense.android.core.data.api.FirebaseStorageApi
+import com.ecosense.android.core.data.local.EcoSenseDatabase
 import com.ecosense.android.core.data.repository.AuthRepositoryImpl
 import com.ecosense.android.core.domain.api.AuthApi
 import com.ecosense.android.core.domain.api.CloudStorageApi
@@ -39,5 +42,15 @@ object CoreModule {
             .baseUrl("https://api.jsonbin.io/b/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideDatabase(app: Application): EcoSenseDatabase {
+        return Room.databaseBuilder(
+            app,
+            EcoSenseDatabase::class.java,
+            EcoSenseDatabase.NAME
+        ).build()
     }
 }
