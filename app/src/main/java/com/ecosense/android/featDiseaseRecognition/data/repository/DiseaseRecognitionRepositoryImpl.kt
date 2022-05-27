@@ -2,6 +2,7 @@ package com.ecosense.android.featDiseaseRecognition.data.repository
 
 import android.content.Context
 import android.graphics.Bitmap
+import com.ecosense.android.featDiseaseRecognition.data.util.toRecognisedDisease
 import com.ecosense.android.featDiseaseRecognition.domain.model.RecognisedDisease
 import com.ecosense.android.featDiseaseRecognition.domain.repository.DiseaseRecognitionRepository
 import com.ecosense.android.ml.PlantDiseaseModel
@@ -33,6 +34,6 @@ class DiseaseRecognitionRepositoryImpl(
             .process(TensorImage.fromBitmap(bitmap))
             .probabilityAsCategoryList
             .apply { sortByDescending { it.score } }
-            .map { RecognisedDisease(label = it.label, confidence = it.score) }
+            .map { it.toRecognisedDisease() }
     }
 }

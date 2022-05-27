@@ -12,12 +12,14 @@ import androidx.compose.material.icons.filled.Save
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.ecosense.android.R
 import com.ecosense.android.core.presentation.theme.spacing
+import com.ecosense.android.core.presentation.util.asString
 import com.ecosense.android.featDiseaseRecognition.domain.model.RecognisedDisease
 
 @Composable
@@ -26,6 +28,8 @@ fun DiseaseRecognitionResultSection(
     mainDiagnosis: RecognisedDisease?,
     diffDiagnoses: List<RecognisedDisease>?,
 ) {
+    val context = LocalContext.current
+
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
@@ -49,7 +53,7 @@ fun DiseaseRecognitionResultSection(
                 )
 
                 Text(
-                    text = mainDiagnosis.label,
+                    text = mainDiagnosis.label.asString(),
                     style = MaterialTheme.typography.h5,
                     fontWeight = FontWeight.SemiBold,
                     color = MaterialTheme.colors.primary
@@ -60,7 +64,15 @@ fun DiseaseRecognitionResultSection(
 
                 if (!diffDiagnoses.isNullOrEmpty()) {
                     Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
-                    Text(text = "But, it could also be ${diffDiagnoses.joinToString { it.label }}")
+                    Text(
+                        text = "But, it could also be ${
+                            diffDiagnoses.joinToString {
+                                it.label.asString(
+                                    context
+                                )
+                            }
+                        }"
+                    )
                 }
 
                 Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
