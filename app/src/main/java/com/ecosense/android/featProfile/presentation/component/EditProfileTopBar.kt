@@ -39,6 +39,11 @@ fun EditProfileTopBar(
                     )
                 }
 
+                Text(
+                    text = stringResource(id = R.string.edit_profile),
+                    color = MaterialTheme.colors.onSurface
+                )
+
                 Spacer(modifier = Modifier.weight(1f))
 
                 IconButton(
