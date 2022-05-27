@@ -1,8 +1,8 @@
-package com.ecosense.android.featDiseaseRecognition.domain.model
+package com.ecosense.android.featRecognition.domain.model
 
 import com.ecosense.android.core.util.UIText
 
-data class RecognisedDisease(
+data class RecognitionResult(
     val label: UIText,
     val confidence: Float
 )

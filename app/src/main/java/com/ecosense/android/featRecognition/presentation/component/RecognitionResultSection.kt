@@ -1,4 +1,4 @@
-package com.ecosense.android.featDiseaseRecognition.presentation.component
+package com.ecosense.android.featRecognition.presentation.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -20,13 +20,14 @@ import coil.compose.AsyncImage
 import com.ecosense.android.R
 import com.ecosense.android.core.presentation.theme.spacing
 import com.ecosense.android.core.presentation.util.asString
-import com.ecosense.android.featDiseaseRecognition.domain.model.RecognisedDisease
+import com.ecosense.android.featRecognition.domain.model.RecognitionResult
 
 @Composable
 fun DiseaseRecognitionResultSection(
     modifier: Modifier = Modifier,
-    mainDiagnosis: RecognisedDisease?,
-    diffDiagnoses: List<RecognisedDisease>?,
+    mainDiagnosis: RecognitionResult?,
+    diffDiagnoses: List<RecognitionResult>?,
+    onSaveResult: () -> Unit,
 ) {
     val context = LocalContext.current
 
@@ -76,7 +77,7 @@ fun DiseaseRecognitionResultSection(
                 }
 
                 Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
-                Button(onClick = { /*TODO: save result here*/ }) {
+                Button(onClick = onSaveResult) {
                     Icon(
                         imageVector = Icons.Default.Save,
                         contentDescription = null

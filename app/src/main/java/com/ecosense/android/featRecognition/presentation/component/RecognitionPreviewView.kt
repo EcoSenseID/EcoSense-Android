@@ -1,4 +1,4 @@
-package com.ecosense.android.featDiseaseRecognition.presentation.component
+package com.ecosense.android.featRecognition.presentation.component
 
 import android.graphics.Bitmap
 import android.util.Size
@@ -14,7 +14,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
-import com.ecosense.android.featDiseaseRecognition.presentation.util.toBitmap
+import com.ecosense.android.featRecognition.presentation.util.toBitmap
 import logcat.asLog
 import logcat.logcat
 import java.util.concurrent.Executors

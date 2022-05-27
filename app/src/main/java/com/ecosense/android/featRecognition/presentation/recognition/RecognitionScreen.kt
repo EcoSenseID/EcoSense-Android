@@ -1,4 +1,4 @@
-package com.ecosense.android.featDiseaseRecognition.presentation
+package com.ecosense.android.featRecognition.presentation.recognition
 
 import android.Manifest
 import androidx.compose.animation.AnimatedVisibility
@@ -11,10 +11,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.ecosense.android.featDiseaseRecognition.presentation.component.DiseaseRecognitionPermissionRequest
-import com.ecosense.android.featDiseaseRecognition.presentation.component.DiseaseRecognitionPreviewView
-import com.ecosense.android.featDiseaseRecognition.presentation.component.DiseaseRecognitionResultSection
-import com.ecosense.android.featDiseaseRecognition.presentation.component.DiseaseRecognitionTopBar
+import com.ecosense.android.destinations.RecognitionHistoryScreenDestination
+import com.ecosense.android.featRecognition.presentation.component.DiseaseRecognitionPermissionRequest
+import com.ecosense.android.featRecognition.presentation.component.DiseaseRecognitionPreviewView
+import com.ecosense.android.featRecognition.presentation.component.DiseaseRecognitionResultSection
+import com.ecosense.android.featRecognition.presentation.component.DiseaseRecognitionTopBar
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberPermissionState
 import com.ramcosta.composedestinations.annotation.Destination
@@ -25,7 +26,7 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 @Destination
 fun DiseaseRecognitionScreen(
     navigator: DestinationsNavigator,
-    viewModel: DiseaseRecognitionViewModel = hiltViewModel()
+    viewModel: RecognitionViewModel = hiltViewModel()
 ) {
     val state = viewModel.state.value
 
@@ -37,7 +38,7 @@ fun DiseaseRecognitionScreen(
         backgroundColor = MaterialTheme.colors.surface,
         topBar = {
             DiseaseRecognitionTopBar(
-                onHistoryClick = { /* TODO: navigate to HistoryScreen */ },
+                onHistoryClick = { navigator.navigate(RecognitionHistoryScreenDestination) },
             )
         },
     ) { scaffoldPadding ->
@@ -64,6 +65,7 @@ fun DiseaseRecognitionScreen(
                     DiseaseRecognitionResultSection(
                         mainDiagnosis = state.mainDiagnosis,
                         diffDiagnoses = state.diffDiagnoses,
+                        onSaveResult = { viewModel.onSaveResult() }
                     )
                 }
             }

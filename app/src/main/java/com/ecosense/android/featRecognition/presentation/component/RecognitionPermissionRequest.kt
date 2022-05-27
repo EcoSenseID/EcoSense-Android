@@ -1,4 +1,4 @@
-package com.ecosense.android.featDiseaseRecognition.presentation.component
+package com.ecosense.android.featRecognition.presentation.component
 
 import android.content.Intent
 import android.net.Uri

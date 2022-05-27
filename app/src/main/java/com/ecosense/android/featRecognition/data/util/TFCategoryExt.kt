@@ -1,11 +1,11 @@
-package com.ecosense.android.featDiseaseRecognition.data.util
+package com.ecosense.android.featRecognition.data.util
 
 import com.ecosense.android.R
 import com.ecosense.android.core.util.UIText
-import com.ecosense.android.featDiseaseRecognition.domain.model.RecognisedDisease
+import com.ecosense.android.featRecognition.domain.model.RecognitionResult
 import org.tensorflow.lite.support.label.Category
 
-fun Category.toRecognisedDisease() = RecognisedDisease(
+fun Category.toRecognisedDisease() = RecognitionResult(
     label = categoryLabelToUIText(this.label),
     confidence = this.score
 )

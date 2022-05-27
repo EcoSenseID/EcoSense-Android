@@ -1,4 +1,4 @@
-package com.ecosense.android.featDiseaseRecognition.presentation.component
+package com.ecosense.android.featRecognition.presentation.component
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Icon
