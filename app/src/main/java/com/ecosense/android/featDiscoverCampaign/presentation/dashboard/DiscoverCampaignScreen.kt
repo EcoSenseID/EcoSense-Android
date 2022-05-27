@@ -9,10 +9,10 @@ import androidx.compose.material.Text
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.ecosense.android.destinations.BrowseCampaignScreenDestination
 import com.ecosense.android.destinations.CategoryCampaignScreenDestination
+import com.ecosense.android.featDiscoverCampaign.presentation.component.DiscoverTopBar
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootNavGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -26,11 +26,11 @@ fun DiscoverCampaignScreen(
 ) {
     val scaffoldState = rememberScaffoldState()
 
-    Scaffold(scaffoldState = scaffoldState) {
+    Scaffold(
+        topBar = { DiscoverTopBar() },
+        scaffoldState = scaffoldState
+    ) {
         Column(modifier = Modifier.fillMaxSize()) {
-            Row {
-                Text("DiscoverCampaign")
-            }
             Row {
                 Button(onClick = {
                     navigator.navigate(BrowseCampaignScreenDestination(category = null)) // null = show all

@@ -25,7 +25,7 @@ import coil.request.ImageRequest
 import coil.size.Scale
 import com.ecosense.android.core.presentation.theme.spacing
 import com.ecosense.android.destinations.BrowseCampaignScreenDestination
-import com.ecosense.android.destinations.CategoryCampaignScreenDestination
+import com.ecosense.android.featDiscoverCampaign.presentation.detail.component.DetailTopBar
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
@@ -37,10 +37,25 @@ fun CategoryCampaignScreen(
 ) {
     val scaffoldState = rememberScaffoldState()
 
-    Scaffold(scaffoldState = scaffoldState) {
+    Scaffold(
+        topBar = {
+            DetailTopBar(
+                onBackClick = {
+                    navigator.popBackStack()
+                }
+            )
+        },
+        scaffoldState = scaffoldState
+    ) {
         Column(modifier = Modifier.fillMaxSize()) {
             Row {
-               Text("Choose a Category")
+                Text(
+                    text = "Choose a Category",
+                    fontWeight = FontWeight.SemiBold,
+                    style = MaterialTheme.typography.subtitle1,
+                    modifier = Modifier
+                        .padding(MaterialTheme.spacing.medium)
+                )
             }
             Row {
                 LazyColumn(modifier = Modifier.fillMaxWidth()) {
@@ -60,7 +75,6 @@ fun CategoryCampaignScreen(
                                     Log.d("TAG", "CategoryCampaignScreen: clicked $i")
                                 })
                                 .background(MaterialTheme.colors.surface)
-                                .padding(MaterialTheme.spacing.small)
                                 .fillMaxWidth()
                         ) {
                             Column(

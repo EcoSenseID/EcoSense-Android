@@ -9,7 +9,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.runtime.*
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.layout.onGloballyPositioned
@@ -19,6 +18,7 @@ import androidx.compose.ui.unit.toSize
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.ecosense.android.core.presentation.component.CampaignItem
 import com.ecosense.android.destinations.DetailCampaignScreenDestination
+import com.ecosense.android.featDiscoverCampaign.presentation.detail.component.DetailTopBar
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
@@ -42,12 +42,17 @@ fun BrowseCampaignScreen(
     else
         Icons.Filled.KeyboardArrowDown
 
-    Scaffold(scaffoldState = scaffoldState) {
+    Scaffold(
+        topBar = {
+            DetailTopBar(
+                onBackClick = {
+                    navigator.popBackStack()
+                }
+            )
+        },
+        scaffoldState = scaffoldState
+    ) {
         Column(modifier = Modifier.fillMaxSize()) {
-            Row {
-                Text("Browse Campaign")
-            }
-            
             Row { //DropDown
                 Column(Modifier.padding(20.dp)) {
                     OutlinedTextField(
