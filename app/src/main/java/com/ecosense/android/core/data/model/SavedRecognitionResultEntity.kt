@@ -8,13 +8,13 @@ import com.ecosense.android.featRecognition.domain.model.SavedRecognitionResult
 data class SavedRecognitionResultEntity(
     @PrimaryKey val id: Int? = null,
     val label: String,
-    val confidence: Float,
+    val confidencePercent: Int,
     val timeInMillis: Long,
 ) {
     fun toDiseaseHistoryItem() = SavedRecognitionResult(
         id = id,
         label = label,
-        confidence = confidence,
+        confidencePercent = confidencePercent,
         timeInMillis = timeInMillis,
     )
 }

@@ -61,17 +61,13 @@ fun DiseaseRecognitionResultSection(
                 )
 
                 Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
-                Text(text = "I'm ${(mainDiagnosis.confidence * 100).toInt()}% confident")
+                Text(text = "I'm ${mainDiagnosis.confidencePercent}% confident")
 
                 if (!diffDiagnoses.isNullOrEmpty()) {
                     Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
                     Text(
                         text = "But, it could also be ${
-                            diffDiagnoses.joinToString {
-                                it.label.asString(
-                                    context
-                                )
-                            }
+                            diffDiagnoses.joinToString { it.label.asString(context) }
                         }"
                     )
                 }

@@ -64,7 +64,7 @@
     <string name="completed_campaigns">Completed Campaigns</string>
     <string name="experiences">Experiences</string>
     <string name="history">History</string>
-    <string name="edit_profile">Edit profile</string>
+    <string name="edit_profile">Edit Profile</string>
     <string name="level">Level</string>
     <string name="name">Name</string>
     <string name="phone_number">Phone number</string>
@@ -130,4 +130,6 @@
     <string name="disease_tomato_target_spot">Tomato with Target Spot</string>
     <string name="disease_tomato_tomato_mosaic_virus">Tomato with Mosaic Virus</string>
     <string name="disease_tomato_tomato_yellow_leaf_curl_virus">Tomato with Yellow Leaf Curl Virus</string>
+    <string name="sm_saved_successfully">Saved successfully</string>
+    <string name="saved_recognition_results">Saved Recognition Results</string>
 </resources>

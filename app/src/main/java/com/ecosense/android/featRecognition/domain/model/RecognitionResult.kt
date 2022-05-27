@@ -4,5 +4,5 @@ import com.ecosense.android.core.util.UIText
 
 data class RecognitionResult(
     val label: UIText,
-    val confidence: Float
+    val confidencePercent: Int
 )

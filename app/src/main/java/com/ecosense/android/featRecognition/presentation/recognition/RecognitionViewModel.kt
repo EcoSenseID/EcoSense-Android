@@ -5,9 +5,14 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.ecosense.android.R
+import com.ecosense.android.core.presentation.util.UIEvent
+import com.ecosense.android.core.util.UIText
 import com.ecosense.android.featRecognition.domain.model.RecognitionResult
 import com.ecosense.android.featRecognition.domain.repository.RecognitionRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -19,21 +24,24 @@ class RecognitionViewModel @Inject constructor(
     private val _state = mutableStateOf(RecognitionState.defaultValue)
     val state: State<RecognitionState> = _state
 
+    private val _eventFlow = Channel<UIEvent>()
+    val eventFlow = _eventFlow.receiveAsFlow()
+
     fun onAnalyze(bitmap: Bitmap) {
         val diagnoses = recognitionRepository
             .analyzeDiseases(bitmap)
-            .sortedByDescending { it.confidence }
+            .sortedByDescending { it.confidencePercent }
 
         val mainDiagnosis: RecognitionResult? = try {
-            diagnoses.first { it.confidence > MAIN_DIAGNOSIS_MINIMUM_CONFIDENCE }
+            diagnoses.first { it.confidencePercent > MAIN_DIAGNOSIS_MINIMUM_CONFIDENCE_PERCENT }
         } catch (e: NoSuchElementException) {
             null
         }
 
         val diffDiagnoses: List<RecognitionResult>? = when {
-            mainDiagnosis != null -> diagnoses.filter {
-                it != mainDiagnosis && it.confidence > DIFFERENTIAL_DIAGNOSES_MINIMUM_CONFIDENCE
-            }
+            mainDiagnosis != null -> diagnoses
+                .filterNot { it.label == mainDiagnosis.label }
+                .filter { it.confidencePercent > DIFFERENTIAL_DIAGNOSES_MINIMUM_CONFIDENCE_PERCENT }
 
             else -> null
         }
@@ -48,12 +56,15 @@ class RecognitionViewModel @Inject constructor(
         viewModelScope.launch {
             state.value.mainDiagnosis?.let {
                 recognitionRepository.saveRecognitionResult(it)
+                _eventFlow.send(
+                    UIEvent.ShowSnackbar(UIText.StringResource(R.string.sm_saved_successfully))
+                )
             }
         }
     }
 
     companion object {
-        private const val MAIN_DIAGNOSIS_MINIMUM_CONFIDENCE = 0.40f
-        private const val DIFFERENTIAL_DIAGNOSES_MINIMUM_CONFIDENCE = 0.30f
+        private const val MAIN_DIAGNOSIS_MINIMUM_CONFIDENCE_PERCENT = 40
+        private const val DIFFERENTIAL_DIAGNOSES_MINIMUM_CONFIDENCE_PERCENT = 30
     }
 }

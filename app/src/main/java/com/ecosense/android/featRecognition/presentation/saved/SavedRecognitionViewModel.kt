@@ -46,9 +46,11 @@ class SavedRecognitionViewModel @Inject constructor(
                         _eventFlow.send(UIEvent.HideKeyboard)
                     }
                     is Resource.Success -> {
+                        // TODO: create sorting feature
                         _state.value = state.value.copy(
                             isLoading = false,
-                            historyList = result.data ?: emptyList()
+                            resultList = result.data?.sortedByDescending { it.timeInMillis }
+                                ?: emptyList()
                         )
                     }
                 }

@@ -7,7 +7,7 @@ import org.tensorflow.lite.support.label.Category
 
 fun Category.toRecognisedDisease() = RecognitionResult(
     label = categoryLabelToUIText(this.label),
-    confidence = this.score
+    confidencePercent = (this.score * 100).toInt()
 )
 
 private fun categoryLabelToUIText(
