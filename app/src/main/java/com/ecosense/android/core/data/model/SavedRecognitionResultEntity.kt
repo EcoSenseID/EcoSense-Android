@@ -1,4 +1,4 @@
-package com.ecosense.android.featRecognition.data.model
+package com.ecosense.android.core.data.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

@@ -3,7 +3,7 @@ package com.ecosense.android.core.data.local
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import com.ecosense.android.core.data.local.dao.SavedRecognitionResultDao
-import com.ecosense.android.featRecognition.data.model.SavedRecognitionResultEntity
+import com.ecosense.android.core.data.model.SavedRecognitionResultEntity
 
 @Database(
     entities = [SavedRecognitionResultEntity::class],

@@ -7,7 +7,7 @@ import com.ecosense.android.core.data.local.dao.SavedRecognitionResultDao
 import com.ecosense.android.core.presentation.util.asString
 import com.ecosense.android.core.util.Resource
 import com.ecosense.android.core.util.UIText
-import com.ecosense.android.featRecognition.data.model.SavedRecognitionResultEntity
+import com.ecosense.android.core.data.model.SavedRecognitionResultEntity
 import com.ecosense.android.featRecognition.data.util.toRecognisedDisease
 import com.ecosense.android.featRecognition.domain.model.RecognitionResult
 import com.ecosense.android.featRecognition.domain.model.SavedRecognitionResult
