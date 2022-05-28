@@ -44,7 +44,6 @@ fun EditProfileScreen(
     navigator: DestinationsNavigator,
     viewModel: EditProfileViewModel = hiltViewModel()
 ) {
-    // TODO: navigate back when successfully saved
     val scaffoldState = rememberScaffoldState()
 
     val imagePickerLauncher = rememberLauncherForActivityResult(

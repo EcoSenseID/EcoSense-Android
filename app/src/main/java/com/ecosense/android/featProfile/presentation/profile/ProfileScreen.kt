@@ -49,7 +49,6 @@ fun ProfileScreen(
     navigator: DestinationsNavigator,
     viewModel: ProfileViewModel = hiltViewModel()
 ) {
-    // TODO: show isLoadingContributions state
     val scaffoldState = rememberScaffoldState()
     val coroutineScope = rememberCoroutineScope()
 
