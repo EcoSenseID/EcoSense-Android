@@ -77,7 +77,7 @@ fun EditProfileScreen(
         topBar = {
             EditProfileTopBar(
                 isSavingLoading = state.isSavingProfileLoading,
-                onBackClick = { navigator.popBackStack() },
+                onBackClick = { navigator.navigateUp() },
                 onSaveClick = { viewModel.onSaveClick() }
             )
         },
