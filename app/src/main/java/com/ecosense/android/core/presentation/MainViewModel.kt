@@ -13,6 +13,6 @@ import javax.inject.Inject
 class MainViewModel @Inject constructor(
     authRepository: AuthRepository
 ) : ViewModel() {
-    val isLoggedIn: StateFlow<Boolean> = authRepository.isLoggedIn
-        .stateIn(viewModelScope, SharingStarted.Eagerly, true)
+    val isLoggedIn: StateFlow<Boolean?> = authRepository.isLoggedIn
+        .stateIn(viewModelScope, SharingStarted.Eagerly, null)
 }
