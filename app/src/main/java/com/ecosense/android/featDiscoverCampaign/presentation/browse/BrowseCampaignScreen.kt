@@ -13,9 +13,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.ecosense.android.R
 import com.ecosense.android.core.presentation.component.CampaignItem
 import com.ecosense.android.destinations.DetailCampaignScreenDestination
 import com.ecosense.android.featDiscoverCampaign.presentation.detail.component.DetailTopBar
@@ -32,7 +34,7 @@ fun BrowseCampaignScreen(
     val scaffoldState = rememberScaffoldState()
 
     var expanded by remember { mutableStateOf(false) }
-    val sortByList = listOf("Show All Campaign", "New Campaign", "Trending Campaign")
+    val sortByList = listOf(stringResource(R.string.show_all_campaign), stringResource(R.string.new_campaign), stringResource(R.string.trending_campaign))
     var selectedSort by remember { mutableStateOf("") }
 
     var textFieldSize by remember { mutableStateOf(Size.Zero)}
@@ -66,9 +68,9 @@ fun BrowseCampaignScreen(
                                 //This value is used to assign to the DropDown the same width
                                 textFieldSize = coordinates.size.toSize()
                             },
-                        label = {Text("Sort by")},
+                        label = {Text(stringResource(R.string.sort_by))},
                         trailingIcon = {
-                            Icon(icon,"Show or hide the drop down")
+                            Icon(icon, stringResource(R.string.show_hide_dropdown))
                         }
                     )
                     DropdownMenu(

@@ -11,9 +11,9 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Person
@@ -26,6 +26,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
@@ -36,6 +37,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import coil.size.Scale
+import com.ecosense.android.R
 import com.ecosense.android.core.presentation.theme.spacing
 import com.ecosense.android.featDiscoverCampaign.data.util.dateFormatter
 import com.ecosense.android.featDiscoverCampaign.presentation.detail.component.DetailTopBar
@@ -51,6 +53,7 @@ fun DetailCampaignScreen(
 ) {
     val scaffoldState = rememberScaffoldState()
     val inputValue = remember { mutableStateOf(TextFieldValue()) }
+    val scrollState = rememberScrollState()
 
     var imageUri by remember { mutableStateOf<Uri?>(null) }
     val context = LocalContext.current
@@ -80,7 +83,7 @@ fun DetailCampaignScreen(
                         ExtendedFloatingActionButton(
                             text = {
                                 Text(
-                                    text = "Join Campaign",
+                                    text = stringResource(R.string.join_campaign),
                                     color = MaterialTheme.colors.onPrimary
                                 )
                             },
@@ -93,8 +96,9 @@ fun DetailCampaignScreen(
                     }
                 }
             ) {
-                // TODO: find a way to make it scrollable, currently can't do scroll because I used lazycolumn and lazyrow (which makes them the only things that scrollable)
-                Column(modifier = Modifier.fillMaxSize()) {
+                Column(modifier = Modifier
+                    .fillMaxSize()
+                    .verticalScroll(scrollState)) {
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier
@@ -116,7 +120,7 @@ fun DetailCampaignScreen(
                                         .crossfade(true)
                                         .scale(Scale.FILL)
                                         .build(),
-                                    contentDescription = "Poster of ${campaign.title} campaign.",
+                                    contentDescription = stringResource(R.string.poster_of_campaign, campaign.title),
                                     contentScale = ContentScale.FillWidth,
                                     modifier = Modifier
                                         .fillMaxSize()
@@ -132,7 +136,7 @@ fun DetailCampaignScreen(
                                     Row(verticalAlignment = Alignment.CenterVertically) {
                                         Icon(
                                             imageVector = Icons.Filled.Person,
-                                            contentDescription = "Participant Count",
+                                            contentDescription = stringResource(R.string.participant_count),
                                             tint = MaterialTheme.colors.onPrimary
                                         )
                                         Spacer(modifier = Modifier.width(2.dp))
@@ -143,25 +147,29 @@ fun DetailCampaignScreen(
                                         )
                                     }
                                     Row {
-                                        LazyRow(
+                                        Row(
                                             modifier = Modifier
                                                 .fillMaxWidth()
                                                 .padding(vertical = MaterialTheme.spacing.extraSmall)
                                         ) {
-                                            items(campaign.category.size) { i ->
+                                            for (campaignCategory in campaign.category) {
                                                 Text(
-                                                    text = campaign.category[i],
+                                                    text = campaignCategory,
                                                     style = MaterialTheme.typography.overline,
                                                     color = MaterialTheme.colors.onPrimary,
                                                     modifier = Modifier
                                                         .clip(shape = RoundedCornerShape(10.dp))
                                                         .background(
-                                                            if (campaign.category[i] == "#AirPollution") {
-                                                                Color.Green
-                                                            } else if (campaign.category[i] == "#FoodWaste") {
-                                                                Color.Magenta
-                                                            } else {
-                                                                MaterialTheme.colors.primary
+                                                            when (campaignCategory) {
+                                                                stringResource(R.string.cat_air_pollution) -> {
+                                                                    Color.Green
+                                                                }
+                                                                stringResource(R.string.cat_food_waste) -> {
+                                                                    Color.Magenta
+                                                                }
+                                                                else -> {
+                                                                    MaterialTheme.colors.primary
+                                                                }
                                                             }
                                                         )
                                                         .padding(MaterialTheme.spacing.extraSmall)
@@ -212,12 +220,12 @@ fun DetailCampaignScreen(
                                     ) {
                                         Icon(
                                             imageVector = Icons.Outlined.Person,
-                                            contentDescription = "Initiator",
+                                            contentDescription = stringResource(R.string.initiator),
                                             tint = MaterialTheme.colors.onSurface
                                         )
                                         Spacer(modifier = Modifier.width(2.dp))
                                         Text(
-                                            text = "Initiated by ",
+                                            text = stringResource(R.string.initiated_by),
                                             style = MaterialTheme.typography.caption
                                         )
                                         Spacer(modifier = Modifier.width(1.dp))
@@ -252,7 +260,7 @@ fun DetailCampaignScreen(
                                             }
                                             Row {
                                                 Text(
-                                                    text = "Start Date",
+                                                    text = stringResource(R.string.start_date),
                                                     style = MaterialTheme.typography.body2,
                                                     color = MaterialTheme.colors.primary
                                                 )
@@ -285,7 +293,7 @@ fun DetailCampaignScreen(
                                             }
                                             Row {
                                                 Text(
-                                                    text = "End Date",
+                                                    text = stringResource(R.string.end_date),
                                                     style = MaterialTheme.typography.body2,
                                                     color = MaterialTheme.colors.primary
                                                 )
@@ -302,7 +310,7 @@ fun DetailCampaignScreen(
                                         Column {
                                             Row {
                                                 Text(
-                                                    text = "Impact",
+                                                    text = stringResource(R.string.impact),
                                                     fontSize = 18.sp,
                                                     fontWeight = FontWeight.Bold,
                                                     modifier = Modifier
@@ -328,7 +336,7 @@ fun DetailCampaignScreen(
                                         Column {
                                             Row {
                                                 Text(
-                                                    text = "Tasks",
+                                                    text = stringResource(R.string.tasks),
                                                     fontSize = 18.sp,
                                                     fontWeight = FontWeight.Bold,
                                                     modifier = Modifier
@@ -336,9 +344,8 @@ fun DetailCampaignScreen(
                                                 )
                                             }
                                             Row(modifier = Modifier.padding(horizontal = MaterialTheme.spacing.medium)) {
-                                                LazyColumn(modifier = Modifier.fillMaxWidth()) {
-                                                    items(campaign.tasks.size) { i ->
-                                                        val task = campaign.tasks[i]
+                                                Column(modifier = Modifier.fillMaxWidth()) {
+                                                    campaign.tasks.forEachIndexed { index, task ->
                                                         Row(
                                                             verticalAlignment = Alignment.CenterVertically,
                                                             modifier = Modifier.padding(
@@ -347,7 +354,7 @@ fun DetailCampaignScreen(
                                                         ) {
                                                             Column {
                                                                 Text(
-                                                                    text = "${i + 1}",
+                                                                    text = "${index + 1}",
                                                                     fontSize = 18.sp,
                                                                     fontWeight = FontWeight.Bold,
                                                                     color = MaterialTheme.colors.primary,
@@ -368,7 +375,7 @@ fun DetailCampaignScreen(
                                                                     horizontalAlignment = Alignment.End
                                                                 ) {
                                                                     Text(
-                                                                        text = "Completed",
+                                                                        text = stringResource(R.string.completed),
                                                                         textAlign = TextAlign.Right,
                                                                         fontWeight = FontWeight.Bold,
                                                                         fontStyle = FontStyle.Italic,
@@ -405,7 +412,7 @@ fun DetailCampaignScreen(
                                                                             .crossfade(true)
                                                                             .scale(Scale.FILL)
                                                                             .build(),
-                                                                        contentDescription = "Proof of ${task.name} task completion.",
+                                                                        contentDescription = stringResource(R.string.proof_completion, task.name),
                                                                         contentScale = ContentScale.FillWidth,
                                                                         modifier = Modifier
                                                                             .fillMaxSize()
@@ -429,130 +436,135 @@ fun DetailCampaignScreen(
                                                                 }
                                                                 Row {
                                                                     Text(
-                                                                        text = "Finished on " +
-                                                                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-                                                                                    dateFormatter(
-                                                                                        task.completedTimeStamp
-                                                                                    )
-                                                                                else
-                                                                                    task.completedTimeStamp,
+                                                                        text = stringResource(R.string.finished_on,
+                                                                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+                                                                                dateFormatter(
+                                                                                    task.completedTimeStamp
+                                                                                )
+                                                                            else
+                                                                                task.completedTimeStamp),
                                                                         style = MaterialTheme.typography.caption,
                                                                         color = MaterialTheme.colors.primary
                                                                     )
                                                                 }
                                                             } else {
-                                                                // FIXME: still haven't figured out how to make the submission only available for the next uncompleted task
-                                                                Row(
-                                                                    modifier = Modifier.padding(
-                                                                        bottom = MaterialTheme.spacing.small
-                                                                    )
-                                                                ) {
-                                                                    Button(
-                                                                        onClick = {
-                                                                            // TODO: currently can only pick image from gallery, find a way to make it able to use camera x too
-                                                                            launcher.launch("image/*")
 
-                                                                            Log.d(
-                                                                                "TAG",
-                                                                                "DetailCampaignScreen: Add Picture Button Clicked"
-                                                                            )
-                                                                        },
-                                                                        modifier = Modifier
-                                                                            .fillMaxWidth()
-                                                                            .clip(
-                                                                                shape = RoundedCornerShape(
-                                                                                    8.dp
-                                                                                )
-                                                                            )
-                                                                    ) { Text("Select Image") }
-                                                                }
-
-                                                                // show the image if there's any
-                                                                if (imageUri != null) {
+                                                                if (campaign.tasks[index - 1].completed) { // make the submission only available for the next uncompleted task
                                                                     Row(
-                                                                        modifier = Modifier
-                                                                            .fillMaxWidth()
-                                                                            .height(100.dp)
-                                                                            .padding(bottom = MaterialTheme.spacing.small)
+                                                                        modifier = Modifier.padding(
+                                                                            bottom = MaterialTheme.spacing.small
+                                                                        )
                                                                     ) {
-                                                                        imageUri?.let {
-                                                                            if (Build.VERSION.SDK_INT < 28) {
-                                                                                bitmap.value =
-                                                                                    MediaStore.Images
-                                                                                        .Media.getBitmap(
-                                                                                            context.contentResolver,
-                                                                                            it
-                                                                                        )
+                                                                        Button(
+                                                                            onClick = {
+                                                                                // TODO: currently can only pick image from gallery, find a way to make it able to use camera x too
+                                                                                launcher.launch("image/*")
 
-                                                                            } else {
-                                                                                val source =
-                                                                                    ImageDecoder
-                                                                                        .createSource(
-                                                                                            context.contentResolver,
-                                                                                            it
-                                                                                        )
-                                                                                bitmap.value =
-                                                                                    ImageDecoder.decodeBitmap(
-                                                                                        source
-                                                                                    )
-                                                                            }
-
-                                                                            bitmap.value?.let { btm ->
-                                                                                Image(
-                                                                                    bitmap = btm.asImageBitmap(),
-                                                                                    contentScale = ContentScale.FillWidth,
-                                                                                    contentDescription = "Unsubmitted proof of ${task.name} task completion.",
-                                                                                    modifier = Modifier
-                                                                                        .fillMaxSize()
-                                                                                        .clip(
-                                                                                            shape = RoundedCornerShape(
-                                                                                                8.dp
-                                                                                            )
-                                                                                        )
+                                                                                Log.d(
+                                                                                    "TAG",
+                                                                                    "DetailCampaignScreen: Add Picture Button Clicked"
                                                                                 )
+                                                                            },
+                                                                            modifier = Modifier
+                                                                                .fillMaxWidth()
+                                                                                .clip(
+                                                                                    shape = RoundedCornerShape(
+                                                                                        8.dp
+                                                                                    )
+                                                                                )
+                                                                        ) { Text(stringResource(R.string.select_image)) }
+                                                                    }
+
+                                                                    // show the image if there's any
+                                                                    if (imageUri != null) {
+                                                                        Row(
+                                                                            modifier = Modifier
+                                                                                .fillMaxWidth()
+                                                                                .height(100.dp)
+                                                                                .padding(bottom = MaterialTheme.spacing.small)
+                                                                        ) {
+                                                                            imageUri?.let {
+                                                                                if (Build.VERSION.SDK_INT < 28) {
+                                                                                    bitmap.value =
+                                                                                        MediaStore.Images
+                                                                                            .Media.getBitmap(
+                                                                                                context.contentResolver,
+                                                                                                it
+                                                                                            )
+
+                                                                                } else {
+                                                                                    val source =
+                                                                                        ImageDecoder
+                                                                                            .createSource(
+                                                                                                context.contentResolver,
+                                                                                                it
+                                                                                            )
+                                                                                    bitmap.value =
+                                                                                        ImageDecoder.decodeBitmap(
+                                                                                            source
+                                                                                        )
+                                                                                }
+
+                                                                                bitmap.value?.let { btm ->
+                                                                                    Image(
+                                                                                        bitmap = btm.asImageBitmap(),
+                                                                                        contentScale = ContentScale.FillWidth,
+                                                                                        contentDescription = stringResource(R.string.unsubmitted_proof, task.name),
+                                                                                        modifier = Modifier
+                                                                                            .fillMaxSize()
+                                                                                            .clip(
+                                                                                                shape = RoundedCornerShape(
+                                                                                                    8.dp
+                                                                                                )
+                                                                                            )
+                                                                                    )
+                                                                                }
                                                                             }
                                                                         }
                                                                     }
-                                                                }
 
-                                                                Row(
-                                                                    modifier = Modifier.padding(
-                                                                        bottom = MaterialTheme.spacing.small
-                                                                    )
-                                                                ) {
-                                                                    OutlinedTextField(
-                                                                        value = inputValue.value,
-                                                                        onValueChange = {
-                                                                            inputValue.value =
-                                                                                it
-                                                                        },
-                                                                        label = { Text("Add Caption") },
-                                                                        modifier = Modifier.fillMaxSize(),
-                                                                        textStyle = MaterialTheme.typography.caption,
-                                                                        singleLine = true
-                                                                    )
-                                                                }
-                                                                Row(
-                                                                    modifier = Modifier.padding(
-                                                                        bottom = MaterialTheme.spacing.small
-                                                                    )
-                                                                ) {
-                                                                    Button(
-                                                                        onClick = {
-                                                                            Log.d(
-                                                                                "TAG",
-                                                                                "DetailCampaignScreen: Submit Button Clicked"
-                                                                            )
-                                                                        },
-                                                                        modifier = Modifier
-                                                                            .fillMaxWidth()
-                                                                            .clip(
-                                                                                shape = RoundedCornerShape(
-                                                                                    8.dp
-                                                                                )
-                                                                            )
+                                                                    Row(
+                                                                        modifier = Modifier.padding(
+                                                                            bottom = MaterialTheme.spacing.small
+                                                                        )
                                                                     ) {
-                                                                        Text("Submit")
+                                                                        OutlinedTextField(
+                                                                            value = inputValue.value,
+                                                                            onValueChange = {
+                                                                                inputValue.value =
+                                                                                    it
+                                                                            },
+                                                                            label = {
+                                                                                Text(
+                                                                                    stringResource(R.string.add_caption)
+                                                                                )
+                                                                            },
+                                                                            modifier = Modifier.fillMaxSize(),
+                                                                            textStyle = MaterialTheme.typography.caption
+                                                                        )
+                                                                    }
+                                                                    Row(
+                                                                        modifier = Modifier.padding(
+                                                                            bottom = MaterialTheme.spacing.small
+                                                                        )
+                                                                    ) {
+                                                                        Button(
+                                                                            onClick = {
+                                                                                Log.d(
+                                                                                    "TAG",
+                                                                                    "DetailCampaignScreen: Submit Button Clicked"
+                                                                                )
+                                                                            },
+                                                                            modifier = Modifier
+                                                                                .fillMaxWidth()
+                                                                                .clip(
+                                                                                    shape = RoundedCornerShape(
+                                                                                        8.dp
+                                                                                    )
+                                                                                )
+                                                                        ) {
+                                                                            Text(stringResource(R.string.submit))
+                                                                        }
                                                                     }
                                                                 }
                                                             }

@@ -10,7 +10,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.ecosense.android.R
 import com.ecosense.android.core.presentation.theme.spacing
 import com.ecosense.android.featDiscoverCampaign.data.util.countDays
 import com.ecosense.android.featDiscoverCampaign.data.util.dateFormatter
@@ -62,18 +64,17 @@ fun OnGoingTasks(
                                     Text(
                                         text =
                                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-                                                countDays(campaign.endDate) + " days left"
+                                                stringResource(R.string.days_left, countDays(campaign.endDate))
                                             else 
                                                 "",
                                         style = MaterialTheme.typography.caption
                                     )
                                     Text(
-                                        text = "Until ${
+                                        text = stringResource(R.string.until_date,
                                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
                                                 dateFormatter(campaign.endDate)
                                             else
-                                                campaign.endDate
-                                        }",
+                                                campaign.endDate),
                                         style = MaterialTheme.typography.caption
                                     )
                                 }

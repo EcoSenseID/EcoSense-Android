@@ -9,9 +9,11 @@ import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.ecosense.android.R
 
 @Composable
 fun DiscoverTopBar(
@@ -28,7 +30,7 @@ fun DiscoverTopBar(
                 horizontalArrangement = Arrangement.Center
             ) {
                 Text(
-                    text = "Campaign",
+                    text = stringResource(R.string.campaign),
                     fontSize = 30.sp,
                     fontWeight = FontWeight.Bold
                 )

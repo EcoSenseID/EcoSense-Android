@@ -19,11 +19,13 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import coil.size.Scale
+import com.ecosense.android.R
 import com.ecosense.android.core.domain.model.Campaign
 import com.ecosense.android.core.presentation.theme.spacing
 import com.ecosense.android.featDiscoverCampaign.data.util.dateFormatter
@@ -51,19 +53,19 @@ fun SortItem(
     campaign: Campaign,
     onClick: () -> Unit
 ) {
-    if (sort == "" || sort == "Show All Campaign") {
+    if (sort == "" || sort == stringResource(R.string.show_all_campaign)) {
         ShowItem(
             campaign = campaign,
             onClick = onClick
         )
-    } else if (sort == "New Campaign") {
+    } else if (sort == stringResource(R.string.new_campaign)) {
         if (campaign.isNew) {
             ShowItem(
                 campaign = campaign,
                 onClick = onClick
             )
         }
-    } else if (sort == "Trending Campaign") {
+    } else if (sort == stringResource(R.string.trending_campaign)) {
         if (campaign.isTrending) {
             ShowItem(
                 campaign = campaign,
@@ -90,7 +92,6 @@ fun ShowItem(
             .clip(shape = RoundedCornerShape(8.dp))
             .clickable(onClick = onClick)
             .background(MaterialTheme.colors.surface)
-            .padding(MaterialTheme.spacing.medium)
             .fillMaxWidth()
     ) {
         Column(
@@ -116,7 +117,7 @@ fun ShowItem(
                         .fillMaxSize()
                         .padding(MaterialTheme.spacing.small)
                 ) {
-                    if (campaign.isNew) {
+                    if (campaign.isTrending) {
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
                             modifier = Modifier
@@ -126,20 +127,20 @@ fun ShowItem(
                         ) {
                             Icon(
                                 imageVector = Icons.Filled.Whatshot,
-                                contentDescription = "Trending Campaign",
+                                contentDescription = stringResource(R.string.trending_campaign),
                                 tint = MaterialTheme.colors.onPrimary,
                                 modifier = Modifier.height(10.dp)
                             )
                             Spacer(modifier = Modifier.width(1.dp))
                             Text(
-                                text = "New",
+                                text = stringResource(R.string.trending_label),
                                 style = MaterialTheme.typography.overline,
                                 color = MaterialTheme.colors.onPrimary,
                             )
                         }
                     }
                     Spacer(modifier = Modifier.height(MaterialTheme.spacing.extraSmall))
-                    if (campaign.isTrending) {
+                    if (campaign.isNew) {
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
                             modifier = Modifier
@@ -149,13 +150,13 @@ fun ShowItem(
                         ) {
                             Icon(
                                 imageVector = Icons.Filled.NewReleases,
-                                contentDescription = "New Campaign",
+                                contentDescription = stringResource(R.string.new_campaign),
                                 tint = MaterialTheme.colors.onPrimary,
                                 modifier = Modifier.height(10.dp)
                             )
                             Spacer(modifier = Modifier.width(1.dp))
                             Text(
-                                text = "Trending",
+                                text = stringResource(R.string.new_label),
                                 style = MaterialTheme.typography.overline,
                                 color = MaterialTheme.colors.onPrimary
                             )
@@ -169,12 +170,11 @@ fun ShowItem(
 
         Column(modifier = Modifier.fillMaxWidth()) {
             Text(
-                text = "Until ${
+                text = stringResource(R.string.until_date,
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
                         dateFormatter(campaign.endDate)
                     else
-                        campaign.endDate
-                }",
+                        campaign.endDate),
                 style = MaterialTheme.typography.caption,
                 modifier = Modifier.padding(bottom = MaterialTheme.spacing.medium)
             )
@@ -198,9 +198,9 @@ fun ShowItem(
                         modifier = Modifier
                             .clip(shape = RoundedCornerShape(10.dp))
                             .background(
-                                if (campaign.category[i] == "#AirPollution") {
+                                if (campaign.category[i] == stringResource(R.string.cat_air_pollution)) {
                                     Color.Green
-                                } else if (campaign.category[i] == "#FoodWaste") {
+                                } else if (campaign.category[i] == stringResource(R.string.cat_food_waste)) {
                                     Color.Magenta
                                 } else {
                                     MaterialTheme.colors.primary
@@ -213,7 +213,7 @@ fun ShowItem(
             }
 
             Text(
-                text = "${campaign.participantsCount} changemakers participated",
+                text = stringResource(R.string.change_maker, campaign.participantsCount),
                 style = MaterialTheme.typography.caption,
             )
         }
