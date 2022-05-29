@@ -100,4 +100,7 @@
     <string name="blank">Blank</string>
     <string name="back">Back</string>
     <string name="days_left">%s days left</string>
+    <string name="close_search_bar">Close Search Bar</string>
+    <string name="open_search_bar">Open Search Bar</string>
+    <string name="showing_search_result">Showing search results for \"%s\"</string>
 </resources>

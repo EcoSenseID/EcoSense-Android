@@ -49,7 +49,7 @@ fun BrowseCategory(
                         .padding(end = MaterialTheme.spacing.small)
                         .clip(shape = RoundedCornerShape(8.dp))
                         .clickable(onClick = {
-                            navigator.navigate(BrowseCampaignScreenDestination(category = null))
+                            navigator.navigate(BrowseCampaignScreenDestination(search = null, category = null))
                         })
                         .background(MaterialTheme.colors.surface)
                         .fillMaxSize()
@@ -88,7 +88,7 @@ fun BrowseCategory(
                                 .padding(horizontal = MaterialTheme.spacing.small)
                                 .clip(shape = RoundedCornerShape(8.dp))
                                 .clickable(onClick = {
-                                    navigator.navigate(BrowseCampaignScreenDestination(category = category.name))
+                                    navigator.navigate(BrowseCampaignScreenDestination(search = null, category = category.name))
                                 })
                                 .background(MaterialTheme.colors.surface)
                                 .fillMaxSize()

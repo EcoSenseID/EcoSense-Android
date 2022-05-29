@@ -21,9 +21,10 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.ecosense.android.R
 import com.ecosense.android.core.presentation.theme.spacing
+import com.ecosense.android.destinations.BrowseCampaignScreenDestination
 import com.ecosense.android.destinations.CategoryCampaignScreenDestination
-import com.ecosense.android.featDiscoverCampaign.presentation.component.DiscoverTopBar
 import com.ecosense.android.featDiscoverCampaign.presentation.dashboard.component.BrowseCategory
+import com.ecosense.android.featDiscoverCampaign.presentation.dashboard.component.DashboardTopBar
 import com.ecosense.android.featDiscoverCampaign.presentation.dashboard.component.OnGoingTasks
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootNavGraph
@@ -39,7 +40,7 @@ fun DiscoverCampaignScreen(
     val scaffoldState = rememberScaffoldState()
 
     Scaffold(
-        topBar = { DiscoverTopBar() },
+        topBar = { DashboardTopBar({ navigator.navigate(BrowseCampaignScreenDestination(search = it, category = null)) }) },
         scaffoldState = scaffoldState
     ) {
         Column(

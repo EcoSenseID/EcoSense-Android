@@ -40,7 +40,7 @@ import coil.size.Scale
 import com.ecosense.android.R
 import com.ecosense.android.core.presentation.theme.spacing
 import com.ecosense.android.featDiscoverCampaign.data.util.dateFormatter
-import com.ecosense.android.featDiscoverCampaign.presentation.detail.component.DetailTopBar
+import com.ecosense.android.featDiscoverCampaign.presentation.component.DiscoverTopBar
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
@@ -70,7 +70,7 @@ fun DetailCampaignScreen(
         if (campaign.id == id) {
             Scaffold(
                 topBar = {
-                    DetailTopBar(
+                    DiscoverTopBar(
                         onBackClick = {
                             navigator.popBackStack()
                         }

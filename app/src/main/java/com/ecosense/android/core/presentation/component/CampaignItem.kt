@@ -1,6 +1,7 @@
 package com.ecosense.android.core.presentation.component
 
 import android.os.Build
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -33,16 +34,20 @@ import com.ecosense.android.featDiscoverCampaign.data.util.dateFormatter
 @Composable
 fun CampaignItem(
     campaign: Campaign,
+    search: String?,
     category: String?,
     sort: String?,
     onClick: () -> Unit
 ) {
-
-    if (category == null) {
+    if (campaign.title.contains(search.toString(), ignoreCase = true)) {
         SortItem(sort = sort, campaign = campaign, onClick = onClick)
-    } else {
-        if (category in campaign.category) {
+    } else if (search == null) {
+        if (category == null) {
             SortItem(sort = sort, campaign = campaign, onClick = onClick)
+        } else {
+            if (category in campaign.category) {
+                SortItem(sort = sort, campaign = campaign, onClick = onClick)
+            }
         }
     }
 }

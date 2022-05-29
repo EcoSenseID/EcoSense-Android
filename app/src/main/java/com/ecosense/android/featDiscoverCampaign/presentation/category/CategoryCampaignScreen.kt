@@ -27,7 +27,7 @@ import coil.size.Scale
 import com.ecosense.android.R
 import com.ecosense.android.core.presentation.theme.spacing
 import com.ecosense.android.destinations.BrowseCampaignScreenDestination
-import com.ecosense.android.featDiscoverCampaign.presentation.detail.component.DetailTopBar
+import com.ecosense.android.featDiscoverCampaign.presentation.component.DiscoverTopBar
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
@@ -42,7 +42,7 @@ fun CategoryCampaignScreen(
 
     Scaffold(
         topBar = {
-            DetailTopBar(
+            DiscoverTopBar(
                 onBackClick = {
                     navigator.popBackStack()
                 }
@@ -76,7 +76,7 @@ fun CategoryCampaignScreen(
                             )
                             .clip(shape = RoundedCornerShape(8.dp))
                             .clickable(onClick = {
-                                navigator.navigate(BrowseCampaignScreenDestination(category = null))
+                                navigator.navigate(BrowseCampaignScreenDestination(search = null, category = null))
                             })
                             .background(MaterialTheme.colors.surface)
                             .fillMaxWidth()
@@ -114,7 +114,7 @@ fun CategoryCampaignScreen(
                                 )
                                 .clip(shape = RoundedCornerShape(8.dp))
                                 .clickable(onClick = {
-                                    navigator.navigate(BrowseCampaignScreenDestination(category = category.name))
+                                    navigator.navigate(BrowseCampaignScreenDestination(search = null, category = category.name))
                                 })
                                 .background(MaterialTheme.colors.surface)
                                 .fillMaxWidth()
