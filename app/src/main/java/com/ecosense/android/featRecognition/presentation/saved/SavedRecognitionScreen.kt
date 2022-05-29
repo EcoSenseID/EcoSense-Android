@@ -1,5 +1,6 @@
 package com.ecosense.android.featRecognition.presentation
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -10,12 +11,17 @@ import androidx.compose.material.Text
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import coil.compose.AsyncImage
+import com.ecosense.android.R
 import com.ecosense.android.core.presentation.theme.spacing
 import com.ecosense.android.core.presentation.util.UIEvent
 import com.ecosense.android.core.presentation.util.asString
@@ -74,10 +80,35 @@ fun RecognitionHistoryScreen(
                 .fillMaxSize()
                 .padding(scaffoldPadding)
         ) {
-            LazyColumn(modifier = Modifier.fillMaxWidth()) {
-                items(state.resultList.size) { i ->
-                    if (i == 0) Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
-                    SavedRecognitionItem(state.resultList[i])
+            AnimatedVisibility(visible = state.resultList.isNotEmpty()) {
+                LazyColumn(modifier = Modifier.fillMaxWidth()) {
+                    items(state.resultList.size) { i ->
+                        if (i == 0) Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
+                        SavedRecognitionItem(state.resultList[i])
+                    }
+                }
+            }
+
+            AnimatedVisibility(visible = state.resultList.isEmpty()) {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center,
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(MaterialTheme.spacing.medium)
+                ) {
+                    AsyncImage(
+                        model = R.drawable.ic_wind_turbine_pana,
+                        contentDescription = null,
+                        modifier = Modifier.size(200.dp)
+                    )
+
+                    Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
+
+                    Text(
+                        text = stringResource(R.string.empty_saved_recognition_results),
+                        textAlign = TextAlign.Center
+                    )
                 }
             }
         }
