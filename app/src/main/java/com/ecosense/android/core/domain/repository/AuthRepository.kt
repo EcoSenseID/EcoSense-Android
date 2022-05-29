@@ -19,6 +19,7 @@ interface AuthRepository {
     ): Flow<SimpleResource>
 
     fun registerWithEmail(
+        name: String,
         email: String,
         password: String,
         repeatedPassword: String,

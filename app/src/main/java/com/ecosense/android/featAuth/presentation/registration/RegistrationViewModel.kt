@@ -49,26 +49,53 @@ class RegistrationViewModel @Inject constructor(
         )
     }
 
+    fun onNameValueChange(value: String) {
+        _state.value = state.value.copy(name = value)
+    }
+
     private var onRegisterClickJob: Job? = null
     fun onRegisterClick() {
         onRegisterClickJob?.cancel()
         onRegisterClickJob = viewModelScope.launch {
             authRepository.registerWithEmail(
+                name = state.value.name,
                 email = state.value.email,
                 password = state.value.password,
                 repeatedPassword = state.value.repeatedPassword
             ).onEach { result ->
                 when (result) {
                     is Resource.Error -> {
-                        _state.value = state.value.copy(isLoading = false)
+                        _state.value = state.value.copy(isRegistering = false)
                         result.uiText?.let { _eventFlow.send(UIEvent.ShowSnackbar(it)) }
                     }
                     is Resource.Loading -> {
-                        _state.value = state.value.copy(isLoading = true)
+                        _state.value = state.value.copy(isRegistering = true)
                         _eventFlow.send(UIEvent.HideKeyboard)
                     }
                     is Resource.Success -> {
-                        _state.value = state.value.copy(isLoading = false)
+                        _state.value = state.value.copy(isRegistering = false)
+                    }
+                }
+            }.launchIn(this)
+        }
+    }
+
+    private var onGoogleSignInResultJob: Job? = null
+    fun onGoogleSignInResult(idToken: String?) {
+        onGoogleSignInResultJob?.cancel()
+        onGoogleSignInResultJob = viewModelScope.launch {
+            authRepository.loginWithGoogle(idToken = idToken).onEach { result ->
+                when (result) {
+                    is Resource.Error -> {
+                        _state.value = state.value.copy(isLoadingGoogleLogin = false)
+                        result.uiText?.let { _eventFlow.send(UIEvent.ShowSnackbar(it)) }
+                    }
+                    is Resource.Loading -> {
+                        _state.value = state.value.copy(isLoadingGoogleLogin = true)
+                        _eventFlow.send(UIEvent.HideKeyboard)
+                    }
+                    is Resource.Success -> {
+                        _state.value = state.value.copy(isLoadingGoogleLogin = false)
                     }
                 }
             }.launchIn(this)

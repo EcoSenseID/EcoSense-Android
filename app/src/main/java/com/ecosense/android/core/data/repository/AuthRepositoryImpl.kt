@@ -71,6 +71,7 @@ class AuthRepositoryImpl(
     }
 
     override fun registerWithEmail(
+        name: String,
         email: String,
         password: String,
         repeatedPassword: String,
@@ -78,6 +79,11 @@ class AuthRepositoryImpl(
         emit(Resource.Loading())
 
         when {
+            name.isBlank() -> {
+                emit(Resource.Error(UIText.StringResource(R.string.em_name_blank)))
+                return@flow
+            }
+
             email.isBlank() -> {
                 emit(Resource.Error(UIText.StringResource(R.string.em_email_blank)))
                 return@flow
@@ -112,7 +118,15 @@ class AuthRepositoryImpl(
         try {
             authApi
                 .registerWithEmail(email = email, password = password)
-                .also { emit(it) }
+                .also { result ->
+                    when (result) {
+                        is Resource.Success -> {
+                            emit(authApi.updateProfile(newDisplayName = name, newPhotoUri = null))
+                        }
+                        else -> emit(result)
+                    }
+                }
+
         } catch (e: Exception) {
             emit(Resource.Error(UIText.StringResource(R.string.em_unknown)))
         }
