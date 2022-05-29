@@ -2,6 +2,7 @@ package com.ecosense.android.featDiscoverCampaign.presentation.dashboard.compone
 
 import android.os.Build
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
@@ -14,12 +15,15 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.ecosense.android.R
 import com.ecosense.android.core.presentation.theme.spacing
+import com.ecosense.android.destinations.DetailCampaignScreenDestination
 import com.ecosense.android.featDiscoverCampaign.data.util.countDays
 import com.ecosense.android.featDiscoverCampaign.data.util.dateFormatter
 import com.ecosense.android.featDiscoverCampaign.domain.model.CampaignDetail
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
 @Composable
 fun OnGoingTasks(
+    navigator: DestinationsNavigator,
     campaign: CampaignDetail,
     modifier: Modifier = Modifier
 ) {
@@ -36,6 +40,7 @@ fun OnGoingTasks(
                         .background(MaterialTheme.colors.surface)
                         .padding(MaterialTheme.spacing.medium)
                         .fillMaxWidth()
+                        .clickable { navigator.navigate(DetailCampaignScreenDestination(id = campaign.id)) }
                 ) {
                     Column(
                         modifier = Modifier

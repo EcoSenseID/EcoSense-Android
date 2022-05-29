@@ -136,7 +136,7 @@ fun DiscoverCampaignScreen(
                     .padding(bottom = MaterialTheme.spacing.medium)
             ) {
                 items(viewModel.discoverCampaignList.value.size) { i ->
-                    OnGoingTasks(campaign = viewModel.discoverCampaignList.value[i])
+                    OnGoingTasks(navigator = navigator, campaign = viewModel.discoverCampaignList.value[i])
                 }
             }
             Row(
