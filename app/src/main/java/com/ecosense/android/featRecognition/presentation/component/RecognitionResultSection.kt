@@ -55,7 +55,7 @@ fun DiseaseRecognitionResultSection(
 
                 Text(
                     text = mainDiagnosis.label.asString(),
-                    style = MaterialTheme.typography.h5,
+                    style = MaterialTheme.typography.h6,
                     fontWeight = FontWeight.SemiBold,
                     color = MaterialTheme.colors.primary
                 )
@@ -72,7 +72,7 @@ fun DiseaseRecognitionResultSection(
                     )
                 }
 
-                Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
+                Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
                 Button(onClick = onSaveResult) {
                     Icon(
                         imageVector = Icons.Default.Save,

@@ -13,9 +13,12 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import coil.compose.AsyncImage
 import com.ecosense.android.R
 import com.ecosense.android.core.presentation.AuthNavGraph
+import com.ecosense.android.core.presentation.component.RoundedEndsButton
 import com.ecosense.android.core.presentation.theme.spacing
 import com.ecosense.android.core.presentation.util.UIEvent
 import com.ecosense.android.core.presentation.util.asString
@@ -23,7 +26,6 @@ import com.ecosense.android.destinations.RegistrationScreenDestination
 import com.ecosense.android.destinations.ResetPasswordScreenDestination
 import com.ecosense.android.featAuth.presentation.component.EmailTextField
 import com.ecosense.android.featAuth.presentation.component.PasswordTextField
-import com.ecosense.android.core.presentation.component.RoundedEndsButton
 import com.ecosense.android.featAuth.presentation.login.contract.GoogleSignInContract
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -75,15 +77,13 @@ fun LoginScreen(
         ) {
             Text(
                 text = stringResource(R.string.login_screen_title),
-                style = MaterialTheme.typography.h5,
+                style = MaterialTheme.typography.h6,
                 fontWeight = FontWeight.SemiBold,
             )
 
-            Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
-
             Text(
                 text = stringResource(R.string.login_screen_caption),
-                style = MaterialTheme.typography.body2,
+                style = MaterialTheme.typography.body1,
             )
 
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.large))
@@ -110,7 +110,8 @@ fun LoginScreen(
             ) {
                 Text(
                     text = stringResource(R.string.forgot_password),
-                    color = MaterialTheme.colors.primary,
+                    color = MaterialTheme.colors.primaryVariant,
+                    fontWeight = FontWeight.SemiBold,
                     modifier = Modifier.clickable {
                         navigator.navigate(ResetPasswordScreenDestination)
                     }
@@ -154,13 +155,26 @@ fun LoginScreen(
             RoundedEndsButton(
                 enabled = !state.isLoading,
                 onClick = { googleSignInLauncher.launch(0) },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                colors = ButtonDefaults.buttonColors(
+                    backgroundColor = MaterialTheme.colors.surface,
+                )
             ) {
+
+                AsyncImage(
+                    model = R.drawable.ic_google,
+                    contentDescription = null,
+                    modifier = Modifier.size(24.dp)
+                )
+
+                Spacer(modifier = Modifier.width(MaterialTheme.spacing.medium))
+
                 Text(
                     text = stringResource(
                         if (state.isLoadingGoogleLogin) R.string.logging_in
-                        else R.string.login_with_google
-                    )
+                        else R.string.continue_with_google
+                    ),
+                    color = MaterialTheme.colors.primary,
                 )
             }
 
@@ -173,7 +187,8 @@ fun LoginScreen(
                 Text(text = stringResource(R.string.new_here).plus(" "))
                 Text(
                     text = stringResource(R.string.create_an_account),
-                    color = MaterialTheme.colors.primary,
+                    color = MaterialTheme.colors.primaryVariant,
+                    fontWeight = FontWeight.SemiBold,
                     modifier = Modifier.clickable { navigator.navigate(RegistrationScreenDestination) }
                 )
             }

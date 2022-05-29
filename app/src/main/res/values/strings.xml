@@ -171,4 +171,6 @@
     <string name="disease_tomato_tomato_yellow_leaf_curl_virus">Tomato with Yellow Leaf Curl Virus</string>
     <string name="sm_saved_successfully">Saved successfully</string>
     <string name="saved_recognition_results">Saved Recognition Results</string>
+    <string name="continue_with_google">Continue with Google</string>
+    <string name="em_name_blank">Name can not be blank</string>
 </resources>

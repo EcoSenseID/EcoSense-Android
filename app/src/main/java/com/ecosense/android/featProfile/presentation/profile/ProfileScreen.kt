@@ -49,7 +49,6 @@ fun ProfileScreen(
     navigator: DestinationsNavigator,
     viewModel: ProfileViewModel = hiltViewModel()
 ) {
-    // TODO: show isLoadingContributions state
     val scaffoldState = rememberScaffoldState()
     val coroutineScope = rememberCoroutineScope()
 
@@ -162,18 +161,18 @@ fun ProfileScreen(
                     text =
                     if (!state.user.displayName.isNullOrBlank()) state.user.displayName
                     else stringResource(R.string.ecosense_user),
-                    style = MaterialTheme.typography.h5,
+                    style = MaterialTheme.typography.h6,
                     fontWeight = FontWeight.SemiBold,
+                    color = MaterialTheme.colors.primary,
                 )
 
-                state.user.email?.let { Text(text = it) }
+                state.user.email?.let { Text(text = it, color = MaterialTheme.colors.primary) }
 
                 Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
 
                 TabRow(
                     selectedTabIndex = pagerState.currentPage,
                     backgroundColor = MaterialTheme.colors.surface,
-                    divider = {},
                     indicator = { tabPositions ->
                         TabRowDefaults.Indicator(
                             height = 4.dp,
@@ -195,10 +194,13 @@ fun ProfileScreen(
                             text = {
                                 Text(
                                     text = tabItem.title,
-                                    style = MaterialTheme.typography.body1,
+                                    style = MaterialTheme.typography.subtitle1,
                                     color =
                                     if (isSelected) MaterialTheme.colors.primary
-                                    else Color.Unspecified
+                                    else Color.Unspecified,
+                                    fontWeight =
+                                    if (isSelected) FontWeight.SemiBold
+                                    else FontWeight.Normal,
                                 )
                             },
                             selected = isSelected,

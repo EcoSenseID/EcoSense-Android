@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.ecosense.android.R
 
@@ -40,6 +41,8 @@ fun SavedRecognitionTopBar(
                 Text(
                     text = stringResource(R.string.saved_recognition_results),
                     color = MaterialTheme.colors.onSurface,
+                    style = MaterialTheme.typography.subtitle1,
+                    fontWeight = FontWeight.SemiBold,
                 )
 
                 Spacer(modifier = Modifier.weight(1f))
