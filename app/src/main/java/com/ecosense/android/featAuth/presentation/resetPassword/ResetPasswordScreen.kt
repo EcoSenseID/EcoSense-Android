@@ -22,7 +22,7 @@ import com.ecosense.android.core.presentation.theme.spacing
 import com.ecosense.android.core.presentation.util.UIEvent
 import com.ecosense.android.core.presentation.util.asString
 import com.ecosense.android.featAuth.presentation.component.EmailTextField
-import com.ecosense.android.featAuth.presentation.component.RoundedEndsButton
+import com.ecosense.android.core.presentation.component.RoundedEndsButton
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlinx.coroutines.flow.collectLatest

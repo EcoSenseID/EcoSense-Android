@@ -1,6 +1,7 @@
 package com.ecosense.android.di
 
 import com.ecosense.android.core.domain.api.AuthApi
+import com.ecosense.android.core.domain.api.CloudStorageApi
 import com.ecosense.android.featProfile.data.api.ProfileApi
 import com.ecosense.android.featProfile.data.repository.ProfileRepositoryImpl
 import com.ecosense.android.featProfile.domain.repository.ProfileRepository
@@ -26,11 +27,13 @@ object ProfileModule {
     @Singleton
     fun provideRepository(
         authApi: AuthApi,
-        profileApi: ProfileApi
+        profileApi: ProfileApi,
+        cloudStorageApi: CloudStorageApi
     ): ProfileRepository {
         return ProfileRepositoryImpl(
             authApi = authApi,
-            profileApi = profileApi
+            profileApi = profileApi,
+            cloudStorageApi = cloudStorageApi
         )
     }
 }

@@ -1,17 +1,19 @@
 package com.ecosense.android.core.domain.model
 
 data class User(
+    val uid: String?,
     val displayName: String?,
     val email: String?,
     val photoUrl: String?,
-    val phoneNumber: String?,
+    val isEmailVerified: Boolean?,
 ) {
     companion object {
         val defaultValue = User(
-            email = null,
+            uid = null,
             displayName = null,
+            email = null,
             photoUrl = null,
-            phoneNumber = null,
+            isEmailVerified = null,
         )
     }
 }
