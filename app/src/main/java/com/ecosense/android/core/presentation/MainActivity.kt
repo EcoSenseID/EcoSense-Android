@@ -11,6 +11,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.ecosense.android.NavGraphs
 import com.ecosense.android.core.presentation.component.BottomBar
 import com.ecosense.android.core.presentation.theme.EcoSenseTheme
@@ -25,24 +26,45 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        installSplashScreen().apply {
+            setKeepOnScreenCondition { viewModel.isLoggedIn.value == null }
+        }
         setContent {
             EcoSenseTheme {
                 val engine = rememberNavHostEngine()
                 val navController = engine.rememberNavController()
 
-                val isLoggedIn = viewModel.isLoggedIn.collectAsState().value
-                Scaffold(
-                    bottomBar = { if (isLoggedIn) BottomBar(navController = navController) },
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background(MaterialTheme.colors.background)
-                ) { scaffoldPadding ->
-                    DestinationsNavHost(
-                        navGraph = if (isLoggedIn) NavGraphs.root else NavGraphs.auth,
-                        engine = engine,
-                        navController = navController,
-                        modifier = Modifier.padding(scaffoldPadding)
-                    )
+                when (viewModel.isLoggedIn.collectAsState().value) {
+                    true -> {
+                        Scaffold(
+                            bottomBar = { BottomBar(navController = navController) },
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .background(MaterialTheme.colors.background)
+                        ) { scaffoldPadding ->
+                            DestinationsNavHost(
+                                navGraph = NavGraphs.root,
+                                engine = engine,
+                                navController = navController,
+                                modifier = Modifier.padding(scaffoldPadding)
+                            )
+                        }
+                    }
+                    false -> {
+                        Scaffold(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .background(MaterialTheme.colors.background)
+                        ) { scaffoldPadding ->
+                            DestinationsNavHost(
+                                navGraph = NavGraphs.auth,
+                                engine = engine,
+                                navController = navController,
+                                modifier = Modifier.padding(scaffoldPadding)
+                            )
+                        }
+                    }
+                    else -> {}
                 }
             }
         }

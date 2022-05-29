@@ -160,4 +160,10 @@ dependencies {
     // Accompanist-Pager
     implementation "com.google.accompanist:accompanist-pager:0.13.0"
     implementation "com.google.accompanist:accompanist-pager-indicators:0.13.0"
+
+    // Accompanist-SystemUIController
+    implementation "com.google.accompanist:accompanist-systemuicontroller:0.17.0"
+
+    // SplashScreen
+    implementation 'androidx.core:core-splashscreen:1.0.0-rc01'
 }
