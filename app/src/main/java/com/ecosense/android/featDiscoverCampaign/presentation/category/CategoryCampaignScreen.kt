@@ -1,11 +1,11 @@
 package com.ecosense.android.featDiscoverCampaign.presentation.category
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -23,6 +24,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import coil.size.Scale
+import com.ecosense.android.R
 import com.ecosense.android.core.presentation.theme.spacing
 import com.ecosense.android.destinations.BrowseCampaignScreenDestination
 import com.ecosense.android.featDiscoverCampaign.presentation.detail.component.DetailTopBar
@@ -36,6 +38,7 @@ fun CategoryCampaignScreen(
     viewModel: CategoryCampaignViewModel = hiltViewModel()
 ) {
     val scaffoldState = rememberScaffoldState()
+    val scrollState = rememberScrollState()
 
     Scaffold(
         topBar = {
@@ -47,10 +50,14 @@ fun CategoryCampaignScreen(
         },
         scaffoldState = scaffoldState
     ) {
-        Column(modifier = Modifier.fillMaxSize()) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(scrollState)
+        ) {
             Row {
                 Text(
-                    text = "Choose a Category",
+                    text = stringResource(R.string.choose_category),
                     fontWeight = FontWeight.SemiBold,
                     style = MaterialTheme.typography.subtitle1,
                     modifier = Modifier
@@ -58,9 +65,45 @@ fun CategoryCampaignScreen(
                 )
             }
             Row {
-                LazyColumn(modifier = Modifier.fillMaxWidth()) {
-                    items(viewModel.categoryList.value.size) { i ->
-                        val category = viewModel.categoryList.value[i]
+                Column(modifier = Modifier.fillMaxWidth()) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier
+                            .padding(
+                                start = MaterialTheme.spacing.medium,
+                                end = MaterialTheme.spacing.medium,
+                                bottom = MaterialTheme.spacing.medium
+                            )
+                            .clip(shape = RoundedCornerShape(8.dp))
+                            .clickable(onClick = {
+                                navigator.navigate(BrowseCampaignScreenDestination(category = null))
+                            })
+                            .background(MaterialTheme.colors.surface)
+                            .fillMaxWidth()
+                    ) {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(128.dp)
+                                .background(MaterialTheme.colors.primary),
+                            verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Text(
+                                text = stringResource(R.string.all_campaign),
+                                style = MaterialTheme.typography.h5,
+                                fontWeight = FontWeight.Bold,
+                                color = MaterialTheme.colors.onPrimary,
+                                modifier = Modifier
+                                    .wrapContentSize()
+                            )
+                        }
+                    }
+                }
+            }
+            Row {
+                Column(modifier = Modifier.fillMaxWidth()) {
+                    for (category in viewModel.categoryList.value) {
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
                             modifier = Modifier
@@ -72,7 +115,6 @@ fun CategoryCampaignScreen(
                                 .clip(shape = RoundedCornerShape(8.dp))
                                 .clickable(onClick = {
                                     navigator.navigate(BrowseCampaignScreenDestination(category = category.name))
-                                    Log.d("TAG", "CategoryCampaignScreen: clicked $i")
                                 })
                                 .background(MaterialTheme.colors.surface)
                                 .fillMaxWidth()

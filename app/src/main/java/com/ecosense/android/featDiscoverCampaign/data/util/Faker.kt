@@ -54,8 +54,11 @@ object Faker {
                     participantsCount = (1000..5000).random(),
                     isTrending = i < 3,
                     isNew = i < 5,
-                    isJoined = i < 3,
-                    tasks = getTask()
+                    isJoined = i < 5,
+                    tasks = if (i < 3)
+                                getTaskAllCompleted()
+                            else
+                                getTask()
                 )
             )
         }
@@ -66,7 +69,7 @@ object Faker {
     fun getCategory(): List<Category> {
         val result = mutableListOf<Category>()
 
-        for (i in 1..3) {
+        for (i in 1..8) {
             result.add(
                 Category(
                     id = i,
@@ -85,17 +88,35 @@ object Faker {
 
     private fun getTask(): List<Task> {
         val result = mutableListOf<Task>()
-
         for (i in 1..10) {
             result.add(
                 Task(
                     id = i,
                     name = "Task No.$i",
                     taskDescription = "Attach the proof by submitting a photo of $i",
-                    completed = i < 4,
+                    completed = i < 3,
                     proofPhotoUrl = "https://cdn.statically.io/og/theme=dark/TaskProof$i.jpg",
                     proofCaption = "I've done the task $i",
-                    completedTimeStamp = "2022-12-2${i%2}T00:00:00.000Z",
+                    completedTimeStamp = "2022-12-2${i % 2}T00:00:00.000Z",
+                )
+            )
+        }
+
+        return result
+    }
+
+    private fun getTaskAllCompleted(): List<Task> {
+        val result = mutableListOf<Task>()
+        for (i in 1..10) {
+            result.add(
+                Task(
+                    id = i,
+                    name = "Task No.$i",
+                    taskDescription = "Attach the proof by submitting a photo of $i",
+                    completed = true,
+                    proofPhotoUrl = "https://cdn.statically.io/og/theme=dark/TaskProof$i.jpg",
+                    proofCaption = "I've done the task $i",
+                    completedTimeStamp = "2022-12-2${i % 2}T00:00:00.000Z",
                 )
             )
         }

@@ -36,7 +36,7 @@ fun CampaignItem(
     onClick: () -> Unit
 ) {
 
-    if (category == null) { // show all
+    if (category == null) {
         SortItem(sort = sort, campaign = campaign, onClick = onClick)
     } else {
         if (category in campaign.category) {

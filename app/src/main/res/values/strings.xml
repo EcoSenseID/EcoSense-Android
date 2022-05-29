@@ -65,4 +65,9 @@
     <string name="experiences">Experiences</string>
     <string name="history">History</string>
     <string name="edit_profile">Edit profile</string>
+    <string name="choose_category">Choose a Category</string>
+    <string name="on_going_task">On going task</string>
+    <string name="browse_categories">Browse categories</string>
+    <string name="view_all">View all</string>
+    <string name="all_campaign">All Campaign</string>
 </resources>
