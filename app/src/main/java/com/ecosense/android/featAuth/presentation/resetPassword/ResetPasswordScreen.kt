@@ -18,11 +18,11 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.ecosense.android.R
 import com.ecosense.android.core.presentation.AuthNavGraph
+import com.ecosense.android.core.presentation.component.RoundedEndsButton
 import com.ecosense.android.core.presentation.theme.spacing
 import com.ecosense.android.core.presentation.util.UIEvent
 import com.ecosense.android.core.presentation.util.asString
 import com.ecosense.android.featAuth.presentation.component.EmailTextField
-import com.ecosense.android.core.presentation.component.RoundedEndsButton
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlinx.coroutines.flow.collectLatest
@@ -70,13 +70,14 @@ fun ResetPasswordScreen(
 
             Text(
                 text = stringResource(R.string.reset_password_screen_title),
-                style = MaterialTheme.typography.h5,
+                style = MaterialTheme.typography.h6,
                 fontWeight = FontWeight.SemiBold,
             )
 
-            Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
-
-            Text(text = stringResource(R.string.reset_password_screen_caption))
+            Text(
+                text = stringResource(R.string.reset_password_screen_caption),
+                style = MaterialTheme.typography.body1,
+            )
 
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.large))
 

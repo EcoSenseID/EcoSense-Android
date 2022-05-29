@@ -42,7 +42,7 @@ fun ExperienceItem(experience: Experience) {
                 style = MaterialTheme.typography.subtitle1,
                 fontWeight = FontWeight.SemiBold
             )
-            Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
+            Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
             LinearProgressIndicator(
                 progress = experience.currentExperience.toFloat() / experience.levelExperience,
                 color = MaterialTheme.colors.secondary,
