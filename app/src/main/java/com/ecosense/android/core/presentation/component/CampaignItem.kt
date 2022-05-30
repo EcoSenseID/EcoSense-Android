@@ -219,7 +219,7 @@ fun ShowItem(
 
             Text(
                 text = stringResource(R.string.change_maker, campaign.participantsCount),
-                style = MaterialTheme.typography.caption,
+                style = MaterialTheme.typography.caption
             )
         }
     }

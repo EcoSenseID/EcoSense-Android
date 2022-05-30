@@ -53,12 +53,13 @@ fun OnGoingTasks(
                             ) {
                                 Text(
                                     text = campaign.tasks[index].name,
-                                    style = MaterialTheme.typography.h6
+                                    style = MaterialTheme.typography.h6,
+                                    color = MaterialTheme.colors.primary
                                 )
                                 Text(
                                     text = campaign.title,
                                     style = MaterialTheme.typography.subtitle2,
-                                    color = MaterialTheme.colors.primary,
+                                    color = MaterialTheme.colors.secondary,
                                     modifier = Modifier.padding(vertical = MaterialTheme.spacing.extraSmall)
                                 )
                                 Row(

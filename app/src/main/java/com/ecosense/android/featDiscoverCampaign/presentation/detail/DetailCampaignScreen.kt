@@ -241,7 +241,8 @@ fun DetailCampaignScreen(
                                         modifier = Modifier
                                             .padding(MaterialTheme.spacing.small)
                                             .fillMaxWidth(),
-                                        horizontalArrangement = Arrangement.SpaceEvenly
+                                        horizontalArrangement = Arrangement.SpaceEvenly,
+                                        verticalAlignment = Alignment.CenterVertically
                                     ) {
                                         Column(
                                             horizontalAlignment = Alignment.CenterHorizontally
@@ -253,7 +254,7 @@ fun DetailCampaignScreen(
                                                         dateFormatter(campaign.startDate)
                                                     else
                                                         campaign.startDate,
-                                                    fontSize = 18.sp,
+                                                    style = MaterialTheme.typography.subtitle1,
                                                     fontWeight = FontWeight.Bold,
                                                     color = MaterialTheme.colors.primary
                                                 )
@@ -271,7 +272,7 @@ fun DetailCampaignScreen(
                                             Divider(
                                                 color = MaterialTheme.colors.primary,
                                                 modifier = Modifier
-                                                    .height(50.dp)
+                                                    .height(40.dp)
                                                     .width(1.dp)
                                             )
                                         }
@@ -286,7 +287,7 @@ fun DetailCampaignScreen(
                                                         dateFormatter(campaign.endDate)
                                                     else
                                                         campaign.endDate,
-                                                    fontSize = 18.sp,
+                                                    style = MaterialTheme.typography.subtitle1,
                                                     fontWeight = FontWeight.Bold,
                                                     color = MaterialTheme.colors.primary
                                                 )
@@ -380,7 +381,7 @@ fun DetailCampaignScreen(
                                                                         fontWeight = FontWeight.Bold,
                                                                         fontStyle = FontStyle.Italic,
                                                                         style = MaterialTheme.typography.caption,
-                                                                        color = Color.Green
+                                                                        color = MaterialTheme.colors.secondary
                                                                     )
                                                                 }
                                                             }

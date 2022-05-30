@@ -20,6 +20,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.ecosense.android.R
+import com.ecosense.android.core.presentation.theme.Gray800
 import com.ecosense.android.core.presentation.theme.spacing
 import com.ecosense.android.destinations.BrowseCampaignScreenDestination
 import com.ecosense.android.destinations.CategoryCampaignScreenDestination
@@ -80,7 +81,7 @@ fun DiscoverCampaignScreen(
                         .wrapContentHeight()
                         .padding(end = MaterialTheme.spacing.small)
                         .clip(shape = RoundedCornerShape(8.dp))
-                        .background(Color.Blue)
+                        .background(MaterialTheme.colors.primary)
                         .padding(
                             horizontal = MaterialTheme.spacing.large,
                             vertical = MaterialTheme.spacing.medium
@@ -105,7 +106,7 @@ fun DiscoverCampaignScreen(
                         .wrapContentHeight()
                         .padding(start = MaterialTheme.spacing.small)
                         .clip(shape = RoundedCornerShape(8.dp))
-                        .background(Color.DarkGray)
+                        .background(MaterialTheme.colors.secondary)
                         .padding(
                             horizontal = MaterialTheme.spacing.large,
                             vertical = MaterialTheme.spacing.medium
@@ -115,12 +116,12 @@ fun DiscoverCampaignScreen(
                     Text(
                         text = countCompletedCampaign.toString(),
                         style = MaterialTheme.typography.h5,
-                        color = MaterialTheme.colors.onPrimary
+                        color = MaterialTheme.colors.onSecondary
                     )
                     Text(
                         text = stringResource(R.string.completed),
                         style = MaterialTheme.typography.subtitle2,
-                        color = MaterialTheme.colors.onPrimary
+                        color = MaterialTheme.colors.onSecondary
                     )
                 }
             }
@@ -128,6 +129,7 @@ fun DiscoverCampaignScreen(
                 text = stringResource(R.string.on_going_task),
                 fontWeight = FontWeight.SemiBold,
                 style = MaterialTheme.typography.subtitle1,
+                color = Gray800,
                 modifier = Modifier.padding(top = MaterialTheme.spacing.medium, bottom = MaterialTheme.spacing.small)
             )
             LazyColumn(
@@ -151,6 +153,7 @@ fun DiscoverCampaignScreen(
                     Text(
                         text = stringResource(R.string.browse_categories),
                         fontWeight = FontWeight.SemiBold,
+                        color = Gray800,
                         style = MaterialTheme.typography.subtitle1,
                         modifier = Modifier.padding(bottom = MaterialTheme.spacing.small)
                     )
@@ -158,8 +161,9 @@ fun DiscoverCampaignScreen(
                 Column(horizontalAlignment = Alignment.End) {
                     Text(
                         text = AnnotatedString(stringResource(R.string.view_all)),
-                        style = MaterialTheme.typography.subtitle1,
-                        color = MaterialTheme.colors.primary,
+                        style = MaterialTheme.typography.caption,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colors.secondary,
                         modifier = Modifier.clickable {
                             navigator.navigate(CategoryCampaignScreenDestination)
                         }
