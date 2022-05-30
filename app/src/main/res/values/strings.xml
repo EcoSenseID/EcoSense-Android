@@ -173,4 +173,7 @@
     <string name="saved_recognition_results">Saved Recognition Results</string>
     <string name="continue_with_google">Continue with Google</string>
     <string name="em_name_blank">Name can not be blank</string>
+    <string name="empty_experiences">Nothing to show yet. Let\'s earn experiences by joining campaigns!</string>
+    <string name="empty_history">No histories yet. Finished campaigns will be shown here</string>
+    <string name="empty_saved_recognition_results">There\'s no saved recognition results yet</string>
 </resources>
