@@ -14,8 +14,8 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.ecosense.android.R
 import com.ecosense.android.core.domain.model.Campaign
-import com.ecosense.android.core.presentation.component.CampaignItem
 import com.ecosense.android.core.presentation.theme.spacing
+import com.ecosense.android.featProfile.presentation.component.HistoryCampaignItem
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import logcat.logcat
 
@@ -30,7 +30,7 @@ fun HistoryTab(
             LazyColumn(modifier = Modifier.fillMaxSize()) {
                 items(campaigns.size) { i ->
                     if (i == 0) Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
-                    CampaignItem(
+                    HistoryCampaignItem(
                         campaign = campaigns[i],
                         onClick = {
                             // TODO: navigate to CampaignDetailScreen
