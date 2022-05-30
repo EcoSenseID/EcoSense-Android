@@ -30,8 +30,7 @@ class ProfileRepositoryImpl(
 
         try {
             val idToken = authApi.getIdToken(true)
-//            val bearerToken = "Bearer $idToken"
-            val bearerToken = "Bearer <idToken>"
+            val bearerToken = "Bearer $idToken"
             val response = profileApi.getContributions(bearerToken = bearerToken)
 
             when {

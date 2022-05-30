@@ -39,7 +39,7 @@ object CoreModule {
     @Singleton
     fun provideCoreRetrofit(): Retrofit {
         return Retrofit.Builder()
-            .baseUrl("https://api.jsonbin.io/b/")
+            .baseUrl("https://ecosense-bangkit.uc.r.appspot.com/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }

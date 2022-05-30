@@ -5,8 +5,7 @@ import retrofit2.http.GET
 import retrofit2.http.Header
 
 interface ProfileApi {
-    //    @GET("contributions")
-    @GET("628b2400402a5b38020928c5/9")
+    @GET("contributions")
     suspend fun getContributions(
         @Header("Authorization") bearerToken: String,
     ): ContributionsDto
