@@ -64,7 +64,6 @@
     <string name="completed_campaigns">Completed Campaigns</string>
     <string name="experiences">Experiences</string>
     <string name="history">History</string>
-    <string name="edit_profile">Edit profile</string>
     <string name="choose_category">Choose a Category</string>
     <string name="on_going_task">On going task</string>
     <string name="browse_categories">Browse categories</string>
@@ -107,7 +106,6 @@
     <string name="level">Level</string>
     <string name="name">Name</string>
     <string name="phone_number">Phone number</string>
-    <string name="back">Back</string>
     <string name="save">Save</string>
     <string name="change_profile_picture">Change profile picture</string>
     <string name="user">User</string>
