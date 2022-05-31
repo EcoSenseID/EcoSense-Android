@@ -1,5 +1,6 @@
 package com.ecosense.android.util
 
+import android.net.Uri
 import com.ecosense.android.core.domain.model.User
 import java.util.*
 import kotlin.random.Random
@@ -12,6 +13,8 @@ object TestFaker {
     val validPassword get() = "password${System.currentTimeMillis()}"
 
     val validName get() = "John Doe"
+
+    val validPhotoUri get() = Uri.parse(validPhotoUrl)
 
     val validPhotoUrl
         get() = "https://cdn.statically.io/og/theme=dark/${System.currentTimeMillis()}.jpg"
