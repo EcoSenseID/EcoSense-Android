@@ -1,22 +1,35 @@
 package com.ecosense.android.core.presentation
 
-import org.junit.Assert.*
-
-import org.junit.After
-import org.junit.Before
+import app.cash.turbine.test
+import com.ecosense.android.core.data.repository.FakeAuthRepository
+import com.ecosense.android.util.MainCoroutineRule
+import com.google.common.truth.Truth.assertThat
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.runBlocking
+import org.junit.Rule
 import org.junit.Test
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class MainViewModelTest {
 
-    @Before
-    fun setUp() {
-    }
+    @get:Rule
+    var mainCoroutineRule = MainCoroutineRule()
 
-    @After
-    fun tearDown() {
+    @Test
+    fun `User is logged in, isLoggedIn is true`() = runBlocking {
+        val fakeAuthRepository = FakeAuthRepository(fakeIsLoggedIn = true)
+        val mainViewModel = MainViewModel(fakeAuthRepository)
+        mainViewModel.isLoggedIn.test {
+            assertThat(awaitItem()).isTrue()
+        }
     }
 
     @Test
-    fun isLoggedIn() {
+    fun `User is logged out, isLoggedIn is false`() = runBlocking {
+        val fakeAuthRepository = FakeAuthRepository(fakeIsLoggedIn = false)
+        val mainViewModel = MainViewModel(fakeAuthRepository)
+        mainViewModel.isLoggedIn.test {
+            assertThat(awaitItem()).isFalse()
+        }
     }
 }
