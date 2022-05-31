@@ -179,7 +179,7 @@ dependencies {
     androidTestImplementation "com.google.truth:truth:$truth_version"
 
     // Turbine
-    def turbine_version = "0.7.0"
+    def turbine_version = "0.8.0"
     testImplementation "app.cash.turbine:turbine:$turbine_version"
     androidTestImplementation "app.cash.turbine:turbine:$turbine_version"
 }
