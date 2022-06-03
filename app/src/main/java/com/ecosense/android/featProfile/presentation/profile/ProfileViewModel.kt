@@ -40,9 +40,8 @@ class ProfileViewModel @Inject constructor(
     private fun getProfile() {
         getProfileJob?.cancel()
         getProfileJob = viewModelScope.launch {
-            authRepository.currentUser.onEach { user ->
-                user?.let { _state.value = state.value.copy(user = it) }
-            }.launchIn(this)
+            val user = authRepository.getCurrentUser()
+            user?.let { _state.value = state.value.copy(user = it) }
         }
     }
 

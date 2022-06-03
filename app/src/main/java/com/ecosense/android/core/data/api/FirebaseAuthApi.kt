@@ -2,7 +2,6 @@ package com.ecosense.android.core.data.api
 
 import android.net.Uri
 import com.ecosense.android.R
-import com.ecosense.android.core.data.util.toUser
 import com.ecosense.android.core.domain.api.AuthApi
 import com.ecosense.android.core.domain.model.User
 import com.ecosense.android.core.util.Resource
@@ -12,7 +11,8 @@ import com.google.firebase.FirebaseTooManyRequestsException
 import com.google.firebase.auth.*
 import com.google.firebase.auth.ktx.userProfileChangeRequest
 import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
@@ -34,15 +34,21 @@ class FirebaseAuthApi : AuthApi {
             }
         }
 
-    private val _currentUser = MutableStateFlow(firebaseAuth.currentUser?.toUser())
-    override val currentUser: StateFlow<User?>
-        get() = _currentUser.asStateFlow()
-
-    private fun reloadUser() {
+    override suspend fun getCurrentUser(): User? = suspendCoroutine { cont ->
         firebaseAuth.currentUser?.reload()?.addOnCompleteListener {
-            _currentUser.value = firebaseAuth.currentUser?.toUser()
+            val firebaseUser = firebaseAuth.currentUser
+            cont.resume(
+                User(
+                    uid = firebaseUser?.uid,
+                    displayName = firebaseUser?.displayName,
+                    email = firebaseUser?.email,
+                    photoUrl = firebaseUser?.photoUrl?.toString(),
+                    isEmailVerified = firebaseUser?.isEmailVerified
+                )
+            )
         }
     }
+
 
     override suspend fun getIdToken(
         forceRefresh: Boolean,
@@ -153,10 +159,7 @@ class FirebaseAuthApi : AuthApi {
 
         user.updateProfile(profileUpdates).addOnCompleteListener { task ->
             when {
-                task.isSuccessful -> {
-                    reloadUser()
-                    cont.resume(Resource.Success(Unit))
-                }
+                task.isSuccessful -> cont.resume(Resource.Success(Unit))
                 else -> when (task.exception) {
                     is FirebaseAuthInvalidUserException -> R.string.em_invalid_credentials
                     else -> R.string.em_unknown

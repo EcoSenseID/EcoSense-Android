@@ -9,7 +9,6 @@ import com.ecosense.android.core.util.Resource
 import com.ecosense.android.core.util.SimpleResource
 import com.ecosense.android.core.util.UIText
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.flow
 
 class AuthRepositoryImpl(
@@ -17,7 +16,8 @@ class AuthRepositoryImpl(
 ) : AuthRepository {
 
     override val isLoggedIn: Flow<Boolean> = authApi.isLoggedIn
-    override val currentUser: StateFlow<User?> get() = authApi.currentUser
+
+    override suspend fun getCurrentUser(): User? = authApi.getCurrentUser()
 
     override fun loginWithEmail(
         email: String,

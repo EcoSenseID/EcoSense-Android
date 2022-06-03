@@ -3,12 +3,11 @@ package com.ecosense.android.core.domain.repository
 import com.ecosense.android.core.domain.model.User
 import com.ecosense.android.core.util.SimpleResource
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.StateFlow
 
 interface AuthRepository {
     val isLoggedIn: Flow<Boolean>
 
-    val currentUser: StateFlow<User?>
+    suspend fun getCurrentUser(): User?
 
     fun loginWithEmail(
         email: String,
