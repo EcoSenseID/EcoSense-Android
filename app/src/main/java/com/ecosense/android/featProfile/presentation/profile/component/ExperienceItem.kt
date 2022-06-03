@@ -10,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -19,6 +20,7 @@ import com.ecosense.android.featProfile.domain.model.Experience
 
 @Composable
 fun ExperienceItem(experience: Experience) {
+    // TODO: add onClickListener
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
@@ -27,7 +29,11 @@ fun ExperienceItem(experience: Experience) {
                 end = MaterialTheme.spacing.medium,
                 bottom = MaterialTheme.spacing.medium
             )
-            .clip(shape = RoundedCornerShape(8.dp))
+            .shadow(
+                elevation = 2.dp,
+                shape = RoundedCornerShape(8.dp),
+                clip = true
+            )
             .background(MaterialTheme.colors.surface)
             .fillMaxWidth()
     ) {

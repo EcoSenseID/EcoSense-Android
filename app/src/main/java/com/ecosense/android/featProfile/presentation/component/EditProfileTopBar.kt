@@ -5,11 +5,11 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Check
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.ecosense.android.R
 
@@ -17,13 +17,11 @@ import com.ecosense.android.R
 fun EditProfileTopBar(
     isSavingLoading: Boolean,
     onBackClick: () -> Unit,
-    onSaveClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(modifier = modifier.fillMaxWidth()) {
         TopAppBar(
             backgroundColor = MaterialTheme.colors.surface,
-            elevation = 0.dp,
             modifier = Modifier.fillMaxWidth()
         ) {
             Row(
@@ -41,21 +39,12 @@ fun EditProfileTopBar(
 
                 Text(
                     text = stringResource(id = R.string.edit_profile),
-                    color = MaterialTheme.colors.onSurface
+                    color = MaterialTheme.colors.onSurface,
+                    style = MaterialTheme.typography.subtitle1,
+                    fontWeight = FontWeight.SemiBold,
                 )
 
                 Spacer(modifier = Modifier.weight(1f))
-
-                IconButton(
-                    enabled = !isSavingLoading,
-                    onClick = onSaveClick
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Check,
-                        contentDescription = stringResource(R.string.save),
-                        tint = MaterialTheme.colors.onSurface
-                    )
-                }
             }
         }
 
