@@ -30,6 +30,7 @@ fun HistoryTab(
             LazyColumn(modifier = Modifier.fillMaxSize()) {
                 items(campaigns.size) { i ->
                     if (i == 0) Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
+                    // TODO: use CampaignItem composable
                     HistoryCampaignItem(
                         campaign = campaigns[i],
                         onClick = {

@@ -4,6 +4,7 @@ import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -11,17 +12,22 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Save
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
@@ -77,24 +83,26 @@ fun EditProfileScreen(
             EditProfileTopBar(
                 isSavingLoading = state.isSavingProfileLoading,
                 onBackClick = { navigator.navigateUp() },
-                onSaveClick = { viewModel.onSaveClick() }
             )
         },
         scaffoldState = scaffoldState,
         modifier = Modifier.fillMaxSize()
     ) {
         Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
-                .fillMaxWidth()
                 .padding(MaterialTheme.spacing.medium)
-                .background(
-                    color = MaterialTheme.colors.surface,
-                    shape = RoundedCornerShape(8.dp)
+                .shadow(
+                    elevation = 2.dp,
+                    shape = RoundedCornerShape(8.dp),
+                    clip = true,
                 )
+                .background(color = MaterialTheme.colors.surface)
                 .padding(MaterialTheme.spacing.medium)
+                .fillMaxWidth()
         ) {
             Row(
-                horizontalArrangement = Arrangement.Center,
+                horizontalArrangement = Arrangement.SpaceEvenly,
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 AsyncImage(
@@ -114,10 +122,32 @@ fun EditProfileScreen(
 
                 Spacer(modifier = Modifier.width(MaterialTheme.spacing.medium))
 
-                Button(onClick = {
-                    imagePickerLauncher.launch(context.getString(R.string.content_type_image))
-                }) {
-                    Text(text = stringResource(R.string.change_profile_picture))
+                Row(
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(8.dp))
+                        .clickable {
+                            imagePickerLauncher.launch(
+                                context.getString(R.string.content_type_image)
+                            )
+                        }
+                        .padding(MaterialTheme.spacing.small)
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Edit,
+                        contentDescription = null,
+                        tint = MaterialTheme.colors.primary,
+                    )
+                    Spacer(modifier = Modifier.width(MaterialTheme.spacing.small))
+                    Text(
+                        text = stringResource(R.string.change_profile_picture),
+                        style = MaterialTheme.typography.subtitle2.copy(
+                            textDecoration = TextDecoration.Underline,
+                        ),
+                        color = MaterialTheme.colors.primaryVariant,
+                        fontWeight = FontWeight.SemiBold,
+                    )
                 }
             }
 
@@ -149,21 +179,32 @@ fun EditProfileScreen(
                 }
             )
 
-            Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
+            Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
 
             if (state.isEmailVerified == false) {
-                Text(text = stringResource(R.string.email_is_not_verified))
-                Button(
-                    enabled = !state.isEmailVerificationLoading,
-                    onClick = { viewModel.onSendEmailVerificationClick() }
+                Row(
+                    horizontalArrangement = Arrangement.Center,
+                    modifier = Modifier.fillMaxWidth()
                 ) {
+                    Text(text = stringResource(R.string.email_is_not_verified).plus(" "))
                     Text(
                         text = stringResource(
                             if (state.isEmailVerificationLoading) R.string.sending
                             else R.string.send_email_verification
-                        )
+                        ),
+                        color = MaterialTheme.colors.primaryVariant,
+                        fontWeight = FontWeight.SemiBold,
+                        modifier = Modifier.clickable { viewModel.onSendEmailVerificationClick() }
                     )
                 }
+            }
+
+            Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
+
+            Button(onClick = { viewModel.onSaveClick() }) {
+                Icon(imageVector = Icons.Default.Save, contentDescription = null)
+                Spacer(modifier = Modifier.width(MaterialTheme.spacing.small))
+                Text(text = stringResource(id = R.string.save))
             }
         }
     }

@@ -83,19 +83,26 @@ class ProfileRepositoryImpl(
     ): Flow<SimpleResource> = flow {
         emit(Resource.Loading())
 
-        if (newDisplayName == null && newPhotoUri == null) {
-            emit(Resource.Success(Unit))
-            return@flow
-        }
+        when {
+            newDisplayName == null && newPhotoUri == null -> {
+                emit(Resource.Success(Unit))
+                return@flow
+            }
 
-        val uploadedPhotoUri: Uri? = newPhotoUri?.let { uri ->
-            cloudStorageApi.uploadProfilePicture(
-                photoUri = uri,
-                uid = authApi.getCurrentUser()?.uid ?: return@let null
-            )
+            newDisplayName != null && newDisplayName.isBlank() -> {
+                emit(Resource.Error(UIText.StringResource(R.string.em_name_blank)))
+                return@flow
+            }
         }
 
         try {
+            val uploadedPhotoUri: Uri? = newPhotoUri?.let { uri ->
+                cloudStorageApi.uploadProfilePicture(
+                    photoUri = uri,
+                    uid = authApi.getCurrentUser()?.uid ?: return@let null
+                )
+            }
+
             authApi.updateProfile(
                 newDisplayName = newDisplayName,
                 newPhotoUri = uploadedPhotoUri,
