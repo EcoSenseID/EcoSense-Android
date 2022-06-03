@@ -8,7 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.ecosense.android.R
 import com.ecosense.android.core.presentation.util.UIEvent
 import com.ecosense.android.core.util.UIText
-import com.ecosense.android.featRecognition.domain.model.RecognitionResult
+import com.ecosense.android.featRecognition.domain.model.Recognisable
 import com.ecosense.android.featRecognition.domain.repository.RecognitionRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
@@ -29,16 +29,16 @@ class RecognitionViewModel @Inject constructor(
 
     fun onAnalyze(bitmap: Bitmap) {
         val diagnoses = recognitionRepository
-            .analyzeDiseases(bitmap)
+            .recognise(bitmap)
             .sortedByDescending { it.confidencePercent }
 
-        val mainDiagnosis: RecognitionResult? = try {
+        val mainDiagnosis: Recognisable? = try {
             diagnoses.first { it.confidencePercent > MAIN_DIAGNOSIS_MINIMUM_CONFIDENCE_PERCENT }
         } catch (e: NoSuchElementException) {
             null
         }
 
-        val diffDiagnoses: List<RecognitionResult>? = when {
+        val diffDiagnoses: List<Recognisable>? = when {
             mainDiagnosis != null -> diagnoses
                 .filterNot { it.label == mainDiagnosis.label }
                 .filter { it.confidencePercent > DIFFERENTIAL_DIAGNOSES_MINIMUM_CONFIDENCE_PERCENT }
@@ -55,7 +55,7 @@ class RecognitionViewModel @Inject constructor(
     fun onSaveResult() {
         viewModelScope.launch {
             state.value.mainDiagnosis?.let {
-                recognitionRepository.saveRecognitionResult(it)
+                recognitionRepository.saveRecognisable(it)
                 _eventFlow.send(
                     UIEvent.ShowSnackbar(UIText.StringResource(R.string.sm_saved_successfully))
                 )

@@ -16,7 +16,7 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.ecosense.android.core.presentation.util.UIEvent
 import com.ecosense.android.core.presentation.util.asString
-import com.ecosense.android.destinations.RecognitionHistoryScreenDestination
+import com.ecosense.android.destinations.SavedRecognitionResultsScreenDestination
 import com.ecosense.android.featRecognition.presentation.component.DiseaseRecognitionPermissionRequest
 import com.ecosense.android.featRecognition.presentation.component.DiseaseRecognitionPreviewView
 import com.ecosense.android.featRecognition.presentation.component.DiseaseRecognitionResultSection
@@ -64,7 +64,7 @@ fun DiseaseRecognitionScreen(
         backgroundColor = MaterialTheme.colors.surface,
         topBar = {
             DiseaseRecognitionTopBar(
-                onHistoryClick = { navigator.navigate(RecognitionHistoryScreenDestination) },
+                onHistoryClick = { navigator.navigate(SavedRecognitionResultsScreenDestination) },
             )
         },
     ) { scaffoldPadding ->

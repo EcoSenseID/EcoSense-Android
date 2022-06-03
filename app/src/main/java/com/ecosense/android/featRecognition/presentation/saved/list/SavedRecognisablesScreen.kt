@@ -1,10 +1,8 @@
-package com.ecosense.android.featRecognition.presentation
+package com.ecosense.android.featRecognition.presentation.saved.list
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
@@ -16,7 +14,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -25,21 +22,18 @@ import com.ecosense.android.R
 import com.ecosense.android.core.presentation.theme.spacing
 import com.ecosense.android.core.presentation.util.UIEvent
 import com.ecosense.android.core.presentation.util.asString
-import com.ecosense.android.core.util.Constants
-import com.ecosense.android.featRecognition.domain.model.SavedRecognitionResult
+import com.ecosense.android.destinations.SavedRecognitionResultDetailScreenDestination
 import com.ecosense.android.featRecognition.presentation.component.SavedRecognitionTopBar
-import com.ecosense.android.featRecognition.presentation.saved.SavedRecognitionViewModel
+import com.ecosense.android.featRecognition.presentation.saved.component.SavedRecognisableItem
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlinx.coroutines.flow.collectLatest
-import java.text.SimpleDateFormat
-import java.util.*
 
 @Composable
 @Destination
-fun RecognitionHistoryScreen(
+fun SavedRecognitionResultsScreen(
     navigator: DestinationsNavigator,
-    viewModel: SavedRecognitionViewModel = hiltViewModel()
+    viewModel: SavedRecognisablesViewModel = hiltViewModel()
 ) {
     val focusManager = LocalFocusManager.current
     val context = LocalContext.current
@@ -80,16 +74,20 @@ fun RecognitionHistoryScreen(
                 .fillMaxSize()
                 .padding(scaffoldPadding)
         ) {
-            AnimatedVisibility(visible = state.resultList.isNotEmpty()) {
+            AnimatedVisibility(visible = state.savedRecognisables.isNotEmpty()) {
                 LazyColumn(modifier = Modifier.fillMaxWidth()) {
-                    items(state.resultList.size) { i ->
+                    items(state.savedRecognisables.size) { i ->
                         if (i == 0) Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
-                        SavedRecognitionItem(state.resultList[i])
+                        SavedRecognisableItem(state.savedRecognisables[i]) { result ->
+                            result.id?.let {
+                                navigator.navigate(SavedRecognitionResultDetailScreenDestination(it))
+                            }
+                        }
                     }
                 }
             }
 
-            AnimatedVisibility(visible = state.resultList.isEmpty()) {
+            AnimatedVisibility(visible = state.savedRecognisables.isEmpty()) {
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center,
@@ -112,50 +110,5 @@ fun RecognitionHistoryScreen(
                 }
             }
         }
-    }
-}
-
-@Composable
-fun SavedRecognitionItem(
-    savedRecognitionResult: SavedRecognitionResult,
-    modifier: Modifier = Modifier,
-) {
-    Column(
-        modifier = modifier
-            .padding(
-                start = MaterialTheme.spacing.medium,
-                end = MaterialTheme.spacing.medium,
-                bottom = MaterialTheme.spacing.medium
-            )
-            .background(
-                color = MaterialTheme.colors.surface,
-                shape = RoundedCornerShape(8.dp)
-            )
-            .padding(MaterialTheme.spacing.medium)
-            .fillMaxWidth()
-    ) {
-        val sdf = SimpleDateFormat(Constants.DATE_FORMAT, Locale.getDefault())
-        val date = Date().apply { this.time = savedRecognitionResult.timeInMillis }
-        Text(
-            text = sdf.format(date),
-            style = MaterialTheme.typography.caption,
-            color = MaterialTheme.colors.onSurface
-        )
-
-        Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
-
-        Text(
-            text = savedRecognitionResult.label,
-            style = MaterialTheme.typography.subtitle1,
-            color = MaterialTheme.colors.onSurface,
-            fontWeight = FontWeight.SemiBold,
-        )
-
-        Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
-
-        Text(
-            text = "Confidence: ${savedRecognitionResult.confidencePercent}%",
-            color = MaterialTheme.colors.onSurface
-        )
     }
 }

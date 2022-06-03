@@ -3,14 +3,14 @@ package com.ecosense.android.featRecognition.data.repository
 import android.content.Context
 import android.graphics.Bitmap
 import com.ecosense.android.R
-import com.ecosense.android.core.data.local.dao.SavedRecognitionResultDao
-import com.ecosense.android.core.data.model.SavedRecognitionResultEntity
+import com.ecosense.android.core.data.local.dao.SavedRecognisableDao
+import com.ecosense.android.core.data.model.SavedRecognisableEntity
 import com.ecosense.android.core.presentation.util.asString
 import com.ecosense.android.core.util.Resource
 import com.ecosense.android.core.util.UIText
-import com.ecosense.android.featRecognition.data.util.toRecognisedDisease
-import com.ecosense.android.featRecognition.domain.model.RecognitionResult
-import com.ecosense.android.featRecognition.domain.model.SavedRecognitionResult
+import com.ecosense.android.featRecognition.data.util.toRecognisable
+import com.ecosense.android.featRecognition.domain.model.Recognisable
+import com.ecosense.android.featRecognition.domain.model.SavedRecognisable
 import com.ecosense.android.featRecognition.domain.repository.RecognitionRepository
 import com.ecosense.android.ml.PlantDiseaseModel
 import kotlinx.coroutines.flow.Flow
@@ -21,7 +21,7 @@ import org.tensorflow.lite.support.model.Model
 
 class RecognitionRepositoryImpl(
     private val appContext: Context,
-    private val savedRecognitionResultDao: SavedRecognitionResultDao
+    private val savedRecognisableDao: SavedRecognisableDao
 ) : RecognitionRepository {
 
     private val plantDiseaseModel by lazy {
@@ -37,41 +37,46 @@ class RecognitionRepositoryImpl(
         )
     }
 
-    override fun analyzeDiseases(
+    override fun recognise(
         bitmap: Bitmap
-    ): List<RecognitionResult> {
+    ): List<Recognisable> {
         return plantDiseaseModel
             .process(TensorImage.fromBitmap(bitmap))
             .probabilityAsCategoryList
             .apply { sortByDescending { it.score } }
-            .map { it.toRecognisedDisease() }
+            .map { it.toRecognisable() }
     }
 
-    override fun getRecognitionHistoryList(): Flow<Resource<List<SavedRecognitionResult>>> = flow {
+    override fun getSavedRecognisables(): Flow<Resource<List<SavedRecognisable>>> = flow {
         emit(Resource.Loading())
         try {
-            val historyList = savedRecognitionResultDao.findAll().map { it.toDiseaseHistoryItem() }
+            val historyList = savedRecognisableDao.findAll().map { it.toSavedRecognisable() }
             emit(Resource.Success(historyList))
         } catch (e: Exception) {
             emit(Resource.Error(UIText.StringResource(R.string.em_unknown)))
         }
     }
 
-    override suspend fun saveRecognitionResult(
-        recognitionResult: RecognitionResult,
-    ) {
-        savedRecognitionResultDao.save(
-            recognitionResult = SavedRecognitionResultEntity(
-                label = recognitionResult.label.asString(appContext),
-                confidencePercent = recognitionResult.confidencePercent,
-                timeInMillis = System.currentTimeMillis()
+    override suspend fun getSavedRecognisable(
+        id: Int
+    ): SavedRecognisable? {
+        return savedRecognisableDao.find(id)?.toSavedRecognisable()
+    }
+
+    override suspend fun saveRecognisable(recognisable: Recognisable) {
+        savedRecognisableDao.save(
+            recognitionResult = SavedRecognisableEntity(
+                label = recognisable.label.asString(appContext),
+                timeInMillis = System.currentTimeMillis(),
+                confidencePercent = recognisable.confidencePercent,
+                symptoms = recognisable.symptoms,
+                treatment = recognisable.treatments,
+                preventiveMeasure = recognisable.preventiveMeasures,
             )
         )
     }
 
-    override suspend fun unsaveRecognitionResult(
-        recognitionResult: SavedRecognitionResult,
-    ) {
-        savedRecognitionResultDao.delete(recognitionResult.id)
+    override suspend fun unsaveRecognisable(savedRecognisable: SavedRecognisable) {
+        savedRecognisableDao.delete(savedRecognisable.id)
     }
 }

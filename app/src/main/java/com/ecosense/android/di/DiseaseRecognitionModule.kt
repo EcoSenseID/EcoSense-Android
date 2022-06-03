@@ -22,7 +22,7 @@ object DiseaseRecognitionModule {
     ): RecognitionRepository {
         return RecognitionRepositoryImpl(
             appContext = appContext,
-            savedRecognitionResultDao = database.savedRecognitionResultDao,
+            savedRecognisableDao = database.savedRecognisableDao,
         )
     }
 }

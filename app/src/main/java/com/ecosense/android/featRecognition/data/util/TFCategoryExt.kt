@@ -2,12 +2,15 @@ package com.ecosense.android.featRecognition.data.util
 
 import com.ecosense.android.R
 import com.ecosense.android.core.util.UIText
-import com.ecosense.android.featRecognition.domain.model.RecognitionResult
+import com.ecosense.android.featRecognition.domain.model.Recognisable
 import org.tensorflow.lite.support.label.Category
 
-fun Category.toRecognisedDisease() = RecognitionResult(
+fun Category.toRecognisable() = Recognisable(
     label = categoryLabelToUIText(this.label),
-    confidencePercent = (this.score * 100).toInt()
+    confidencePercent = (this.score * 100).toInt(),
+    symptoms = "Symptoms go here",
+    treatments = "Treatment go here",
+    preventiveMeasures = "Preventive Measure go here"
 )
 
 private fun categoryLabelToUIText(

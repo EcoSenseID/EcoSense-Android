@@ -10,7 +10,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
 import com.ecosense.android.R
 
 @Composable
@@ -22,7 +21,6 @@ fun SavedRecognitionTopBar(
     Column(modifier = modifier.fillMaxWidth()) {
         TopAppBar(
             backgroundColor = MaterialTheme.colors.surface,
-            elevation = 0.dp,
             modifier = Modifier.fillMaxWidth()
         ) {
             Row(

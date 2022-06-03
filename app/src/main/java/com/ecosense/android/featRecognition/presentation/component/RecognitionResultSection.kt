@@ -20,13 +20,13 @@ import coil.compose.AsyncImage
 import com.ecosense.android.R
 import com.ecosense.android.core.presentation.theme.spacing
 import com.ecosense.android.core.presentation.util.asString
-import com.ecosense.android.featRecognition.domain.model.RecognitionResult
+import com.ecosense.android.featRecognition.domain.model.Recognisable
 
 @Composable
 fun DiseaseRecognitionResultSection(
     modifier: Modifier = Modifier,
-    mainDiagnosis: RecognitionResult?,
-    diffDiagnoses: List<RecognitionResult>?,
+    mainDiagnosis: Recognisable?,
+    diffDiagnoses: List<Recognisable>?,
     onSaveResult: () -> Unit,
 ) {
     val context = LocalContext.current
