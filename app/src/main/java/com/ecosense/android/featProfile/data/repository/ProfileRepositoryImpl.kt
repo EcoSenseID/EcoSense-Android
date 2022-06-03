@@ -14,7 +14,6 @@ import com.ecosense.android.featProfile.domain.repository.ProfileRepository
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import logcat.asLog
 import logcat.logcat
@@ -100,7 +99,7 @@ class ProfileRepositoryImpl(
             val uploadedPhotoUri: Uri? = newPhotoUri?.let { uri ->
                 cloudStorageApi.uploadProfilePicture(
                     photoUri = uri,
-                    uid = authApi.currentUser.first()?.uid ?: return@let null
+                    uid = authApi.getCurrentUser()?.uid ?: return@let null
                 )
             }
 
