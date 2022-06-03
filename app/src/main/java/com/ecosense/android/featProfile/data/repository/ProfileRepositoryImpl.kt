@@ -14,6 +14,7 @@ import com.ecosense.android.featProfile.domain.repository.ProfileRepository
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import logcat.asLog
 import logcat.logcat
@@ -83,19 +84,26 @@ class ProfileRepositoryImpl(
     ): Flow<SimpleResource> = flow {
         emit(Resource.Loading())
 
-        if (newDisplayName == null && newPhotoUri == null) {
-            emit(Resource.Success(Unit))
-            return@flow
-        }
+        when {
+            newDisplayName == null && newPhotoUri == null -> {
+                emit(Resource.Success(Unit))
+                return@flow
+            }
 
-        val uploadedPhotoUri: Uri? = newPhotoUri?.let { uri ->
-            cloudStorageApi.uploadProfilePicture(
-                photoUri = uri,
-                uid = authApi.getCurrentUser()?.uid ?: return@let null
-            )
+            newDisplayName != null && newDisplayName.isBlank() -> {
+                emit(Resource.Error(UIText.StringResource(R.string.em_name_blank)))
+                return@flow
+            }
         }
 
         try {
+            val uploadedPhotoUri: Uri? = newPhotoUri?.let { uri ->
+                cloudStorageApi.uploadProfilePicture(
+                    photoUri = uri,
+                    uid = authApi.currentUser.first()?.uid ?: return@let null
+                )
+            }
+
             authApi.updateProfile(
                 newDisplayName = newDisplayName,
                 newPhotoUri = uploadedPhotoUri,
