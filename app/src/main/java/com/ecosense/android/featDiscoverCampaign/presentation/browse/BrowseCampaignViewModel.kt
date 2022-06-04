@@ -28,13 +28,6 @@ class BrowseCampaignViewModel @Inject constructor(
     private val _eventFlow = Channel<UIEvent>()
     val eventFlow = _eventFlow.receiveAsFlow()
 
-//    var q: String? = null
-//    var categoryId: Int? = null
-//
-//    init {
-//        setCampaignsParams(q = q, categoryId = categoryId)
-//    }
-
     private var getCampaignsJob: Job? = null
     fun setCampaignsParams(q: String?, categoryId: Int?) {
         logcat { q ?: "" }
@@ -64,88 +57,4 @@ class BrowseCampaignViewModel @Inject constructor(
             }.launchIn(this)
         }
     }
-
-//    private var getCampaignsJob: Job? = null
-//    fun getCampaigns() {
-//        getCampaignsJob?.cancel()
-//        getCampaignsJob = viewModelScope.launch {
-//            discoverCampaignRepository.getCampaigns().onEach { result ->
-//                logcat { result::class.java.name }
-//                when (result) {
-//                    is Resource.Error -> {
-//                        _state.value = state.value.copy(isLoadingCampaigns = false)
-//                        result.uiText?.let { _eventFlow.send(UIEvent.ShowSnackbar(it)) }
-//                    }
-//                    is Resource.Loading -> {
-//                        _state.value = state.value.copy(
-//                            campaigns = result.data ?: emptyList(),
-//                            isLoadingCampaigns = true
-//                        )
-//                    }
-//                    is Resource.Success -> {
-//                        _state.value = state.value.copy(
-//                            campaigns = result.data ?: emptyList(),
-//                            isLoadingCampaigns = false
-//                        )
-//                    }
-//                }
-//            }.launchIn(this)
-//        }
-//    }
-//    private var getCampaignsByQueryJob: Job? = null
-//    fun getCampaignsByQuery(q: String) {
-//        logcat { q }
-//        getCampaignsByQueryJob?.cancel()
-//        getCampaignsByQueryJob = viewModelScope.launch {
-//            discoverCampaignRepository.getCampaignsByQuery(q).onEach { result ->
-//                logcat { result::class.java.name }
-//                when (result) {
-//                    is Resource.Error -> {
-//                        _state.value = state.value.copy(isLoadingCampaigns = false)
-//                        result.uiText?.let { _eventFlow.send(UIEvent.ShowSnackbar(it)) }
-//                    }
-//                    is Resource.Loading -> {
-//                        _state.value = state.value.copy(
-//                            campaigns = result.data ?: emptyList(),
-//                            isLoadingCampaigns = true
-//                        )
-//                    }
-//                    is Resource.Success -> {
-//                        _state.value = state.value.copy(
-//                            campaigns = result.data ?: emptyList(),
-//                            isLoadingCampaigns = false
-//                        )
-//                    }
-//                }
-//            }.launchIn(this)
-//        }
-//    }
-//    private var getCampaignsByCategoryJob: Job? = null
-//    fun getCampaignsByCategory(categoryId: Int) {
-//        logcat { categoryId.toString() }
-//        getCampaignsByCategoryJob?.cancel()
-//        getCampaignsByCategoryJob = viewModelScope.launch {
-//            discoverCampaignRepository.getCampaignsByCategory(categoryId).onEach { result ->
-//                logcat { result::class.java.name }
-//                when (result) {
-//                    is Resource.Error -> {
-//                        _state.value = state.value.copy(isLoadingCampaigns = false)
-//                        result.uiText?.let { _eventFlow.send(UIEvent.ShowSnackbar(it)) }
-//                    }
-//                    is Resource.Loading -> {
-//                        _state.value = state.value.copy(
-//                            campaigns = result.data ?: emptyList(),
-//                            isLoadingCampaigns = true
-//                        )
-//                    }
-//                    is Resource.Success -> {
-//                        _state.value = state.value.copy(
-//                            campaigns = result.data ?: emptyList(),
-//                            isLoadingCampaigns = false
-//                        )
-//                    }
-//                }
-//            }.launchIn(this)
-//        }
-//    }
 }

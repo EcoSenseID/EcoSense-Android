@@ -23,7 +23,6 @@ import com.ecosense.android.destinations.CampaignDetailScreenDestination
 import com.ecosense.android.featDiscoverCampaign.presentation.component.DiscoverTopBar
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
-import logcat.logcat
 
 @Composable
 @Destination
@@ -33,17 +32,7 @@ fun BrowseCampaignScreen(
     categoryId: Int?,
     viewModel: BrowseCampaignViewModel = hiltViewModel()
 ) {
-//    when {
-//        search != null -> viewModel.getCampaignsByQuery(search)
-//        categoryId != null -> viewModel.getCampaignsByCategory(categoryId)
-//        else -> viewModel.getCampaigns()
-//    }
-//    viewModel.q = search
-//    viewModel.categoryId = categoryId
-
-//    logcat("BrowseCampaignScreen: q") { viewModel.q ?: "" }
-//    logcat("BrowseCampaignScreen: categoryId") { viewModel.categoryId.toString() }
-    viewModel.setCampaignsParams(q = search, categoryId = categoryId)
+    remember { viewModel.setCampaignsParams(q = search, categoryId = categoryId) }
 
     val scaffoldState = rememberScaffoldState()
 

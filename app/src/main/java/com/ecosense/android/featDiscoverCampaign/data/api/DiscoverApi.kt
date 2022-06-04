@@ -13,23 +13,6 @@ interface DiscoverApi {
         @Query("categoryId") categoryId: Int?
     ): BrowseCampaignDto
 
-//    @GET("campaign")
-//    suspend fun getCampaigns(
-//        @Header("Authorization") bearerToken: String
-//    ): BrowseCampaignDto
-//
-//    @GET("campaign")
-//    suspend fun getCampaignsByQuery(
-//        @Header("Authorization") bearerToken: String,
-//        @Query("q") q: String
-//    ): BrowseCampaignDto
-//
-//    @GET("campaign")
-//    suspend fun getCampaignsByCategory(
-//        @Header("Authorization") bearerToken: String,
-//        @Query("categoryId") categoryId: Int
-//    ): BrowseCampaignDto
-
     @GET("dashboard")
     suspend fun getDashboard(
         @Header("Authorization") bearerToken: String

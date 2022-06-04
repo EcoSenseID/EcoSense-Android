@@ -12,12 +12,6 @@ import java.io.File
 interface DiscoverCampaignRepository {
     fun getCampaigns(q: String?, categoryId: Int?): Flow<Resource<List<Campaign>>>
 
-//    fun getCampaigns(): Flow<Resource<List<Campaign>>>
-
-//    fun getCampaignsByQuery(q: String): Flow<Resource<List<Campaign>>>
-//
-//    fun getCampaignsByCategory(categoryId: Int): Flow<Resource<List<Campaign>>>
-
     fun getCampaignDetail(id: Int): Flow<Resource<CampaignDetail>>
 
     fun getCategories(): Flow<Resource<List<Category>>>
