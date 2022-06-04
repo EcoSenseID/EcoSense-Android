@@ -34,28 +34,7 @@ import com.ecosense.android.featDiscoverCampaign.data.util.dateFormatter
 @Composable
 fun CampaignItem(
     campaign: Campaign,
-    search: String?,
-    category: String?,
     sort: String?,
-    onClick: () -> Unit
-) {
-    if (campaign.title.contains(search.toString(), ignoreCase = true)) {
-        SortItem(sort = sort, campaign = campaign, onClick = onClick)
-    } else if (search == null) {
-        if (category == null) {
-            SortItem(sort = sort, campaign = campaign, onClick = onClick)
-        } else {
-            if (category in campaign.category) {
-                SortItem(sort = sort, campaign = campaign, onClick = onClick)
-            }
-        }
-    }
-}
-
-@Composable
-fun SortItem(
-    sort: String?,
-    campaign: Campaign,
     onClick: () -> Unit
 ) {
     if (sort == "" || sort == stringResource(R.string.show_all_campaign)) {
@@ -174,15 +153,15 @@ fun ShowItem(
         Spacer(modifier = Modifier.width(MaterialTheme.spacing.medium))
 
         Column(modifier = Modifier.fillMaxWidth()) {
-            Text(
-                text = stringResource(R.string.until_date,
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-                        dateFormatter(campaign.endDate)
-                    else
-                        campaign.endDate),
-                style = MaterialTheme.typography.caption,
-                modifier = Modifier.padding(bottom = MaterialTheme.spacing.medium)
-            )
+//            Text(
+//                text = stringResource(R.string.until_date,
+//                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+//                        dateFormatter(campaign.endDate)
+//                    else
+//                        campaign.endDate),
+//                style = MaterialTheme.typography.caption,
+//                modifier = Modifier.padding(bottom = MaterialTheme.spacing.medium)
+//            )
             Text(
                 text = campaign.title,
                 style = MaterialTheme.typography.h6,

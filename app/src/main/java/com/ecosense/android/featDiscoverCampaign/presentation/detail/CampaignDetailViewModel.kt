@@ -1,4 +1,4 @@
-package com.ecosense.android.featDiscoverCampaign.presentation.category
+package com.ecosense.android.featDiscoverCampaign.presentation.detail
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
@@ -17,40 +17,35 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class CategoryCampaignViewModel @Inject constructor(
+class CampaignDetailViewModel @Inject constructor(
     private val discoverCampaignRepository: DiscoverCampaignRepository
 ) : ViewModel() {
-
-    private val _state = mutableStateOf(CategoryCampaignScreenState.defaultValue)
-    val state: State<CategoryCampaignScreenState> = _state
+    private val _state = mutableStateOf(CampaignDetailScreenState.defaultValue)
+    val state: State<CampaignDetailScreenState> = _state
 
     private val _eventFlow = Channel<UIEvent>()
     val eventFlow = _eventFlow.receiveAsFlow()
 
-    init {
-        getCategory()
-    }
-
-    private var getCategoryJob: Job? = null
-    private fun getCategory() {
-        getCategoryJob?.cancel()
-        getCategoryJob = viewModelScope.launch {
-            discoverCampaignRepository.getCategories().onEach { result ->
+    private var setCampaignIdJob: Job? = null
+    fun setCampaignId(id: Int) {
+        setCampaignIdJob?.cancel()
+        setCampaignIdJob = viewModelScope.launch {
+            discoverCampaignRepository.getCampaignDetail(id).onEach { result ->
                 when (result) {
                     is Resource.Error -> {
-                        _state.value = state.value.copy(isLoadingCategories = false)
+                        _state.value = state.value.copy(isLoadingCampaignDetail = false)
                         result.uiText?.let { _eventFlow.send(UIEvent.ShowSnackbar(it)) }
                     }
                     is Resource.Loading -> {
                         _state.value = state.value.copy(
-                            categories = result.data ?: emptyList(),
-                            isLoadingCategories = true
+                            campaignDetail = result.data ?: state.value.campaignDetail,
+                            isLoadingCampaignDetail = true
                         )
                     }
                     is Resource.Success -> {
                         _state.value = state.value.copy(
-                            categories = result.data ?: emptyList(),
-                            isLoadingCategories = false
+                            campaignDetail = result.data ?: state.value.campaignDetail,
+                            isLoadingCampaignDetail = false
                         )
                     }
                 }

@@ -3,7 +3,6 @@ package com.ecosense.android.featDiscoverCampaign.presentation.dashboard
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
@@ -13,7 +12,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -25,6 +23,7 @@ import com.ecosense.android.core.presentation.theme.spacing
 import com.ecosense.android.destinations.BrowseCampaignScreenDestination
 import com.ecosense.android.destinations.CategoryCampaignScreenDestination
 import com.ecosense.android.featDiscoverCampaign.presentation.dashboard.component.BrowseCategory
+//import com.ecosense.android.featDiscoverCampaign.presentation.dashboard.component.BrowseCategory
 import com.ecosense.android.featDiscoverCampaign.presentation.dashboard.component.DashboardTopBar
 import com.ecosense.android.featDiscoverCampaign.presentation.dashboard.component.OnGoingTasks
 import com.ramcosta.composedestinations.annotation.Destination
@@ -40,8 +39,10 @@ fun DiscoverCampaignScreen(
 ) {
     val scaffoldState = rememberScaffoldState()
 
+    val state = viewModel.state.value
+
     Scaffold(
-        topBar = { DashboardTopBar({ navigator.navigate(BrowseCampaignScreenDestination(search = it, category = null)) }) },
+        topBar = { DashboardTopBar({ navigator.navigate(BrowseCampaignScreenDestination(search = it, categoryId = null)) }) },
         scaffoldState = scaffoldState
     ) {
         Column(
@@ -53,27 +54,6 @@ fun DiscoverCampaignScreen(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
-                var countOnGoingTask = 0
-                var countCompletedCampaign = 0
-
-                for (campaign in viewModel.discoverCampaignList.value) {
-                    var countCompletedTask = 0
-
-                    if (campaign.isJoined) {
-                        campaign.tasks.forEachIndexed { index, _ ->
-                            if (!campaign.tasks[index].completed)
-                                countOnGoingTask++
-                        }
-                    }
-                    if (campaign.isJoined) {
-                        campaign.tasks.forEachIndexed { index, _ ->
-                            if (campaign.tasks[index].completed)
-                                countCompletedTask++
-                        }
-                    }
-                    if (countCompletedTask == campaign.tasks.size)
-                        countCompletedCampaign++
-                }
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier
@@ -88,8 +68,13 @@ fun DiscoverCampaignScreen(
                         )
                         .weight(1f)
                 ) {
+//                    // nampilin task left
+//                    var countTask = 0
+//                    state.dashboard.tasks.forEach {
+//                        countTask += it.tasksLeft
+//                    }
                     Text(
-                        text = countOnGoingTask.toString(),
+                        text = state.dashboard.tasks.size.toString(),
                         style = MaterialTheme.typography.h5,
                         color = MaterialTheme.colors.onPrimary
                     )
@@ -114,7 +99,7 @@ fun DiscoverCampaignScreen(
                         .weight(1f)
                 ) {
                     Text(
-                        text = countCompletedCampaign.toString(),
+                        text = state.dashboard.tasks.size.toString(),
                         style = MaterialTheme.typography.h5,
                         color = MaterialTheme.colors.onSecondary
                     )
@@ -132,16 +117,7 @@ fun DiscoverCampaignScreen(
                 color = Gray800,
                 modifier = Modifier.padding(top = MaterialTheme.spacing.medium, bottom = MaterialTheme.spacing.small)
             )
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .fillMaxHeight(0.5f)
-                    .padding(bottom = MaterialTheme.spacing.medium)
-            ) {
-                items(viewModel.discoverCampaignList.value.size) { i ->
-                    OnGoingTasks(navigator = navigator, campaign = viewModel.discoverCampaignList.value[i])
-                }
-            }
+            OnGoingTasks(navigator = navigator, tasks = state.dashboard.tasks)
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -170,7 +146,7 @@ fun DiscoverCampaignScreen(
                     )
                 }
             }
-            BrowseCategory(navigator = navigator, viewModel = viewModel)
+            BrowseCategory(navigator = navigator, categories = state.categories)
         }
     }
 }

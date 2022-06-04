@@ -17,21 +17,20 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import coil.size.Scale
 import com.ecosense.android.R
 import com.ecosense.android.core.presentation.theme.spacing
 import com.ecosense.android.destinations.BrowseCampaignScreenDestination
-import com.ecosense.android.featDiscoverCampaign.presentation.dashboard.DiscoverCampaignViewModel
+import com.ecosense.android.featDiscoverCampaign.domain.model.Category
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
 @Composable
 fun BrowseCategory(
     modifier: Modifier = Modifier,
     navigator: DestinationsNavigator,
-    viewModel: DiscoverCampaignViewModel = hiltViewModel()
+    categories: List<Category>
 ) {
     val scrollState = rememberScrollState()
 
@@ -49,7 +48,7 @@ fun BrowseCategory(
                         .padding(end = MaterialTheme.spacing.small)
                         .clip(shape = RoundedCornerShape(8.dp))
                         .clickable(onClick = {
-                            navigator.navigate(BrowseCampaignScreenDestination(search = null, category = null))
+                            navigator.navigate(BrowseCampaignScreenDestination(search = null, categoryId = null))
                         })
                         .background(MaterialTheme.colors.surface)
                         .fillMaxSize()
@@ -80,7 +79,7 @@ fun BrowseCategory(
                     .fillMaxHeight(0.75f)
                     .padding(vertical = MaterialTheme.spacing.small)
             ) {
-                viewModel.categoryList.value.forEachIndexed { index, category ->
+                categories.forEachIndexed { index, category ->
                     if (index < 3) {
                         Column(
                             horizontalAlignment = Alignment.CenterHorizontally,
@@ -88,7 +87,7 @@ fun BrowseCategory(
                                 .padding(horizontal = MaterialTheme.spacing.small)
                                 .clip(shape = RoundedCornerShape(8.dp))
                                 .clickable(onClick = {
-                                    navigator.navigate(BrowseCampaignScreenDestination(search = null, category = category.name))
+                                    navigator.navigate(BrowseCampaignScreenDestination(search = null, categoryId = category.id))
                                 })
                                 .background(MaterialTheme.colors.surface)
                                 .fillMaxSize()

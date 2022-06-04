@@ -1,7 +1,6 @@
 package com.ecosense.android.featDiscoverCampaign.domain.model
 
 data class CampaignDetail(
-    val id: Int,
     val posterUrl: String,
     val initiator: String,
     val title: String,
@@ -12,6 +11,6 @@ data class CampaignDetail(
     val participantsCount: Int,
     val isTrending: Boolean,
     val isNew: Boolean,
-    val isJoined: Boolean,
-    val tasks: List<Task>
+    val joined: Boolean,
+    val campaignTasks: List<CampaignTask>
 )

@@ -1,6 +1,5 @@
 package com.ecosense.android.featDiscoverCampaign.presentation.browse
 
-import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -15,26 +14,40 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.ecosense.android.R
 import com.ecosense.android.core.presentation.component.CampaignItem
 import com.ecosense.android.core.presentation.theme.spacing
-import com.ecosense.android.destinations.DetailCampaignScreenDestination
+import com.ecosense.android.destinations.CampaignDetailScreenDestination
 import com.ecosense.android.featDiscoverCampaign.presentation.component.DiscoverTopBar
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import logcat.logcat
 
 @Composable
 @Destination
 fun BrowseCampaignScreen(
     navigator: DestinationsNavigator,
     search: String?,
-    category: String?,
+    categoryId: Int?,
     viewModel: BrowseCampaignViewModel = hiltViewModel()
 ) {
+//    when {
+//        search != null -> viewModel.getCampaignsByQuery(search)
+//        categoryId != null -> viewModel.getCampaignsByCategory(categoryId)
+//        else -> viewModel.getCampaigns()
+//    }
+//    viewModel.q = search
+//    viewModel.categoryId = categoryId
+
+//    logcat("BrowseCampaignScreen: q") { viewModel.q ?: "" }
+//    logcat("BrowseCampaignScreen: categoryId") { viewModel.categoryId.toString() }
+    viewModel.setCampaignsParams(q = search, categoryId = categoryId)
+
     val scaffoldState = rememberScaffoldState()
+
+    val state = viewModel.state.value
 
     var expanded by remember { mutableStateOf(false) }
     val sortByList = listOf(
@@ -115,14 +128,12 @@ fun BrowseCampaignScreen(
 
             Row {
                 LazyColumn(modifier = Modifier.fillMaxWidth()) {
-                    items(viewModel.campaignList.value.size) { i ->
+                    items(state.campaigns.size) { i ->
                         CampaignItem(
-                            campaign = viewModel.campaignList.value[i],
-                            search = search,
-                            category = category,
+                            campaign = state.campaigns[i],
                             sort = selectedSort,
                             onClick = {
-                                navigator.navigate(DetailCampaignScreenDestination(id = viewModel.campaignList.value[i].id))
+                                navigator.navigate(CampaignDetailScreenDestination(id = state.campaigns[i].id))
                             }
                         )
                     }

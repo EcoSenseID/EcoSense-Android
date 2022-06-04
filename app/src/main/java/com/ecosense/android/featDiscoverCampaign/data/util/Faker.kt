@@ -3,7 +3,7 @@ package com.ecosense.android.featDiscoverCampaign.data.util
 import com.ecosense.android.core.domain.model.Campaign
 import com.ecosense.android.featDiscoverCampaign.domain.model.CampaignDetail
 import com.ecosense.android.featDiscoverCampaign.domain.model.Category
-import com.ecosense.android.featDiscoverCampaign.domain.model.Task
+import com.ecosense.android.featDiscoverCampaign.domain.model.CampaignTask
 
 object Faker {
     fun getBrowseCampaign(): List<Campaign> {
@@ -38,7 +38,7 @@ object Faker {
         for (i in 1..50) {
             result.add(
                 CampaignDetail(
-                    id = i,
+//                    id = i,
                     posterUrl = "https://cdn.statically.io/og/theme=dark/Campaign$i.jpg",
                     initiator = "Olaf Number $i",
                     title = "Lorem Ipsum $i",
@@ -54,8 +54,8 @@ object Faker {
                     participantsCount = (1000..5000).random(),
                     isTrending = i < 3,
                     isNew = i < 5,
-                    isJoined = i < 5,
-                    tasks = if (i < 3)
+                    joined = i < 5,
+                    campaignTasks = if (i < 3)
                                 getTaskAllCompleted()
                             else
                                 getTask()
@@ -86,11 +86,11 @@ object Faker {
         return result
     }
 
-    private fun getTask(): List<Task> {
-        val result = mutableListOf<Task>()
+    private fun getTask(): List<CampaignTask> {
+        val result = mutableListOf<CampaignTask>()
         for (i in 1..10) {
             result.add(
-                Task(
+                CampaignTask(
                     id = i,
                     name = "Task No.$i",
                     taskDescription = "Attach the proof by submitting a photo of $i",
@@ -105,11 +105,11 @@ object Faker {
         return result
     }
 
-    private fun getTaskAllCompleted(): List<Task> {
-        val result = mutableListOf<Task>()
+    private fun getTaskAllCompleted(): List<CampaignTask> {
+        val result = mutableListOf<CampaignTask>()
         for (i in 1..10) {
             result.add(
-                Task(
+                CampaignTask(
                     id = i,
                     name = "Task No.$i",
                     taskDescription = "Attach the proof by submitting a photo of $i",

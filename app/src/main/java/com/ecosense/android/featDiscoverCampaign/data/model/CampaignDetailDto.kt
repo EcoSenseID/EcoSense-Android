@@ -1,29 +1,57 @@
 package com.ecosense.android.featDiscoverCampaign.data.model
 
-data class CampaignDetailDto(
-    val error: Boolean? = null,
-    val message: String? = null,
-    val participantsCount: Int? = null,
-    val category: List<String?>? = null,
-    val title: String? = null,
-    val posterUrl: String? = null,
-    val isTrending: Boolean? = null,
-    val isNew: Boolean? = null,
-    val initiator: String? = null,
-    val startDate: String? = null,
-    val endDate: String? = null,
-    val description: String? = null,
-    val joined: Boolean? = null,
-    val tasks: List<CampaignTasksItem?>? = null
-)
+import com.ecosense.android.featDiscoverCampaign.domain.model.CampaignDetail
+import com.ecosense.android.featDiscoverCampaign.domain.model.CampaignTask
 
-data class CampaignTasksItem(
-    val id: Int? = null,
-    val name: String? = null,
-    val taskDescription: String? = null,
-    val completed: Boolean? = null,
-    val proofPhotoUrl: String? = null,
-    val proofCaption: String? = null,
-    val completedTimeStamp: String? = null
-)
+data class CampaignDetailDto(
+    val error: Boolean?,
+    val message: String?,
+    val participantsCount: Int?,
+    val category: List<String>?,
+    val title: String?,
+    val posterUrl: String?,
+    val isTrending: Boolean?,
+    val isNew: Boolean?,
+    val initiator: String?,
+    val startDate: String?,
+    val endDate: String?,
+    val description: String?,
+    val joined: Boolean?,
+    val tasks: List<CampaignTasksDto>?
+) {
+    fun toCampaignDetails() = CampaignDetail(
+        participantsCount = participantsCount ?: 0,
+        category = category ?: emptyList(),
+        title = title ?: "",
+        posterUrl = posterUrl ?: "",
+        isTrending = isTrending ?: false,
+        isNew = isNew ?: false,
+        initiator = initiator ?: "",
+        startDate = startDate ?: "",
+        endDate = endDate ?: "",
+        description = description ?: "",
+        joined = joined ?: false,
+        campaignTasks = tasks?.map{ it.toCampaignTasks() } ?: emptyList()
+    )
+}
+
+data class CampaignTasksDto(
+    val id: Int?,
+    val name: String?,
+    val taskDescription: String?,
+    val completed: Boolean?,
+    val proofPhotoUrl: String?,
+    val proofCaption: String?,
+    val completedTimeStamp: String?
+) {
+    fun toCampaignTasks() = CampaignTask(
+        id = id ?: 0,
+        name = name ?: "nama campaign task",
+        taskDescription = taskDescription ?: "",
+        completed = completed ?: false,
+        proofPhotoUrl = proofPhotoUrl ?: "",
+        proofCaption = proofCaption ?: "",
+        completedTimeStamp = completedTimeStamp ?: ""
+    )
+}
 

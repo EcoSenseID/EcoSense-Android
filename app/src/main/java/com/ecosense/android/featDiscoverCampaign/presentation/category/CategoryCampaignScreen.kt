@@ -27,6 +27,7 @@ import coil.size.Scale
 import com.ecosense.android.R
 import com.ecosense.android.core.presentation.theme.spacing
 import com.ecosense.android.destinations.BrowseCampaignScreenDestination
+import com.ecosense.android.featDiscoverCampaign.domain.model.Category
 import com.ecosense.android.featDiscoverCampaign.presentation.component.DiscoverTopBar
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -39,6 +40,9 @@ fun CategoryCampaignScreen(
 ) {
     val scaffoldState = rememberScaffoldState()
     val scrollState = rememberScrollState()
+
+    val state = viewModel.state.value
+    val categories : List<Category> = state.categories
 
     Scaffold(
         topBar = {
@@ -76,7 +80,7 @@ fun CategoryCampaignScreen(
                             )
                             .clip(shape = RoundedCornerShape(8.dp))
                             .clickable(onClick = {
-                                navigator.navigate(BrowseCampaignScreenDestination(search = null, category = null))
+                                navigator.navigate(BrowseCampaignScreenDestination(search = null, categoryId = null))
                             })
                             .background(MaterialTheme.colors.surface)
                             .fillMaxWidth()
@@ -103,7 +107,7 @@ fun CategoryCampaignScreen(
             }
             Row {
                 Column(modifier = Modifier.fillMaxWidth()) {
-                    for (category in viewModel.categoryList.value) {
+                    for (category in categories) {
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
                             modifier = Modifier
@@ -114,7 +118,7 @@ fun CategoryCampaignScreen(
                                 )
                                 .clip(shape = RoundedCornerShape(8.dp))
                                 .clickable(onClick = {
-                                    navigator.navigate(BrowseCampaignScreenDestination(search = null, category = category.name))
+                                    navigator.navigate(BrowseCampaignScreenDestination(search = null, categoryId = category.id))
                                 })
                                 .background(MaterialTheme.colors.surface)
                                 .fillMaxWidth()

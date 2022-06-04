@@ -1,18 +1,40 @@
 package com.ecosense.android.featDiscoverCampaign.domain.repository
 
-import com.ecosense.android.core.util.Resource
 import com.ecosense.android.core.domain.model.Campaign
+import com.ecosense.android.core.util.Resource
+import com.ecosense.android.core.util.SimpleResource
 import com.ecosense.android.featDiscoverCampaign.domain.model.CampaignDetail
 import com.ecosense.android.featDiscoverCampaign.domain.model.Category
-import com.ecosense.android.featDiscoverCampaign.domain.model.Task
+import com.ecosense.android.featDiscoverCampaign.domain.model.Dashboard
 import kotlinx.coroutines.flow.Flow
+import java.io.File
 
 interface DiscoverCampaignRepository {
-    fun getCampaigns(): Flow<Resource<List<Campaign>>>
+    fun getCampaigns(q: String?, categoryId: Int?): Flow<Resource<List<Campaign>>>
 
-    fun getBrowseCampaign(): Flow<Resource<List<Campaign>>>
+//    fun getCampaigns(): Flow<Resource<List<Campaign>>>
 
-    fun getCampaignDetail(): Flow<Resource<List<CampaignDetail>>>
+//    fun getCampaignsByQuery(q: String): Flow<Resource<List<Campaign>>>
+//
+//    fun getCampaignsByCategory(categoryId: Int): Flow<Resource<List<Campaign>>>
 
-    fun getCategory(): Flow<Resource<List<Category>>>
+    fun getCampaignDetail(id: Int): Flow<Resource<CampaignDetail>>
+
+    fun getCategories(): Flow<Resource<List<Category>>>
+
+    fun getDashboard(): Flow<Resource<Dashboard>>
+
+    fun setCompletionProof(
+        photo: File?,
+        caption: String?,
+        taskId: Int?
+    ): Flow<SimpleResource>
+
+    fun setJoinCampaign(
+        campaignId: Int?
+    ): Flow<SimpleResource>
+
+    fun setCompleteCampaign(
+        campaignId: Int?
+    ): Flow<SimpleResource>
 }

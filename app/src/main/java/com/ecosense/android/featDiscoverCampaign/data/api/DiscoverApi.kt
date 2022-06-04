@@ -9,9 +9,26 @@ interface DiscoverApi {
     @GET("campaign")
     suspend fun getCampaigns(
         @Header("Authorization") bearerToken: String,
-        @Query("categoryId") categoryId: Int,
-        @Query("q") queries: String
+        @Query("q") q: String?,
+        @Query("categoryId") categoryId: Int?
     ): BrowseCampaignDto
+
+//    @GET("campaign")
+//    suspend fun getCampaigns(
+//        @Header("Authorization") bearerToken: String
+//    ): BrowseCampaignDto
+//
+//    @GET("campaign")
+//    suspend fun getCampaignsByQuery(
+//        @Header("Authorization") bearerToken: String,
+//        @Query("q") q: String
+//    ): BrowseCampaignDto
+//
+//    @GET("campaign")
+//    suspend fun getCampaignsByCategory(
+//        @Header("Authorization") bearerToken: String,
+//        @Query("categoryId") categoryId: Int
+//    ): BrowseCampaignDto
 
     @GET("dashboard")
     suspend fun getDashboard(
@@ -25,7 +42,8 @@ interface DiscoverApi {
 
     @GET("detail")
     suspend fun getCampaignDetail(
-        @Header("Authorization") bearerToken: String
+        @Header("Authorization") bearerToken: String,
+        @Query("id") id: Int
     ): CampaignDetailDto
 
     @Multipart
