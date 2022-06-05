@@ -1,9 +1,8 @@
 package com.ecosense.android.featRecognition.domain.model
 
-import com.ecosense.android.core.util.UIText
-
-data class Recognisable(
+data class RecognisableDetail(
+    val id: Int?,
     val label: String,
+    val timeInMillis: Long,
     val confidencePercent: Int,
-    val readableName: UIText?,
 )

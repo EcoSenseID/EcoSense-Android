@@ -1,4 +1,4 @@
-package com.ecosense.android.featRecognition.presentation.component
+package com.ecosense.android.featRecognition.presentation.recognition.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -27,6 +27,7 @@ fun DiseaseRecognitionResultSection(
     modifier: Modifier = Modifier,
     mainDiagnosis: Recognisable?,
     diffDiagnoses: List<Recognisable>?,
+    isSavingResult: Boolean,
     onSaveResult: () -> Unit,
 ) {
     val context = LocalContext.current
@@ -54,7 +55,7 @@ fun DiseaseRecognitionResultSection(
                 )
 
                 Text(
-                    text = mainDiagnosis.label.asString(),
+                    text = mainDiagnosis.readableName?.asString() ?: mainDiagnosis.label,
                     style = MaterialTheme.typography.h6,
                     fontWeight = FontWeight.SemiBold,
                     color = MaterialTheme.colors.primary
@@ -67,19 +68,29 @@ fun DiseaseRecognitionResultSection(
                     Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
                     Text(
                         text = "But, it could also be ${
-                            diffDiagnoses.joinToString { it.label.asString(context) }
+                            diffDiagnoses.joinToString {
+                                it.readableName?.asString(context) ?: it.label
+                            }
                         }"
                     )
                 }
 
                 Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
-                Button(onClick = onSaveResult) {
+                Button(
+                    enabled = !isSavingResult,
+                    onClick = onSaveResult,
+                ) {
                     Icon(
                         imageVector = Icons.Default.Save,
                         contentDescription = null
                     )
                     Spacer(modifier = Modifier.width(MaterialTheme.spacing.medium))
-                    Text(text = stringResource(R.string.save_result))
+                    Text(
+                        text = stringResource(
+                            if (isSavingResult) R.string.saving
+                            else R.string.save_result
+                        )
+                    )
                 }
             } else {
                 Text(

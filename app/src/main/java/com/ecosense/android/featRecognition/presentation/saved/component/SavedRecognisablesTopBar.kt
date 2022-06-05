@@ -1,4 +1,4 @@
-package com.ecosense.android.featRecognition.presentation.component
+package com.ecosense.android.featRecognition.presentation.recognition.component
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.*
@@ -13,7 +13,7 @@ import androidx.compose.ui.text.font.FontWeight
 import com.ecosense.android.R
 
 @Composable
-fun SavedRecognitionTopBar(
+fun SavedRecognisablesTopBar(
     modifier: Modifier = Modifier,
     isLoading: Boolean,
     onBackClick: () -> Unit,

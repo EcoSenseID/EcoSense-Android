@@ -2,8 +2,10 @@ package com.ecosense.android.featRecognition.domain.model
 
 import com.ecosense.android.core.util.UIText
 
-data class Recognisable(
+data class Disease(
     val label: String,
-    val confidencePercent: Int,
     val readableName: UIText?,
+    val symptoms: UIText?,
+    val treatments: UIText?,
+    val preventiveMeasures: UIText?,
 )

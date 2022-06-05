@@ -9,7 +9,7 @@ import com.ecosense.android.core.data.model.SavedRecognisableEntity
 @Dao
 interface SavedRecognisableDao {
     @Insert(onConflict = OnConflictStrategy.ABORT)
-    suspend fun save(recognitionResult: SavedRecognisableEntity)
+    suspend fun save(recognitionResult: SavedRecognisableEntity): Long
 
     @Query("SELECT * FROM savedrecognisableentity WHERE id = :id")
     suspend fun find(id: Int): SavedRecognisableEntity?
@@ -18,5 +18,5 @@ interface SavedRecognisableDao {
     suspend fun findAll(): List<SavedRecognisableEntity>
 
     @Query("DELETE FROM savedrecognisableentity WHERE id = :id")
-    suspend fun delete(id: Int?)
+    suspend fun delete(id: Int?): Int
 }

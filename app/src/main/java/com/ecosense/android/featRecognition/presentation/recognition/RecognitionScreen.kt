@@ -17,10 +17,10 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.ecosense.android.core.presentation.util.UIEvent
 import com.ecosense.android.core.presentation.util.asString
 import com.ecosense.android.destinations.SavedRecognitionResultsScreenDestination
-import com.ecosense.android.featRecognition.presentation.component.DiseaseRecognitionPermissionRequest
-import com.ecosense.android.featRecognition.presentation.component.DiseaseRecognitionPreviewView
-import com.ecosense.android.featRecognition.presentation.component.DiseaseRecognitionResultSection
-import com.ecosense.android.featRecognition.presentation.component.DiseaseRecognitionTopBar
+import com.ecosense.android.featRecognition.presentation.recognition.component.DiseaseRecognitionPermissionRequest
+import com.ecosense.android.featRecognition.presentation.recognition.component.DiseaseRecognitionPreviewView
+import com.ecosense.android.featRecognition.presentation.recognition.component.DiseaseRecognitionResultSection
+import com.ecosense.android.featRecognition.presentation.recognition.component.DiseaseRecognitionTopBar
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberPermissionState
 import com.ramcosta.composedestinations.annotation.Destination
@@ -91,7 +91,8 @@ fun DiseaseRecognitionScreen(
                     DiseaseRecognitionResultSection(
                         mainDiagnosis = state.mainDiagnosis,
                         diffDiagnoses = state.diffDiagnoses,
-                        onSaveResult = { viewModel.onSaveResult() }
+                        isSavingResult = state.isSavingResult,
+                        onSaveResult = { viewModel.onSaveResult() },
                     )
                 }
             }

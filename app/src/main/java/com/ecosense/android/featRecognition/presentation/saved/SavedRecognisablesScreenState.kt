@@ -1,4 +1,4 @@
-package com.ecosense.android.featRecognition.presentation.saved.list
+package com.ecosense.android.featRecognition.presentation.saved
 
 import com.ecosense.android.featRecognition.domain.model.SavedRecognisable
 

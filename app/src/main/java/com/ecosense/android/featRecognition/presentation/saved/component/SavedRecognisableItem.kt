@@ -12,6 +12,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.ecosense.android.core.presentation.theme.spacing
+import com.ecosense.android.core.presentation.util.asString
 import com.ecosense.android.core.util.Constants
 import com.ecosense.android.featRecognition.domain.model.SavedRecognisable
 import java.text.SimpleDateFormat
@@ -51,7 +52,7 @@ fun SavedRecognisableItem(
         Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
 
         Text(
-            text = savedRecognisable.label,
+            text = savedRecognisable.readableName?.asString() ?: savedRecognisable.label,
             style = MaterialTheme.typography.subtitle1,
             color = MaterialTheme.colors.onSurface,
             fontWeight = FontWeight.SemiBold,

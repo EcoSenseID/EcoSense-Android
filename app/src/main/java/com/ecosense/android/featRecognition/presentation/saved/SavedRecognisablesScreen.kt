@@ -1,4 +1,4 @@
-package com.ecosense.android.featRecognition.presentation.saved.list
+package com.ecosense.android.featRecognition.presentation.saved
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.*
@@ -22,8 +22,9 @@ import com.ecosense.android.R
 import com.ecosense.android.core.presentation.theme.spacing
 import com.ecosense.android.core.presentation.util.UIEvent
 import com.ecosense.android.core.presentation.util.asString
-import com.ecosense.android.destinations.SavedRecognitionResultDetailScreenDestination
-import com.ecosense.android.featRecognition.presentation.component.SavedRecognitionTopBar
+import com.ecosense.android.destinations.RecognisableDetailScreenDestination
+import com.ecosense.android.featRecognition.presentation.model.toDetailParcelable
+import com.ecosense.android.featRecognition.presentation.recognition.component.SavedRecognisablesTopBar
 import com.ecosense.android.featRecognition.presentation.saved.component.SavedRecognisableItem
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -61,7 +62,7 @@ fun SavedRecognitionResultsScreen(
 
     Scaffold(
         topBar = {
-            SavedRecognitionTopBar(
+            SavedRecognisablesTopBar(
                 isLoading = state.isLoading,
                 onBackClick = { navigator.navigateUp() }
             )
@@ -78,10 +79,10 @@ fun SavedRecognitionResultsScreen(
                 LazyColumn(modifier = Modifier.fillMaxWidth()) {
                     items(state.savedRecognisables.size) { i ->
                         if (i == 0) Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
-                        SavedRecognisableItem(state.savedRecognisables[i]) { result ->
-                            result.id?.let {
-                                navigator.navigate(SavedRecognitionResultDetailScreenDestination(it))
-                            }
+                        SavedRecognisableItem(state.savedRecognisables[i]) {
+                            navigator.navigate(
+                                RecognisableDetailScreenDestination(it.toDetailParcelable())
+                            )
                         }
                     }
                 }

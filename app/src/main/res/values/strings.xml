@@ -174,4 +174,7 @@
     <string name="empty_experiences">Nothing to show yet. Let\'s earn experiences by joining campaigns!</string>
     <string name="empty_history">No histories yet. Finished campaigns will be shown here</string>
     <string name="empty_saved_recognition_results">There\'s no saved recognition results yet</string>
+    <string name="saved_recognition_detail">Saved Recognition Detail</string>
+    <string name="em_data_not_found">Data not found</string>
+    <string name="saving">Saving…</string>
 </resources>

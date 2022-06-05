@@ -5,16 +5,22 @@ import android.graphics.Bitmap
 import com.ecosense.android.R
 import com.ecosense.android.core.data.local.dao.SavedRecognisableDao
 import com.ecosense.android.core.data.model.SavedRecognisableEntity
-import com.ecosense.android.core.presentation.util.asString
 import com.ecosense.android.core.util.Resource
+import com.ecosense.android.core.util.SimpleResource
 import com.ecosense.android.core.util.UIText
+import com.ecosense.android.featRecognition.data.source.DiseaseDataSource
 import com.ecosense.android.featRecognition.data.util.toRecognisable
+import com.ecosense.android.featRecognition.data.util.toSavedRecognisable
+import com.ecosense.android.featRecognition.domain.model.Disease
 import com.ecosense.android.featRecognition.domain.model.Recognisable
+import com.ecosense.android.featRecognition.domain.model.RecognisableDetail
 import com.ecosense.android.featRecognition.domain.model.SavedRecognisable
 import com.ecosense.android.featRecognition.domain.repository.RecognitionRepository
 import com.ecosense.android.ml.PlantDiseaseModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import logcat.asLog
+import logcat.logcat
 import org.tensorflow.lite.gpu.CompatibilityList
 import org.tensorflow.lite.support.image.TensorImage
 import org.tensorflow.lite.support.model.Model
@@ -57,26 +63,45 @@ class RecognitionRepositoryImpl(
         }
     }
 
-    override suspend fun getSavedRecognisable(
-        id: Int
-    ): SavedRecognisable? {
-        return savedRecognisableDao.find(id)?.toSavedRecognisable()
+    override fun getDisease(label: String): Disease? {
+        return DiseaseDataSource.getDisease(label)
     }
 
-    override suspend fun saveRecognisable(recognisable: Recognisable) {
-        savedRecognisableDao.save(
-            recognitionResult = SavedRecognisableEntity(
-                label = recognisable.label.asString(appContext),
-                timeInMillis = System.currentTimeMillis(),
-                confidencePercent = recognisable.confidencePercent,
-                symptoms = recognisable.symptoms,
-                treatment = recognisable.treatments,
-                preventiveMeasure = recognisable.preventiveMeasures,
+    override suspend fun saveRecognisable(
+        recognisable: Recognisable
+    ): Flow<SimpleResource> = flow {
+        emit(Resource.Loading())
+        try {
+            val savedRow = savedRecognisableDao.save(
+                recognitionResult = SavedRecognisableEntity(
+                    label = recognisable.label,
+                    timeInMillis = System.currentTimeMillis(),
+                    confidencePercent = recognisable.confidencePercent,
+                )
             )
-        )
+            emit(
+                if (savedRow != 0L) Resource.Success(Unit)
+                else Resource.Error(UIText.StringResource(R.string.em_unknown))
+            )
+        } catch (e: Exception) {
+            logcat { e.asLog() }
+            emit(Resource.Error(UIText.StringResource(R.string.em_unknown)))
+        }
     }
 
-    override suspend fun unsaveRecognisable(savedRecognisable: SavedRecognisable) {
-        savedRecognisableDao.delete(savedRecognisable.id)
+    override suspend fun unsaveRecognisable(
+        recognisableDetail: RecognisableDetail
+    ): Flow<SimpleResource> = flow {
+        emit(Resource.Loading())
+        try {
+            val deletedRow = savedRecognisableDao.delete(recognisableDetail.id)
+            emit(
+                if (deletedRow != 0) Resource.Success(Unit)
+                else Resource.Error(UIText.StringResource(R.string.em_unknown))
+            )
+        } catch (e: Exception) {
+            logcat { e.asLog() }
+            emit(Resource.Error(UIText.StringResource(R.string.em_unknown)))
+        }
     }
 }

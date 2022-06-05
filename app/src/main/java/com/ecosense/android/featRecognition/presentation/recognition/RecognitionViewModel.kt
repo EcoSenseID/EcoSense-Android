@@ -7,11 +7,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ecosense.android.R
 import com.ecosense.android.core.presentation.util.UIEvent
+import com.ecosense.android.core.util.Resource
 import com.ecosense.android.core.util.UIText
 import com.ecosense.android.featRecognition.domain.model.Recognisable
 import com.ecosense.android.featRecognition.domain.repository.RecognitionRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -40,7 +43,7 @@ class RecognitionViewModel @Inject constructor(
 
         val diffDiagnoses: List<Recognisable>? = when {
             mainDiagnosis != null -> diagnoses
-                .filterNot { it.label == mainDiagnosis.label }
+                .filterNot { it.readableName == mainDiagnosis.readableName }
                 .filter { it.confidencePercent > DIFFERENTIAL_DIAGNOSES_MINIMUM_CONFIDENCE_PERCENT }
 
             else -> null
@@ -54,12 +57,22 @@ class RecognitionViewModel @Inject constructor(
 
     fun onSaveResult() {
         viewModelScope.launch {
-            state.value.mainDiagnosis?.let {
-                recognitionRepository.saveRecognisable(it)
-                _eventFlow.send(
-                    UIEvent.ShowSnackbar(UIText.StringResource(R.string.sm_saved_successfully))
-                )
-            }
+            val recognisable = state.value.mainDiagnosis ?: return@launch
+            recognitionRepository.saveRecognisable(recognisable).onEach { result ->
+                when (result) {
+                    is Resource.Error -> {
+                        _state.value = state.value.copy(isSavingResult = false)
+                        result.uiText?.let { _eventFlow.send(UIEvent.ShowSnackbar(it)) }
+                    }
+                    is Resource.Loading -> {
+                        _state.value = state.value.copy(isSavingResult = true)
+                    }
+                    is Resource.Success -> {
+                        _state.value = state.value.copy(isSavingResult = false)
+                        _eventFlow.send(UIEvent.ShowSnackbar(UIText.StringResource(R.string.sm_saved_successfully)))
+                    }
+                }
+            }.launchIn(this)
         }
     }
 
