@@ -7,6 +7,8 @@ data class RecognisableDetailScreenState(
     val recognisableDetail: RecognisableDetail,
     val disease: Disease,
 ) {
+    val isSaved get() = this.recognisableDetail.id != null
+
     companion object {
         val defaultValue = RecognisableDetailScreenState(
             recognisableDetail = RecognisableDetail(

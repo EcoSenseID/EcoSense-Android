@@ -3,7 +3,6 @@ package com.ecosense.android.featRecognition.presentation.recognition
 import android.Manifest
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.rememberScaffoldState
@@ -16,7 +15,9 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.ecosense.android.core.presentation.util.UIEvent
 import com.ecosense.android.core.presentation.util.asString
+import com.ecosense.android.destinations.RecognisableDetailScreenDestination
 import com.ecosense.android.destinations.SavedRecognitionResultsScreenDestination
+import com.ecosense.android.featRecognition.presentation.model.toDetailParcelable
 import com.ecosense.android.featRecognition.presentation.recognition.component.DiseaseRecognitionPermissionRequest
 import com.ecosense.android.featRecognition.presentation.recognition.component.DiseaseRecognitionPreviewView
 import com.ecosense.android.featRecognition.presentation.recognition.component.DiseaseRecognitionResultSection
@@ -27,7 +28,7 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlinx.coroutines.flow.collectLatest
 
-@OptIn(ExperimentalPermissionsApi::class, ExperimentalMaterialApi::class)
+@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 @Destination
 fun DiseaseRecognitionScreen(
@@ -93,6 +94,15 @@ fun DiseaseRecognitionScreen(
                         diffDiagnoses = state.diffDiagnoses,
                         isSavingResult = state.isSavingResult,
                         onSaveResult = { viewModel.onSaveResult() },
+                        onLearnMoreClick = {
+                            state.mainDiagnosis?.let {
+                                navigator.navigate(
+                                    RecognisableDetailScreenDestination(
+                                        it.toDetailParcelable()
+                                    )
+                                )
+                            }
+                        }
                     )
                 }
             }

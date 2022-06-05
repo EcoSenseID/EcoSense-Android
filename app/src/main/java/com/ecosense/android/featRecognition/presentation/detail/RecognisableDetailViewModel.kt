@@ -23,4 +23,18 @@ class RecognisableDetailViewModel @Inject constructor(
             disease = disease ?: state.value.disease,
         )
     }
+
+    fun onDeleteClick() {
+        // TODO: implement this
+        _state.value = state.value.copy(
+            recognisableDetail = state.value.recognisableDetail.copy(id = null)
+        )
+    }
+
+    fun onSaveClick() {
+        // TODO: implement this
+        _state.value = state.value.copy(
+            recognisableDetail = state.value.recognisableDetail.copy(id = 1)
+        )
+    }
 }
