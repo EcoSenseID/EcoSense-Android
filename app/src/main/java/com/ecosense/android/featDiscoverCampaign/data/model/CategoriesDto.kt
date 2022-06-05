@@ -11,12 +11,14 @@ data class CategoriesDto(
 data class CategoriesItem(
     val id: Int?,
     val photoUrl: String?,
-    val name: String?
+    val name: String?,
+    val colorHex: String?
 ) {
     fun toCategories() = Category(
         id = id ?: 0,
         photoUrl = photoUrl ?: "",
-        name = name ?: ""
+        name = name ?: "",
+        colorHex = colorHex ?: ""
     )
 }
 

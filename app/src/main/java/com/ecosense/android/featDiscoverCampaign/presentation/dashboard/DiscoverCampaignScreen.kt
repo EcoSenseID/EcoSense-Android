@@ -68,18 +68,17 @@ fun DiscoverCampaignScreen(
                         )
                         .weight(1f)
                 ) {
-//                    // nampilin task left
-//                    var countTask = 0
-//                    state.dashboard.tasks.forEach {
-//                        countTask += it.tasksLeft
-//                    }
+                    var countTask = 0
+                    state.dashboard.tasks.forEach {
+                        countTask += it.tasksLeft
+                    }
                     Text(
-                        text = state.dashboard.tasks.size.toString(),
+                        text = countTask.toString(),
                         style = MaterialTheme.typography.h5,
                         color = MaterialTheme.colors.onPrimary
                     )
                     Text(
-                        text = stringResource(R.string.on_going_task),
+                        text = stringResource(R.string.tasks_left),
                         style = MaterialTheme.typography.subtitle2,
                         color = MaterialTheme.colors.onPrimary
                     )
