@@ -87,10 +87,12 @@ fun EditProfileScreen(
         },
         scaffoldState = scaffoldState,
         modifier = Modifier.fillMaxSize()
-    ) {
+    ) { scaffoldPadding ->
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
+                .fillMaxWidth()
+                .padding(scaffoldPadding)
                 .padding(MaterialTheme.spacing.medium)
                 .shadow(
                     elevation = 2.dp,
