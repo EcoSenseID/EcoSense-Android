@@ -1,6 +1,6 @@
 package com.ecosense.android.core.data.repository
 
-import android.util.Patterns
+import androidx.core.util.PatternsCompat
 import com.ecosense.android.R
 import com.ecosense.android.core.domain.api.AuthApi
 import com.ecosense.android.core.domain.model.User
@@ -10,6 +10,8 @@ import com.ecosense.android.core.util.SimpleResource
 import com.ecosense.android.core.util.UIText
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import logcat.asLog
+import logcat.logcat
 
 class AuthRepositoryImpl(
     private val authApi: AuthApi
@@ -30,7 +32,7 @@ class AuthRepositoryImpl(
                 emit(Resource.Error(UIText.StringResource(R.string.em_email_blank)))
                 return@flow
             }
-            !Patterns.EMAIL_ADDRESS.matcher(email).matches() -> {
+            !PatternsCompat.EMAIL_ADDRESS.matcher(email).matches() -> {
                 emit(Resource.Error(UIText.StringResource(R.string.em_invalid_email)))
                 return@flow
             }
@@ -89,7 +91,7 @@ class AuthRepositoryImpl(
                 return@flow
             }
 
-            !Patterns.EMAIL_ADDRESS.matcher(email).matches() -> {
+            !PatternsCompat.EMAIL_ADDRESS.matcher(email).matches() -> {
                 emit(Resource.Error(UIText.StringResource(R.string.em_invalid_email)))
                 return@flow
             }
@@ -128,6 +130,7 @@ class AuthRepositoryImpl(
                 }
 
         } catch (e: Exception) {
+            logcat { e.asLog() }
             emit(Resource.Error(UIText.StringResource(R.string.em_unknown)))
         }
     }
@@ -143,7 +146,7 @@ class AuthRepositoryImpl(
                 return@flow
             }
 
-            !Patterns.EMAIL_ADDRESS.matcher(email).matches() -> {
+            !PatternsCompat.EMAIL_ADDRESS.matcher(email).matches() -> {
                 emit(Resource.Error(UIText.StringResource(R.string.em_invalid_email)))
                 return@flow
             }
@@ -161,6 +164,6 @@ class AuthRepositoryImpl(
     override fun logout() = authApi.logout()
 
     companion object {
-        private const val MINIMUM_PASSWORD_LENGTH = 6
+        const val MINIMUM_PASSWORD_LENGTH = 6
     }
 }
