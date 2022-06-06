@@ -20,7 +20,6 @@ import com.ecosense.android.featProfile.domain.model.Experience
 
 @Composable
 fun ExperienceItem(experience: Experience) {
-    // TODO: add onClickListener
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
