@@ -39,8 +39,7 @@ class ProfileRepositoryImpl(
                         ?: UIText.StringResource(R.string.em_unknown))
                 )
 
-                response.experiences.isNullOrEmpty() ||
-                        response.completedCampaigns.isNullOrEmpty() -> {
+                response.experiences == null || response.completedCampaigns == null -> {
                     emit(Resource.Error(UIText.StringResource(R.string.em_unknown)))
                 }
 
