@@ -17,12 +17,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.core.graphics.toColorInt
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import coil.size.Scale
@@ -34,28 +36,7 @@ import com.ecosense.android.featDiscoverCampaign.data.util.dateFormatter
 @Composable
 fun CampaignItem(
     campaign: Campaign,
-    search: String?,
-    category: String?,
     sort: String?,
-    onClick: () -> Unit
-) {
-    if (campaign.title.contains(search.toString(), ignoreCase = true)) {
-        SortItem(sort = sort, campaign = campaign, onClick = onClick)
-    } else if (search == null) {
-        if (category == null) {
-            SortItem(sort = sort, campaign = campaign, onClick = onClick)
-        } else {
-            if (category in campaign.category) {
-                SortItem(sort = sort, campaign = campaign, onClick = onClick)
-            }
-        }
-    }
-}
-
-@Composable
-fun SortItem(
-    sort: String?,
-    campaign: Campaign,
     onClick: () -> Unit
 ) {
     if (sort == "" || sort == stringResource(R.string.show_all_campaign)) {
@@ -94,6 +75,7 @@ fun ShowItem(
                 end = MaterialTheme.spacing.medium,
                 bottom = MaterialTheme.spacing.medium
             )
+            .shadow(elevation = 5.dp, shape = RoundedCornerShape(8.dp))
             .clip(shape = RoundedCornerShape(8.dp))
             .clickable(onClick = onClick)
             .background(MaterialTheme.colors.surface)
@@ -127,8 +109,8 @@ fun ShowItem(
                             verticalAlignment = Alignment.CenterVertically,
                             modifier = Modifier
                                 .clip(shape = RoundedCornerShape(10.dp))
-                                .background(Color.Red)
-                                .padding(MaterialTheme.spacing.extraSmall)
+                                .background(Color("#FCAF77".toColorInt()))
+                                .padding(horizontal = MaterialTheme.spacing.extraSmall, vertical = 1.dp)
                         ) {
                             Icon(
                                 imageVector = Icons.Filled.Whatshot,
@@ -150,8 +132,8 @@ fun ShowItem(
                             verticalAlignment = Alignment.CenterVertically,
                             modifier = Modifier
                                 .clip(shape = RoundedCornerShape(10.dp))
-                                .background(Color.Yellow)
-                                .padding(MaterialTheme.spacing.extraSmall)
+                                .background(Color("#FFCC29".toColorInt()))
+                                .padding(horizontal = MaterialTheme.spacing.extraSmall, vertical = 1.dp)
                         ) {
                             Icon(
                                 imageVector = Icons.Filled.NewReleases,
@@ -175,11 +157,7 @@ fun ShowItem(
 
         Column(modifier = Modifier.fillMaxWidth()) {
             Text(
-                text = stringResource(R.string.until_date,
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-                        dateFormatter(campaign.endDate)
-                    else
-                        campaign.endDate),
+                text = stringResource(R.string.until_date, dateFormatter(campaign.endDate)),
                 style = MaterialTheme.typography.caption,
                 modifier = Modifier.padding(bottom = MaterialTheme.spacing.medium)
             )
@@ -199,19 +177,32 @@ fun ShowItem(
                     Text(
                         text = campaign.category[i],
                         style = MaterialTheme.typography.overline,
-                        color = MaterialTheme.colors.onPrimary,
+                        color = Color.White,
                         modifier = Modifier
                             .clip(shape = RoundedCornerShape(10.dp))
                             .background(
-                                if (campaign.category[i] == stringResource(R.string.cat_air_pollution)) {
-                                    Color.Green
-                                } else if (campaign.category[i] == stringResource(R.string.cat_food_waste)) {
-                                    Color.Magenta
-                                } else {
-                                    MaterialTheme.colors.primary
+                                when (campaign.category[i]) {
+                                    stringResource(R.string.cat_water_pollution) -> {
+                                        Color("#206A5D".toColorInt())
+                                    }
+                                    stringResource(R.string.cat_air_pollution) -> {
+                                        Color("#81B214".toColorInt())
+                                    }
+                                    stringResource(R.string.cat_food_waste)  -> {
+                                        Color("#F58634".toColorInt())
+                                    }
+                                    stringResource(R.string.cat_plastic_free) -> {
+                                        Color("#E25DD7".toColorInt())
+                                    }
+                                    stringResource(R.string.cat_energy_efficiency) -> {
+                                        Color("#DB3069".toColorInt())
+                                    }
+                                    else -> {
+                                        MaterialTheme.colors.primary
+                                    }
                                 }
                             )
-                            .padding(MaterialTheme.spacing.extraSmall)
+                            .padding(horizontal = MaterialTheme.spacing.extraSmall, vertical = 1.dp)
                     )
                     Spacer(modifier = Modifier.width(MaterialTheme.spacing.extraSmall))
                 }
@@ -219,7 +210,7 @@ fun ShowItem(
 
             Text(
                 text = stringResource(R.string.change_maker, campaign.participantsCount),
-                style = MaterialTheme.typography.caption,
+                style = MaterialTheme.typography.caption
             )
         }
     }

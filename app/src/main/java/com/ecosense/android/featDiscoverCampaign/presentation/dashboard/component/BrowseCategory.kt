@@ -12,26 +12,29 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.toLowerCase
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.core.graphics.toColorInt
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import coil.size.Scale
 import com.ecosense.android.R
 import com.ecosense.android.core.presentation.theme.spacing
 import com.ecosense.android.destinations.BrowseCampaignScreenDestination
-import com.ecosense.android.featDiscoverCampaign.presentation.dashboard.DiscoverCampaignViewModel
+import com.ecosense.android.featDiscoverCampaign.domain.model.Category
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
 @Composable
 fun BrowseCategory(
     modifier: Modifier = Modifier,
     navigator: DestinationsNavigator,
-    viewModel: DiscoverCampaignViewModel = hiltViewModel()
+    categories: List<Category>
 ) {
     val scrollState = rememberScrollState()
 
@@ -39,7 +42,7 @@ fun BrowseCategory(
         Column {
             Row(
                 modifier = modifier
-                    .width(250.dp)
+                    .width(125.dp)
                     .fillMaxHeight(0.75f)
                     .padding(vertical = MaterialTheme.spacing.small)
             ) {
@@ -47,9 +50,10 @@ fun BrowseCategory(
                     horizontalAlignment = Alignment.Start,
                     modifier = modifier
                         .padding(end = MaterialTheme.spacing.small)
+                        .shadow(elevation = 5.dp, shape = RoundedCornerShape(8.dp))
                         .clip(shape = RoundedCornerShape(8.dp))
                         .clickable(onClick = {
-                            navigator.navigate(BrowseCampaignScreenDestination(search = null, category = null))
+                            navigator.navigate(BrowseCampaignScreenDestination(search = null, categoryId = null))
                         })
                         .background(MaterialTheme.colors.surface)
                         .fillMaxSize()
@@ -62,7 +66,7 @@ fun BrowseCategory(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
-                            text = stringResource(R.string.all_campaign),
+                            text = stringResource(R.string.all),
                             style = MaterialTheme.typography.h5,
                             fontWeight = FontWeight.Bold,
                             color = MaterialTheme.colors.onPrimary,
@@ -80,49 +84,45 @@ fun BrowseCategory(
                     .fillMaxHeight(0.75f)
                     .padding(vertical = MaterialTheme.spacing.small)
             ) {
-                viewModel.categoryList.value.forEachIndexed { index, category ->
-                    if (index < 3) {
-                        Column(
-                            horizontalAlignment = Alignment.CenterHorizontally,
-                            modifier = modifier
-                                .padding(horizontal = MaterialTheme.spacing.small)
-                                .clip(shape = RoundedCornerShape(8.dp))
-                                .clickable(onClick = {
-                                    navigator.navigate(BrowseCampaignScreenDestination(search = null, category = category.name))
-                                })
-                                .background(MaterialTheme.colors.surface)
-                                .fillMaxSize()
-                        ) {
-                            Row(
-                                modifier = modifier
-                                    .width(250.dp)
-                            ) {
-                                Box(modifier = modifier.fillMaxSize()) {
-                                    AsyncImage(
-                                        model = ImageRequest.Builder(LocalContext.current)
-                                            .data(category.photoUrl)
-                                            .crossfade(true)
-                                            .scale(Scale.FILL)
-                                            .build(),
-                                        contentDescription = category.name,
-                                        contentScale = ContentScale.FillWidth,
-                                        modifier = modifier.fillMaxSize()
+                categories.forEachIndexed { _, category ->
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        modifier = modifier
+                            .padding(horizontal = MaterialTheme.spacing.small)
+                            .shadow(elevation = 5.dp, shape = RoundedCornerShape(8.dp))
+                            .clip(shape = RoundedCornerShape(8.dp))
+                            .clickable(onClick = {
+                                navigator.navigate(BrowseCampaignScreenDestination(search = null, categoryId = category.id))
+                            })
+                            .background(MaterialTheme.colors.surface)
+                            .fillMaxSize()
+                    ) {
+                        Row(modifier = Modifier.width(125.dp)) {
+                            Box(modifier = modifier.fillMaxSize()) {
+                                AsyncImage(
+                                    model = ImageRequest.Builder(LocalContext.current)
+                                        .data(category.photoUrl)
+                                        .crossfade(true)
+                                        .scale(Scale.FILL)
+                                        .build(),
+                                    contentDescription = category.name,
+                                    contentScale = ContentScale.Crop,
+                                    modifier = modifier.fillMaxSize()
+                                )
+                                Row(
+                                    modifier = modifier.fillMaxSize(),
+                                    horizontalArrangement = Arrangement.Center,
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    Text(
+                                        text = category.name,
+                                        style = MaterialTheme.typography.caption,
+                                        fontWeight = FontWeight.Bold,
+                                        color = Color.White,
+                                        modifier = modifier
+                                            .background(Color(category.colorHex.toColorInt()))
+                                            .padding(MaterialTheme.spacing.small)
                                     )
-                                    Row(
-                                        modifier = modifier.fillMaxSize(),
-                                        horizontalArrangement = Arrangement.End,
-                                        verticalAlignment = Alignment.CenterVertically
-                                    ) {
-                                        Text(
-                                            text = category.name,
-                                            style = MaterialTheme.typography.subtitle2,
-                                            fontWeight = FontWeight.Bold,
-                                            color = MaterialTheme.colors.onPrimary,
-                                            modifier = modifier
-                                                .background(MaterialTheme.colors.primary)
-                                                .padding(MaterialTheme.spacing.small)
-                                        )
-                                    }
                                 }
                             }
                         }

@@ -4,46 +4,54 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.ecosense.android.core.presentation.util.UIEvent
 import com.ecosense.android.core.util.Resource
-import com.ecosense.android.core.util.UIText
-import com.ecosense.android.featDiscoverCampaign.domain.model.Category
 import com.ecosense.android.featDiscoverCampaign.domain.repository.DiscoverCampaignRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class CategoryCampaignViewModel @Inject constructor(
-    private val repository: DiscoverCampaignRepository
+    private val discoverCampaignRepository: DiscoverCampaignRepository
 ) : ViewModel() {
 
-    private val _categoryList = mutableStateOf(emptyList<Category>())
-    val categoryList: State<List<Category>> = _categoryList
+    private val _state = mutableStateOf(CategoryCampaignScreenState.defaultValue)
+    val state: State<CategoryCampaignScreenState> = _state
 
-    private val _isLoading = mutableStateOf(false)
-    val isLoading: State<Boolean> = _isLoading
-
-    private val _errorMessage = mutableStateOf<UIText>(UIText.DynamicString(""))
-    val errorMessage: State<UIText> = _errorMessage
+    private val _eventFlow = Channel<UIEvent>()
+    val eventFlow = _eventFlow.receiveAsFlow()
 
     init {
-        viewModelScope.launch {
-            repository.getCategory().onEach { result ->
+        getCategory()
+    }
+
+    private var getCategoryJob: Job? = null
+    private fun getCategory() {
+        getCategoryJob?.cancel()
+        getCategoryJob = viewModelScope.launch {
+            discoverCampaignRepository.getCategories().onEach { result ->
                 when (result) {
                     is Resource.Error -> {
-                        result.uiText?.let { _errorMessage.value = it }
-                        result.data?.let { _categoryList.value = it }
-                        _isLoading.value = false
+                        _state.value = state.value.copy(isLoadingCategories = false)
+                        result.uiText?.let { _eventFlow.send(UIEvent.ShowSnackbar(it)) }
                     }
                     is Resource.Loading -> {
-                        result.data?.let { _categoryList.value = it }
-                        _isLoading.value = true
+                        _state.value = state.value.copy(
+                            categories = result.data ?: emptyList(),
+                            isLoadingCategories = true
+                        )
                     }
                     is Resource.Success -> {
-                        result.data?.let { _categoryList.value = it }
-                        _isLoading.value = false
+                        _state.value = state.value.copy(
+                            categories = result.data ?: emptyList(),
+                            isLoadingCategories = false
+                        )
                     }
                 }
             }.launchIn(this)

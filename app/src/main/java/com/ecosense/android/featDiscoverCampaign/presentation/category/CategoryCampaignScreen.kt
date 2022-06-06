@@ -14,12 +14,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.graphics.toColorInt
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
@@ -27,6 +31,7 @@ import coil.size.Scale
 import com.ecosense.android.R
 import com.ecosense.android.core.presentation.theme.spacing
 import com.ecosense.android.destinations.BrowseCampaignScreenDestination
+import com.ecosense.android.featDiscoverCampaign.domain.model.Category
 import com.ecosense.android.featDiscoverCampaign.presentation.component.DiscoverTopBar
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -39,6 +44,9 @@ fun CategoryCampaignScreen(
 ) {
     val scaffoldState = rememberScaffoldState()
     val scrollState = rememberScrollState()
+
+    val state = viewModel.state.value
+    val categories : List<Category> = state.categories
 
     Scaffold(
         topBar = {
@@ -74,9 +82,10 @@ fun CategoryCampaignScreen(
                                 end = MaterialTheme.spacing.medium,
                                 bottom = MaterialTheme.spacing.medium
                             )
+                            .shadow(elevation = 5.dp, shape = RoundedCornerShape(8.dp))
                             .clip(shape = RoundedCornerShape(8.dp))
                             .clickable(onClick = {
-                                navigator.navigate(BrowseCampaignScreenDestination(search = null, category = null))
+                                navigator.navigate(BrowseCampaignScreenDestination(search = null, categoryId = null))
                             })
                             .background(MaterialTheme.colors.surface)
                             .fillMaxWidth()
@@ -84,7 +93,7 @@ fun CategoryCampaignScreen(
                         Column(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .height(128.dp)
+                                .height(105.dp)
                                 .background(MaterialTheme.colors.primary),
                             verticalArrangement = Arrangement.Center,
                             horizontalAlignment = Alignment.CenterHorizontally
@@ -103,7 +112,7 @@ fun CategoryCampaignScreen(
             }
             Row {
                 Column(modifier = Modifier.fillMaxWidth()) {
-                    for (category in viewModel.categoryList.value) {
+                    for (category in categories) {
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
                             modifier = Modifier
@@ -112,9 +121,10 @@ fun CategoryCampaignScreen(
                                     end = MaterialTheme.spacing.medium,
                                     bottom = MaterialTheme.spacing.medium
                                 )
+                                .shadow(elevation = 5.dp, shape = RoundedCornerShape(8.dp))
                                 .clip(shape = RoundedCornerShape(8.dp))
                                 .clickable(onClick = {
-                                    navigator.navigate(BrowseCampaignScreenDestination(search = null, category = category.name))
+                                    navigator.navigate(BrowseCampaignScreenDestination(search = null, categoryId = category.id))
                                 })
                                 .background(MaterialTheme.colors.surface)
                                 .fillMaxWidth()
@@ -122,7 +132,7 @@ fun CategoryCampaignScreen(
                             Column(
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .height(128.dp)
+                                    .height(105.dp)
                             ) {
                                 Box(modifier = Modifier.fillMaxSize()) {
                                     AsyncImage(
@@ -136,17 +146,25 @@ fun CategoryCampaignScreen(
                                         modifier = Modifier.fillMaxSize()
                                     )
                                     Column(
-                                        modifier = Modifier.fillMaxSize(),
+                                        modifier = Modifier
+                                            .fillMaxSize()
+                                            .background(
+                                                Brush.horizontalGradient(
+                                                    colors = listOf(
+                                                        Color(category.colorHex.toColorInt()),
+                                                        Color.Transparent
+                                                    )
+                                                )
+                                            ),
                                         verticalArrangement = Arrangement.Center,
-                                        horizontalAlignment = Alignment.End
+                                        horizontalAlignment = Alignment.Start
                                     ) {
                                         Text(
                                             text = category.name,
                                             fontSize = 18.sp,
                                             fontWeight = FontWeight.Bold,
-                                            color = MaterialTheme.colors.onPrimary,
+                                            color = Color.White,
                                             modifier = Modifier
-                                                .background(MaterialTheme.colors.primary)
                                                 .padding(MaterialTheme.spacing.small)
                                         )
                                     }

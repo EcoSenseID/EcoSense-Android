@@ -1,11 +1,11 @@
-package com.ecosense.android.featDiscoverCampaign.presentation.browse
+package com.ecosense.android.featDiscoverCampaign.presentation.detail
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.ecosense.android.core.util.Resource
 import com.ecosense.android.core.presentation.util.UIEvent
+import com.ecosense.android.core.util.Resource
 import com.ecosense.android.featDiscoverCampaign.domain.repository.DiscoverCampaignRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
@@ -14,43 +14,38 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
-import logcat.logcat
 import javax.inject.Inject
 
 @HiltViewModel
-class BrowseCampaignViewModel @Inject constructor(
+class CampaignDetailViewModel @Inject constructor(
     private val discoverCampaignRepository: DiscoverCampaignRepository
 ) : ViewModel() {
-
-    private val _state = mutableStateOf(BrowseCampaignScreenState.defaultValue)
-    val state: State<BrowseCampaignScreenState> = _state
+    private val _state = mutableStateOf(CampaignDetailScreenState.defaultValue)
+    val state: State<CampaignDetailScreenState> = _state
 
     private val _eventFlow = Channel<UIEvent>()
     val eventFlow = _eventFlow.receiveAsFlow()
 
-    private var getCampaignsJob: Job? = null
-    fun setCampaignsParams(q: String?, categoryId: Int?) {
-        logcat { q ?: "" }
-        logcat { categoryId.toString() }
-        getCampaignsJob?.cancel()
-        getCampaignsJob = viewModelScope.launch {
-            discoverCampaignRepository.getCampaigns(q = q, categoryId = categoryId).onEach { result ->
-                logcat { result::class.java.name }
+    private var setCampaignIdJob: Job? = null
+    fun setCampaignId(id: Int) {
+        setCampaignIdJob?.cancel()
+        setCampaignIdJob = viewModelScope.launch {
+            discoverCampaignRepository.getCampaignDetail(id).onEach { result ->
                 when (result) {
                     is Resource.Error -> {
-                        _state.value = state.value.copy(isLoadingCampaigns = false)
+                        _state.value = state.value.copy(isLoadingCampaignDetail = false)
                         result.uiText?.let { _eventFlow.send(UIEvent.ShowSnackbar(it)) }
                     }
                     is Resource.Loading -> {
                         _state.value = state.value.copy(
-                            campaigns = result.data ?: emptyList(),
-                            isLoadingCampaigns = true
+                            campaignDetail = result.data ?: state.value.campaignDetail,
+                            isLoadingCampaignDetail = true
                         )
                     }
                     is Resource.Success -> {
                         _state.value = state.value.copy(
-                            campaigns = result.data ?: emptyList(),
-                            isLoadingCampaigns = false
+                            campaignDetail = result.data ?: state.value.campaignDetail,
+                            isLoadingCampaignDetail = false
                         )
                     }
                 }
