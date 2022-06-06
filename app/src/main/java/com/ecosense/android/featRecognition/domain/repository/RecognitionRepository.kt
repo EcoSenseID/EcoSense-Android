@@ -2,18 +2,23 @@ package com.ecosense.android.featRecognition.domain.repository
 
 import android.graphics.Bitmap
 import com.ecosense.android.core.util.Resource
-import com.ecosense.android.featRecognition.domain.model.RecognitionResult
-import com.ecosense.android.featRecognition.domain.model.SavedRecognitionResult
+import com.ecosense.android.core.util.SimpleResource
+import com.ecosense.android.featRecognition.domain.model.Disease
+import com.ecosense.android.featRecognition.domain.model.Recognisable
+import com.ecosense.android.featRecognition.domain.model.RecognisableDetail
+import com.ecosense.android.featRecognition.domain.model.SavedRecognisable
 import kotlinx.coroutines.flow.Flow
 
 interface RecognitionRepository {
-    fun analyzeDiseases(
+    fun recognise(
         bitmap: Bitmap
-    ): List<RecognitionResult>
+    ): List<Recognisable>
 
-    fun getRecognitionHistoryList(): Flow<Resource<List<SavedRecognitionResult>>>
+    fun getSavedRecognisables(): Flow<Resource<List<SavedRecognisable>>>
 
-    suspend fun saveRecognitionResult(recognitionResult: RecognitionResult)
+    fun getDisease(label: String): Disease?
 
-    suspend fun unsaveRecognitionResult(recognitionResult: SavedRecognitionResult)
+    suspend fun saveRecognisable(recognisable: Recognisable): Flow<SimpleResource>
+
+    suspend fun unsaveRecognisable(recognisableDetail: RecognisableDetail): Flow<SimpleResource>
 }

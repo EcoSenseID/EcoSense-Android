@@ -1,4 +1,4 @@
-package com.ecosense.android.featRecognition.presentation.component
+package com.ecosense.android.featRecognition.presentation.recognition.component
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.*
@@ -10,11 +10,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
 import com.ecosense.android.R
 
 @Composable
-fun SavedRecognitionTopBar(
+fun SavedRecognisablesTopBar(
     modifier: Modifier = Modifier,
     isLoading: Boolean,
     onBackClick: () -> Unit,
@@ -22,7 +21,6 @@ fun SavedRecognitionTopBar(
     Column(modifier = modifier.fillMaxWidth()) {
         TopAppBar(
             backgroundColor = MaterialTheme.colors.surface,
-            elevation = 0.dp,
             modifier = Modifier.fillMaxWidth()
         ) {
             Row(

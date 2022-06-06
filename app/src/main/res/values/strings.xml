@@ -127,7 +127,7 @@
     <string name="open_app_settings">Open app settings</string>
     <string name="recognising">I\'m trying to recognise this one…</string>
     <string name="recognition_tip">Tip: move the camera close enough to the plant and make sure it is well lit</string>
-    <string name="save_result">Save result</string>
+    <string name="save_result">Save Result</string>
     <string name="recognised_title">Hmm, I think this is</string>
     <string name="disease_apple_scab">Apple with Scab</string>
     <string name="disease_apple_black_rot">Apple with Black Rot</string>
@@ -174,4 +174,13 @@
     <string name="empty_experiences">Nothing to show yet. Let\'s earn experiences by joining campaigns!</string>
     <string name="empty_history">No histories yet. Finished campaigns will be shown here</string>
     <string name="empty_saved_recognition_results">There\'s no saved recognition results yet</string>
+    <string name="saved_recognition_detail">Saved Recognition Detail</string>
+    <string name="em_data_not_found">Data not found</string>
+    <string name="saving">Saving…</string>
+    <string name="delete_recognition_result">Delete recognition result</string>
+    <string name="recognition_result_detail">Recognition Result Detail</string>
+    <string name="learn_more">Learn More</string>
+    <string name="symptoms">Symptoms</string>
+    <string name="preventive_measures">Preventive Measures</string>
+    <string name="treatments">Treatments</string>
 </resources>

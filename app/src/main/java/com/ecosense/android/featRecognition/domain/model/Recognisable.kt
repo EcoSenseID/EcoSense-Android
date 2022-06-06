@@ -1,8 +1,9 @@
 package com.ecosense.android.featRecognition.domain.model
 
-data class SavedRecognitionResult(
-    val id: Int? = null,
+import com.ecosense.android.core.util.UIText
+
+data class Recognisable(
     val label: String,
     val confidencePercent: Int,
-    val timeInMillis: Long,
+    val readableName: UIText?,
 )

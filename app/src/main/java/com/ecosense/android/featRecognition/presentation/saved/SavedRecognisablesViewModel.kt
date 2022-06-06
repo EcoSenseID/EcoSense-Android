@@ -17,12 +17,12 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class SavedRecognitionViewModel @Inject constructor(
+class SavedRecognisablesViewModel @Inject constructor(
     private val recognitionRepository: RecognitionRepository
 ) : ViewModel() {
 
-    private val _state = mutableStateOf(SavedRecognitionScreenState.defaultValue)
-    val state: State<SavedRecognitionScreenState> = _state
+    private val _state = mutableStateOf(SavedRecognisablesScreenState.defaultValue)
+    val state: State<SavedRecognisablesScreenState> = _state
 
     private val _eventFlow = Channel<UIEvent>()
     val eventFlow = _eventFlow.receiveAsFlow()
@@ -35,7 +35,7 @@ class SavedRecognitionViewModel @Inject constructor(
     private fun getHistoryList() {
         getHistoryListJob?.cancel()
         getHistoryListJob = viewModelScope.launch {
-            recognitionRepository.getRecognitionHistoryList().onEach { result ->
+            recognitionRepository.getSavedRecognisables().onEach { result ->
                 when (result) {
                     is Resource.Error -> {
                         _state.value = state.value.copy(isLoading = false)
@@ -49,7 +49,7 @@ class SavedRecognitionViewModel @Inject constructor(
                         // TODO: create sorting feature
                         _state.value = state.value.copy(
                             isLoading = false,
-                            resultList = result.data?.sortedByDescending { it.timeInMillis }
+                            savedRecognisables = result.data?.sortedByDescending { it.timeInMillis }
                                 ?: emptyList()
                         )
                     }

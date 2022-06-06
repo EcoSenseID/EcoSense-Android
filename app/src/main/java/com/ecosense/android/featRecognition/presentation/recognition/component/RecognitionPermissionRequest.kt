@@ -1,4 +1,4 @@
-package com.ecosense.android.featRecognition.presentation.component
+package com.ecosense.android.featRecognition.presentation.recognition.component
 
 import android.content.Intent
 import android.net.Uri
