@@ -20,7 +20,7 @@ import logcat.logcat
 import java.util.concurrent.Executors
 
 @Composable
-fun DiseaseRecognitionPreviewView(
+fun RecognitionPreviewView(
     modifier: Modifier = Modifier,
     onAnalyze: (Bitmap) -> Unit
 ) {

@@ -1,21 +1,19 @@
 package com.ecosense.android.featRecognition.presentation.recognition.component
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.TopAppBar
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.History
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.ecosense.android.R
 
 @Composable
-fun DiseaseRecognitionTopBar(
+fun RecognitionTopBar(
     modifier: Modifier = Modifier,
     onHistoryClick: () -> Unit,
 ) {
@@ -32,12 +30,26 @@ fun DiseaseRecognitionTopBar(
             ) {
                 Spacer(modifier = Modifier.weight(1f))
 
-                IconButton(onClick = onHistoryClick) {
-                    Icon(
-                        imageVector = Icons.Default.History,
-                        contentDescription = stringResource(R.string.history),
-                        tint = MaterialTheme.colors.onSurface
-                    )
+                Text(
+                    text = stringResource(R.string.ecobot),
+                    style = MaterialTheme.typography.h6,
+                    fontWeight = FontWeight.Bold,
+                )
+
+                Row(
+                    horizontalArrangement = Arrangement.End,
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier
+                        .weight(1f)
+                        .fillMaxHeight(),
+                ) {
+                    IconButton(onClick = onHistoryClick) {
+                        Icon(
+                            imageVector = Icons.Default.History,
+                            contentDescription = stringResource(R.string.history),
+                            tint = MaterialTheme.colors.onSurface
+                        )
+                    }
                 }
             }
         }

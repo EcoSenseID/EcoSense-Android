@@ -24,7 +24,7 @@ import com.google.accompanist.permissions.PermissionState
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
-fun DiseaseRecognitionPermissionRequest(
+fun RecognitionPermissionRequest(
     modifier: Modifier = Modifier,
     camPermission: PermissionState,
 ) {

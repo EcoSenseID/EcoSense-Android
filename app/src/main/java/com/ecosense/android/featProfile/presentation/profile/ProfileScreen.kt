@@ -28,6 +28,7 @@ import com.ecosense.android.R
 import com.ecosense.android.core.presentation.theme.spacing
 import com.ecosense.android.core.presentation.util.UIEvent
 import com.ecosense.android.core.presentation.util.asString
+import com.ecosense.android.destinations.CampaignDetailScreenDestination
 import com.ecosense.android.destinations.EditProfileScreenDestination
 import com.ecosense.android.featProfile.presentation.profile.component.ExperiencesTab
 import com.ecosense.android.featProfile.presentation.profile.component.HistoryTab
@@ -71,7 +72,7 @@ fun ProfileScreen(
             content = {
                 HistoryTab(
                     campaigns = state.contributions.completedCampaigns,
-                    navigator = navigator
+                    onItemClick = { navigator.navigate(CampaignDetailScreenDestination(it.id)) }
                 )
             }
         )

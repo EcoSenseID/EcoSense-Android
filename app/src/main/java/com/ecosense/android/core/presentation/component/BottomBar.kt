@@ -19,8 +19,8 @@ import com.ecosense.android.R
 import com.ecosense.android.appCurrentDestinationAsState
 import com.ecosense.android.destinations.Destination
 import com.ecosense.android.destinations.DiscoverCampaignScreenDestination
-import com.ecosense.android.destinations.DiseaseRecognitionScreenDestination
 import com.ecosense.android.destinations.ProfileScreenDestination
+import com.ecosense.android.destinations.RecognitionScreenDestination
 import com.ecosense.android.startAppDestination
 import com.ramcosta.composedestinations.navigation.navigateTo
 import com.ramcosta.composedestinations.spec.DirectionDestinationSpec
@@ -69,8 +69,8 @@ private enum class BottomBarDestination(
         label = R.string.campaign
     ),
 
-    DiseaseRecognition(
-        direction = DiseaseRecognitionScreenDestination,
+    Recognition(
+        direction = RecognitionScreenDestination,
         icon = Icons.Outlined.Eco,
         selectedIcon = Icons.Filled.Eco,
         label = R.string.plant
