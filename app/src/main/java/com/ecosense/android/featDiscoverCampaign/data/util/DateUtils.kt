@@ -32,34 +32,15 @@ fun dateFormatter(date: String): String {
     }
 }
 
-@SuppressLint("SimpleDateFormat")
+@RequiresApi(Build.VERSION_CODES.O)
 fun countDays(date: String) : String {
-    return if (date == "") {
-        ""
-    } else {
-        val format = SimpleDateFormat("yyyy/MM/dd HH:mm:ss")
+    val start = LocalDateTime.now()
+    val end = Instant.ofEpochSecond(date.toLong())
+        .atZone(ZoneId.systemDefault())
+        .toLocalDateTime()
 
-        val utc = TimeZone.getTimeZone("UTC")
-        val sourceFormat = SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy")
-        val destFormat = SimpleDateFormat("yyyy/MM/dd HH:mm:ss")
-        sourceFormat.timeZone = utc
-        val convertedDate = sourceFormat.parse(Calendar.getInstance().time.toString())
-        val convertedDate2 =  destFormat.format(convertedDate)
-        val currentDate = format.parse(convertedDate2)
+    val count = Duration.between(start, end).toHours().toDouble()
+    val result = ceil(count / 24)
 
-        val endDate = format.parse(date)
-
-        val days = (endDate.time - currentDate.time) / 3600 / 24
-
-        days.toString()
-    }
-}
-
-fun currentDateParser(date: String) : String {
-    val utc = TimeZone.getTimeZone("UTC")
-    val sourceFormat = SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy")
-    val destFormat = SimpleDateFormat("yyyy/MM/dd HH:mm:ss")
-    sourceFormat.timeZone = utc
-    val convertedDate = sourceFormat.parse(date)
-    return destFormat.format(convertedDate)
+    return result.toInt().toString()
 }

@@ -80,28 +80,21 @@ fun OnGoingTasks(
                                 horizontalArrangement = Arrangement.SpaceBetween
                             ) {
                                 Text(
-                                    text = stringResource(R.string.days_left, tasks[i].campaignEndDate),
+                                    text =
+                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                        stringResource(
+                                            R.string.days_left,
+                                            countDays(tasks[i].campaignEndDate)
+                                        )
+                                    } else
+                                        "",
                                     style = MaterialTheme.typography.caption
                                 )
                                 Text(
-                                    text = stringResource(R.string.until_date, tasks[i].campaignEndDate),
+                                    text = stringResource(R.string.until_date, dateFormatter(tasks[i].campaignEndDate)),
                                     style = MaterialTheme.typography.caption
                                 )
                             }
-//                            Row(
-//                                modifier = Modifier.fillMaxSize(),
-//                                verticalAlignment = Alignment.CenterVertically,
-//                                horizontalArrangement = Arrangement.SpaceBetween
-//                            ) {
-//                                Text(
-//                                    text = stringResource(R.string.days_left, countDays(tasks[i].campaignEndDate)),
-//                                    style = MaterialTheme.typography.caption
-//                                )
-//                                Text(
-//                                    text = stringResource(R.string.until_date, dateFormatter(tasks[i].campaignEndDate)),
-//                                    style = MaterialTheme.typography.caption
-//                                )
-//                            }
                         }
                     }
                 }
