@@ -1,280 +1,37 @@
 package com.ecosense.android.featRecognition.data.source
 
+import android.content.Context
 import com.ecosense.android.R
-import com.ecosense.android.core.util.UIText
+import com.ecosense.android.featRecognition.data.model.DiseasesDto
 import com.ecosense.android.featRecognition.domain.model.Disease
+import com.google.gson.GsonBuilder
+import logcat.asLog
+import logcat.logcat
 
-object DiseaseDataSource {
-    fun getDisease(label: String): Disease? {
-        return diseaseCategories.find { it.label == label }
+class DiseaseDataSource(
+    appContext: Context
+) {
+    private val diseasesList = mutableListOf<Disease>()
+
+    init {
+        try {
+            val inputStream = appContext.resources.openRawResource(R.raw.diseases)
+            val json = inputStream.bufferedReader().use { it.readText() }
+
+            val diseases = GsonBuilder()
+                .create()
+                .fromJson(json, DiseasesDto::class.java)
+                .map { it.toDisease() }
+
+            diseasesList.addAll(diseases)
+
+            inputStream.close()
+        } catch (e: Exception) {
+            logcat { e.asLog() }
+        }
     }
 
-    private val diseaseCategories = listOf(
-        Disease(
-            label = "Apple___Apple_scab",
-            readableName = UIText.StringResource(R.string.disease_apple_scab),
-            symptoms = UIText.DynamicString("Symptoms lorem ipsum dolor sit amet"),
-            treatments = UIText.DynamicString("Treatments lorem ipsum dolor sit amet"),
-            preventiveMeasures = UIText.DynamicString("Preventive Measures lorem ipsum dolor sit amet"),
-        ),
-        Disease(
-            label = "Apple___Black_rot",
-            readableName = UIText.StringResource(R.string.disease_apple_black_rot),
-            symptoms = UIText.DynamicString("Symptoms lorem ipsum dolor sit amet"),
-            treatments = UIText.DynamicString("Treatments lorem ipsum dolor sit amet"),
-            preventiveMeasures = UIText.DynamicString("Preventive Measures lorem ipsum dolor sit amet"),
-        ),
-        Disease(
-            label = "Apple___Cedar_apple_rust",
-            readableName = UIText.StringResource(R.string.disease_apple_cedar_apple_rust),
-            symptoms = UIText.DynamicString("Symptoms lorem ipsum dolor sit amet"),
-            treatments = UIText.DynamicString("Treatments lorem ipsum dolor sit amet"),
-            preventiveMeasures = UIText.DynamicString("Preventive Measures lorem ipsum dolor sit amet"),
-        ),
-        Disease(
-            label = "Apple___healthy",
-            readableName = UIText.StringResource(R.string.disease_apple_healthy),
-            symptoms = UIText.DynamicString("Symptoms lorem ipsum dolor sit amet"),
-            treatments = UIText.DynamicString("Treatments lorem ipsum dolor sit amet"),
-            preventiveMeasures = UIText.DynamicString("Preventive Measures lorem ipsum dolor sit amet"),
-        ),
-        Disease(
-            label = "Blueberry___healthy",
-            readableName = UIText.StringResource(R.string.disease_blueberry_healthy),
-            symptoms = UIText.DynamicString("Symptoms lorem ipsum dolor sit amet"),
-            treatments = UIText.DynamicString("Treatments lorem ipsum dolor sit amet"),
-            preventiveMeasures = UIText.DynamicString("Preventive Measures lorem ipsum dolor sit amet"),
-        ),
-        Disease(
-            label = "Cherry_(including_sour)___healthy",
-            readableName = UIText.StringResource(R.string.disease_cherry_inc_sour_healthy),
-            symptoms = UIText.DynamicString("Symptoms lorem ipsum dolor sit amet"),
-            treatments = UIText.DynamicString("Treatments lorem ipsum dolor sit amet"),
-            preventiveMeasures = UIText.DynamicString("Preventive Measures lorem ipsum dolor sit amet"),
-        ),
-        Disease(
-            label = "Cherry_(including_sour)___Powdery_mildew",
-            readableName = UIText.StringResource(R.string.disease_cherry_inc_sour_powdery_mildew),
-            symptoms = UIText.DynamicString("Symptoms lorem ipsum dolor sit amet"),
-            treatments = UIText.DynamicString("Treatments lorem ipsum dolor sit amet"),
-            preventiveMeasures = UIText.DynamicString("Preventive Measures lorem ipsum dolor sit amet"),
-        ),
-        Disease(
-            label = "Corn_(maize)___Cercospora_leaf_spot Gray_leaf_spot",
-            readableName = UIText.StringResource(R.string.disease_corn_maize_cercospora),
-            symptoms = UIText.DynamicString("Symptoms lorem ipsum dolor sit amet"),
-            treatments = UIText.DynamicString("Treatments lorem ipsum dolor sit amet"),
-            preventiveMeasures = UIText.DynamicString("Preventive Measures lorem ipsum dolor sit amet"),
-        ),
-        Disease(
-            label = "Corn_(maize)___Common_rust_",
-            readableName = UIText.StringResource(R.string.disease_corn_maize_common_rust),
-            symptoms = UIText.DynamicString("Symptoms lorem ipsum dolor sit amet"),
-            treatments = UIText.DynamicString("Treatments lorem ipsum dolor sit amet"),
-            preventiveMeasures = UIText.DynamicString("Preventive Measures lorem ipsum dolor sit amet"),
-        ),
-        Disease(
-            label = "Corn_(maize)___healthy",
-            readableName = UIText.StringResource(R.string.disease_corn_maize_healthy),
-            symptoms = UIText.DynamicString("Symptoms lorem ipsum dolor sit amet"),
-            treatments = UIText.DynamicString("Treatments lorem ipsum dolor sit amet"),
-            preventiveMeasures = UIText.DynamicString("Preventive Measures lorem ipsum dolor sit amet"),
-        ),
-        Disease(
-            label = "Corn_(maize)___Northern_Leaf_Blight",
-            readableName = UIText.StringResource(R.string.disease_corn_maize_northern_leaf_blight),
-            symptoms = UIText.DynamicString("Symptoms lorem ipsum dolor sit amet"),
-            treatments = UIText.DynamicString("Treatments lorem ipsum dolor sit amet"),
-            preventiveMeasures = UIText.DynamicString("Preventive Measures lorem ipsum dolor sit amet"),
-        ),
-        Disease(
-            label = "Grape___Black_rot",
-            readableName = UIText.StringResource(R.string.disease_grape_black_rot),
-            symptoms = UIText.DynamicString("Symptoms lorem ipsum dolor sit amet"),
-            treatments = UIText.DynamicString("Treatments lorem ipsum dolor sit amet"),
-            preventiveMeasures = UIText.DynamicString("Preventive Measures lorem ipsum dolor sit amet"),
-        ),
-        Disease(
-            label = "Grape___Esca_(Black_Measles)",
-            readableName = UIText.StringResource(R.string.disease_grape_esca),
-            symptoms = UIText.DynamicString("Symptoms lorem ipsum dolor sit amet"),
-            treatments = UIText.DynamicString("Treatments lorem ipsum dolor sit amet"),
-            preventiveMeasures = UIText.DynamicString("Preventive Measures lorem ipsum dolor sit amet"),
-        ),
-        Disease(
-            label = "Grape___healthy",
-            readableName = UIText.StringResource(R.string.disease_grape_healthy),
-            symptoms = UIText.DynamicString("Symptoms lorem ipsum dolor sit amet"),
-            treatments = UIText.DynamicString("Treatments lorem ipsum dolor sit amet"),
-            preventiveMeasures = UIText.DynamicString("Preventive Measures lorem ipsum dolor sit amet"),
-        ),
-        Disease(
-            label = "Grape___Leaf_blight_(Isariopsis_Leaf_Spot)",
-            readableName = UIText.StringResource(R.string.disease_grape_leaf_blight),
-            symptoms = UIText.DynamicString("Symptoms lorem ipsum dolor sit amet"),
-            treatments = UIText.DynamicString("Treatments lorem ipsum dolor sit amet"),
-            preventiveMeasures = UIText.DynamicString("Preventive Measures lorem ipsum dolor sit amet"),
-        ),
-        Disease(
-            label = "Orange___Haunglongbing_(Citrus_greening)",
-            readableName = UIText.StringResource(R.string.disease_orange_haunglongbing),
-            symptoms = UIText.DynamicString("Symptoms lorem ipsum dolor sit amet"),
-            treatments = UIText.DynamicString("Treatments lorem ipsum dolor sit amet"),
-            preventiveMeasures = UIText.DynamicString("Preventive Measures lorem ipsum dolor sit amet"),
-        ),
-        Disease(
-            label = "Peach___Bacterial_spot",
-            readableName = UIText.StringResource(R.string.disease_peach_bacterial_spot),
-            symptoms = UIText.DynamicString("Symptoms lorem ipsum dolor sit amet"),
-            treatments = UIText.DynamicString("Treatments lorem ipsum dolor sit amet"),
-            preventiveMeasures = UIText.DynamicString("Preventive Measures lorem ipsum dolor sit amet"),
-        ),
-        Disease(
-            label = "Peach___healthy",
-            readableName = UIText.StringResource(R.string.disease_peach_healthy),
-            symptoms = UIText.DynamicString("Symptoms lorem ipsum dolor sit amet"),
-            treatments = UIText.DynamicString("Treatments lorem ipsum dolor sit amet"),
-            preventiveMeasures = UIText.DynamicString("Preventive Measures lorem ipsum dolor sit amet"),
-        ),
-        Disease(
-            label = "Pepper,_bell___Bacterial_spot",
-            readableName = UIText.StringResource(R.string.disease_bell_paper_bacterial_spot),
-            symptoms = UIText.DynamicString("Symptoms lorem ipsum dolor sit amet"),
-            treatments = UIText.DynamicString("Treatments lorem ipsum dolor sit amet"),
-            preventiveMeasures = UIText.DynamicString("Preventive Measures lorem ipsum dolor sit amet"),
-        ),
-        Disease(
-            label = "Pepper,_bell___healthy",
-            readableName = UIText.StringResource(R.string.disease_bell_pepper_healthy),
-            symptoms = UIText.DynamicString("Symptoms lorem ipsum dolor sit amet"),
-            treatments = UIText.DynamicString("Treatments lorem ipsum dolor sit amet"),
-            preventiveMeasures = UIText.DynamicString("Preventive Measures lorem ipsum dolor sit amet"),
-        ),
-        Disease(
-            label = "Potato___Early_blight",
-            readableName = UIText.StringResource(R.string.disease_potato_early_blight),
-            symptoms = UIText.DynamicString("Symptoms lorem ipsum dolor sit amet"),
-            treatments = UIText.DynamicString("Treatments lorem ipsum dolor sit amet"),
-            preventiveMeasures = UIText.DynamicString("Preventive Measures lorem ipsum dolor sit amet"),
-        ),
-        Disease(
-            label = "Potato___healthy",
-            readableName = UIText.StringResource(R.string.disease_potato_healthy),
-            symptoms = UIText.DynamicString("Symptoms lorem ipsum dolor sit amet"),
-            treatments = UIText.DynamicString("Treatments lorem ipsum dolor sit amet"),
-            preventiveMeasures = UIText.DynamicString("Preventive Measures lorem ipsum dolor sit amet"),
-        ),
-        Disease(
-            label = "Potato___Late_blight",
-            readableName = UIText.StringResource(R.string.disease_potato_late_blight),
-            symptoms = UIText.DynamicString("Symptoms lorem ipsum dolor sit amet"),
-            treatments = UIText.DynamicString("Treatments lorem ipsum dolor sit amet"),
-            preventiveMeasures = UIText.DynamicString("Preventive Measures lorem ipsum dolor sit amet"),
-        ),
-        Disease(
-            label = "Raspberry___healthy",
-            readableName = UIText.StringResource(R.string.disease_raspberry_healthy),
-            symptoms = UIText.DynamicString("Symptoms lorem ipsum dolor sit amet"),
-            treatments = UIText.DynamicString("Treatments lorem ipsum dolor sit amet"),
-            preventiveMeasures = UIText.DynamicString("Preventive Measures lorem ipsum dolor sit amet"),
-        ),
-        Disease(
-            label = "Soybean___healthy",
-            readableName = UIText.StringResource(R.string.disease_soybean_healthy),
-            symptoms = UIText.DynamicString("Symptoms lorem ipsum dolor sit amet"),
-            treatments = UIText.DynamicString("Treatments lorem ipsum dolor sit amet"),
-            preventiveMeasures = UIText.DynamicString("Preventive Measures lorem ipsum dolor sit amet"),
-        ),
-        Disease(
-            label = "Squash___Powdery_mildew",
-            readableName = UIText.StringResource(R.string.disease_squash_powdery_mildew),
-            symptoms = UIText.DynamicString("Symptoms lorem ipsum dolor sit amet"),
-            treatments = UIText.DynamicString("Treatments lorem ipsum dolor sit amet"),
-            preventiveMeasures = UIText.DynamicString("Preventive Measures lorem ipsum dolor sit amet"),
-        ),
-        Disease(
-            label = "Strawberry___healthy",
-            readableName = UIText.StringResource(R.string.disease_strawberry_healthy),
-            symptoms = UIText.DynamicString("Symptoms lorem ipsum dolor sit amet"),
-            treatments = UIText.DynamicString("Treatments lorem ipsum dolor sit amet"),
-            preventiveMeasures = UIText.DynamicString("Preventive Measures lorem ipsum dolor sit amet"),
-        ),
-        Disease(
-            label = "Strawberry___Leaf_scorch",
-            readableName = UIText.StringResource(R.string.disease_strawberry_leaf_scorch),
-            symptoms = UIText.DynamicString("Symptoms lorem ipsum dolor sit amet"),
-            treatments = UIText.DynamicString("Treatments lorem ipsum dolor sit amet"),
-            preventiveMeasures = UIText.DynamicString("Preventive Measures lorem ipsum dolor sit amet"),
-        ),
-        Disease(
-            label = "Tomato___Bacterial_spot",
-            readableName = UIText.StringResource(R.string.disease_tomato_bacterial_spot),
-            symptoms = UIText.DynamicString("Symptoms lorem ipsum dolor sit amet"),
-            treatments = UIText.DynamicString("Treatments lorem ipsum dolor sit amet"),
-            preventiveMeasures = UIText.DynamicString("Preventive Measures lorem ipsum dolor sit amet"),
-        ),
-        Disease(
-            label = "Tomato___Early_blight",
-            readableName = UIText.StringResource(R.string.disease_tomato_early_blight),
-            symptoms = UIText.DynamicString("Symptoms lorem ipsum dolor sit amet"),
-            treatments = UIText.DynamicString("Treatments lorem ipsum dolor sit amet"),
-            preventiveMeasures = UIText.DynamicString("Preventive Measures lorem ipsum dolor sit amet"),
-        ),
-        Disease(
-            label = "Tomato___healthy",
-            readableName = UIText.StringResource(R.string.disease_tomato_healthy),
-            symptoms = UIText.DynamicString("Symptoms lorem ipsum dolor sit amet"),
-            treatments = UIText.DynamicString("Treatments lorem ipsum dolor sit amet"),
-            preventiveMeasures = UIText.DynamicString("Preventive Measures lorem ipsum dolor sit amet"),
-        ),
-        Disease(
-            label = "Tomato___Late_blight",
-            readableName = UIText.StringResource(R.string.disease_tomato_late_blight),
-            symptoms = UIText.DynamicString("Symptoms lorem ipsum dolor sit amet"),
-            treatments = UIText.DynamicString("Treatments lorem ipsum dolor sit amet"),
-            preventiveMeasures = UIText.DynamicString("Preventive Measures lorem ipsum dolor sit amet"),
-        ),
-        Disease(
-            label = "Tomato___Leaf_Mold",
-            readableName = UIText.StringResource(R.string.disease_tomato_leaf_mold),
-            symptoms = UIText.DynamicString("Symptoms lorem ipsum dolor sit amet"),
-            treatments = UIText.DynamicString("Treatments lorem ipsum dolor sit amet"),
-            preventiveMeasures = UIText.DynamicString("Preventive Measures lorem ipsum dolor sit amet"),
-        ),
-        Disease(
-            label = "Tomato___Septoria_leaf_spot",
-            readableName = UIText.StringResource(R.string.disease_tomato_septoria_leaf_spot),
-            symptoms = UIText.DynamicString("Symptoms lorem ipsum dolor sit amet"),
-            treatments = UIText.DynamicString("Treatments lorem ipsum dolor sit amet"),
-            preventiveMeasures = UIText.DynamicString("Preventive Measures lorem ipsum dolor sit amet"),
-        ),
-        Disease(
-            label = "Tomato___Spider_mites Two-spotted_spider_mite",
-            readableName = UIText.StringResource(R.string.disease_tomato_spider_mites),
-            symptoms = UIText.DynamicString("Symptoms lorem ipsum dolor sit amet"),
-            treatments = UIText.DynamicString("Treatments lorem ipsum dolor sit amet"),
-            preventiveMeasures = UIText.DynamicString("Preventive Measures lorem ipsum dolor sit amet"),
-        ),
-        Disease(
-            label = "Tomato___Target_Spot",
-            readableName = UIText.StringResource(R.string.disease_tomato_target_spot),
-            symptoms = UIText.DynamicString("Symptoms lorem ipsum dolor sit amet"),
-            treatments = UIText.DynamicString("Treatments lorem ipsum dolor sit amet"),
-            preventiveMeasures = UIText.DynamicString("Preventive Measures lorem ipsum dolor sit amet"),
-        ),
-        Disease(
-            label = "Tomato___Tomato_mosaic_virus",
-            readableName = UIText.StringResource(R.string.disease_tomato_tomato_mosaic_virus),
-            symptoms = UIText.DynamicString("Symptoms lorem ipsum dolor sit amet"),
-            treatments = UIText.DynamicString("Treatments lorem ipsum dolor sit amet"),
-            preventiveMeasures = UIText.DynamicString("Preventive Measures lorem ipsum dolor sit amet"),
-        ),
-        Disease(
-            label = "Tomato___Tomato_Yellow_Leaf_Curl_Virus",
-            readableName = UIText.StringResource(R.string.disease_tomato_tomato_yellow_leaf_curl_virus),
-            symptoms = UIText.DynamicString("Symptoms lorem ipsum dolor sit amet"),
-            treatments = UIText.DynamicString("Treatments lorem ipsum dolor sit amet"),
-            preventiveMeasures = UIText.DynamicString("Preventive Measures lorem ipsum dolor sit amet"),
-        ),
-    )
+    fun getDisease(label: String): Disease? {
+        return diseasesList.find { it.label == label }
+    }
 }

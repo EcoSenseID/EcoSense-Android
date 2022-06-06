@@ -9,8 +9,6 @@ import com.ecosense.android.core.util.Resource
 import com.ecosense.android.core.util.SimpleResource
 import com.ecosense.android.core.util.UIText
 import com.ecosense.android.featRecognition.data.source.DiseaseDataSource
-import com.ecosense.android.featRecognition.data.util.toRecognisable
-import com.ecosense.android.featRecognition.data.util.toSavedRecognisable
 import com.ecosense.android.featRecognition.domain.model.Disease
 import com.ecosense.android.featRecognition.domain.model.Recognisable
 import com.ecosense.android.featRecognition.domain.model.RecognisableDetail
@@ -27,7 +25,8 @@ import org.tensorflow.lite.support.model.Model
 
 class RecognitionRepositoryImpl(
     private val appContext: Context,
-    private val savedRecognisableDao: SavedRecognisableDao
+    private val savedRecognisableDao: SavedRecognisableDao,
+    private val diseaseDataSource: DiseaseDataSource
 ) : RecognitionRepository {
 
     private val plantDiseaseModel by lazy {
@@ -50,13 +49,29 @@ class RecognitionRepositoryImpl(
             .process(TensorImage.fromBitmap(bitmap))
             .probabilityAsCategoryList
             .apply { sortByDescending { it.score } }
-            .map { it.toRecognisable() }
+            .map {
+                val disease = diseaseDataSource.getDisease(it.label)
+                Recognisable(
+                    label = it.label,
+                    confidencePercent = (it.score * 100).toInt(),
+                    readableName = disease?.readableName
+                )
+            }
     }
 
     override fun getSavedRecognisables(): Flow<Resource<List<SavedRecognisable>>> = flow {
         emit(Resource.Loading())
         try {
-            val historyList = savedRecognisableDao.findAll().map { it.toSavedRecognisable() }
+            val historyList = savedRecognisableDao.findAll().map {
+                val disease = diseaseDataSource.getDisease(it.label)
+                SavedRecognisable(
+                    id = it.id,
+                    label = it.label,
+                    timeInMillis = it.timeInMillis,
+                    readableName = disease?.readableName,
+                    confidencePercent = it.confidencePercent,
+                )
+            }
             emit(Resource.Success(historyList))
         } catch (e: Exception) {
             emit(Resource.Error(UIText.StringResource(R.string.em_unknown)))
@@ -64,7 +79,7 @@ class RecognitionRepositoryImpl(
     }
 
     override fun getDisease(label: String): Disease? {
-        return DiseaseDataSource.getDisease(label)
+        return diseaseDataSource.getDisease(label)
     }
 
     override suspend fun saveRecognisable(
