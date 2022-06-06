@@ -33,18 +33,19 @@ interface DiscoverApi {
     @POST("proof")
     suspend fun setCompletionProof(
         @Header("Authorization") bearerToken: String,
-        @Part("photo") photo: MultipartBody.Part,
-        @Part("caption") caption: RequestBody,
+        @Part photo: MultipartBody.Part?,
+        @Part("caption") caption: RequestBody?,
         @Part("taskId") taskId: Int
     ): CompletionProofDto
 
-
+    @FormUrlEncoded
     @POST("joincampaign")
     suspend fun setJoinCampaign(
         @Header("Authorization") bearerToken: String,
         @Field("campaignId") campaignId: Int
     ): JoinCampaignDto
 
+    @FormUrlEncoded
     @POST("completecampaign")
     suspend fun setCompleteCampaign(
         @Header("Authorization") bearerToken: String,

@@ -4,7 +4,10 @@ import com.ecosense.android.featDiscoverCampaign.domain.model.CampaignDetail
 
 data class CampaignDetailScreenState(
     val campaignDetail: CampaignDetail,
-    val isLoadingCampaignDetail: Boolean
+    val proofPhotoUrl: String?,
+    val isLoadingCampaignDetail: Boolean,
+    val isLoadingUploadProof: Boolean,
+    val isLoadingJoinCampaign: Boolean
 ) {
     companion object {
         val defaultValue = CampaignDetailScreenState(
@@ -22,7 +25,10 @@ data class CampaignDetailScreenState(
                 joined = false,
                 campaignTasks = emptyList()
             ),
-            isLoadingCampaignDetail = false
+            proofPhotoUrl = null,
+            isLoadingCampaignDetail = false,
+            isLoadingUploadProof = false,
+            isLoadingJoinCampaign = false
         )
     }
 }

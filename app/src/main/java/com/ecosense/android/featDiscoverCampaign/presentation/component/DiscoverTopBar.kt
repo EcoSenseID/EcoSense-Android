@@ -1,6 +1,9 @@
 package com.ecosense.android.featDiscoverCampaign.presentation.component
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBackIos
@@ -11,7 +14,6 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.ecosense.android.R
 
 @Composable
@@ -38,7 +40,7 @@ fun DiscoverTopBar(
                 }
                 Text(
                     text = stringResource(R.string.campaign),
-                    fontSize = 30.sp,
+                    style = MaterialTheme.typography.h6,
                     fontWeight = FontWeight.Bold
                 )
                 Icon(
