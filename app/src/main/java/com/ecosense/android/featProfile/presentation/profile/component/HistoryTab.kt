@@ -14,29 +14,25 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.ecosense.android.R
 import com.ecosense.android.core.domain.model.Campaign
+import com.ecosense.android.core.presentation.component.CampaignItem
 import com.ecosense.android.core.presentation.theme.spacing
-import com.ecosense.android.featProfile.presentation.component.HistoryCampaignItem
-import com.ramcosta.composedestinations.navigation.DestinationsNavigator
-import logcat.logcat
 
 @Composable
 fun HistoryTab(
     campaigns: List<Campaign>,
-    navigator: DestinationsNavigator,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onItemClick: (Campaign) -> Unit,
 ) {
     Column(modifier = modifier.fillMaxSize()) {
         AnimatedVisibility(visible = campaigns.isNotEmpty()) {
             LazyColumn(modifier = Modifier.fillMaxSize()) {
                 items(campaigns.size) { i ->
                     if (i == 0) Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
-                    // TODO: use CampaignItem composable
-                    HistoryCampaignItem(
+
+                    CampaignItem(
                         campaign = campaigns[i],
-                        onClick = {
-                            // TODO: navigate to CampaignDetailScreen
-                            logcat("HistoryTab") { "${campaigns[i].title} clicked" }
-                        }
+                        sort = "",
+                        onClick = { onItemClick(campaigns[i]) },
                     )
                 }
             }
