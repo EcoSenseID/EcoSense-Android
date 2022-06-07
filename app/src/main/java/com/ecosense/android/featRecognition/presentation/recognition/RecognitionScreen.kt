@@ -16,12 +16,12 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.ecosense.android.core.presentation.util.UIEvent
 import com.ecosense.android.core.presentation.util.asString
 import com.ecosense.android.destinations.RecognisableDetailScreenDestination
-import com.ecosense.android.destinations.SavedRecognitionResultsScreenDestination
+import com.ecosense.android.destinations.SavedRecognisablesScreenDestination
 import com.ecosense.android.featRecognition.presentation.model.toDetailParcelable
-import com.ecosense.android.featRecognition.presentation.recognition.component.DiseaseRecognitionPermissionRequest
-import com.ecosense.android.featRecognition.presentation.recognition.component.DiseaseRecognitionPreviewView
-import com.ecosense.android.featRecognition.presentation.recognition.component.DiseaseRecognitionResultSection
-import com.ecosense.android.featRecognition.presentation.recognition.component.DiseaseRecognitionTopBar
+import com.ecosense.android.featRecognition.presentation.recognition.component.RecognitionPermissionRequest
+import com.ecosense.android.featRecognition.presentation.recognition.component.RecognitionPreviewView
+import com.ecosense.android.featRecognition.presentation.recognition.component.RecognitionResultSection
+import com.ecosense.android.featRecognition.presentation.recognition.component.RecognitionTopBar
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberPermissionState
 import com.ramcosta.composedestinations.annotation.Destination
@@ -31,7 +31,7 @@ import kotlinx.coroutines.flow.collectLatest
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
 @Destination
-fun DiseaseRecognitionScreen(
+fun RecognitionScreen(
     navigator: DestinationsNavigator,
     viewModel: RecognitionViewModel = hiltViewModel()
 ) {
@@ -64,8 +64,8 @@ fun DiseaseRecognitionScreen(
         scaffoldState = scaffoldState,
         backgroundColor = MaterialTheme.colors.surface,
         topBar = {
-            DiseaseRecognitionTopBar(
-                onHistoryClick = { navigator.navigate(SavedRecognitionResultsScreenDestination) },
+            RecognitionTopBar(
+                onHistoryClick = { navigator.navigate(SavedRecognisablesScreenDestination) },
             )
         },
     ) { scaffoldPadding ->
@@ -77,19 +77,19 @@ fun DiseaseRecognitionScreen(
                 .padding(scaffoldPadding)
         ) {
             AnimatedVisibility(visible = !camPermission.hasPermission) {
-                DiseaseRecognitionPermissionRequest(camPermission = camPermission)
+                RecognitionPermissionRequest(camPermission = camPermission)
             }
 
             AnimatedVisibility(visible = camPermission.hasPermission) {
                 Box(
                     contentAlignment = Alignment.BottomCenter,
                 ) {
-                    DiseaseRecognitionPreviewView(
+                    RecognitionPreviewView(
                         modifier = Modifier.fillMaxSize(),
                         onAnalyze = { viewModel.onAnalyze(it) },
                     )
 
-                    DiseaseRecognitionResultSection(
+                    RecognitionResultSection(
                         mainDiagnosis = state.mainDiagnosis,
                         diffDiagnoses = state.diffDiagnoses,
                         isSavingResult = state.isSavingResult,

@@ -20,7 +20,7 @@ import com.ecosense.android.core.presentation.util.asString
 import com.ecosense.android.featRecognition.domain.model.Recognisable
 
 @Composable
-fun DiseaseRecognitionResultSection(
+fun RecognitionResultSection(
     modifier: Modifier = Modifier,
     mainDiagnosis: Recognisable?,
     diffDiagnoses: List<Recognisable>?,
