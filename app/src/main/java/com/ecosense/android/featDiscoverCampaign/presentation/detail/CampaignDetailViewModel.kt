@@ -1,5 +1,6 @@
 package com.ecosense.android.featDiscoverCampaign.presentation.detail
 
+import android.net.Uri
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -30,7 +31,7 @@ class CampaignDetailViewModel @Inject constructor(
     fun setCampaignId(id: Int) {
         setCampaignIdJob?.cancel()
         setCampaignIdJob = viewModelScope.launch {
-            discoverCampaignRepository.getCampaignDetail(id).onEach { result ->
+            discoverCampaignRepository.getCampaignDetail(id = id).onEach { result ->
                 when (result) {
                     is Resource.Error -> {
                         _state.value = state.value.copy(isLoadingCampaignDetail = false)
@@ -51,5 +52,78 @@ class CampaignDetailViewModel @Inject constructor(
                 }
             }.launchIn(this)
         }
+    }
+
+    private var onUploadCompletionProofJob: Job? = null
+    fun onUploadCompletionProof(caption: String?, taskId: Int, campaignId: Int) {
+        onUploadCompletionProofJob?.cancel()
+        onUploadCompletionProofJob = viewModelScope.launch {
+            discoverCampaignRepository.setCompletionProof(
+                photo = state.value.proofPhotoUrl,
+                caption = caption,
+                taskId = taskId
+            ).onEach { result ->
+                when (result) {
+                    is Resource.Error -> {
+                        _state.value = state.value.copy(isLoadingUploadProof = false)
+                        result.uiText?.let { _eventFlow.send(UIEvent.ShowSnackbar(it)) }
+                    }
+                    is Resource.Loading -> {
+                        _state.value = state.value.copy(isLoadingUploadProof = true)
+                    }
+                    is Resource.Success -> {
+                        _state.value = state.value.copy(isLoadingUploadProof = false)
+                        onCompleteCampaign(campaignId = campaignId)
+                    }
+                }
+            }.launchIn(this)
+        }
+    }
+
+    private var onJoinCampaignJob: Job? = null
+    fun onJoinCampaign(campaignId: Int) {
+        onJoinCampaignJob?.cancel()
+        onJoinCampaignJob = viewModelScope.launch {
+            discoverCampaignRepository.setJoinCampaign(campaignId = campaignId).onEach { result ->
+                when (result) {
+                    is Resource.Error -> {
+                        _state.value = state.value.copy(isLoadingJoinCampaign = false)
+                        result.uiText?.let { _eventFlow.send(UIEvent.ShowSnackbar(it)) }
+                    }
+                    is Resource.Loading -> {
+                        _state.value = state.value.copy(isLoadingJoinCampaign = true)
+                    }
+                    is Resource.Success -> {
+                        _state.value = state.value.copy(isLoadingJoinCampaign = false)
+                    }
+                }
+            }.launchIn(this)
+        }
+    }
+
+    private var onCompleteCampaignJob: Job? = null
+    private fun onCompleteCampaign(campaignId: Int) {
+        onCompleteCampaignJob?.cancel()
+
+        var countCompletedTask = 0
+        state.value.campaignDetail.campaignTasks.forEach { task ->
+            if (task.completed) {
+                countCompletedTask++
+            }
+        }
+        if (countCompletedTask != state.value.campaignDetail.campaignTasks.size) {
+            onCompleteCampaignJob = viewModelScope.launch {
+                discoverCampaignRepository.setCompleteCampaign(campaignId = campaignId)
+                    .onEach { result ->
+                        if (result is Resource.Error) {
+                            result.uiText?.let { _eventFlow.send(UIEvent.ShowSnackbar(it)) }
+                        }
+                    }.launchIn(this)
+            }
+        }
+    }
+
+    fun onImagePicked(uri: Uri?) {
+        uri?.let { _state.value = state.value.copy(proofPhotoUrl = it.toString()) }
     }
 }

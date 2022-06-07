@@ -187,6 +187,7 @@
     <string name="symptoms">Symptoms</string>
     <string name="preventive_measures">Preventive Measures</string>
     <string name="treatments">Treatments</string>
+    <string name="dash">-</string>
     <string name="my_profile">My Profile</string>
     <string name="ecobot">EcoBot</string>
 </resources>

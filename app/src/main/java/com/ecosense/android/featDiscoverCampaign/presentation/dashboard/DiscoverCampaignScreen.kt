@@ -23,7 +23,6 @@ import com.ecosense.android.core.presentation.theme.spacing
 import com.ecosense.android.destinations.BrowseCampaignScreenDestination
 import com.ecosense.android.destinations.CategoryCampaignScreenDestination
 import com.ecosense.android.featDiscoverCampaign.presentation.dashboard.component.BrowseCategory
-//import com.ecosense.android.featDiscoverCampaign.presentation.dashboard.component.BrowseCategory
 import com.ecosense.android.featDiscoverCampaign.presentation.dashboard.component.DashboardTopBar
 import com.ecosense.android.featDiscoverCampaign.presentation.dashboard.component.OnGoingTasks
 import com.ramcosta.composedestinations.annotation.Destination
@@ -73,7 +72,7 @@ fun DiscoverCampaignScreen(
                         countTask += it.tasksLeft
                     }
                     Text(
-                        text = countTask.toString(),
+                        text = if (state.isLoadingDashboard) stringResource(R.string.dash) else countTask.toString(),
                         style = MaterialTheme.typography.h5,
                         color = MaterialTheme.colors.onPrimary
                     )
@@ -98,7 +97,7 @@ fun DiscoverCampaignScreen(
                         .weight(1f)
                 ) {
                     Text(
-                        text = state.dashboard.tasks.size.toString(),
+                        text = if (state.isLoadingDashboard) stringResource(R.string.dash) else state.dashboard.tasks.size.toString(),
                         style = MaterialTheme.typography.h5,
                         color = MaterialTheme.colors.onSecondary
                     )
@@ -114,9 +113,16 @@ fun DiscoverCampaignScreen(
                 fontWeight = FontWeight.SemiBold,
                 style = MaterialTheme.typography.subtitle1,
                 color = Gray800,
-                modifier = Modifier.padding(top = MaterialTheme.spacing.medium, bottom = MaterialTheme.spacing.small)
+                modifier = Modifier.padding(
+                    top = MaterialTheme.spacing.medium,
+                    bottom = MaterialTheme.spacing.small
+                )
             )
-            OnGoingTasks(navigator = navigator, tasks = state.dashboard.tasks)
+            OnGoingTasks(
+                navigator = navigator,
+                tasks = state.dashboard.tasks,
+                isLoading = state.isLoadingDashboard
+            )
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -133,19 +139,25 @@ fun DiscoverCampaignScreen(
                         modifier = Modifier.padding(bottom = MaterialTheme.spacing.small)
                     )
                 }
-                Column(horizontalAlignment = Alignment.End) {
-                    Text(
-                        text = AnnotatedString(stringResource(R.string.view_all)),
-                        style = MaterialTheme.typography.caption,
-                        fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colors.secondary,
-                        modifier = Modifier.clickable {
-                            navigator.navigate(CategoryCampaignScreenDestination)
-                        }
-                    )
+                if (!state.isLoadingCategories) {
+                    Column(horizontalAlignment = Alignment.End) {
+                        Text(
+                            text = AnnotatedString(stringResource(R.string.view_all)),
+                            style = MaterialTheme.typography.caption,
+                            fontWeight = FontWeight.Bold,
+                            color = MaterialTheme.colors.secondary,
+                            modifier = Modifier.clickable {
+                                navigator.navigate(CategoryCampaignScreenDestination)
+                            }
+                        )
+                    }
                 }
             }
-            BrowseCategory(navigator = navigator, categories = state.categories)
+            BrowseCategory(
+                navigator = navigator,
+                categories = state.categories,
+                isLoading = state.isLoadingCategories
+            )
         }
     }
 }

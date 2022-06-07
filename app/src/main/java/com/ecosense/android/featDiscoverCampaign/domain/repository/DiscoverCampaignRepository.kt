@@ -7,7 +7,6 @@ import com.ecosense.android.featDiscoverCampaign.domain.model.CampaignDetail
 import com.ecosense.android.featDiscoverCampaign.domain.model.Category
 import com.ecosense.android.featDiscoverCampaign.domain.model.Dashboard
 import kotlinx.coroutines.flow.Flow
-import java.io.File
 
 interface DiscoverCampaignRepository {
     fun getCampaigns(q: String?, categoryId: Int?): Flow<Resource<List<Campaign>>>
@@ -19,16 +18,16 @@ interface DiscoverCampaignRepository {
     fun getDashboard(): Flow<Resource<Dashboard>>
 
     fun setCompletionProof(
-        photo: File?,
+        photo: String?,
         caption: String?,
-        taskId: Int?
+        taskId: Int
     ): Flow<SimpleResource>
 
     fun setJoinCampaign(
-        campaignId: Int?
+        campaignId: Int
     ): Flow<SimpleResource>
 
     fun setCompleteCampaign(
-        campaignId: Int?
+        campaignId: Int
     ): Flow<SimpleResource>
 }

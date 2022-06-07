@@ -1,5 +1,11 @@
 package com.ecosense.android.featDiscoverCampaign.data.repository
 
+import android.content.ContentResolver
+import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.net.Uri
+import android.os.Environment
 import com.ecosense.android.R
 import com.ecosense.android.core.domain.api.AuthApi
 import com.ecosense.android.core.domain.model.Campaign
@@ -7,10 +13,7 @@ import com.ecosense.android.core.util.Resource
 import com.ecosense.android.core.util.SimpleResource
 import com.ecosense.android.core.util.UIText
 import com.ecosense.android.featDiscoverCampaign.data.api.DiscoverApi
-import com.ecosense.android.featDiscoverCampaign.data.model.BrowseCampaignDto
-import com.ecosense.android.featDiscoverCampaign.data.model.CampaignDetailDto
-import com.ecosense.android.featDiscoverCampaign.data.model.CategoriesDto
-import com.ecosense.android.featDiscoverCampaign.data.model.DashboardDto
+import com.ecosense.android.featDiscoverCampaign.data.model.*
 import com.ecosense.android.featDiscoverCampaign.domain.model.CampaignDetail
 import com.ecosense.android.featDiscoverCampaign.domain.model.Category
 import com.ecosense.android.featDiscoverCampaign.domain.model.Dashboard
@@ -21,13 +24,20 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import logcat.asLog
 import logcat.logcat
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.HttpException
-import java.io.File
-import java.io.IOException
+import java.io.*
+import java.text.SimpleDateFormat
+import java.util.*
 
 class DiscoverCampaignRepositoryImpl(
     private val authApi: AuthApi,
-    private val discoverApi: DiscoverApi
+    private val discoverApi: DiscoverApi,
+    private val appContext: Context
 ) : DiscoverCampaignRepository {
     override fun getCampaigns(q: String?, categoryId: Int?): Flow<Resource<List<Campaign>>> = flow {
         emit(Resource.Loading())
@@ -213,18 +223,197 @@ class DiscoverCampaignRepositoryImpl(
     }
 
     override fun setCompletionProof(
-        photo: File?,
+        photo: String?,
         caption: String?,
-        taskId: Int?
+        taskId: Int
     ): Flow<SimpleResource> = flow {
-        TODO("Not yet implemented")
+        emit(Resource.Loading())
+
+        try {
+            val idToken = authApi.getIdToken(true)
+            val bearerToken = "Bearer $idToken"
+            val captionRB = caption?.toRequestBody("text/plain".toMediaType())
+            var photoMultipart: MultipartBody.Part? = null
+
+            if (photo != null) {
+                val photoUri = Uri.parse(photo)
+
+                val photoFile = uriToFile(photoUri, appContext)
+
+                val reducedPhotoFile = reduceFileImage(photoFile)
+
+                val requestPhotoFile =
+                    reducedPhotoFile.asRequestBody("image/jpeg".toMediaTypeOrNull())
+                photoMultipart = requestPhotoFile.let {
+                    MultipartBody.Part.createFormData(
+                        "photo", reducedPhotoFile.name, it
+                    )
+                }
+            }
+
+            val response = discoverApi.setCompletionProof(
+                bearerToken = bearerToken,
+                photo = photoMultipart,
+                caption = captionRB,
+                taskId = taskId
+            )
+
+            when {
+                response.error == false -> emit(Resource.Success(Unit))
+
+                response.message != null -> emit(Resource.Error(UIText.DynamicString(response.message)))
+
+                else -> emit(Resource.Error(UIText.StringResource(R.string.em_unknown)))
+            }
+
+        } catch (e: Exception) {
+            logcat { e.asLog() }
+            when (e) {
+                is HttpException -> {
+                    try {
+                        val response = Gson().fromJson<CompletionProofDto>(
+                            e.response()?.errorBody()?.charStream(),
+                            object : TypeToken<CompletionProofDto>() {}.type
+                        )
+                        UIText.DynamicString(response.message!!)
+                    } catch (e: Exception) {
+                        UIText.StringResource(R.string.em_unknown)
+                    }
+                }
+
+                is IOException -> UIText.StringResource(R.string.em_io_exception)
+
+                else -> UIText.StringResource(R.string.em_unknown)
+
+            }.let { emit(Resource.Error(it)) }
+        }
     }
 
-    override fun setJoinCampaign(campaignId: Int?): Flow<SimpleResource> = flow {
-        TODO("Not yet implemented")
+    override fun setJoinCampaign(campaignId: Int): Flow<SimpleResource> = flow {
+        emit(Resource.Loading())
+
+        try {
+            val idToken = authApi.getIdToken(true)
+            val bearerToken = "Bearer $idToken"
+
+            val response =
+                discoverApi.setJoinCampaign(bearerToken = bearerToken, campaignId = campaignId)
+
+            when {
+                response.error == false -> emit(Resource.Success(Unit))
+
+                response.message != null -> emit(Resource.Error(UIText.DynamicString(response.message)))
+
+                else -> emit(Resource.Error(UIText.StringResource(R.string.em_unknown)))
+            }
+
+        } catch (e: Exception) {
+            logcat { e.asLog() }
+            when (e) {
+                is HttpException -> {
+                    try {
+                        val response = Gson().fromJson<JoinCampaignDto>(
+                            e.response()?.errorBody()?.charStream(),
+                            object : TypeToken<JoinCampaignDto>() {}.type
+                        )
+                        UIText.DynamicString(response.message!!)
+                    } catch (e: Exception) {
+                        UIText.StringResource(R.string.em_unknown)
+                    }
+                }
+
+                is IOException -> UIText.StringResource(R.string.em_io_exception)
+
+                else -> UIText.StringResource(R.string.em_unknown)
+
+            }.let { emit(Resource.Error(it)) }
+        }
     }
 
-    override fun setCompleteCampaign(campaignId: Int?): Flow<SimpleResource> = flow {
-        TODO("Not yet implemented")
+    override fun setCompleteCampaign(campaignId: Int): Flow<SimpleResource> = flow {
+        emit(Resource.Loading())
+
+        try {
+            val idToken = authApi.getIdToken(true)
+            val bearerToken = "Bearer $idToken"
+
+            val response =
+                discoverApi.setCompleteCampaign(bearerToken = bearerToken, campaignId = campaignId)
+
+            when {
+                response.error == false -> emit(Resource.Success(Unit))
+
+                response.message != null -> emit(Resource.Error(UIText.DynamicString(response.message)))
+
+                else -> emit(Resource.Error(UIText.StringResource(R.string.em_unknown)))
+            }
+
+        } catch (e: Exception) {
+            logcat { e.asLog() }
+            when (e) {
+                is HttpException -> {
+                    try {
+                        val response = Gson().fromJson<CompleteCampaignDto>(
+                            e.response()?.errorBody()?.charStream(),
+                            object : TypeToken<CompleteCampaignDto>() {}.type
+                        )
+                        UIText.DynamicString(response.message!!)
+                    } catch (e: Exception) {
+                        UIText.StringResource(R.string.em_unknown)
+                    }
+                }
+
+                is IOException -> UIText.StringResource(R.string.em_io_exception)
+
+                else -> UIText.StringResource(R.string.em_unknown)
+
+            }.let { emit(Resource.Error(it)) }
+        }
+    }
+
+    private fun createCustomTempFile(context: Context): File {
+        val filenameFormat = "dd-MMM-yyyy"
+
+        val timeStamp: String = SimpleDateFormat(
+            filenameFormat,
+            Locale.US
+        ).format(System.currentTimeMillis())
+
+        val storageDir: File? = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+        return File.createTempFile(timeStamp, ".jpg", storageDir)
+    }
+
+    private fun uriToFile(selectedImg: Uri, context: Context): File {
+        val contentResolver: ContentResolver = context.contentResolver
+        val myFile = createCustomTempFile(context)
+
+        val inputStream = contentResolver.openInputStream(selectedImg) as InputStream
+        val outputStream: OutputStream = FileOutputStream(myFile)
+        val buf = ByteArray(1024)
+        var len: Int
+        while (inputStream.read(buf).also { len = it } > 0) outputStream.write(buf, 0, len)
+        outputStream.close()
+        inputStream.close()
+
+        return myFile
+    }
+
+    private fun reduceFileImage(file: File): File {
+        val bitmap = BitmapFactory.decodeFile(file.path)
+
+        var compressQuality = 100
+        var streamLength: Int
+
+        do {
+            val bmpStream = ByteArrayOutputStream()
+            bitmap.compress(Bitmap.CompressFormat.JPEG, compressQuality, bmpStream)
+            val bmpPicByteArray = bmpStream.toByteArray()
+            streamLength = bmpPicByteArray.size
+            compressQuality -= 5
+        } while (streamLength > 1000000)
+
+        bitmap.compress(Bitmap.CompressFormat.JPEG, compressQuality, FileOutputStream(file))
+
+        return file
     }
 }

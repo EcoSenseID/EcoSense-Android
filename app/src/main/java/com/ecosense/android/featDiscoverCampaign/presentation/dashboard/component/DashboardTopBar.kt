@@ -26,7 +26,6 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.ecosense.android.R
 
 @Composable
@@ -97,7 +96,7 @@ fun DashboardTopBar(
                 }
                 Text(
                     text = stringResource(R.string.campaign),
-                    fontSize = 30.sp,
+                    style = MaterialTheme.typography.h6,
                     fontWeight = FontWeight.Bold
                 )
                 Icon(
