@@ -42,11 +42,11 @@ fun SavedRecognisableItem(
             .fillMaxWidth()
     ) {
         val sdf = SimpleDateFormat(Constants.DATE_FORMAT, Locale.getDefault())
-        val date = Date().apply { this.time = savedRecognisable.timeInMillis }
+        val date = Date().apply { time = savedRecognisable.savedAt.toLong() * 1000 }
         Text(
             text = sdf.format(date),
             style = MaterialTheme.typography.caption,
-            color = MaterialTheme.colors.onSurface
+            color = MaterialTheme.colors.onSurface,
         )
 
         Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))

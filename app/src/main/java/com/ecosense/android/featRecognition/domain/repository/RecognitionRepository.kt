@@ -11,14 +11,17 @@ import kotlinx.coroutines.flow.Flow
 
 interface RecognitionRepository {
     fun recognise(
-        bitmap: Bitmap
+        bitmap: Bitmap,
     ): List<Recognisable>
 
     fun getSavedRecognisables(): Flow<Resource<List<SavedRecognisable>>>
 
-    fun getDisease(label: String): Disease?
+    fun getDisease(
+        label: String,
+    ): Disease?
 
-    suspend fun saveRecognisable(recognisable: Recognisable): Flow<SimpleResource>
-
-    suspend fun unsaveRecognisable(recognisableDetail: RecognisableDetail): Flow<SimpleResource>
+    suspend fun saveRecognisable(
+        label: String,
+        confidencePercent: Int,
+    ): Flow<Resource<Int>>
 }
