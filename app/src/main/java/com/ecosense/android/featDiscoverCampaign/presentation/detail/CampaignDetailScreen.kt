@@ -1,9 +1,6 @@
 package com.ecosense.android.featDiscoverCampaign.presentation.detail
 
-import android.net.Uri
 import android.util.Log
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -14,7 +11,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -26,7 +22,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -39,6 +34,7 @@ import com.ecosense.android.R
 import com.ecosense.android.core.presentation.theme.spacing
 import com.ecosense.android.featDiscoverCampaign.data.util.detailDateFormatter
 import com.ecosense.android.featDiscoverCampaign.presentation.component.DiscoverTopBar
+import com.ecosense.android.featDiscoverCampaign.presentation.detail.component.UploadTaskProof
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
@@ -56,14 +52,7 @@ fun CampaignDetailScreen(
     val state = viewModel.state.value
     val campaign = state.campaignDetail
 
-    val imagePickerLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.GetContent()
-    ) { uri: Uri? -> viewModel.onImagePicked(uri) }
-
-    val inputValue = remember { mutableStateOf(TextFieldValue()) }
     val scrollState = rememberScrollState()
-
-    val context = LocalContext.current
 
     Scaffold(
         topBar = {
@@ -479,104 +468,18 @@ fun CampaignDetailScreen(
                                                                 )
                                                             }
                                                         } else {
-                                                            if (!campaign.campaignTasks[index].completed) { //TODO: make the submission only available for the next uncompleted task
-                                                                Row(
-                                                                    modifier = Modifier.padding(
-                                                                        bottom = MaterialTheme.spacing.small
-                                                                    )
-                                                                ) {
-                                                                    Button(
-                                                                        onClick = {
-                                                                            // TODO: currently can only pick image from gallery, find a way to make it able to use camera x too
-                                                                            imagePickerLauncher.launch(
-                                                                                context.getString(R.string.content_type_image)
-                                                                            )
-                                                                        },
-                                                                        modifier = Modifier
-                                                                            .fillMaxWidth()
-                                                                            .clip(
-                                                                                shape = RoundedCornerShape(
-                                                                                    8.dp
-                                                                                )
-                                                                            )
-                                                                    ) { Text(stringResource(R.string.select_image)) }
-                                                                }
-
-                                                                if (state.proofPhotoUrl != null) {
-                                                                    Row(
-                                                                        modifier = Modifier
-                                                                            .fillMaxWidth()
-                                                                            .height(100.dp)
-                                                                            .padding(bottom = MaterialTheme.spacing.small)
-                                                                    ) {
-                                                                        AsyncImage(
-                                                                            model = ImageRequest.Builder(
-                                                                                LocalContext.current
-                                                                            )
-                                                                                .data(state.proofPhotoUrl)
-                                                                                .crossfade(true)
-                                                                                .scale(Scale.FILL)
-                                                                                .build(),
-                                                                            contentScale = ContentScale.FillWidth,
-                                                                            contentDescription = stringResource(
-                                                                                R.string.unsubmitted_proof,
-                                                                                task.name
-                                                                            ),
-                                                                            modifier = Modifier
-                                                                                .fillMaxSize()
-                                                                                .clip(
-                                                                                    shape = RoundedCornerShape(
-                                                                                        8.dp
-                                                                                    )
-                                                                                )
-                                                                        )
-                                                                    }
-                                                                }
-
-                                                                Row(
-                                                                    modifier = Modifier.padding(
-                                                                        bottom = MaterialTheme.spacing.small
-                                                                    )
-                                                                ) {
-                                                                    OutlinedTextField(
-                                                                        value = inputValue.value,
-                                                                        onValueChange = {
-                                                                            inputValue.value =
-                                                                                it
-                                                                        },
-                                                                        label = {
-                                                                            Text(
-                                                                                stringResource(R.string.add_caption)
-                                                                            )
-                                                                        },
-                                                                        modifier = Modifier.fillMaxSize(),
-                                                                        textStyle = MaterialTheme.typography.caption
-                                                                    )
-                                                                }
-                                                                Row(
-                                                                    modifier = Modifier.padding(
-                                                                        bottom = MaterialTheme.spacing.small
-                                                                    )
-                                                                ) {
-                                                                    Button(
-                                                                        onClick = {
-                                                                            viewModel.onUploadCompletionProof(
-                                                                                caption = inputValue.value.toString(),
-                                                                                taskId = campaign.campaignTasks[index].id
-                                                                            )
-                                                                            //TODO: trigger the compose to reload the page
-                                                                        },
-                                                                        modifier = Modifier
-                                                                            .fillMaxWidth()
-                                                                            .clip(
-                                                                                shape = RoundedCornerShape(
-                                                                                    8.dp
-                                                                                )
-                                                                            )
-                                                                    ) {
-                                                                        Text(stringResource(R.string.submit))
-                                                                    }
-                                                                }
+                                                            if (index == 0) {
+                                                                UploadTaskProof(
+                                                                    viewModel = viewModel,
+                                                                    task = task,
+                                                                    campaignId = id
+                                                                )
+                                                            } else if (index != 0 && campaign.campaignTasks[index - 1].completed) {
+                                                                UploadTaskProof(
+                                                                    viewModel = viewModel,
+                                                                    task = task,
+                                                                    campaignId = id
+                                                                )
                                                             }
                                                         }
                                                     }

@@ -55,7 +55,7 @@ class CampaignDetailViewModel @Inject constructor(
     }
 
     private var onUploadCompletionProofJob: Job? = null
-    fun onUploadCompletionProof(caption: String?, taskId: Int) {
+    fun onUploadCompletionProof(caption: String?, taskId: Int, campaignId: Int) {
         onUploadCompletionProofJob?.cancel()
         onUploadCompletionProofJob = viewModelScope.launch {
             discoverCampaignRepository.setCompletionProof(
@@ -73,6 +73,7 @@ class CampaignDetailViewModel @Inject constructor(
                     }
                     is Resource.Success -> {
                         _state.value = state.value.copy(isLoadingUploadProof = false)
+                        onCompleteCampaign(campaignId = campaignId)
                     }
                 }
             }.launchIn(this)
@@ -97,6 +98,28 @@ class CampaignDetailViewModel @Inject constructor(
                     }
                 }
             }.launchIn(this)
+        }
+    }
+
+    private var onCompleteCampaignJob: Job? = null
+    private fun onCompleteCampaign(campaignId: Int) {
+        onCompleteCampaignJob?.cancel()
+
+        var countCompletedTask = 0
+        state.value.campaignDetail.campaignTasks.forEach { task ->
+            if (task.completed) {
+                countCompletedTask++
+            }
+        }
+        if (countCompletedTask != state.value.campaignDetail.campaignTasks.size) {
+            onCompleteCampaignJob = viewModelScope.launch {
+                discoverCampaignRepository.setCompleteCampaign(campaignId = campaignId)
+                    .onEach { result ->
+                        if (result is Resource.Error) {
+                            result.uiText?.let { _eventFlow.send(UIEvent.ShowSnackbar(it)) }
+                        }
+                    }.launchIn(this)
+            }
         }
     }
 

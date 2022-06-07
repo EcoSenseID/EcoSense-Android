@@ -233,18 +233,22 @@ class DiscoverCampaignRepositoryImpl(
             val idToken = authApi.getIdToken(true)
             val bearerToken = "Bearer $idToken"
             val captionRB = caption?.toRequestBody("text/plain".toMediaType())
+            var photoMultipart: MultipartBody.Part? = null
 
-            val photoUri = Uri.parse(photo)
+            if (photo != null) {
+                val photoUri = Uri.parse(photo)
 
-            val photoFile = uriToFile(photoUri, appContext)
+                val photoFile = uriToFile(photoUri, appContext)
 
-            val reducedPhotoFile = reduceFileImage(photoFile)
+                val reducedPhotoFile = reduceFileImage(photoFile)
 
-            val requestPhotoFile = reducedPhotoFile.asRequestBody("image/jpeg".toMediaTypeOrNull())
-            val photoMultipart: MultipartBody.Part = requestPhotoFile.let {
-                MultipartBody.Part.createFormData(
-                    "photo", reducedPhotoFile.name, it
-                )
+                val requestPhotoFile =
+                    reducedPhotoFile.asRequestBody("image/jpeg".toMediaTypeOrNull())
+                photoMultipart = requestPhotoFile.let {
+                    MultipartBody.Part.createFormData(
+                        "photo", reducedPhotoFile.name, it
+                    )
+                }
             }
 
             val response = discoverApi.setCompletionProof(
@@ -327,7 +331,44 @@ class DiscoverCampaignRepositoryImpl(
     }
 
     override fun setCompleteCampaign(campaignId: Int): Flow<SimpleResource> = flow {
-        TODO("Not yet implemented")
+        emit(Resource.Loading())
+
+        try {
+            val idToken = authApi.getIdToken(true)
+            val bearerToken = "Bearer $idToken"
+
+            val response =
+                discoverApi.setCompleteCampaign(bearerToken = bearerToken, campaignId = campaignId)
+
+            when {
+                response.error == false -> emit(Resource.Success(Unit))
+
+                response.message != null -> emit(Resource.Error(UIText.DynamicString(response.message)))
+
+                else -> emit(Resource.Error(UIText.StringResource(R.string.em_unknown)))
+            }
+
+        } catch (e: Exception) {
+            logcat { e.asLog() }
+            when (e) {
+                is HttpException -> {
+                    try {
+                        val response = Gson().fromJson<CompleteCampaignDto>(
+                            e.response()?.errorBody()?.charStream(),
+                            object : TypeToken<CompleteCampaignDto>() {}.type
+                        )
+                        UIText.DynamicString(response.message!!)
+                    } catch (e: Exception) {
+                        UIText.StringResource(R.string.em_unknown)
+                    }
+                }
+
+                is IOException -> UIText.StringResource(R.string.em_io_exception)
+
+                else -> UIText.StringResource(R.string.em_unknown)
+
+            }.let { emit(Resource.Error(it)) }
+        }
     }
 
     private fun createCustomTempFile(context: Context): File {

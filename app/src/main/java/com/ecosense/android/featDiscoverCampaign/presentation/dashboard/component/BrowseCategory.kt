@@ -104,7 +104,7 @@ fun BrowseCategory(
                         .fillMaxHeight()
                         .padding(vertical = MaterialTheme.spacing.small)
                 ) {
-                    categories.forEachIndexed { _, category ->
+                    categories.forEach { category ->
                         Column(
                             horizontalAlignment = Alignment.CenterHorizontally,
                             modifier = modifier
