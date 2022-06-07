@@ -1,6 +1,6 @@
 package com.ecosense.android.featDiscoverCampaign.presentation.detail.component
 
-import android.net.Uri
+import android.Manifest
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.*
@@ -12,6 +12,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
@@ -26,16 +27,23 @@ import com.ecosense.android.R
 import com.ecosense.android.core.presentation.theme.spacing
 import com.ecosense.android.featDiscoverCampaign.domain.model.CampaignTask
 import com.ecosense.android.featDiscoverCampaign.presentation.detail.CampaignDetailViewModel
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.rememberPermissionState
+import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun UploadTaskProof(viewModel: CampaignDetailViewModel, task: CampaignTask, campaignId: Int) {
     val state = viewModel.state.value
+    val coroutineScope = rememberCoroutineScope()
+    val camPermission = rememberPermissionState(permission = Manifest.permission.CAMERA)
 
     val imagePickerLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.GetContent()
-    ) { uri: Uri? -> viewModel.onImagePicked(uri) }
-
-    val context = LocalContext.current
+        contract = ActivityResultContracts.TakePicture()
+    ) { success ->
+//            uri: Uri? -> viewModel.onImagePicked(uri)
+        if (success) viewModel.onImageCaptured()
+    }
 
     val inputValue = remember { mutableStateOf(TextFieldValue()) }
 
@@ -47,9 +55,19 @@ fun UploadTaskProof(viewModel: CampaignDetailViewModel, task: CampaignTask, camp
         Button(
             onClick = {
                 // TODO: currently can only pick image from gallery, find a way to make it able to use camera x too
-                imagePickerLauncher.launch(
-                    context.getString(R.string.content_type_image)
-                )
+//                imagePickerLauncher.launch(
+//                    context.getString(R.string.content_type_image)
+//                )
+                when {
+                    camPermission.hasPermission -> {
+                        coroutineScope.launch {
+                            val uri = viewModel.getNewTempJpegUri()
+                            imagePickerLauncher.launch(uri)
+                        }
+                    }
+                    else -> camPermission.launchPermissionRequest()
+                }
+
             },
             modifier = Modifier
                 .fillMaxWidth()

@@ -1,5 +1,6 @@
 package com.ecosense.android.featDiscoverCampaign.domain.repository
 
+import android.net.Uri
 import com.ecosense.android.core.domain.model.Campaign
 import com.ecosense.android.core.util.Resource
 import com.ecosense.android.core.util.SimpleResource
@@ -30,4 +31,6 @@ interface DiscoverCampaignRepository {
     fun setCompleteCampaign(
         campaignId: Int
     ): Flow<SimpleResource>
+
+    suspend fun getNewTempJpegUri(): Uri
 }

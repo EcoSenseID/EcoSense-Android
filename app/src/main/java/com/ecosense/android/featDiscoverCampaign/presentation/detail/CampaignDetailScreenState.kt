@@ -1,5 +1,6 @@
 package com.ecosense.android.featDiscoverCampaign.presentation.detail
 
+import android.net.Uri
 import com.ecosense.android.featDiscoverCampaign.domain.model.CampaignDetail
 
 data class CampaignDetailScreenState(
@@ -7,7 +8,8 @@ data class CampaignDetailScreenState(
     val proofPhotoUrl: String?,
     val isLoadingCampaignDetail: Boolean,
     val isLoadingUploadProof: Boolean,
-    val isLoadingJoinCampaign: Boolean
+    val isLoadingJoinCampaign: Boolean,
+    val tempJpegUri: Uri?,
 ) {
     companion object {
         val defaultValue = CampaignDetailScreenState(
@@ -28,7 +30,8 @@ data class CampaignDetailScreenState(
             proofPhotoUrl = null,
             isLoadingCampaignDetail = false,
             isLoadingUploadProof = false,
-            isLoadingJoinCampaign = false
+            isLoadingJoinCampaign = false,
+            tempJpegUri = null
         )
     }
 }
