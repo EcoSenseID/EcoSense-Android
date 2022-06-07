@@ -32,7 +32,7 @@ import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 @Destination
-fun SavedRecognitionResultsScreen(
+fun SavedRecognisablesScreen(
     navigator: DestinationsNavigator,
     viewModel: SavedRecognisablesViewModel = hiltViewModel()
 ) {

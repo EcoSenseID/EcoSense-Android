@@ -49,7 +49,7 @@ class SavedRecognisablesViewModel @Inject constructor(
                         // TODO: create sorting feature
                         _state.value = state.value.copy(
                             isLoading = false,
-                            savedRecognisables = result.data?.sortedByDescending { it.timeInMillis }
+                            savedRecognisables = result.data?.sortedByDescending { it.savedAt }
                                 ?: emptyList()
                         )
                     }

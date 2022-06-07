@@ -1,10 +1,7 @@
 package com.ecosense.android.featRecognition.presentation.saved.component
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -14,14 +11,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
 import com.ecosense.android.R
 
 @Composable
 fun RecognisableDetailTopBar(
     modifier: Modifier = Modifier,
-    showDeleteButton: Boolean,
     onBackClick: () -> Unit,
-    onDeleteClick: () -> Unit,
 ) {
     TopAppBar(
         backgroundColor = MaterialTheme.colors.surface,
@@ -48,18 +44,6 @@ fun RecognisableDetailTopBar(
             )
 
             Spacer(modifier = Modifier.weight(1f))
-
-            AnimatedVisibility(visible = showDeleteButton) {
-                IconButton(
-                    enabled = showDeleteButton,
-                    onClick = onDeleteClick,
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Delete,
-                        contentDescription = stringResource(R.string.delete_recognition_result),
-                    )
-                }
-            }
         }
     }
 }

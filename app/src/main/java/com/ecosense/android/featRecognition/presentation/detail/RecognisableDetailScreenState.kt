@@ -6,6 +6,8 @@ import com.ecosense.android.featRecognition.domain.model.RecognisableDetail
 data class RecognisableDetailScreenState(
     val recognisableDetail: RecognisableDetail,
     val disease: Disease,
+    val isLoadingSaving: Boolean,
+    val isLoadingUnsaving: Boolean,
 ) {
     val isSaved get() = this.recognisableDetail.id != null
 
@@ -13,7 +15,7 @@ data class RecognisableDetailScreenState(
         val defaultValue = RecognisableDetailScreenState(
             recognisableDetail = RecognisableDetail(
                 id = null,
-                timeInMillis = 0,
+                savedAt = 0,
                 confidencePercent = 0,
                 label = "",
             ),
@@ -23,7 +25,9 @@ data class RecognisableDetailScreenState(
                 symptoms = null,
                 treatments = null,
                 preventiveMeasures = null,
-            )
+            ),
+            isLoadingSaving = false,
+            isLoadingUnsaving = false,
         )
     }
 }

@@ -16,7 +16,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.ecosense.android.core.presentation.util.UIEvent
 import com.ecosense.android.core.presentation.util.asString
 import com.ecosense.android.destinations.RecognisableDetailScreenDestination
-import com.ecosense.android.destinations.SavedRecognitionResultsScreenDestination
+import com.ecosense.android.destinations.SavedRecognisablesScreenDestination
 import com.ecosense.android.featRecognition.presentation.model.toDetailParcelable
 import com.ecosense.android.featRecognition.presentation.recognition.component.RecognitionPermissionRequest
 import com.ecosense.android.featRecognition.presentation.recognition.component.RecognitionPreviewView
@@ -65,7 +65,7 @@ fun RecognitionScreen(
         backgroundColor = MaterialTheme.colors.surface,
         topBar = {
             RecognitionTopBar(
-                onHistoryClick = { navigator.navigate(SavedRecognitionResultsScreenDestination) },
+                onHistoryClick = { navigator.navigate(SavedRecognisablesScreenDestination) },
             )
         },
     ) { scaffoldPadding ->

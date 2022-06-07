@@ -9,37 +9,37 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class RecognisableDetailParcelable(
     val id: Int?,
-    val timeInMillis: Long,
+    val savedAt: Int,
     val confidencePercent: Int,
     val label: String,
 ) : Parcelable {
     fun toRecognisableDetail() = RecognisableDetail(
         id = this.id,
         label = this.label,
-        timeInMillis = this.timeInMillis,
+        savedAt = this.savedAt,
         confidencePercent = this.confidencePercent,
     )
 }
 
 fun SavedRecognisable.toDetailParcelable() = RecognisableDetailParcelable(
     id = this.id,
-    timeInMillis = this.timeInMillis,
+    savedAt = this.savedAt,
     confidencePercent = this.confidencePercent,
     label = this.label,
 )
 
 fun Recognisable.toDetailParcelable(
-    timeInMillis: Long = System.currentTimeMillis(),
+    savedAt: Int = (System.currentTimeMillis() / 1000).toInt(),
 ) = RecognisableDetailParcelable(
     id = null,
-    timeInMillis = timeInMillis,
+    savedAt = savedAt,
     confidencePercent = this.confidencePercent,
     label = this.label,
 )
 
 fun RecognisableDetail.toParcelable() = RecognisableDetailParcelable(
     id = this.id,
-    timeInMillis = this.timeInMillis,
+    savedAt = this.savedAt,
     confidencePercent = this.confidencePercent,
     label = this.label
 )

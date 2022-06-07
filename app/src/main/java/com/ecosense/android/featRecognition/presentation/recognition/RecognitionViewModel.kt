@@ -58,7 +58,10 @@ class RecognitionViewModel @Inject constructor(
     fun onSaveResult() {
         viewModelScope.launch {
             val recognisable = state.value.mainDiagnosis ?: return@launch
-            recognitionRepository.saveRecognisable(recognisable).onEach { result ->
+            recognitionRepository.saveRecognisable(
+                label = recognisable.label,
+                confidencePercent = recognisable.confidencePercent,
+            ).onEach { result ->
                 when (result) {
                     is Resource.Error -> {
                         _state.value = state.value.copy(isSavingResult = false)

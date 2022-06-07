@@ -47,8 +47,6 @@ fun RecognisableDetailScreen(
         topBar = {
             RecognisableDetailTopBar(
                 onBackClick = { navigator.navigateUp() },
-                showDeleteButton = state.isSaved,
-                onDeleteClick = { viewModel.onDeleteClick() }
             )
         },
         scaffoldState = scaffoldState,
@@ -74,7 +72,7 @@ fun RecognisableDetailScreen(
                     .wrapContentHeight()
             ) {
                 val sdf = SimpleDateFormat(Constants.DATE_FORMAT, Locale.getDefault())
-                val date = Date().apply { this.time = state.recognisableDetail.timeInMillis }
+                val date = Date().apply { time = state.recognisableDetail.savedAt.toLong() * 1000 }
                 Text(
                     text = sdf.format(date),
                     style = MaterialTheme.typography.caption,
@@ -167,7 +165,7 @@ fun RecognisableDetailScreen(
 
                 AnimatedVisibility(visible = !state.isSaved) {
                     RoundedEndsButton(
-                        enabled = !state.isSaved,
+                        enabled = !state.isSaved && !state.isLoadingSaving,
                         onClick = { viewModel.onSaveClick() },
                         modifier = Modifier.fillMaxWidth(),
                     ) {
@@ -176,7 +174,12 @@ fun RecognisableDetailScreen(
                             contentDescription = null
                         )
                         Spacer(modifier = Modifier.width(MaterialTheme.spacing.medium))
-                        Text(text = stringResource(R.string.save_result))
+                        Text(
+                            text = stringResource(
+                                if (state.isLoadingSaving) R.string.saving
+                                else R.string.save_result
+                            )
+                        )
                     }
                 }
             }
