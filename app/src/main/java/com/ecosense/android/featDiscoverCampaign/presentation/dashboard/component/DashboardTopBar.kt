@@ -5,15 +5,13 @@ package com.ecosense.android.featDiscoverCampaign.presentation.dashboard.compone
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.slideIn
 import androidx.compose.animation.slideOut
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -45,12 +43,10 @@ fun DashboardTopBar(
         }
     )
 
-    Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .height(56.dp),
-        horizontalArrangement = Arrangement.Start,
-        verticalAlignment = Alignment.CenterVertically
+    TopAppBar(
+        backgroundColor = MaterialTheme.colors.surface,
+        elevation = 0.dp,
+        modifier = Modifier.fillMaxWidth()
     ) {
         AnimatedVisibility(
             visible = expanded,
@@ -82,28 +78,36 @@ fun DashboardTopBar(
                 }
             }
         }
+
         AnimatedVisibility(visible = !expanded) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
+                horizontalArrangement = Arrangement.SpaceEvenly
             ) {
-                IconButton(onClick = { expanded = true }) {
-                    Icon(
-                        imageVector = Icons.Default.Search,
-                        contentDescription = stringResource(R.string.open_search_bar)
-                    )
+                Row(
+                    horizontalArrangement = Arrangement.Start,
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier
+                        .weight(1f)
+                        .fillMaxHeight(),
+                ) {
+                    IconButton(onClick = { expanded = true }) {
+                        Icon(
+                            imageVector = Icons.Default.Search,
+                            contentDescription = stringResource(R.string.open_search_bar),
+                            tint = MaterialTheme.colors.onSurface,
+                        )
+                    }
                 }
+
                 Text(
                     text = stringResource(R.string.campaign),
                     style = MaterialTheme.typography.h6,
                     fontWeight = FontWeight.Bold
                 )
-                Icon(
-                    imageVector = Icons.Default.Search,
-                    contentDescription = stringResource(R.string.blank),
-                    modifier = modifier.alpha(0f)
-                )
+
+                Spacer(modifier = Modifier.weight(1f))
             }
         }
     }

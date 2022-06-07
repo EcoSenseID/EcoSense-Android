@@ -6,6 +6,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Environment
+import androidx.core.content.FileProvider
 import com.ecosense.android.R
 import com.ecosense.android.core.domain.api.AuthApi
 import com.ecosense.android.core.domain.model.Campaign
@@ -20,8 +21,10 @@ import com.ecosense.android.featDiscoverCampaign.domain.model.Dashboard
 import com.ecosense.android.featDiscoverCampaign.domain.repository.DiscoverCampaignRepository
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.withContext
 import logcat.asLog
 import logcat.logcat
 import okhttp3.MediaType.Companion.toMediaType
@@ -45,7 +48,8 @@ class DiscoverCampaignRepositoryImpl(
         try {
             val idToken = authApi.getIdToken(true)
             val bearerToken = "Bearer $idToken"
-            val response = discoverApi.getCampaigns(bearerToken = bearerToken, q = q, categoryId = categoryId)
+            val response =
+                discoverApi.getCampaigns(bearerToken = bearerToken, q = q, categoryId = categoryId)
 
             when {
                 response.error == true -> emit(Resource.Error(
@@ -370,6 +374,26 @@ class DiscoverCampaignRepositoryImpl(
             }.let { emit(Resource.Error(it)) }
         }
     }
+
+    override suspend fun getNewTempJpegUri(): Uri = withContext(Dispatchers.IO) {
+        val tempJpeg = getNewTempJpeg()
+        return@withContext FileProvider.getUriForFile(
+            appContext,
+            appContext.packageName,
+            tempJpeg
+        )
+    }
+
+    @Suppress("BlockingMethodInNonBlockingContext")
+    private suspend fun getNewTempJpeg(): File = withContext(Dispatchers.IO) {
+        val sdf = SimpleDateFormat("dd-MMM-yyyy", Locale.US)
+        val timeStamp: String = sdf.format(System.currentTimeMillis())
+
+        val dirPictures: File? = appContext.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+
+        return@withContext File.createTempFile(timeStamp, ".jpeg", dirPictures)
+    }
+
 
     private fun createCustomTempFile(context: Context): File {
         val filenameFormat = "dd-MMM-yyyy"

@@ -1,12 +1,11 @@
 package com.ecosense.android.featDiscoverCampaign.presentation.component
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowBackIos
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -19,36 +18,40 @@ import com.ecosense.android.R
 @Composable
 fun DiscoverTopBar(
     onBackClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
-    Column(modifier = modifier.fillMaxWidth()) {
-        TopAppBar(
-            backgroundColor = MaterialTheme.colors.surface,
-            elevation = 0.dp,
-            modifier = Modifier.fillMaxWidth()
+    TopAppBar(
+        backgroundColor = MaterialTheme.colors.surface,
+        modifier = Modifier.fillMaxWidth(),
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceEvenly
         ) {
             Row(
-                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Start,
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxHeight(),
             ) {
                 IconButton(onClick = onBackClick) {
                     Icon(
-                        imageVector = Icons.Default.ArrowBackIos,
-                        contentDescription = stringResource(R.string.back)
-                    )
+                        imageVector = Icons.Default.ArrowBack,
+                        contentDescription = stringResource(R.string.back),
+                        tint = MaterialTheme.colors.onSurface,
+                        )
                 }
-                Text(
-                    text = stringResource(R.string.campaign),
-                    style = MaterialTheme.typography.h6,
-                    fontWeight = FontWeight.Bold
-                )
-                Icon(
-                    imageVector = Icons.Default.ArrowBackIos,
-                    contentDescription = stringResource(R.string.blank),
-                    modifier = Modifier.alpha(0f)
-                )
             }
+
+            Text(
+                text = stringResource(R.string.campaign),
+                style = MaterialTheme.typography.h6,
+                fontWeight = FontWeight.Bold
+            )
+
+            Spacer(modifier = Modifier.weight(1f))
         }
     }
 }

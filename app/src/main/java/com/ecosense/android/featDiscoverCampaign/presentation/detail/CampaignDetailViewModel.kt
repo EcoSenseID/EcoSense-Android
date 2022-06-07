@@ -126,4 +126,16 @@ class CampaignDetailViewModel @Inject constructor(
     fun onImagePicked(uri: Uri?) {
         uri?.let { _state.value = state.value.copy(proofPhotoUrl = it.toString()) }
     }
+
+    suspend fun getNewTempJpegUri(): Uri {
+        val uri = discoverCampaignRepository.getNewTempJpegUri()
+        _state.value = state.value.copy(tempJpegUri = uri)
+        return uri
+    }
+
+    fun onImageCaptured() {
+        _state.value = state.value.copy(
+            proofPhotoUrl = state.value.tempJpegUri.toString()
+        )
+    }
 }
