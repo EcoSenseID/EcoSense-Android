@@ -1,34 +1,46 @@
 package com.ecosense.android.featRecognition.presentation.recognition
 
-import org.junit.Assert.*
-
-import org.junit.After
-import org.junit.Before
+import android.graphics.Bitmap
+import app.cash.turbine.test
+import com.ecosense.android.R
+import com.ecosense.android.core.presentation.util.UIEvent
+import com.ecosense.android.core.util.Resource
+import com.ecosense.android.core.util.UIText
+import com.ecosense.android.featRecognition.data.repository.FakeRecognitionRepository
+import com.ecosense.android.featRecognition.domain.model.Recognisable
+import com.ecosense.android.util.MainCoroutineRule
+import com.ecosense.android.util.TestFaker
+import com.google.common.truth.Truth.assertThat
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.runBlocking
+import org.junit.Rule
 import org.junit.Test
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class RecognitionViewModelTest {
 
-    @Before
-    fun setUp() {
-    }
+    @get:Rule
+    var mainCoroutineRule = MainCoroutineRule()
 
-    @After
-    fun tearDown() {
+    @Test
+    fun `getState, default state`() = runBlocking {
+        val recognitionViewModel = RecognitionViewModel(
+            recognitionRepository = FakeRecognitionRepository()
+        )
+
+        assertThat(recognitionViewModel.state.value).isEqualTo(RecognitionState.defaultValue)
     }
 
     @Test
-    fun getState() {
-    }
+    fun `Saving is unsuccessful, correct state`() = runBlocking {
+        val recognitionViewModel = RecognitionViewModel(
+            recognitionRepository = FakeRecognitionRepository(
+                fakeSaveRecognisableResult = Resource.Error(UIText.DynamicString(TestFaker.getLorem()))
+            )
+        )
 
-    @Test
-    fun getEventFlow() {
-    }
+        recognitionViewModel.onSaveResult()
 
-    @Test
-    fun onAnalyze() {
-    }
-
-    @Test
-    fun onSaveResult() {
+        assertThat(recognitionViewModel.state.value.isSavingResult).isFalse()
     }
 }
