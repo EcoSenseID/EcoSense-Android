@@ -38,7 +38,6 @@ data class CampaignDetailDto(
 data class CampaignTasksDto(
     val id: Int?,
     val name: String?,
-    val taskDescription: String?,
     val completed: Boolean?,
     val proofPhotoUrl: String?,
     val proofCaption: String?,
@@ -46,8 +45,7 @@ data class CampaignTasksDto(
 ) {
     fun toCampaignTasks() = CampaignTask(
         id = id ?: 0,
-        name = name ?: "nama campaign task",
-        taskDescription = taskDescription ?: "",
+        name = name ?: "",
         completed = completed ?: false,
         proofPhotoUrl = proofPhotoUrl ?: "",
         proofCaption = proofCaption ?: "",
