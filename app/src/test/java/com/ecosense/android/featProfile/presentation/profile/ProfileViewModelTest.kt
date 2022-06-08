@@ -1,34 +1,41 @@
 package com.ecosense.android.featProfile.presentation.profile
 
-import org.junit.Assert.*
-
-import org.junit.After
-import org.junit.Before
+import com.ecosense.android.core.data.repository.FakeAuthRepository
+import com.ecosense.android.featProfile.data.repository.FakeProfileRepository
+import com.ecosense.android.featProfile.presentation.profile.model.ProfileScreenState
+import com.ecosense.android.util.MainCoroutineRule
+import com.google.common.truth.Truth.assertThat
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.runBlocking
+import org.junit.Rule
 import org.junit.Test
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class ProfileViewModelTest {
 
-    @Before
-    fun setUp() {
-    }
+    @get:Rule
+    var mainCoroutineRule = MainCoroutineRule()
 
-    @After
-    fun tearDown() {
+    @Test
+    fun `getState, default state`() = runBlocking {
+        val profileViewModel = ProfileViewModel(
+            authRepository = FakeAuthRepository(),
+            profileRepository = FakeProfileRepository(),
+        )
+        assertThat(profileViewModel.state.value).isEqualTo(ProfileScreenState.defaultValue)
     }
 
     @Test
-    fun getState() {
-    }
+    fun `setExpandDropdownMenu, correct state`() {
+        val profileViewModel = ProfileViewModel(
+            authRepository = FakeAuthRepository(),
+            profileRepository = FakeProfileRepository(),
+        )
 
-    @Test
-    fun getEventFlow() {
-    }
+        profileViewModel.setExpandDropdownMenu(true)
+        assertThat(profileViewModel.state.value.isDropdownMenuExpanded).isTrue()
 
-    @Test
-    fun onLogoutClick() {
-    }
-
-    @Test
-    fun setExpandDropdownMenu() {
+        profileViewModel.setExpandDropdownMenu(false)
+        assertThat(profileViewModel.state.value.isDropdownMenuExpanded).isFalse()
     }
 }

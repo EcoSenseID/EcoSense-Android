@@ -80,7 +80,7 @@ class RecognitionViewModel @Inject constructor(
     }
 
     companion object {
-        private const val MAIN_DIAGNOSIS_MINIMUM_CONFIDENCE_PERCENT = 40
-        private const val DIFFERENTIAL_DIAGNOSES_MINIMUM_CONFIDENCE_PERCENT = 30
+        const val MAIN_DIAGNOSIS_MINIMUM_CONFIDENCE_PERCENT = 40
+        const val DIFFERENTIAL_DIAGNOSES_MINIMUM_CONFIDENCE_PERCENT = 30
     }
 }
