@@ -5,8 +5,10 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.ecosense.android.R
 import com.ecosense.android.core.presentation.util.UIEvent
 import com.ecosense.android.core.util.Resource
+import com.ecosense.android.core.util.UIText
 import com.ecosense.android.featDiscoverCampaign.domain.repository.DiscoverCampaignRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
@@ -76,6 +78,7 @@ class CampaignDetailViewModel @Inject constructor(
                         _state.value = state.value.copy(isLoadingUploadProof = false)
                         onCompleteCampaign(campaignId = campaignId)
                         setCampaignId(id = campaignId)
+                        _eventFlow.send(UIEvent.ShowSnackbar(UIText.StringResource(R.string.upload_proof_success)))
                     }
                 }
             }.launchIn(this)
@@ -98,6 +101,7 @@ class CampaignDetailViewModel @Inject constructor(
                     is Resource.Success -> {
                         _state.value = state.value.copy(isLoadingJoinCampaign = false)
                         setCampaignId(id = campaignId)
+                        _eventFlow.send(UIEvent.ShowSnackbar(UIText.StringResource(R.string.join_campaign_success)))
                     }
                 }
             }.launchIn(this)
@@ -116,12 +120,14 @@ class CampaignDetailViewModel @Inject constructor(
         }
         if (countCompletedTask == state.value.campaignDetail.campaignTasks.size) {
             onCompleteCampaignJob = viewModelScope.launch {
-                discoverCampaignRepository.setCompleteCampaign(campaignId = campaignId)
-                    .onEach { result ->
-                        if (result is Resource.Error) {
-                            result.uiText?.let { _eventFlow.send(UIEvent.ShowSnackbar(it)) }
-                        }
-                    }.launchIn(this)
+                discoverCampaignRepository.setCompleteCampaign(campaignId = campaignId).onEach { result ->
+                    if (result is Resource.Error) {
+                        result.uiText?.let { _eventFlow.send(UIEvent.ShowSnackbar(it)) }
+                    }
+                    else if (result is Resource.Success) {
+                        _eventFlow.send(UIEvent.ShowSnackbar(UIText.StringResource(R.string.complete_campaign_success)))
+                    }
+                }.launchIn(this)
             }
         }
     }

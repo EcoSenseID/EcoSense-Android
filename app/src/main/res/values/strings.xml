@@ -193,4 +193,7 @@
     <string name="ecobot">EcoBot</string>
     <string name="search_for_campaign">Search for Campaign</string>
     <string name="joining_campaign">Joining Campaign…</string>
+    <string name="upload_proof_success">Hurray! Task submitted successfully. Keep it up!</string>
+    <string name="join_campaign_success">Successfully joined the campaign. Next, let\'s change the world!</string>
+    <string name="complete_campaign_success">Congratulations, you\'ve completed this campaign! Go to the Profile page to check your experience points.</string>
 </resources>
