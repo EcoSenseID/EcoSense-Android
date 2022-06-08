@@ -74,6 +74,7 @@ class CampaignDetailViewModel @Inject constructor(
                     is Resource.Success -> {
                         _state.value = state.value.copy(isLoadingUploadProof = false)
                         onCompleteCampaign(campaignId = campaignId)
+                        setCampaignId(id = campaignId)
                     }
                 }
             }.launchIn(this)
@@ -95,6 +96,7 @@ class CampaignDetailViewModel @Inject constructor(
                     }
                     is Resource.Success -> {
                         _state.value = state.value.copy(isLoadingJoinCampaign = false)
+                        setCampaignId(id = campaignId)
                     }
                 }
             }.launchIn(this)

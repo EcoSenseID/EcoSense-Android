@@ -32,7 +32,7 @@ import coil.request.ImageRequest
 import coil.size.Scale
 import com.ecosense.android.R
 import com.ecosense.android.core.presentation.theme.spacing
-import com.ecosense.android.featDiscoverCampaign.data.util.detailDateFormatter
+import com.ecosense.android.featDiscoverCampaign.data.util.dateFormatter
 import com.ecosense.android.featDiscoverCampaign.presentation.component.DiscoverTopBar
 import com.ecosense.android.featDiscoverCampaign.presentation.detail.component.UploadTaskProof
 import com.ramcosta.composedestinations.annotation.Destination
@@ -274,7 +274,7 @@ fun CampaignDetailScreen(
                                     ) {
                                         Row {
                                             Text(
-                                                text = detailDateFormatter(campaign.startDate),
+                                                text = dateFormatter(campaign.startDate),
                                                 style = MaterialTheme.typography.subtitle1,
                                                 fontWeight = FontWeight.Bold,
                                                 color = MaterialTheme.colors.primary
@@ -303,7 +303,7 @@ fun CampaignDetailScreen(
                                     ) {
                                         Row {
                                             Text(
-                                                text = detailDateFormatter(campaign.endDate),
+                                                text = dateFormatter(campaign.endDate),
                                                 style = MaterialTheme.typography.subtitle1,
                                                 fontWeight = FontWeight.Bold,
                                                 color = MaterialTheme.colors.primary

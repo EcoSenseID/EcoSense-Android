@@ -11,22 +11,11 @@ import java.util.concurrent.TimeUnit
 import kotlin.math.ceil
 
 @SuppressLint("SimpleDateFormat")
-fun detailDateFormatter(date: String): String {
-    return if (date == "") {
-        ""
-    } else {
-        val sdf = SimpleDateFormat("dd MMMM yyyy")
-        val netDate = Date(date.toLong() * 1000)
-        sdf.format(netDate)
-    }
-}
-
-@SuppressLint("SimpleDateFormat")
 fun dateFormatter(date: String): String {
     return if (date == "") {
         ""
     } else {
-        val sdf = SimpleDateFormat("dd/MM/yyyy")
+        val sdf = SimpleDateFormat("dd MMMM yyyy")
         val netDate = Date(date.toLong() * 1000)
         sdf.format(netDate)
     }
