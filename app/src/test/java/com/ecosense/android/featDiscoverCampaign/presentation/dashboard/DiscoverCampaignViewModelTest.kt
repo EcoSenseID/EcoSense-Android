@@ -7,28 +7,4 @@ import org.junit.Before
 import org.junit.Test
 
 class DiscoverCampaignViewModelTest {
-
-    @Before
-    fun setUp() {
-    }
-
-    @After
-    fun tearDown() {
-    }
-
-    @Test
-    fun getDiscoverCampaignList() {
-    }
-
-    @Test
-    fun getCategoryList() {
-    }
-
-    @Test
-    fun isLoading() {
-    }
-
-    @Test
-    fun getErrorMessage() {
-    }
 }
