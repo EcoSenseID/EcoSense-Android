@@ -91,7 +91,7 @@ fun CategoryCampaignScreen(
                                     end = MaterialTheme.spacing.medium,
                                     bottom = MaterialTheme.spacing.medium
                                 )
-                                .shadow(elevation = 5.dp, shape = RoundedCornerShape(8.dp))
+                                .shadow(elevation = 2.dp, shape = RoundedCornerShape(8.dp))
                                 .clip(shape = RoundedCornerShape(8.dp))
                                 .clickable(onClick = {
                                     navigator.navigate(
@@ -135,7 +135,7 @@ fun CategoryCampaignScreen(
                                         end = MaterialTheme.spacing.medium,
                                         bottom = MaterialTheme.spacing.medium
                                     )
-                                    .shadow(elevation = 5.dp, shape = RoundedCornerShape(8.dp))
+                                    .shadow(elevation = 2.dp, shape = RoundedCornerShape(8.dp))
                                     .clip(shape = RoundedCornerShape(8.dp))
                                     .clickable(onClick = {
                                         navigator.navigate(

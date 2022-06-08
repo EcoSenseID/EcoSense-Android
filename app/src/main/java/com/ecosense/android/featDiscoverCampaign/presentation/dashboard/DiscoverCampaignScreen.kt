@@ -18,7 +18,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.ecosense.android.R
-import com.ecosense.android.core.presentation.theme.Gray800
 import com.ecosense.android.core.presentation.theme.spacing
 import com.ecosense.android.destinations.BrowseCampaignScreenDestination
 import com.ecosense.android.destinations.CategoryCampaignScreenDestination
@@ -47,10 +46,10 @@ fun DiscoverCampaignScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(MaterialTheme.spacing.medium)
+                .padding(vertical = MaterialTheme.spacing.medium)
         ) {
             Row(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth().padding(horizontal = MaterialTheme.spacing.medium),
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
                 Column(
@@ -97,7 +96,7 @@ fun DiscoverCampaignScreen(
                         .weight(1f)
                 ) {
                     Text(
-                        text = if (state.isLoadingDashboard) stringResource(R.string.dash) else state.dashboard.tasks.size.toString(),
+                        text = if (state.isLoadingDashboard) stringResource(R.string.dash) else state.dashboard.completedCampaigns.size.toString(),
                         style = MaterialTheme.typography.h5,
                         color = MaterialTheme.colors.onSecondary
                     )
@@ -112,11 +111,8 @@ fun DiscoverCampaignScreen(
                 text = stringResource(R.string.on_going_task),
                 fontWeight = FontWeight.SemiBold,
                 style = MaterialTheme.typography.subtitle1,
-                color = Gray800,
-                modifier = Modifier.padding(
-                    top = MaterialTheme.spacing.medium,
-                    bottom = MaterialTheme.spacing.small
-                )
+                color = MaterialTheme.colors.onSurface,
+                modifier = Modifier.padding(MaterialTheme.spacing.medium)
             )
             OnGoingTasks(
                 navigator = navigator,
@@ -126,7 +122,11 @@ fun DiscoverCampaignScreen(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = MaterialTheme.spacing.medium),
+                    .padding(
+                        top = MaterialTheme.spacing.large,
+                        start = MaterialTheme.spacing.medium,
+                        end = MaterialTheme.spacing.medium
+                    ),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -134,9 +134,9 @@ fun DiscoverCampaignScreen(
                     Text(
                         text = stringResource(R.string.browse_categories),
                         fontWeight = FontWeight.SemiBold,
-                        color = Gray800,
+                        color = MaterialTheme.colors.onSurface,
                         style = MaterialTheme.typography.subtitle1,
-                        modifier = Modifier.padding(bottom = MaterialTheme.spacing.small)
+                        modifier = Modifier.padding(bottom = MaterialTheme.spacing.medium)
                     )
                 }
                 if (!state.isLoadingCategories) {

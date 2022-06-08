@@ -36,7 +36,7 @@ fun OnGoingTasks(
             modifier = Modifier
                 .fillMaxWidth()
                 .fillMaxHeight(0.55f)
-                .padding(bottom = MaterialTheme.spacing.medium),
+                .padding(horizontal = MaterialTheme.spacing.medium),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -50,24 +50,24 @@ fun OnGoingTasks(
             modifier = Modifier
                 .fillMaxWidth()
                 .fillMaxHeight(0.55f)
-                .padding(bottom = MaterialTheme.spacing.medium)
+                .padding(horizontal = MaterialTheme.spacing.medium)
         ) {
             items(tasks.size) { i ->
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = modifier
                         .padding(
-                            vertical = MaterialTheme.spacing.small
+                            bottom = MaterialTheme.spacing.small
                         )
-                        .shadow(elevation = 5.dp, shape = RoundedCornerShape(8.dp))
+                        .shadow(elevation = 2.dp, shape = RoundedCornerShape(8.dp))
                         .clip(shape = RoundedCornerShape(8.dp))
                         .background(MaterialTheme.colors.surface)
+                        .clickable { navigator.navigate(CampaignDetailScreenDestination(id = tasks[i].campaignId)) }
                         .padding(
                             vertical = MaterialTheme.spacing.small,
                             horizontal = MaterialTheme.spacing.medium
                         )
                         .fillMaxWidth()
-                        .clickable { navigator.navigate(CampaignDetailScreenDestination(id = tasks[i].campaignId)) }
                 ) {
                     Column(
                         modifier = Modifier
