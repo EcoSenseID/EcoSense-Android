@@ -1,6 +1,5 @@
 package com.ecosense.android.featDiscoverCampaign.presentation.detail
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -15,6 +14,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
@@ -52,6 +52,8 @@ fun CampaignDetailScreen(
     val state = viewModel.state.value
     val campaign = state.campaignDetail
 
+    val context = LocalContext.current
+
     val scrollState = rememberScrollState()
 
     Scaffold(
@@ -66,21 +68,31 @@ fun CampaignDetailScreen(
         floatingActionButtonPosition = FabPosition.Center,
         floatingActionButton = {
             if (!campaign.joined && !state.isLoadingCampaignDetail) {
-                ExtendedFloatingActionButton(
-                    text = {
-                        Text(
-                            text = stringResource(R.string.join_campaign),
-                            color = MaterialTheme.colors.onPrimary
-                        )
-                    },
-                    backgroundColor = MaterialTheme.colors.primary,
-                    onClick = {
-                        // TODO: change onClick to change isJoined value in the database (at the moment the real database haven't finished yet, so it can't be simulated)
-                        viewModel.onJoinCampaign(campaignId = id)
-
-                        Log.d("TAG", "DetailCampaignScreen: FAB Clicked")
-                    }
-                )
+                if (!state.isLoadingJoinCampaign) {
+                    ExtendedFloatingActionButton(
+                        text = {
+                            Text(
+                                text = stringResource(R.string.join_campaign),
+                                color = MaterialTheme.colors.onPrimary
+                            )
+                        },
+                        backgroundColor = MaterialTheme.colors.primary,
+                        onClick = {
+                            viewModel.onJoinCampaign(campaignId = id)
+                        }
+                    )
+                } else {
+                    ExtendedFloatingActionButton(
+                        text = {
+                            Text(
+                                text = stringResource(R.string.joining_campaign),
+                                color = MaterialTheme.colors.onPrimary
+                            )
+                        },
+                        backgroundColor = Color.Gray,
+                        onClick = {}
+                    )
+                }
             }
         }
     ) {
@@ -104,11 +116,13 @@ fun CampaignDetailScreen(
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier
+                        .fillMaxWidth()
                         .padding(
                             horizontal = MaterialTheme.spacing.medium,
                             vertical = MaterialTheme.spacing.small
                         )
-                        .fillMaxWidth()
+                        .shadow(elevation = 2.dp, shape = RoundedCornerShape(8.dp))
+                        .clip(shape = RoundedCornerShape(8.dp))
                 ) {
                     Column(
                         modifier = Modifier
@@ -117,7 +131,7 @@ fun CampaignDetailScreen(
                     ) {
                         Box(modifier = Modifier.fillMaxSize()) {
                             AsyncImage(
-                                model = ImageRequest.Builder(LocalContext.current)
+                                model = ImageRequest.Builder(context)
                                     .data(campaign.posterUrl)
                                     .crossfade(true)
                                     .scale(Scale.FILL)
@@ -127,9 +141,7 @@ fun CampaignDetailScreen(
                                     campaign.title
                                 ),
                                 contentScale = ContentScale.FillWidth,
-                                modifier = Modifier
-                                    .fillMaxSize()
-                                    .clip(shape = RoundedCornerShape(8.dp))
+                                modifier = Modifier.fillMaxSize()
                             )
                             Column(
                                 modifier = Modifier
@@ -219,15 +231,17 @@ fun CampaignDetailScreen(
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier
+                        .fillMaxWidth()
                         .padding(
                             top = MaterialTheme.spacing.small,
+                            bottom = MaterialTheme.spacing.medium,
                             start = MaterialTheme.spacing.medium,
                             end = MaterialTheme.spacing.medium
                         )
+                        .shadow(elevation = 2.dp, shape = RoundedCornerShape(8.dp))
                         .clip(shape = RoundedCornerShape(8.dp))
                         .background(MaterialTheme.colors.surface)
                         .padding(MaterialTheme.spacing.small)
-                        .fillMaxWidth()
                 ) {
                     Column(
                         modifier = Modifier
@@ -358,7 +372,7 @@ fun CampaignDetailScreen(
                                                 fontSize = 18.sp,
                                                 fontWeight = FontWeight.Bold,
                                                 modifier = Modifier
-                                                    .padding(bottom = MaterialTheme.spacing.small)
+                                                    .padding(bottom = MaterialTheme.spacing.medium)
                                             )
                                         }
                                         Row(modifier = Modifier.padding(horizontal = MaterialTheme.spacing.medium)) {
@@ -367,7 +381,7 @@ fun CampaignDetailScreen(
                                                     Row(
                                                         verticalAlignment = Alignment.Top,
                                                         modifier = Modifier.padding(
-                                                            vertical = MaterialTheme.spacing.small
+                                                            bottom = MaterialTheme.spacing.small
                                                         )
                                                     ) {
                                                         Column {
@@ -386,48 +400,20 @@ fun CampaignDetailScreen(
                                                                 textAlign = TextAlign.Justify,
                                                                 style = MaterialTheme.typography.body1,
                                                                 modifier = Modifier
-                                                                    .padding(top = 3.dp)
+                                                                    .padding(top = 2.dp)
                                                             )
-                                                        }
-                                                        if (campaign.joined && task.completed) {
-                                                            Column(
-                                                                modifier = Modifier.fillMaxWidth(),
-                                                                horizontalAlignment = Alignment.End
-                                                            ) {
-                                                                Text(
-                                                                    text = stringResource(R.string.completed),
-                                                                    textAlign = TextAlign.Right,
-                                                                    fontWeight = FontWeight.Bold,
-                                                                    fontStyle = FontStyle.Italic,
-                                                                    style = MaterialTheme.typography.caption,
-                                                                    color = MaterialTheme.colors.secondary
-                                                                )
-                                                            }
                                                         }
                                                     }
                                                     if (campaign.joined) {
                                                         if (task.completed) {
                                                             Row(
-                                                                modifier = Modifier.padding(
-                                                                    bottom = MaterialTheme.spacing.small
-                                                                )
-                                                            ) {
-                                                                Text(
-                                                                    text = task.taskDescription,
-                                                                    textAlign = TextAlign.Justify,
-                                                                    style = MaterialTheme.typography.caption
-                                                                )
-                                                            }
-                                                            Row(
                                                                 modifier = Modifier
                                                                     .fillMaxWidth()
-                                                                    .height(100.dp)
+                                                                    .wrapContentHeight()
                                                                     .padding(bottom = MaterialTheme.spacing.small)
                                                             ) {
                                                                 AsyncImage(
-                                                                    model = ImageRequest.Builder(
-                                                                        LocalContext.current
-                                                                    )
+                                                                    model = ImageRequest.Builder(context)
                                                                         .data(task.proofPhotoUrl)
                                                                         .crossfade(true)
                                                                         .scale(Scale.FILL)
@@ -461,7 +447,7 @@ fun CampaignDetailScreen(
                                                                 Text(
                                                                     text = stringResource(
                                                                         R.string.finished_on,
-                                                                        task.completedTimeStamp
+                                                                        dateFormatter(task.completedTimeStamp)
                                                                     ),
                                                                     style = MaterialTheme.typography.caption,
                                                                     color = MaterialTheme.colors.primary

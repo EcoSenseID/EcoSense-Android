@@ -96,8 +96,9 @@
     <string name="proof_completion">Proof of %s task completion.</string>
     <string name="unsubmitted_proof">Unsubmitted proof of %s task completion.</string>
     <string name="finished_on">Finished on %s</string>
-    <string name="select_image">Select Image</string>
+    <string name="open_camera">Open Camera</string>
     <string name="submit">Submit</string>
+    <string name="submitting">Submitting…</string>
     <string name="sort_by">Sort by</string>
     <string name="show_hide_dropdown">Show or hide the drop down</string>
     <string name="blank">Blank</string>
@@ -191,4 +192,5 @@
     <string name="my_profile">My Profile</string>
     <string name="ecobot">EcoBot</string>
     <string name="search_for_campaign">Search for Campaign</string>
+    <string name="joining_campaign">Joining Campaign…</string>
 </resources>

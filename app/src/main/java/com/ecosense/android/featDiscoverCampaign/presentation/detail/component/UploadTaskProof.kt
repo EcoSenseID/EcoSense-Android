@@ -54,7 +54,6 @@ fun UploadTaskProof(viewModel: CampaignDetailViewModel, task: CampaignTask, camp
     ) {
         Button(
             onClick = {
-                // TODO: currently can only pick image from gallery, find a way to make it able to use camera x too
 //                imagePickerLauncher.launch(
 //                    context.getString(R.string.content_type_image)
 //                )
@@ -67,8 +66,8 @@ fun UploadTaskProof(viewModel: CampaignDetailViewModel, task: CampaignTask, camp
                     }
                     else -> camPermission.launchPermissionRequest()
                 }
-
             },
+            enabled = !state.isLoadingUploadProof,
             modifier = Modifier
                 .fillMaxWidth()
                 .clip(
@@ -76,14 +75,14 @@ fun UploadTaskProof(viewModel: CampaignDetailViewModel, task: CampaignTask, camp
                         8.dp
                     )
                 )
-        ) { Text(stringResource(R.string.select_image)) }
+        ) { Text(stringResource(R.string.open_camera)) }
     }
 
     if (state.proofPhotoUrl != null) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(100.dp)
+                .wrapContentHeight()
                 .padding(bottom = MaterialTheme.spacing.small)
         ) {
             AsyncImage(
@@ -121,6 +120,7 @@ fun UploadTaskProof(viewModel: CampaignDetailViewModel, task: CampaignTask, camp
                 inputValue.value =
                     it
             },
+            enabled = !state.isLoadingUploadProof,
             label = {
                 Text(
                     stringResource(R.string.add_caption)
@@ -138,12 +138,12 @@ fun UploadTaskProof(viewModel: CampaignDetailViewModel, task: CampaignTask, camp
         Button(
             onClick = {
                 viewModel.onUploadCompletionProof(
-                    caption = inputValue.value.toString(),
+                    caption = inputValue.value.text,
                     taskId = task.id,
                     campaignId = campaignId
                 )
-                //TODO: trigger the compose to reload the page
             },
+            enabled = !state.isLoadingUploadProof,
             modifier = Modifier
                 .fillMaxWidth()
                 .clip(
@@ -152,7 +152,10 @@ fun UploadTaskProof(viewModel: CampaignDetailViewModel, task: CampaignTask, camp
                     )
                 )
         ) {
-            Text(stringResource(R.string.submit))
+            if (!state.isLoadingUploadProof)
+                Text(stringResource(R.string.submit))
+            else
+                Text(stringResource(R.string.submitting))
         }
     }
 }
