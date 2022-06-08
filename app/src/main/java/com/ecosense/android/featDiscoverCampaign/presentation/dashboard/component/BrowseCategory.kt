@@ -37,13 +37,11 @@ fun BrowseCategory(
     categories: List<Category>,
     isLoading: Boolean
 ) {
-    val scrollState = rememberScrollState()
+    val horizontalScrollState = rememberScrollState()
 
     if (isLoading) {
         Row(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(bottom = MaterialTheme.spacing.medium),
+            modifier = Modifier.fillMaxSize(),
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -53,19 +51,20 @@ fun BrowseCategory(
             )
         }
     } else {
-        Row(modifier = modifier.horizontalScroll(scrollState)) {
+        Row(modifier = modifier.horizontalScroll(horizontalScrollState)) {
             Column {
                 Row(
                     modifier = modifier
+                        .padding(
+                            horizontal = MaterialTheme.spacing.medium
+                        )
                         .width(125.dp)
                         .fillMaxHeight()
-                        .padding(bottom = MaterialTheme.spacing.small)
                 ) {
                     Column(
                         horizontalAlignment = Alignment.Start,
                         modifier = modifier
-                            .padding(end = MaterialTheme.spacing.small)
-                            .shadow(elevation = 5.dp, shape = RoundedCornerShape(8.dp))
+                            .shadow(elevation = 2.dp, shape = RoundedCornerShape(8.dp))
                             .clip(shape = RoundedCornerShape(8.dp))
                             .clickable(onClick = {
                                 navigator.navigate(
@@ -102,14 +101,13 @@ fun BrowseCategory(
                     modifier = modifier
                         .fillMaxWidth()
                         .fillMaxHeight()
-                        .padding(vertical = MaterialTheme.spacing.small)
                 ) {
                     categories.forEach { category ->
                         Column(
                             horizontalAlignment = Alignment.CenterHorizontally,
                             modifier = modifier
-                                .padding(horizontal = MaterialTheme.spacing.small)
-                                .shadow(elevation = 5.dp, shape = RoundedCornerShape(8.dp))
+                                .padding(end = MaterialTheme.spacing.medium)
+                                .shadow(elevation = 2.dp, shape = RoundedCornerShape(8.dp))
                                 .clip(shape = RoundedCornerShape(8.dp))
                                 .clickable(onClick = {
                                     navigator.navigate(
