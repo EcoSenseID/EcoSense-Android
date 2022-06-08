@@ -30,6 +30,7 @@ class CampaignDetailViewModel @Inject constructor(
     private var setCampaignIdJob: Job? = null
     fun setCampaignId(id: Int) {
         setCampaignIdJob?.cancel()
+        _state.value = state.value.copy(proofPhotoUrl = null)
         setCampaignIdJob = viewModelScope.launch {
             discoverCampaignRepository.getCampaignDetail(id = id).onEach { result ->
                 when (result) {
@@ -113,7 +114,7 @@ class CampaignDetailViewModel @Inject constructor(
                 countCompletedTask++
             }
         }
-        if (countCompletedTask != state.value.campaignDetail.campaignTasks.size) {
+        if (countCompletedTask == state.value.campaignDetail.campaignTasks.size) {
             onCompleteCampaignJob = viewModelScope.launch {
                 discoverCampaignRepository.setCompleteCampaign(campaignId = campaignId)
                     .onEach { result ->
