@@ -5,7 +5,9 @@ package com.ecosense.android.featDiscoverCampaign.presentation.dashboard.compone
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.slideIn
 import androidx.compose.animation.slideOut
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
@@ -17,6 +19,8 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -25,6 +29,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import com.ecosense.android.R
+import com.ecosense.android.core.presentation.theme.spacing
 
 @Composable
 fun DashboardTopBar(
@@ -58,7 +63,9 @@ fun DashboardTopBar(
             },
         ) {
             Row(
-                modifier = modifier.fillMaxWidth(),
+                modifier = modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = MaterialTheme.spacing.medium),
                 horizontalArrangement = Arrangement.Start,
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -68,7 +75,14 @@ fun DashboardTopBar(
                     keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Search),
                     keyboardActions = keyboardActions,
                     singleLine = true,
-                    modifier = modifier.weight(9f)
+                    placeholder = { Text(stringResource(R.string.search_for_campaign)) },
+                    colors = TextFieldDefaults.textFieldColors(
+                        backgroundColor = MaterialTheme.colors.secondary.copy(alpha = 0.1f)
+                    ),
+                    shape = RoundedCornerShape(4.dp),
+                    modifier = modifier
+                        .weight(9f)
+                        .padding(top = 2.dp)
                 )
                 IconButton(onClick = {
                     expanded = false

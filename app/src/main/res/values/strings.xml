@@ -190,4 +190,5 @@
     <string name="dash">-</string>
     <string name="my_profile">My Profile</string>
     <string name="ecobot">EcoBot</string>
+    <string name="search_for_campaign">Search for Campaign</string>
 </resources>

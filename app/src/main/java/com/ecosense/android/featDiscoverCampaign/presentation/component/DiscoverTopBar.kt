@@ -4,21 +4,16 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.ArrowBackIos
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
 import com.ecosense.android.R
 
 @Composable
 fun DiscoverTopBar(
-    onBackClick: () -> Unit,
-    modifier: Modifier = Modifier,
+    onBackClick: () -> Unit
 ) {
     TopAppBar(
         backgroundColor = MaterialTheme.colors.surface,
