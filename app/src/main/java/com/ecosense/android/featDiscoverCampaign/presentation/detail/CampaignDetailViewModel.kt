@@ -73,6 +73,7 @@ class CampaignDetailViewModel @Inject constructor(
                     }
                     is Resource.Loading -> {
                         _state.value = state.value.copy(isLoadingUploadProof = true)
+                        _eventFlow.send(UIEvent.HideKeyboard)
                     }
                     is Resource.Success -> {
                         _state.value = state.value.copy(isLoadingUploadProof = false)
