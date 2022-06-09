@@ -1,14 +1,15 @@
 package com.ecosense.android.featDiscoverCampaign.presentation.detail.component
 
 import android.Manifest
+import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.Text
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Image
+import androidx.compose.material.icons.outlined.PhotoCamera
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -38,14 +39,47 @@ fun UploadTaskProof(viewModel: CampaignDetailViewModel, task: CampaignTask, camp
     val coroutineScope = rememberCoroutineScope()
     val camPermission = rememberPermissionState(permission = Manifest.permission.CAMERA)
 
-    val imagePickerLauncher = rememberLauncherForActivityResult(
+    val cameraImagePickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.TakePicture()
     ) { success ->
-//            uri: Uri? -> viewModel.onImagePicked(uri)
         if (success) viewModel.onImageCaptured()
     }
 
+    val galleryImagePickerLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent()
+    ) { uri: Uri? -> viewModel.onImagePicked(uri) }
+
+    val context = LocalContext.current
+
     val inputValue = remember { mutableStateOf(TextFieldValue()) }
+
+    Row(
+        modifier = Modifier.padding(
+            bottom = MaterialTheme.spacing.extraSmall
+        )
+    ) {
+        Button(
+            onClick = {
+                galleryImagePickerLauncher.launch(
+                    context.getString(R.string.content_type_image)
+                )
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .clip(
+                    shape = RoundedCornerShape(
+                        8.dp
+                    )
+                )
+        ) {
+            Icon(
+                imageVector = Icons.Outlined.Image,
+                contentDescription = stringResource(R.string.open_gallery)
+            )
+            Spacer(Modifier.width(MaterialTheme.spacing.extraSmall))
+            Text(stringResource(R.string.open_gallery))
+        }
+    }
 
     Row(
         modifier = Modifier.padding(
@@ -54,14 +88,11 @@ fun UploadTaskProof(viewModel: CampaignDetailViewModel, task: CampaignTask, camp
     ) {
         Button(
             onClick = {
-//                imagePickerLauncher.launch(
-//                    context.getString(R.string.content_type_image)
-//                )
                 when {
                     camPermission.hasPermission -> {
                         coroutineScope.launch {
                             val uri = viewModel.getNewTempJpegUri()
-                            imagePickerLauncher.launch(uri)
+                            cameraImagePickerLauncher.launch(uri)
                         }
                     }
                     else -> camPermission.launchPermissionRequest()
@@ -75,7 +106,14 @@ fun UploadTaskProof(viewModel: CampaignDetailViewModel, task: CampaignTask, camp
                         8.dp
                     )
                 )
-        ) { Text(stringResource(R.string.open_camera)) }
+        ) {
+            Icon(
+                imageVector = Icons.Outlined.PhotoCamera,
+                contentDescription = stringResource(R.string.open_camera)
+            )
+            Spacer(Modifier.width(MaterialTheme.spacing.extraSmall))
+            Text(stringResource(R.string.open_camera))
+        }
     }
 
     if (state.proofPhotoUrl != null) {

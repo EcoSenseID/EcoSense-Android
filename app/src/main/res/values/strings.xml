@@ -97,6 +97,7 @@
     <string name="unsubmitted_proof">Unsubmitted proof of %s task completion.</string>
     <string name="finished_on">Finished on %s</string>
     <string name="open_camera">Open Camera</string>
+    <string name="open_gallery">Open Gallery</string>
     <string name="submit">Submit</string>
     <string name="submitting">Submitting…</string>
     <string name="sort_by">Sort by</string>
@@ -196,4 +197,6 @@
     <string name="upload_proof_success">Hurray! Task submitted successfully. Keep it up!</string>
     <string name="join_campaign_success">Successfully joined the campaign. Next, let\'s change the world!</string>
     <string name="complete_campaign_success">Congratulations, you\'ve completed this campaign! Go to the Profile page to check your experience points.</string>
+    <string name="task_number">Task %s</string>
+    <string name="task_completion_mark">Task Completion Mark</string>
 </resources>
