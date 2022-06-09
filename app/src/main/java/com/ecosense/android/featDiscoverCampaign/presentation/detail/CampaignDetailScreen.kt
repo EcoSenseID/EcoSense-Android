@@ -7,6 +7,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.runtime.Composable
@@ -400,33 +401,46 @@ fun CampaignDetailScreen(
                                         Row(modifier = Modifier.padding(horizontal = MaterialTheme.spacing.medium)) {
                                             Column(modifier = Modifier.fillMaxWidth()) {
                                                 campaign.campaignTasks.forEachIndexed { index, task ->
-                                                    Row(
-                                                        verticalAlignment = Alignment.Top,
-                                                        modifier = Modifier.padding(
-                                                            bottom = MaterialTheme.spacing.small
-                                                        )
-                                                    ) {
-                                                        Column {
+                                                    if (campaign.joined) {
+                                                        Row(
+                                                            modifier = Modifier.padding(
+                                                                bottom = MaterialTheme.spacing.extraSmall
+                                                            ),
+                                                            verticalAlignment = Alignment.CenterVertically
+                                                        ) {
+                                                            Icon(
+                                                                imageVector = Icons.Filled.CheckCircle,
+                                                                tint =
+                                                                if (task.completed)
+                                                                    MaterialTheme.colors.primary
+                                                                else
+                                                                    Color.Gray,
+                                                                contentDescription = stringResource(R.string.task_completion_mark),
+                                                                modifier = Modifier.padding(
+                                                                    end = MaterialTheme.spacing.medium
+                                                                )
+                                                            )
                                                             Text(
-                                                                text = "${index + 1}",
+                                                                text = stringResource(R.string.task_number, index + 1),
                                                                 fontSize = 18.sp,
                                                                 fontWeight = FontWeight.Bold,
                                                                 color = MaterialTheme.colors.primary,
                                                                 modifier = Modifier
-                                                                    .padding(end = MaterialTheme.spacing.medium)
+                                                                    .padding(top = 3.dp)
                                                             )
                                                         }
-                                                        Column {
+                                                        Row(
+                                                            modifier = Modifier.padding(
+                                                                bottom = MaterialTheme.spacing.small
+                                                            )
+                                                        ) {
                                                             Text(
                                                                 text = task.name,
-                                                                textAlign = TextAlign.Justify,
-                                                                style = MaterialTheme.typography.body1,
-                                                                modifier = Modifier
-                                                                    .padding(top = 2.dp)
+                                                                textAlign = TextAlign.Start,
+                                                                style = MaterialTheme.typography.body1
                                                             )
                                                         }
-                                                    }
-                                                    if (campaign.joined) {
+
                                                         if (task.completed) {
                                                             Row(
                                                                 modifier = Modifier
@@ -487,6 +501,33 @@ fun CampaignDetailScreen(
                                                                     viewModel = viewModel,
                                                                     task = task,
                                                                     campaignId = id
+                                                                )
+                                                            }
+                                                        }
+                                                    } else {
+                                                        Row(
+                                                            verticalAlignment = Alignment.Top,
+                                                            modifier = Modifier.padding(
+                                                                bottom = MaterialTheme.spacing.small
+                                                            )
+                                                        ) {
+                                                            Column {
+                                                                Text(
+                                                                    text = "${index + 1}",
+                                                                    fontSize = 18.sp,
+                                                                    fontWeight = FontWeight.Bold,
+                                                                    color = MaterialTheme.colors.primary,
+                                                                    modifier = Modifier
+                                                                        .padding(end = MaterialTheme.spacing.medium)
+                                                                )
+                                                            }
+                                                            Column {
+                                                                Text(
+                                                                    text = task.name,
+                                                                    textAlign = TextAlign.Start,
+                                                                    style = MaterialTheme.typography.body1,
+                                                                    modifier = Modifier
+                                                                        .padding(top = 3.dp)
                                                                 )
                                                             }
                                                         }
