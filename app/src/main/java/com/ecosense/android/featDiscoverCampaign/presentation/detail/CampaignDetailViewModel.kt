@@ -51,6 +51,7 @@ class CampaignDetailViewModel @Inject constructor(
                             campaignDetail = result.data ?: state.value.campaignDetail,
                             isLoadingCampaignDetail = false
                         )
+                        onCompleteCampaign(campaignId = id)
                     }
                 }
             }.launchIn(this)
@@ -78,7 +79,6 @@ class CampaignDetailViewModel @Inject constructor(
                     is Resource.Success -> {
                         _state.value = state.value.copy(isLoadingUploadProof = false)
                         _eventFlow.send(UIEvent.ShowSnackbar(UIText.StringResource(R.string.upload_proof_success)))
-                        onCompleteCampaign(campaignId = campaignId)
                         setCampaignId(id = campaignId)
                     }
                 }
@@ -113,7 +113,7 @@ class CampaignDetailViewModel @Inject constructor(
     private fun onCompleteCampaign(campaignId: Int) {
         onCompleteCampaignJob?.cancel()
 
-        var countCompletedTask = 1
+        var countCompletedTask = 0
         state.value.campaignDetail.campaignTasks.forEach { task ->
             if (task.completed) {
                 countCompletedTask++
