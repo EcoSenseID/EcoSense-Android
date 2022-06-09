@@ -17,6 +17,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import logcat.logcat
 import javax.inject.Inject
 
 @HiltViewModel
@@ -77,9 +78,9 @@ class CampaignDetailViewModel @Inject constructor(
                     }
                     is Resource.Success -> {
                         _state.value = state.value.copy(isLoadingUploadProof = false)
+                        _eventFlow.send(UIEvent.ShowSnackbar(UIText.StringResource(R.string.upload_proof_success)))
                         onCompleteCampaign(campaignId = campaignId)
                         setCampaignId(id = campaignId)
-                        _eventFlow.send(UIEvent.ShowSnackbar(UIText.StringResource(R.string.upload_proof_success)))
                     }
                 }
             }.launchIn(this)
@@ -101,8 +102,8 @@ class CampaignDetailViewModel @Inject constructor(
                     }
                     is Resource.Success -> {
                         _state.value = state.value.copy(isLoadingJoinCampaign = false)
-                        setCampaignId(id = campaignId)
                         _eventFlow.send(UIEvent.ShowSnackbar(UIText.StringResource(R.string.join_campaign_success)))
+                        setCampaignId(id = campaignId)
                     }
                 }
             }.launchIn(this)
@@ -113,15 +114,19 @@ class CampaignDetailViewModel @Inject constructor(
     private fun onCompleteCampaign(campaignId: Int) {
         onCompleteCampaignJob?.cancel()
 
-        var countCompletedTask = 0
+        var countCompletedTask = 1
         state.value.campaignDetail.campaignTasks.forEach { task ->
             if (task.completed) {
                 countCompletedTask++
             }
         }
+        logcat("heu: cCT") {countCompletedTask.toString()}
+        logcat("heu: cTS") {state.value.campaignDetail.campaignTasks.size.toString()}
+        logcat("heu: cCT==cTS") {(countCompletedTask == state.value.campaignDetail.campaignTasks.size).toString()}
         if (countCompletedTask == state.value.campaignDetail.campaignTasks.size) {
             onCompleteCampaignJob = viewModelScope.launch {
                 discoverCampaignRepository.setCompleteCampaign(campaignId = campaignId).onEach { result ->
+                    logcat("heu: result") {result::class.java.name}
                     if (result is Resource.Error) {
                         result.uiText?.let { _eventFlow.send(UIEvent.ShowSnackbar(it)) }
                     }
