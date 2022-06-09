@@ -1,13 +1,8 @@
 package com.ecosense.android.featRecognition.presentation.recognition
 
-import android.graphics.Bitmap
-import app.cash.turbine.test
-import com.ecosense.android.R
-import com.ecosense.android.core.presentation.util.UIEvent
 import com.ecosense.android.core.util.Resource
 import com.ecosense.android.core.util.UIText
 import com.ecosense.android.featRecognition.data.repository.FakeRecognitionRepository
-import com.ecosense.android.featRecognition.domain.model.Recognisable
 import com.ecosense.android.util.MainCoroutineRule
 import com.ecosense.android.util.TestFaker
 import com.google.common.truth.Truth.assertThat

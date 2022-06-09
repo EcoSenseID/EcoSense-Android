@@ -1,4 +1,4 @@
-package com.ecosense.android.featRecognition.presentation.recognition.component
+package com.ecosense.android.featRecognition.presentation.saved.component
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.*

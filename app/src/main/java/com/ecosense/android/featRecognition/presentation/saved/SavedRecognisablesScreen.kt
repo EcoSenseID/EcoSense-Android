@@ -24,7 +24,7 @@ import com.ecosense.android.core.presentation.util.UIEvent
 import com.ecosense.android.core.presentation.util.asString
 import com.ecosense.android.destinations.RecognisableDetailScreenDestination
 import com.ecosense.android.featRecognition.presentation.model.toDetailParcelable
-import com.ecosense.android.featRecognition.presentation.recognition.component.SavedRecognisablesTopBar
+import com.ecosense.android.featRecognition.presentation.saved.component.SavedRecognisablesTopBar
 import com.ecosense.android.featRecognition.presentation.saved.component.SavedRecognisableItem
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator

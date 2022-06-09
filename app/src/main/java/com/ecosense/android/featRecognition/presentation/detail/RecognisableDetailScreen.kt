@@ -24,7 +24,7 @@ import com.ecosense.android.core.presentation.theme.spacing
 import com.ecosense.android.core.presentation.util.asString
 import com.ecosense.android.core.util.Constants
 import com.ecosense.android.featRecognition.presentation.model.RecognisableDetailParcelable
-import com.ecosense.android.featRecognition.presentation.saved.component.RecognisableDetailTopBar
+import com.ecosense.android.featRecognition.presentation.detail.component.RecognisableDetailTopBar
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import java.text.SimpleDateFormat

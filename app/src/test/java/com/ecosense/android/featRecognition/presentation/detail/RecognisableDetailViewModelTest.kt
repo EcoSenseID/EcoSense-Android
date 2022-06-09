@@ -1,7 +1,6 @@
 package com.ecosense.android.featRecognition.presentation.detail
 
 import app.cash.turbine.test
-import com.ecosense.android.R
 import com.ecosense.android.core.presentation.util.UIEvent
 import com.ecosense.android.core.util.Resource
 import com.ecosense.android.core.util.UIText

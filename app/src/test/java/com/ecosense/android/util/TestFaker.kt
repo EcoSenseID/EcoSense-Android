@@ -14,9 +14,9 @@ object TestFaker {
 
     val validName get() = "John Doe"
 
-    val validPhotoUri get() = Uri.parse(validPhotoUrl)
+    val validPhotoUri: Uri get() = Uri.parse(validPhotoUrl)
 
-    val validPhotoUrl
+    private val validPhotoUrl
         get() = "https://cdn.statically.io/og/theme=dark/${System.currentTimeMillis()}.jpg"
 
     val validIdToken get() = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
