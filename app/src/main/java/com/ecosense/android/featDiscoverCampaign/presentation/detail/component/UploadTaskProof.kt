@@ -67,6 +67,7 @@ fun UploadTaskProof(viewModel: CampaignDetailViewModel, task: CampaignTask, camp
                     context.getString(R.string.content_type_image)
                 )
             },
+            enabled = !state.isLoadingUploadProof,
             modifier = Modifier
                 .fillMaxWidth()
                 .clip(

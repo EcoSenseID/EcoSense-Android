@@ -473,11 +473,13 @@ fun CampaignDetailScreen(
                                                                     bottom = MaterialTheme.spacing.small
                                                                 )
                                                             ) {
-                                                                Text(
-                                                                    text = "\"${task.proofCaption}\"",
-                                                                    fontStyle = FontStyle.Italic,
-                                                                    style = MaterialTheme.typography.caption
-                                                                )
+                                                                if (task.proofCaption != "") {
+                                                                    Text(
+                                                                        text = "\"${task.proofCaption}\"",
+                                                                        fontStyle = FontStyle.Italic,
+                                                                        style = MaterialTheme.typography.caption
+                                                                    )
+                                                                }
                                                             }
                                                             Row {
                                                                 Text(
