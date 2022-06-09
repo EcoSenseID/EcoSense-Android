@@ -201,4 +201,7 @@
     <string name="task_number">Task %s</string>
     <string name="task_completion_mark">Task Completion Mark</string>
     <string name="cancel">Cancel</string>
+    <string name="attach_proof_photo">Attach Proof Photo</string>
+    <string name="choose_image_from">Choose Image From…</string>
+    <string name="whoops">Whoops!</string>
 </resources>

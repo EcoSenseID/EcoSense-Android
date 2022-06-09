@@ -17,7 +17,6 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
-import logcat.logcat
 import javax.inject.Inject
 
 @HiltViewModel
@@ -120,13 +119,9 @@ class CampaignDetailViewModel @Inject constructor(
                 countCompletedTask++
             }
         }
-        logcat("heu: cCT") {countCompletedTask.toString()}
-        logcat("heu: cTS") {state.value.campaignDetail.campaignTasks.size.toString()}
-        logcat("heu: cCT==cTS") {(countCompletedTask == state.value.campaignDetail.campaignTasks.size).toString()}
         if (countCompletedTask == state.value.campaignDetail.campaignTasks.size) {
             onCompleteCampaignJob = viewModelScope.launch {
                 discoverCampaignRepository.setCompleteCampaign(campaignId = campaignId).onEach { result ->
-                    logcat("heu: result") {result::class.java.name}
                     if (result is Resource.Error) {
                         result.uiText?.let { _eventFlow.send(UIEvent.ShowSnackbar(it)) }
                     }
