@@ -9,17 +9,21 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.ecosense.android.R
-import com.ecosense.android.core.presentation.theme.Gray800
 import com.ecosense.android.core.presentation.theme.spacing
+import com.ecosense.android.core.presentation.util.UIEvent
+import com.ecosense.android.core.presentation.util.asString
 import com.ecosense.android.destinations.BrowseCampaignScreenDestination
 import com.ecosense.android.destinations.CategoryCampaignScreenDestination
 import com.ecosense.android.featDiscoverCampaign.presentation.dashboard.component.BrowseCategory
@@ -28,6 +32,7 @@ import com.ecosense.android.featDiscoverCampaign.presentation.dashboard.componen
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootNavGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 @Destination
@@ -40,6 +45,26 @@ fun DiscoverCampaignScreen(
 
     val state = viewModel.state.value
 
+    val context = LocalContext.current
+    val focusManager = LocalFocusManager.current
+
+    LaunchedEffect(key1 = true) {
+        viewModel.eventFlow.collectLatest { event ->
+            when (event) {
+                is UIEvent.ShowSnackbar -> {
+                    focusManager.clearFocus()
+                    scaffoldState.snackbarHostState.showSnackbar(
+                        message = event.uiText.asString(context)
+                    )
+                }
+
+                is UIEvent.HideKeyboard -> {
+                    focusManager.clearFocus()
+                }
+            }
+        }
+    }
+
     Scaffold(
         topBar = { DashboardTopBar({ navigator.navigate(BrowseCampaignScreenDestination(search = it, categoryId = null)) }) },
         scaffoldState = scaffoldState
@@ -47,10 +72,10 @@ fun DiscoverCampaignScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(MaterialTheme.spacing.medium)
+                .padding(vertical = MaterialTheme.spacing.medium)
         ) {
             Row(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth().padding(horizontal = MaterialTheme.spacing.medium),
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
                 Column(
@@ -77,7 +102,7 @@ fun DiscoverCampaignScreen(
                         color = MaterialTheme.colors.onPrimary
                     )
                     Text(
-                        text = stringResource(R.string.tasks_left),
+                        text = stringResource(R.string.tasks_to_go),
                         style = MaterialTheme.typography.subtitle2,
                         color = MaterialTheme.colors.onPrimary
                     )
@@ -97,7 +122,7 @@ fun DiscoverCampaignScreen(
                         .weight(1f)
                 ) {
                     Text(
-                        text = if (state.isLoadingDashboard) stringResource(R.string.dash) else state.dashboard.tasks.size.toString(),
+                        text = if (state.isLoadingDashboard) stringResource(R.string.dash) else state.dashboard.completedCampaigns.size.toString(),
                         style = MaterialTheme.typography.h5,
                         color = MaterialTheme.colors.onSecondary
                     )
@@ -112,11 +137,8 @@ fun DiscoverCampaignScreen(
                 text = stringResource(R.string.on_going_task),
                 fontWeight = FontWeight.SemiBold,
                 style = MaterialTheme.typography.subtitle1,
-                color = Gray800,
-                modifier = Modifier.padding(
-                    top = MaterialTheme.spacing.medium,
-                    bottom = MaterialTheme.spacing.small
-                )
+                color = MaterialTheme.colors.onSurface,
+                modifier = Modifier.padding(MaterialTheme.spacing.medium)
             )
             OnGoingTasks(
                 navigator = navigator,
@@ -126,7 +148,11 @@ fun DiscoverCampaignScreen(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = MaterialTheme.spacing.medium),
+                    .padding(
+                        top = MaterialTheme.spacing.large,
+                        start = MaterialTheme.spacing.medium,
+                        end = MaterialTheme.spacing.medium
+                    ),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -134,9 +160,9 @@ fun DiscoverCampaignScreen(
                     Text(
                         text = stringResource(R.string.browse_categories),
                         fontWeight = FontWeight.SemiBold,
-                        color = Gray800,
+                        color = MaterialTheme.colors.onSurface,
                         style = MaterialTheme.typography.subtitle1,
-                        modifier = Modifier.padding(bottom = MaterialTheme.spacing.small)
+                        modifier = Modifier.padding(bottom = MaterialTheme.spacing.medium)
                     )
                 }
                 if (!state.isLoadingCategories) {

@@ -15,7 +15,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 import com.ecosense.android.R
 import com.ecosense.android.core.presentation.theme.spacing
 import com.ecosense.android.destinations.CampaignDetailScreenDestination
@@ -36,7 +38,7 @@ fun OnGoingTasks(
             modifier = Modifier
                 .fillMaxWidth()
                 .fillMaxHeight(0.55f)
-                .padding(bottom = MaterialTheme.spacing.medium),
+                .padding(horizontal = MaterialTheme.spacing.medium),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -46,72 +48,92 @@ fun OnGoingTasks(
             )
         }
     } else {
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxHeight(0.55f)
-                .padding(bottom = MaterialTheme.spacing.medium)
-        ) {
-            items(tasks.size) { i ->
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = modifier
-                        .padding(
-                            vertical = MaterialTheme.spacing.small
-                        )
-                        .shadow(elevation = 5.dp, shape = RoundedCornerShape(8.dp))
-                        .clip(shape = RoundedCornerShape(8.dp))
-                        .background(MaterialTheme.colors.surface)
-                        .padding(
-                            vertical = MaterialTheme.spacing.small,
-                            horizontal = MaterialTheme.spacing.medium
-                        )
-                        .fillMaxWidth()
-                        .clickable { navigator.navigate(CampaignDetailScreenDestination(id = tasks[i].campaignId)) }
-                ) {
-                    Column(
-                        modifier = Modifier
-                            .wrapContentSize()
+        if (tasks.isEmpty()) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .fillMaxHeight(0.55f)
+                    .padding(horizontal = MaterialTheme.spacing.medium),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                AsyncImage(
+                    model = R.drawable.ic_wind_turbine_pana,
+                    contentDescription = null,
+                    modifier = Modifier.size(180.dp)
+                )
+
+                Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
+
+                Text(text = stringResource(R.string.empty_on_going_tasks), textAlign = TextAlign.Center)
+            }
+        } else {
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .fillMaxHeight(0.55f)
+                    .padding(horizontal = MaterialTheme.spacing.medium)
+            ) {
+                items(tasks.size) { i ->
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = modifier
+                            .padding(
+                                bottom = MaterialTheme.spacing.small
+                            )
+                            .shadow(elevation = 2.dp, shape = RoundedCornerShape(8.dp))
+                            .clip(shape = RoundedCornerShape(8.dp))
+                            .background(MaterialTheme.colors.surface)
+                            .clickable { navigator.navigate(CampaignDetailScreenDestination(id = tasks[i].campaignId)) }
+                            .padding(
+                                vertical = MaterialTheme.spacing.small,
+                                horizontal = MaterialTheme.spacing.medium
+                            )
+                            .fillMaxWidth()
                     ) {
-                        Box(modifier = Modifier.fillMaxSize()) {
-                            Column(
-                                modifier = Modifier.fillMaxSize(),
-                                verticalArrangement = Arrangement.SpaceEvenly
-                            ) {
-                                Text(
-                                    text = tasks[i].name,
-                                    style = MaterialTheme.typography.subtitle1,
-                                    color = MaterialTheme.colors.primary
-                                )
-                                Text(
-                                    text = tasks[i].campaignName,
-                                    style = MaterialTheme.typography.subtitle2,
-                                    color = MaterialTheme.colors.secondary,
-                                    modifier = Modifier.padding(vertical = MaterialTheme.spacing.extraSmall)
-                                )
-                                Row(
+                        Column(
+                            modifier = Modifier
+                                .wrapContentSize()
+                        ) {
+                            Box(modifier = Modifier.fillMaxSize()) {
+                                Column(
                                     modifier = Modifier.fillMaxSize(),
-                                    verticalAlignment = Alignment.CenterVertically,
-                                    horizontalArrangement = Arrangement.SpaceBetween
+                                    verticalArrangement = Arrangement.SpaceEvenly
                                 ) {
                                     Text(
-                                        text =
-                                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                                            stringResource(
-                                                R.string.days_left,
-                                                countDays(tasks[i].campaignEndDate)
-                                            )
-                                        } else
-                                            "",
-                                        style = MaterialTheme.typography.caption
+                                        text = tasks[i].name,
+                                        style = MaterialTheme.typography.subtitle1,
+                                        color = MaterialTheme.colors.primary
                                     )
                                     Text(
-                                        text = stringResource(
-                                            R.string.until_date,
-                                            dateFormatter(tasks[i].campaignEndDate)
-                                        ),
-                                        style = MaterialTheme.typography.caption
+                                        text = tasks[i].campaignName,
+                                        style = MaterialTheme.typography.subtitle2,
+                                        color = MaterialTheme.colors.secondary,
+                                        modifier = Modifier.padding(vertical = MaterialTheme.spacing.extraSmall)
                                     )
+                                    Row(
+                                        modifier = Modifier.fillMaxSize(),
+                                        verticalAlignment = Alignment.CenterVertically,
+                                        horizontalArrangement = Arrangement.SpaceBetween
+                                    ) {
+                                        Text(
+                                            text =
+                                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                                stringResource(
+                                                    R.string.days_left,
+                                                    countDays(tasks[i].campaignEndDate)
+                                                )
+                                            } else
+                                                "",
+                                            style = MaterialTheme.typography.caption
+                                        )
+                                        Text(
+                                            text = stringResource(
+                                                R.string.until_date,
+                                                dateFormatter(tasks[i].campaignEndDate)
+                                            ),
+                                            style = MaterialTheme.typography.caption
+                                        )
+                                    }
                                 }
                             }
                         }

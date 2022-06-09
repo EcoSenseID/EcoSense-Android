@@ -1,7 +1,5 @@
 package com.ecosense.android.core.presentation.component
 
-import android.os.Build
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -75,7 +73,7 @@ fun ShowItem(
                 end = MaterialTheme.spacing.medium,
                 bottom = MaterialTheme.spacing.medium
             )
-            .shadow(elevation = 5.dp, shape = RoundedCornerShape(8.dp))
+            .shadow(elevation = 2.dp, shape = RoundedCornerShape(8.dp))
             .clip(shape = RoundedCornerShape(8.dp))
             .clickable(onClick = onClick)
             .background(MaterialTheme.colors.surface)
@@ -202,7 +200,7 @@ fun ShowItem(
                                     }
                                 }
                             )
-                            .padding(horizontal = MaterialTheme.spacing.extraSmall, vertical = 1.dp)
+                            .padding(horizontal = MaterialTheme.spacing.small, vertical = 2.dp)
                     )
                     Spacer(modifier = Modifier.width(MaterialTheme.spacing.extraSmall))
                 }

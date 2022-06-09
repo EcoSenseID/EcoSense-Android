@@ -1,18 +1,13 @@
 package com.ecosense.android.featDiscoverCampaign.presentation.detail.component
 
-import android.Manifest
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.Text
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.AttachFile
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
@@ -27,25 +22,20 @@ import com.ecosense.android.R
 import com.ecosense.android.core.presentation.theme.spacing
 import com.ecosense.android.featDiscoverCampaign.domain.model.CampaignTask
 import com.ecosense.android.featDiscoverCampaign.presentation.detail.CampaignDetailViewModel
-import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import com.google.accompanist.permissions.rememberPermissionState
-import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun UploadTaskProof(viewModel: CampaignDetailViewModel, task: CampaignTask, campaignId: Int) {
     val state = viewModel.state.value
-    val coroutineScope = rememberCoroutineScope()
-    val camPermission = rememberPermissionState(permission = Manifest.permission.CAMERA)
-
-    val imagePickerLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.TakePicture()
-    ) { success ->
-//            uri: Uri? -> viewModel.onImagePicked(uri)
-        if (success) viewModel.onImageCaptured()
-    }
+    val openPickImageDialog = remember { mutableStateOf(false) }
 
     val inputValue = remember { mutableStateOf(TextFieldValue()) }
+
+    if (openPickImageDialog.value) {
+        AttachImageDialog(
+            viewModel = viewModel,
+            openPickImageDialog = { openPickImageDialog.value = it }
+        )
+    }
 
     Row(
         modifier = Modifier.padding(
@@ -54,21 +44,9 @@ fun UploadTaskProof(viewModel: CampaignDetailViewModel, task: CampaignTask, camp
     ) {
         Button(
             onClick = {
-                // TODO: currently can only pick image from gallery, find a way to make it able to use camera x too
-//                imagePickerLauncher.launch(
-//                    context.getString(R.string.content_type_image)
-//                )
-                when {
-                    camPermission.hasPermission -> {
-                        coroutineScope.launch {
-                            val uri = viewModel.getNewTempJpegUri()
-                            imagePickerLauncher.launch(uri)
-                        }
-                    }
-                    else -> camPermission.launchPermissionRequest()
-                }
-
+                openPickImageDialog.value = true
             },
+            enabled = !state.isLoadingUploadProof,
             modifier = Modifier
                 .fillMaxWidth()
                 .clip(
@@ -76,14 +54,21 @@ fun UploadTaskProof(viewModel: CampaignDetailViewModel, task: CampaignTask, camp
                         8.dp
                     )
                 )
-        ) { Text(stringResource(R.string.select_image)) }
+        ) {
+            Icon(
+                imageVector = Icons.Outlined.AttachFile,
+                contentDescription = stringResource(R.string.attach_proof_photo)
+            )
+            Spacer(Modifier.width(MaterialTheme.spacing.extraSmall))
+            Text(stringResource(R.string.attach_proof_photo))
+        }
     }
 
     if (state.proofPhotoUrl != null) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(100.dp)
+                .wrapContentHeight()
                 .padding(bottom = MaterialTheme.spacing.small)
         ) {
             AsyncImage(
@@ -121,6 +106,7 @@ fun UploadTaskProof(viewModel: CampaignDetailViewModel, task: CampaignTask, camp
                 inputValue.value =
                     it
             },
+            enabled = !state.isLoadingUploadProof,
             label = {
                 Text(
                     stringResource(R.string.add_caption)
@@ -138,12 +124,12 @@ fun UploadTaskProof(viewModel: CampaignDetailViewModel, task: CampaignTask, camp
         Button(
             onClick = {
                 viewModel.onUploadCompletionProof(
-                    caption = inputValue.value.toString(),
+                    caption = inputValue.value.text,
                     taskId = task.id,
                     campaignId = campaignId
                 )
-                //TODO: trigger the compose to reload the page
             },
+            enabled = !state.isLoadingUploadProof,
             modifier = Modifier
                 .fillMaxWidth()
                 .clip(
@@ -152,7 +138,10 @@ fun UploadTaskProof(viewModel: CampaignDetailViewModel, task: CampaignTask, camp
                     )
                 )
         ) {
-            Text(stringResource(R.string.submit))
+            if (!state.isLoadingUploadProof)
+                Text(stringResource(R.string.submit))
+            else
+                Text(stringResource(R.string.submitting))
         }
     }
 }
