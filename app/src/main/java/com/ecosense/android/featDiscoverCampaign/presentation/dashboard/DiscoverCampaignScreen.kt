@@ -102,7 +102,7 @@ fun DiscoverCampaignScreen(
                         color = MaterialTheme.colors.onPrimary
                     )
                     Text(
-                        text = stringResource(R.string.tasks_left),
+                        text = stringResource(R.string.tasks_to_go),
                         style = MaterialTheme.typography.subtitle2,
                         color = MaterialTheme.colors.onPrimary
                     )
