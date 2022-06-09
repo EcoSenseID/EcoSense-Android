@@ -113,12 +113,10 @@ class CampaignDetailViewModel @Inject constructor(
     private fun onCompleteCampaign(campaignId: Int) {
         onCompleteCampaignJob?.cancel()
 
-        var countCompletedTask = 0
-        state.value.campaignDetail.campaignTasks.forEach { task ->
-            if (task.completed) {
-                countCompletedTask++
-            }
-        }
+        val countCompletedTask = state.value.campaignDetail.campaignTasks.filter {
+            it.completed
+        }.size
+
         if (countCompletedTask == state.value.campaignDetail.campaignTasks.size) {
             onCompleteCampaignJob = viewModelScope.launch {
                 discoverCampaignRepository.setCompleteCampaign(campaignId = campaignId).onEach { result ->
