@@ -229,8 +229,8 @@ fun CampaignDetailScreen(
                                                         }
                                                     )
                                                     .padding(
-                                                        horizontal = MaterialTheme.spacing.extraSmall,
-                                                        vertical = 1.dp
+                                                        horizontal = MaterialTheme.spacing.small,
+                                                        vertical = 2.dp
                                                     )
                                             )
                                             Spacer(modifier = Modifier.width(MaterialTheme.spacing.extraSmall))

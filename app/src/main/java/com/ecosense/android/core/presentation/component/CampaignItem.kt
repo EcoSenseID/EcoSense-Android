@@ -200,7 +200,7 @@ fun ShowItem(
                                     }
                                 }
                             )
-                            .padding(horizontal = MaterialTheme.spacing.extraSmall, vertical = 1.dp)
+                            .padding(horizontal = MaterialTheme.spacing.small, vertical = 2.dp)
                     )
                     Spacer(modifier = Modifier.width(MaterialTheme.spacing.extraSmall))
                 }
