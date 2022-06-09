@@ -65,7 +65,7 @@
     <string name="history">History</string>
     <string name="choose_category">Choose a Category</string>
     <string name="on_going_task">On going task</string>
-    <string name="tasks_left">Tasks Left</string>
+    <string name="tasks_to_go">Tasks To Go</string>
     <string name="browse_categories">Browse categories</string>
     <string name="view_all">View all</string>
     <string name="all_campaign">All Campaign</string>
@@ -179,6 +179,7 @@
     <string name="continue_with_google">Continue with Google</string>
     <string name="em_name_blank">Name can not be blank</string>
     <string name="empty_experiences">Nothing to show yet. Let\'s earn experiences by joining campaigns!</string>
+    <string name="empty_on_going_tasks">Nothing to show yet. Campaign tasks will be shown here.</string>
     <string name="empty_history">No histories yet. Finished campaigns will be shown here</string>
     <string name="empty_saved_recognition_results">There\'s no saved recognition results yet</string>
     <string name="saved_recognition_detail">Saved Recognition Detail</string>
