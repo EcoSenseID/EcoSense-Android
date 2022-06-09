@@ -129,6 +129,7 @@
     <string name="permission_request_message">Hi! I\'m the plant disease recognizer robot. Please give me permission to your camera so I can look at your plants!</string>
     <string name="permission_request_rationale">Camera permission is needed for plant disease recognition feature. Please give me access to it</string>
     <string name="permission_request_denied_permanently">Beep boop! Camera permission was permanently denied. If you change your mind, please enable it manually in the app settings</string>
+    <string name="upload_permission_request_denied_permanently">Looks like your camera permission was permanently denied. To use camera, please enable the camera permission manually in the app settings</string>
     <string name="grant_permission">Grant permission</string>
     <string name="open_app_settings">Open app settings</string>
     <string name="recognising">I\'m trying to recognise this one…</string>
@@ -199,4 +200,5 @@
     <string name="complete_campaign_success">Congratulations, you\'ve completed this campaign! Go to the Profile page to check your experience points.</string>
     <string name="task_number">Task %s</string>
     <string name="task_completion_mark">Task Completion Mark</string>
+    <string name="cancel">Cancel</string>
 </resources>
