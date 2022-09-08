@@ -6,48 +6,41 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Campaign
 import androidx.compose.material.icons.filled.Eco
+import androidx.compose.material.icons.filled.Forum
 import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material.icons.outlined.Campaign
 import androidx.compose.material.icons.outlined.Eco
+import androidx.compose.material.icons.outlined.Forum
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
-import com.ecosense.android.NavGraphs
 import com.ecosense.android.R
-import com.ecosense.android.appCurrentDestinationAsState
-import com.ecosense.android.destinations.Destination
-import com.ecosense.android.destinations.DiscoverCampaignScreenDestination
-import com.ecosense.android.destinations.ProfileScreenDestination
-import com.ecosense.android.destinations.RecognitionScreenDestination
-import com.ecosense.android.startAppDestination
-import com.ramcosta.composedestinations.navigation.navigateTo
+import com.ecosense.android.destinations.*
 import com.ramcosta.composedestinations.spec.DirectionDestinationSpec
 
 @Composable
 fun BottomBar(
-    navController: NavController
+    currentDestination: @Composable () -> Destination,
+    onItemClick: (BottomBarDestination) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
-    val currentDestination: Destination = navController.appCurrentDestinationAsState().value
-        ?: NavGraphs.root.startAppDestination
-
     BottomNavigation(
         backgroundColor = MaterialTheme.colors.surface,
         contentColor = MaterialTheme.colors.primary,
-        elevation = 16.dp,
+        elevation = 2.dp,
     ) {
         BottomBarDestination.values().forEach { destination ->
-            val isSelected = currentDestination == destination.direction
+            val isSelected = currentDestination() == destination.direction
+
             BottomNavigationItem(
                 selected = isSelected,
-                onClick = {
-                    navController.navigateTo(destination.direction) { launchSingleTop = true }
-                },
+                onClick = { onItemClick(destination) },
                 icon = {
                     Icon(
-                        imageVector = if (isSelected) destination.selectedIcon else destination.icon,
-                        contentDescription = stringResource(destination.label),
+                        imageVector = if (isSelected) destination.iconSelected else destination.icon,
+                        contentDescription = null,
                     )
                 },
                 label = { Text(stringResource(destination.label)) },
@@ -56,30 +49,37 @@ fun BottomBar(
     }
 }
 
-private enum class BottomBarDestination(
+enum class BottomBarDestination(
     val direction: DirectionDestinationSpec,
     val icon: ImageVector,
-    val selectedIcon: ImageVector,
+    val iconSelected: ImageVector,
     @StringRes val label: Int
 ) {
+    Forums(
+        direction = ForumsScreenDestination,
+        icon = Icons.Outlined.Forum,
+        iconSelected = Icons.Filled.Forum,
+        label = R.string.bottom_bar_label_forums,
+    ),
+
     DiscoverCampaign(
         direction = DiscoverCampaignScreenDestination,
         icon = Icons.Outlined.Campaign,
-        selectedIcon = Icons.Filled.Campaign,
+        iconSelected = Icons.Filled.Campaign,
         label = R.string.campaign
     ),
 
     Recognition(
         direction = RecognitionScreenDestination,
         icon = Icons.Outlined.Eco,
-        selectedIcon = Icons.Filled.Eco,
+        iconSelected = Icons.Filled.Eco,
         label = R.string.plant
     ),
 
     Profile(
         direction = ProfileScreenDestination,
         icon = Icons.Outlined.AccountCircle,
-        selectedIcon = Icons.Filled.AccountCircle,
+        iconSelected = Icons.Filled.AccountCircle,
         label = R.string.profile
     )
 }

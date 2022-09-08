@@ -12,10 +12,14 @@ import androidx.compose.material.Scaffold
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import com.ecosense.android.NavGraphs
+import com.ecosense.android.appCurrentDestinationAsState
 import com.ecosense.android.core.presentation.component.BottomBar
 import com.ecosense.android.core.presentation.theme.EcoSenseTheme
+import com.ecosense.android.startAppDestination
 import com.ramcosta.composedestinations.DestinationsNavHost
+import com.ramcosta.composedestinations.navigation.navigateTo
 import com.ramcosta.composedestinations.rememberNavHostEngine
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -37,7 +41,23 @@ class MainActivity : ComponentActivity() {
                 when (viewModel.isLoggedIn.collectAsState().value) {
                     true -> {
                         Scaffold(
-                            bottomBar = { BottomBar(navController = navController) },
+                            bottomBar = {
+                                BottomBar(
+                                    currentDestination = {
+                                        navController.appCurrentDestinationAsState().value
+                                            ?: NavGraphs.root.startAppDestination
+                                    },
+                                    onItemClick = { destination ->
+                                        navController.navigateTo(destination.direction) {
+                                            popUpTo(navController.graph.findStartDestination().id) {
+                                                saveState = true
+                                            }
+                                            launchSingleTop = true
+                                            restoreState = true
+                                        }
+                                    },
+                                )
+                            },
                             modifier = Modifier
                                 .fillMaxSize()
                                 .background(MaterialTheme.colors.background)
