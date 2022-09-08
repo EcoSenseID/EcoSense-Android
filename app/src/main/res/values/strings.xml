@@ -148,4 +148,5 @@
     <string name="attach_proof_photo">Attach Proof Photo</string>
     <string name="choose_image_from">Choose Image From…</string>
     <string name="whoops">Whoops!</string>
+    <string name="bottom_bar_label_forums">EcoWorld</string>
 </resources>
