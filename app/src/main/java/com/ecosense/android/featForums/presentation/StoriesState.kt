@@ -1,11 +1,11 @@
 package com.ecosense.android.featForums.presentation
 
 import com.ecosense.android.core.util.UIText
-import com.ecosense.android.featForums.domain.model.Story
+import com.ecosense.android.featForums.presentation.model.StoryPresentation
 
 data class StoriesState(
     val isLoading: Boolean,
-    val stories: List<Story>,
+    val stories: List<StoryPresentation>,
     val error: UIText?,
     val endReached: Boolean,
     val page: Int,

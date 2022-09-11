@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.ecosense.android.core.util.UIText
 import com.ecosense.android.featForums.domain.model.Story
 import com.ecosense.android.featForums.domain.repository.ForumsRepository
+import com.ecosense.android.featForums.presentation.model.toPresentation
 import com.ecosense.android.featForums.presentation.paginator.DefaultPaginator
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -28,8 +29,9 @@ class ForumsViewModel @Inject constructor(
         onLoadUpdated = { isLoading -> storiesState = storiesState.copy(isLoading = isLoading) },
         onError = { message: UIText? -> storiesState = storiesState.copy(error = message) },
         onSuccess = { items: List<Story>?, newKey: Int ->
+            val newStories = items?.map { it.toPresentation() }
             storiesState = storiesState.copy(
-                stories = storiesState.stories + (items ?: emptyList()),
+                stories = storiesState.stories + (newStories ?: emptyList()),
                 page = newKey,
                 endReached = items?.isEmpty() ?: false,
             )
