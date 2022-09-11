@@ -152,4 +152,7 @@
     <string name="cd_like">Like</string>
     <string name="cd_comment">Comment</string>
     <string name="cd_share">Share</string>
+    <string name="whats_happening">What\'s happening?</string>
+    <string name="attachment">Attachment</string>
+    <string name="share">Share</string>
 </resources>

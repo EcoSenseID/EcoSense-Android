@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.ecosense.android.core.presentation.theme.spacing
+import com.ecosense.android.featForums.presentation.component.StoryComposer
 import com.ecosense.android.featForums.presentation.component.StoryItem
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootNavGraph
@@ -29,28 +30,38 @@ fun ForumsScreen(
         scaffoldState = scaffoldState,
     ) {
         LazyColumn(
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier.fillMaxSize(),
         ) {
-            val state = viewModel.storiesState
+            item {
+                StoryComposer(
+                    state = { viewModel.storyComposerState },
+                    modifier = Modifier.padding(MaterialTheme.spacing.medium),
+                    onCaptionChange = { value: String -> viewModel.onComposerCaptionChange(value) },
+                    onAttachClick = { /* TODO */ },
+                    onShareClick = { /* TODO */ },
+                )
+            }
 
+            val storiesState = viewModel.storiesState
             items(
-                count = state.stories.size,
-                key = { i -> state.stories[i].id },
+                count = storiesState.stories.size,
+                key = { i -> storiesState.stories[i].id },
             ) { i ->
-                if (i >= state.stories.size - 1 && !state.endReached && !state.isLoading) {
+                if (i >= storiesState.stories.size - 1 && !storiesState.endReached && !storiesState.isLoading) {
                     viewModel.loadNextItems()
                 }
 
                 StoryItem(
-                    story = { state.stories[i] },
+                    story = { storiesState.stories[i] },
                     onClickLike = { /*TODO*/ logcat { "onClickLike $i" } },
-                    onClickComment = { /*TODO*/ logcat { "onClickComment $i" } })
+                    onClickComment = { /*TODO*/ logcat { "onClickComment $i" } },
+                )
 
                 Spacer(modifier = Modifier.height(MaterialTheme.spacing.extraSmall))
             }
 
             item {
-                if (state.isLoading) {
+                if (storiesState.isLoading) {
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
