@@ -1,42 +1,36 @@
 package com.ecosense.android.featReward.data.model
 
-import com.google.gson.annotations.SerializedName
+import com.ecosense.android.featReward.domain.model.CategoryRewards
+import com.ecosense.android.featReward.domain.model.Rewards
 
 data class RewardsDto(
+    val categoryRewards: List<CategoryRewardsDto>?,
+    val error: Boolean?,
+    val message: String?,
+    val category: String?
+) {
+    fun toRewards() = Rewards(
+        category = category ?: "",
+        categoryRewards = categoryRewards?.map { it.toCategoryRewards() } ?: emptyList()
+    )
+}
 
-    @field:SerializedName("categoryRewards")
-    val categoryRewards: List<CategoryRewardsItem?>? = null,
-
-    @field:SerializedName("error")
-    val error: Boolean? = null,
-
-    @field:SerializedName("message")
-    val message: String? = null,
-
-    @field:SerializedName("category")
-    val category: String? = null
-)
-
-data class CategoryRewardsItem(
-
-    @field:SerializedName("partner")
-    val partner: String? = null,
-
-    @field:SerializedName("bannerUrl")
-    val bannerUrl: String? = null,
-
-    @field:SerializedName("numberOfRedeem")
-    val numberOfRedeem: Int? = null,
-
-    @field:SerializedName("id")
-    val id: Int? = null,
-
-    @field:SerializedName("title")
-    val title: String? = null,
-
-    @field:SerializedName("maxRedeem")
-    val maxRedeem: Int? = null,
-
-    @field:SerializedName("pointsNeeded")
-    val pointsNeeded: Int? = null
-)
+data class CategoryRewardsDto(
+    val partner: String?,
+    val bannerUrl: String?,
+    val numberOfRedeem: Int?,
+    val id: Int?,
+    val title: String?,
+    val maxRedeem: Int?,
+    val pointsNeeded: Int?
+) {
+    fun toCategoryRewards() = CategoryRewards(
+        partner = partner ?: "",
+        bannerUrl = bannerUrl ?: "",
+        numberOfRedeem = numberOfRedeem ?: 0,
+        id = id ?: 0,
+        title = title ?: "",
+        maxRedeem = maxRedeem ?: 0,
+        pointsNeeded = pointsNeeded ?: 0
+    )
+}
