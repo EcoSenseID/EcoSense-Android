@@ -15,7 +15,7 @@ interface RewardRepository {
 
     fun getMyRewards(): Flow<Resource<List<MyRewards>>>
 
-    fun getRewardDetail(): Flow<Resource<RewardDetail>>
+    fun getRewardDetail(rewardId: Int): Flow<Resource<RewardDetail>>
 
     fun setRedeemReward(
         rewardId: Int
