@@ -1,7 +1,7 @@
 package com.ecosense.android.featReward.data.api
 
-import com.ecosense.android.featReward.data.model.MyRewardDetailDto
 import com.ecosense.android.featReward.data.model.MyRewardsDto
+import com.ecosense.android.featReward.data.model.RewardDetailDto
 import com.ecosense.android.featReward.data.model.RewardHomepageDto
 import com.ecosense.android.featReward.data.model.RewardsDto
 import retrofit2.http.GET
@@ -28,5 +28,5 @@ interface RewardApi {
     @GET("rewarddetail")
     suspend fun getRewardDetail(
         @Header("Authorization") bearerToken: String
-    ): MyRewardDetailDto
+    ): RewardDetailDto
 }
