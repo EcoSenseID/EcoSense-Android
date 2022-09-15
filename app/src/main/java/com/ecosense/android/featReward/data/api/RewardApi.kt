@@ -35,7 +35,7 @@ interface RewardApi {
 
     @FormUrlEncoded
     @POST("usereward")
-    suspend fun useRedeemReward(
+    suspend fun setUseReward(
         @Header("Authorization") bearerToken: String,
         @Field("rewardId") rewardId: Int
     ): UseRewardDto
