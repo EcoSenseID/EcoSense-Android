@@ -5,7 +5,6 @@ data class RewardDetail(
     val isRedeemed: Boolean,
     val bannerUrl: String,
     val description: String,
-    val id: Int,
     val validity: String,
     val title: String,
     val pointsNeeded: Int,

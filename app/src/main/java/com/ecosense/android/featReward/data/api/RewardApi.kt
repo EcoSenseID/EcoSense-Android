@@ -22,7 +22,8 @@ interface RewardApi {
 
     @GET("rewarddetail")
     suspend fun getRewardDetail(
-        @Header("Authorization") bearerToken: String
+        @Header("Authorization") bearerToken: String,
+        @Query("rewardId") rewardId: Int?
     ): RewardDetailDto
 
     @FormUrlEncoded
