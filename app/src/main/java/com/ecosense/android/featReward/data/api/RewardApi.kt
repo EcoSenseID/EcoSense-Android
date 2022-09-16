@@ -12,7 +12,7 @@ interface RewardApi {
     @GET("rewards")
     suspend fun getRewards(
         @Header("Authorization") bearerToken: String,
-        @Query("rewardCategory") rewardCategory: String?
+        @Query("rewardCategory") rewardCategory: String
     ): RewardsDto
 
     @GET("myrewards")
@@ -23,7 +23,7 @@ interface RewardApi {
     @GET("rewarddetail")
     suspend fun getRewardDetail(
         @Header("Authorization") bearerToken: String,
-        @Query("rewardId") rewardId: Int?
+        @Query("rewardId") rewardId: Int
     ): RewardDetailDto
 
     @FormUrlEncoded
