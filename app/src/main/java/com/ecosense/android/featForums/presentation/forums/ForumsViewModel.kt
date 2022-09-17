@@ -1,4 +1,4 @@
-package com.ecosense.android.featForums.presentation
+package com.ecosense.android.featForums.presentation.forums
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -9,8 +9,8 @@ import com.ecosense.android.core.domain.repository.AuthRepository
 import com.ecosense.android.core.util.UIText
 import com.ecosense.android.featForums.domain.model.Story
 import com.ecosense.android.featForums.domain.repository.ForumsRepository
-import com.ecosense.android.featForums.presentation.model.StoriesState
-import com.ecosense.android.featForums.presentation.model.StoryComposerState
+import com.ecosense.android.featForums.presentation.forums.model.StoriesFeedState
+import com.ecosense.android.featForums.presentation.forums.model.StoryComposerState
 import com.ecosense.android.featForums.presentation.model.toPresentation
 import com.ecosense.android.featForums.presentation.paginator.DefaultPaginator
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -23,30 +23,30 @@ class ForumsViewModel @Inject constructor(
     private val authRepository: AuthRepository,
 ) : ViewModel() {
 
-    var storiesState by mutableStateOf(StoriesState.defaultValue)
+    var storiesFeedState by mutableStateOf(StoriesFeedState.defaultValue)
         private set
 
     var storyComposerState by mutableStateOf(StoryComposerState.defaultValue)
         private set
 
     private val paginator = DefaultPaginator(
-        initialKey = storiesState.page,
-        getNextKey = { storiesState.page + 1 },
+        initialKey = storiesFeedState.page,
+        getNextKey = { storiesFeedState.page + 1 },
         onRequest = { nextPage -> forumsRepository.getStories(nextPage, 20) },
-        onLoadUpdated = { isLoading -> storiesState = storiesState.copy(isLoading = isLoading) },
-        onError = { message: UIText? -> storiesState = storiesState.copy(error = message) },
+        onLoadUpdated = { isLoading -> storiesFeedState = storiesFeedState.copy(isLoading = isLoading) },
+        onError = { message: UIText? -> storiesFeedState = storiesFeedState.copy(errorMessage = message) },
         onSuccess = { items: List<Story>?, newKey: Int ->
             val newStories = items?.map { it.toPresentation() }
-            storiesState = storiesState.copy(
-                stories = storiesState.stories + (newStories ?: emptyList()),
+            storiesFeedState = storiesFeedState.copy(
+                stories = storiesFeedState.stories + (newStories ?: emptyList()),
                 page = newKey,
-                endReached = items?.isEmpty() ?: false,
+                isEndReached = items?.isEmpty() ?: false,
             )
         }
     )
 
     init {
-        loadNextItems()
+        onLoadNextStoriesFeed()
         viewModelScope.launch {
             storyComposerState = storyComposerState.copy(
                 profilePictureUrl = authRepository.getCurrentUser()?.photoUrl,
@@ -54,7 +54,7 @@ class ForumsViewModel @Inject constructor(
         }
     }
 
-    fun loadNextItems() {
+    fun onLoadNextStoriesFeed() {
         viewModelScope.launch {
             paginator.loadNextItems()
         }

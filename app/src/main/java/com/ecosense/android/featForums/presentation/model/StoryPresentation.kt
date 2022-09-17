@@ -1,10 +1,13 @@
 package com.ecosense.android.featForums.presentation.model
 
+import android.os.Parcelable
 import com.ecosense.android.featForums.domain.model.Story
 import com.ecosense.android.featForums.presentation.constants.PatternConstants
+import kotlinx.parcelize.Parcelize
 import java.text.SimpleDateFormat
 import java.util.*
 
+@Parcelize
 data class StoryPresentation(
     val id: Int,
     val name: String,
@@ -16,7 +19,7 @@ data class StoryPresentation(
     val likesCount: Int,
     val commentsCount: Int,
     val isLiked: Boolean,
-)
+) : Parcelable
 
 fun Story.toPresentation(): StoryPresentation {
     return StoryPresentation(

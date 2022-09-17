@@ -1,18 +1,17 @@
-package com.ecosense.android.featForums.presentation
+package com.ecosense.android.featForums.presentation.forums
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
-import androidx.compose.material.rememberScaffoldState
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.ecosense.android.core.presentation.theme.spacing
+import com.ecosense.android.destinations.StoryDetailScreenDestination
 import com.ecosense.android.featForums.presentation.component.StoryComposer
-import com.ecosense.android.featForums.presentation.component.StoryItem
+import com.ecosense.android.featForums.presentation.forums.component.StoryItem
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootNavGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -28,6 +27,7 @@ fun ForumsScreen(
     val scaffoldState = rememberScaffoldState()
     Scaffold(
         scaffoldState = scaffoldState,
+        modifier = Modifier.fillMaxSize(),
     ) {
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
@@ -42,26 +42,28 @@ fun ForumsScreen(
                 )
             }
 
-            val storiesState = viewModel.storiesState
+            val feedState = viewModel.storiesFeedState
             items(
-                count = storiesState.stories.size,
-                key = { i -> storiesState.stories[i].id },
+                count = feedState.stories.size,
+                key = { i -> feedState.stories[i].id },
             ) { i ->
-                if (i >= storiesState.stories.size - 1 && !storiesState.endReached && !storiesState.isLoading) {
-                    viewModel.loadNextItems()
-                }
+                if (i >= feedState.stories.size - 1 && !feedState.isEndReached && !feedState.isLoading) viewModel.onLoadNextStoriesFeed()
 
                 StoryItem(
-                    story = { storiesState.stories[i] },
+                    story = { feedState.stories[i] },
                     onClickLike = { /*TODO*/ logcat { "onClickLike $i" } },
                     onClickComment = { /*TODO*/ logcat { "onClickComment $i" } },
+                    onClickShare = { /*TODO*/ logcat { "onClickShare $i" } },
+                    modifier = Modifier.clickable {
+                        navigator.navigate(StoryDetailScreenDestination(feedState.stories[i]))
+                    },
                 )
 
-                Spacer(modifier = Modifier.height(MaterialTheme.spacing.extraSmall))
+                Divider()
             }
 
             item {
-                if (storiesState.isLoading) {
+                if (feedState.isLoading) {
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()

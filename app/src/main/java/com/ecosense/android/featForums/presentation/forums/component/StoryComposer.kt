@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.ecosense.android.R
 import com.ecosense.android.core.presentation.theme.spacing
-import com.ecosense.android.featForums.presentation.model.StoryComposerState
+import com.ecosense.android.featForums.presentation.forums.model.StoryComposerState
 
 @Composable
 fun StoryComposer(
