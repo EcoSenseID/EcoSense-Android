@@ -148,4 +148,12 @@
     <string name="attach_proof_photo">Attach Proof Photo</string>
     <string name="choose_image_from">Choose Image From…</string>
     <string name="whoops">Whoops!</string>
+    <string name="bottom_bar_label_forums">EcoWorld</string>
+    <string name="cd_like">Like</string>
+    <string name="cd_comment">Comment</string>
+    <string name="cd_share">Share</string>
+    <string name="whats_happening">What\'s happening?</string>
+    <string name="attachment">Attachment</string>
+    <string name="share">Share</string>
+    <string name="em_comments">Couldn\'t load comments</string>
 </resources>
