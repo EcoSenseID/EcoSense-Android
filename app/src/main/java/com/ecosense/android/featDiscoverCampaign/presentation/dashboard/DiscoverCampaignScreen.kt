@@ -36,9 +36,9 @@ import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 @Destination
+@RootNavGraph(start = true)
 fun DiscoverCampaignScreen(
-    navigator: DestinationsNavigator,
-    viewModel: DiscoverCampaignViewModel = hiltViewModel()
+    navigator: DestinationsNavigator, viewModel: DiscoverCampaignViewModel = hiltViewModel()
 ) {
     val scaffoldState = rememberScaffoldState()
 
@@ -65,8 +65,15 @@ fun DiscoverCampaignScreen(
     }
 
     Scaffold(
-        topBar = { DashboardTopBar({ navigator.navigate(BrowseCampaignScreenDestination(search = it, categoryId = null)) }) },
-        scaffoldState = scaffoldState
+        topBar = {
+            DashboardTopBar({
+                navigator.navigate(
+                    BrowseCampaignScreenDestination(
+                        search = it, categoryId = null
+                    )
+                )
+            })
+        }, scaffoldState = scaffoldState
     ) {
         Column(
             modifier = Modifier
@@ -74,7 +81,9 @@ fun DiscoverCampaignScreen(
                 .padding(vertical = MaterialTheme.spacing.medium)
         ) {
             Row(
-                modifier = Modifier.fillMaxWidth().padding(horizontal = MaterialTheme.spacing.medium),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = MaterialTheme.spacing.medium),
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
                 Column(
@@ -166,15 +175,13 @@ fun DiscoverCampaignScreen(
                 }
                 if (!state.isLoadingCategories) {
                     Column(horizontalAlignment = Alignment.End) {
-                        Text(
-                            text = AnnotatedString(stringResource(R.string.view_all)),
+                        Text(text = AnnotatedString(stringResource(R.string.view_all)),
                             style = MaterialTheme.typography.caption,
                             fontWeight = FontWeight.Bold,
                             color = MaterialTheme.colors.secondary,
                             modifier = Modifier.clickable {
                                 navigator.navigate(CategoryCampaignScreenDestination)
-                            }
-                        )
+                            })
                     }
                 }
             }

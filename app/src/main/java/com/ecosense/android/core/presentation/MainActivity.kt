@@ -5,8 +5,10 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.collectAsState
@@ -41,7 +43,24 @@ class MainActivity : ComponentActivity() {
                 when (viewModel.isLoggedIn.collectAsState().value) {
                     true -> {
                         Scaffold(
-                            bottomBar = {
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .background(MaterialTheme.colors.background)
+                        ) { scaffoldPadding ->
+                            Column(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .padding(scaffoldPadding),
+                            ) {
+                                DestinationsNavHost(
+                                    navGraph = NavGraphs.root,
+                                    engine = engine,
+                                    navController = navController,
+                                    modifier = Modifier.weight(1f),
+                                )
+
+                                Divider()
+
                                 BottomBar(
                                     currentDestination = {
                                         navController.appCurrentDestinationAsState().value
@@ -57,17 +76,7 @@ class MainActivity : ComponentActivity() {
                                         }
                                     },
                                 )
-                            },
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .background(MaterialTheme.colors.background)
-                        ) { scaffoldPadding ->
-                            DestinationsNavHost(
-                                navGraph = NavGraphs.root,
-                                engine = engine,
-                                navController = navController,
-                                modifier = Modifier.padding(scaffoldPadding)
-                            )
+                            }
                         }
                     }
                     false -> {
