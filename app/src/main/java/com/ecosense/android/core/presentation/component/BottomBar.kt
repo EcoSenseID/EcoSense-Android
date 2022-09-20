@@ -1,85 +1,102 @@
 package com.ecosense.android.core.presentation.component
 
+import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
-import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountCircle
-import androidx.compose.material.icons.filled.Campaign
-import androidx.compose.material.icons.filled.Eco
-import androidx.compose.material.icons.filled.Forum
-import androidx.compose.material.icons.outlined.AccountCircle
-import androidx.compose.material.icons.outlined.Campaign
-import androidx.compose.material.icons.outlined.Eco
-import androidx.compose.material.icons.outlined.Forum
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.selection.selectableGroup
+import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.unit.ExperimentalUnitApi
+import androidx.compose.ui.unit.TextUnit
+import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import com.ecosense.android.R
+import com.ecosense.android.core.presentation.theme.FontPlusJakartaSans
+import com.ecosense.android.core.presentation.theme.SuperDarkGrey
 import com.ecosense.android.destinations.*
 import com.ramcosta.composedestinations.spec.DirectionDestinationSpec
 
+@OptIn(ExperimentalUnitApi::class)
 @Composable
 fun BottomBar(
     currentDestination: @Composable () -> Destination,
     onItemClick: (BottomBarDestination) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    BottomNavigation(
-        backgroundColor = MaterialTheme.colors.surface,
-        contentColor = MaterialTheme.colors.primary,
-        elevation = 2.dp,
+    Row(
+        modifier
+            .fillMaxWidth()
+            .background(MaterialTheme.colors.surface)
+            .height(56.dp)
+            .selectableGroup(),
     ) {
         BottomBarDestination.values().forEach { destination ->
             val isSelected = currentDestination() == destination.direction
 
-            BottomNavigationItem(
-                selected = isSelected,
-                onClick = { onItemClick(destination) },
-                icon = {
-                    Icon(
-                        imageVector = if (isSelected) destination.iconSelected else destination.icon,
-                        contentDescription = null,
-                    )
-                },
-                label = { Text(stringResource(destination.label)) },
-            )
+            Column(
+                horizontalAlignment = CenterHorizontally,
+                verticalArrangement = Arrangement.Center,
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .weight(1f)
+                    .clickable { onItemClick(destination) },
+            ) {
+                Icon(
+                    painter = painterResource(id = destination.iconResId),
+                    contentDescription = null,
+                    tint = if (isSelected) MaterialTheme.colors.primary else SuperDarkGrey,
+                )
+
+                Text(
+                    text = stringResource(destination.label),
+                    style = TextStyle(
+                        fontFamily = FontPlusJakartaSans,
+                        fontSize = TextUnit(10f, TextUnitType.Sp),
+                    ),
+                    color = if (isSelected) MaterialTheme.colors.primary else SuperDarkGrey,
+                )
+            }
         }
     }
 }
 
 enum class BottomBarDestination(
     val direction: DirectionDestinationSpec,
-    val icon: ImageVector,
-    val iconSelected: ImageVector,
-    @StringRes val label: Int
+    @DrawableRes val iconResId: Int,
+    @StringRes val label: Int,
 ) {
-    Forums(
-        direction = ForumsScreenDestination,
-        icon = Icons.Outlined.Forum,
-        iconSelected = Icons.Filled.Forum,
-        label = R.string.bottom_bar_label_forums,
-    ),
-
-    DiscoverCampaign(
+    Campaign(
         direction = DiscoverCampaignScreenDestination,
-        icon = Icons.Outlined.Campaign,
-        iconSelected = Icons.Filled.Campaign,
-        label = R.string.campaign
+        iconResId = R.drawable.ic_campaign,
+        label = R.string.campaign,
     ),
-
-    Recognition(
-        direction = RecognitionScreenDestination,
-        icon = Icons.Outlined.Eco,
-        iconSelected = Icons.Filled.Eco,
-        label = R.string.plant
+    EcoWorld(
+        direction = ForumsScreenDestination,
+        iconResId = R.drawable.ic_ecoworld,
+        label = R.string.ecoworld,
     ),
-
+    EcoReward(
+        direction = RewardsScreenDestination,
+        iconResId = R.drawable.ic_ecoreward,
+        label = R.string.ecoreward,
+    ),
+    Notifications(
+        direction = NotificationsScreenDestination,
+        iconResId = R.drawable.ic_notifications,
+        label = R.string.notifications,
+    ),
     Profile(
         direction = ProfileScreenDestination,
-        icon = Icons.Outlined.AccountCircle,
-        iconSelected = Icons.Filled.AccountCircle,
-        label = R.string.profile
+        iconResId = R.drawable.ic_profile,
+        label = R.string.profile,
     )
 }

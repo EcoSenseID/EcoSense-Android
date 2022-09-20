@@ -1,6 +1,5 @@
 package com.ecosense.android.core.presentation.theme
 
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
@@ -10,32 +9,37 @@ import androidx.compose.ui.graphics.Color
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 private val DarkColorPalette = darkColors(
-    primary = Teal200,
-    primaryVariant = Teal700,
-    secondary = Lime200
+    primary = DarkGreen,
+    primaryVariant = LeafGreen,
+    secondary = ElectricGreen,
 )
 
 private val LightColorPalette = lightColors(
-    primary = Teal800,
-    primaryVariant = Teal500,
-    secondary = Lime600,
-    background = Gray50,
+    primary = DarkGreen,
+    primaryVariant = LeafGreen,
+    secondary = ElectricGreen,
+    background = LightGrey,
     surface = Color.White,
     onPrimary = Color.White,
     onSecondary = Color.White,
-    onBackground = Gray900,
-    onSurface = Gray900,
+    onBackground = Color.Black,
+    onSurface = Color.Black,
 )
 
 @Composable
-fun EcoSenseTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable () -> Unit) {
+fun EcoSenseTheme(
+    darkTheme: Boolean = false, /* isSystemInDarkTheme() */
+    content: @Composable () -> Unit,
+) {
     val systemUiController = rememberSystemUiController()
 
-    systemUiController.setSystemBarsColor(color = if (darkTheme) Color.Black else Color.White)
+    systemUiController.setSystemBarsColor(
+        color = LightGrey /* if (darkTheme) Color.Black else Color.White */
+    )
 
     CompositionLocalProvider(LocalSpacing provides Spacing()) {
         MaterialTheme(
-            colors = if (darkTheme) DarkColorPalette else LightColorPalette,
+            colors = LightColorPalette /* if (darkTheme) DarkColorPalette else LightColorPalette */,
             typography = Typography,
             shapes = Shapes,
             content = content

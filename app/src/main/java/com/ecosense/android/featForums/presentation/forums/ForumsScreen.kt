@@ -19,7 +19,6 @@ import logcat.logcat
 
 @Composable
 @Destination
-@RootNavGraph(start = true)
 fun ForumsScreen(
     navigator: DestinationsNavigator,
     viewModel: ForumsViewModel = hiltViewModel(),
