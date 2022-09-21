@@ -12,13 +12,14 @@ data class StoryPresentation(
     val id: Int,
     val name: String,
     val username: String,
-    val profilePictureUrl: String,
+    val avatarUrl: String,
     val caption: String,
-    val photoUrl: String?,
+    val attachedPhotoUrl: String?,
     val createdAt: String,
-    val likesCount: Int,
-    val commentsCount: Int,
-    val isLiked: Boolean,
+    val supportersCount: Int,
+    val supportersAvatarsUrl: List<String>,
+    val repliesCount: Int,
+    val isSupported: Boolean,
 ) : Parcelable
 
 fun Story.toPresentation(): StoryPresentation {
@@ -26,15 +27,16 @@ fun Story.toPresentation(): StoryPresentation {
         id = this.id,
         name = this.name,
         username = this.username,
-        profilePictureUrl = this.profilePictureUrl,
+        avatarUrl = this.avatarUrl,
         caption = this.caption,
-        photoUrl = this.photoUrl,
+        attachedPhotoUrl = this.attachedPhotoUrl,
         createdAt = SimpleDateFormat(
             PatternConstants.STORIES_DATE_FORMAT,
             Locale.getDefault(),
         ).format(Date().apply { time = this@toPresentation.createdAt }),
-        likesCount = this.likesCount,
-        commentsCount = this.commentsCount,
-        isLiked = this.isLiked,
+        supportersCount = this.supportersCount,
+        repliesCount = this.repliesCount,
+        isSupported = this.isSupported,
+        supportersAvatarsUrl = this.supportersAvatarsUrl,
     )
 }

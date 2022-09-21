@@ -113,7 +113,7 @@ fun CommentItem(
             ) {
                 Icon(
                     imageVector = if (comment().isLiked) Icons.Filled.ThumbUp else Icons.Outlined.ThumbUp,
-                    contentDescription = stringResource(R.string.cd_like),
+                    contentDescription = stringResource(R.string.cd_support),
                     tint = MaterialTheme.colors.onSurface.copy(alpha = 0.7f),
                 )
 

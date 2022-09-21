@@ -81,7 +81,7 @@ fun StoryDetailScreen(
                             modifier = Modifier.fillMaxWidth(),
                         ) {
                             AsyncImage(
-                                model = story.profilePictureUrl,
+                                model = story.avatarUrl,
                                 contentDescription = null,
                                 placeholder = painterResource(id = R.drawable.ic_ecosense_logo),
                                 contentScale = ContentScale.Crop,
@@ -118,7 +118,7 @@ fun StoryDetailScreen(
 
                         Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
 
-                        story.photoUrl?.let {
+                        story.attachedPhotoUrl?.let {
                             AsyncImage(
                                 model = it,
                                 contentDescription = null,
@@ -145,11 +145,11 @@ fun StoryDetailScreen(
                                 .fillMaxWidth()
                                 .padding(vertical = MaterialTheme.spacing.medium),
                         ) {
-                            Text(text = "${story.likesCount} Likes")
+                            Text(text = "${story.supportersCount} Likes")
 
                             Spacer(modifier = Modifier.width(MaterialTheme.spacing.medium))
 
-                            Text(text = "${story.commentsCount} Comments")
+                            Text(text = "${story.repliesCount} Comments")
                         }
 
                         Divider()
