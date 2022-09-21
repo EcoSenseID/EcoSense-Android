@@ -29,7 +29,7 @@ fun StoryItem(
     onClickSupport: () -> Unit,
     onClickReply: () -> Unit,
     onClickShare: () -> Unit,
-    onClickSupporters:() -> Unit,
+    onClickSupporters: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -110,7 +110,7 @@ fun StoryItem(
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier
                         .clip(RoundedCornerShape(4.dp))
-                        .clickable { onClickSupport() }
+                        .clickable { onClickSupporters() }
                         .padding(MaterialTheme.spacing.extraSmall),
                 ) {
                     Box(contentAlignment = Alignment.CenterStart) {
@@ -137,8 +137,9 @@ fun StoryItem(
 
                     Spacer(modifier = Modifier.width(MaterialTheme.spacing.small))
 
-                    Text(
-                        text = "+${story().supportersCount - story().supportersAvatarsUrl.size}",
+                    val restCount = story().supportersCount - story().supportersAvatarsUrl.size
+                    if (restCount > 0) Text(
+                        text = "+$restCount",
                         color = MaterialTheme.colors.onSurface.copy(alpha = 0.6f),
                         style = MaterialTheme.typography.caption,
                     )

@@ -11,9 +11,12 @@ import com.ecosense.android.featForums.domain.model.Story
 import com.ecosense.android.featForums.domain.repository.ForumsRepository
 import com.ecosense.android.featForums.presentation.forums.model.StoriesFeedState
 import com.ecosense.android.featForums.presentation.forums.model.StoryComposerState
+import com.ecosense.android.featForums.presentation.forums.model.SupportersDialogState
+import com.ecosense.android.featForums.presentation.model.StoryPresentation
 import com.ecosense.android.featForums.presentation.model.toPresentation
 import com.ecosense.android.featForums.presentation.paginator.DefaultPaginator
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -29,12 +32,18 @@ class ForumsViewModel @Inject constructor(
     var storyComposerState by mutableStateOf(StoryComposerState.defaultValue)
         private set
 
-    private val paginator = DefaultPaginator(
-        initialKey = storiesFeedState.page,
+    var supportersDialogState by mutableStateOf(SupportersDialogState.defaultValue)
+        private set
+
+    private val storiesPaginator = DefaultPaginator(initialKey = storiesFeedState.page,
         getNextKey = { storiesFeedState.page + 1 },
         onRequest = { nextPage -> forumsRepository.getStories(nextPage, 20) },
-        onLoadUpdated = { isLoading -> storiesFeedState = storiesFeedState.copy(isLoading = isLoading) },
-        onError = { message: UIText? -> storiesFeedState = storiesFeedState.copy(errorMessage = message) },
+        onLoadUpdated = { isLoading ->
+            storiesFeedState = storiesFeedState.copy(isLoading = isLoading)
+        },
+        onError = { message: UIText? ->
+            storiesFeedState = storiesFeedState.copy(errorMessage = message)
+        },
         onSuccess = { items: List<Story>?, newKey: Int ->
             val newStories = items?.map { it.toPresentation() }
             storiesFeedState = storiesFeedState.copy(
@@ -42,8 +51,7 @@ class ForumsViewModel @Inject constructor(
                 page = newKey,
                 isEndReached = items?.isEmpty() ?: false,
             )
-        }
-    )
+        })
 
     init {
         onLoadNextStoriesFeed()
@@ -54,13 +62,49 @@ class ForumsViewModel @Inject constructor(
         }
     }
 
+    private var onLoadNextStoriesFeedJob: Job? = null
     fun onLoadNextStoriesFeed() {
-        viewModelScope.launch {
-            paginator.loadNextItems()
+        onLoadNextStoriesFeedJob?.cancel()
+        onLoadNextStoriesFeedJob = viewModelScope.launch {
+            storiesPaginator.loadNextItems()
         }
     }
 
+    private var onComposerCaptionChangeJob: Job? = null
     fun onComposerCaptionChange(value: String) {
-        storyComposerState = storyComposerState.copy(caption = value)
+        onComposerCaptionChangeJob?.cancel()
+        onComposerCaptionChangeJob = viewModelScope.launch {
+            storyComposerState = storyComposerState.copy(caption = value)
+        }
+    }
+
+    private var onClickSupportJob: Job? = null
+    fun onClickSupport(story: StoryPresentation) {
+        onClickSupportJob?.cancel()
+        onClickSupportJob = viewModelScope.launch {
+            /* TODO */
+        }
+    }
+
+    private var onClickSupportersJob: Job? = null
+    fun onClickSupporters(story: StoryPresentation) {
+        onClickSupportersJob?.cancel()
+        onClickSupportersJob = viewModelScope.launch {
+            supportersDialogState = supportersDialogState.copy(
+                isVisible = true,
+                storyId = story.id,
+            )
+        }
+    }
+
+    private var onDismissSupportersDialogRequestJob: Job? = null
+    fun onDismissSupportersDialogRequest() {
+        onDismissSupportersDialogRequestJob?.cancel()
+        onDismissSupportersDialogRequestJob = viewModelScope.launch {
+            supportersDialogState = supportersDialogState.copy(
+                isVisible = false,
+                storyId = null,
+            )
+        }
     }
 }
