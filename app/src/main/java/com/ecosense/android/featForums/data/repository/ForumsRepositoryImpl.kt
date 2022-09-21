@@ -3,8 +3,9 @@ package com.ecosense.android.featForums.data.repository
 import com.ecosense.android.core.domain.api.AuthApi
 import com.ecosense.android.core.util.Resource
 import com.ecosense.android.featForums.data.api.ForumsApi
-import com.ecosense.android.featForums.domain.model.Comment
+import com.ecosense.android.featForums.domain.model.Reply
 import com.ecosense.android.featForums.domain.model.Story
+import com.ecosense.android.featForums.domain.model.Supporter
 import com.ecosense.android.featForums.domain.repository.ForumsRepository
 import kotlinx.coroutines.delay
 
@@ -38,17 +39,26 @@ class ForumsRepositoryImpl(
         )
     }
 
-    private val fakeComments = (1..100).map {
-        Comment(
+    private val fakeReplies = (1..100).map {
+        Reply(
             id = it,
             name = "Siti ($it)",
             username = "@siti$it",
-            profilePictureUrl = "https://cdn.statically.io/og/theme=dark/$it.jpg",
+            avatarUrl = "https://i.pravatar.cc/300?img=$it",
             caption = "Comment caption $it",
-            photoUrl = if (it % 3 == 0) "https://cdn.statically.io/og/theme=dark/Story$it.jpg" else null,
+            attachedPhotoUrl = if (it % 3 == 0) "https://cdn.statically.io/og/theme=dark/Story$it.jpg" else null,
             createdAt = System.currentTimeMillis() - (it * 90000000),
-            likesCount = (it * 420) % 69,
-            isLiked = it % 11 == 0,
+            supportersCount = (it * 420) % 69,
+            isSupported = it % 11 == 0,
+        )
+    }
+
+    private val fakeSupporters = (1..100).map {
+        Supporter(
+            id = it,
+            avatarUrl = "https://i.pravatar.cc/300?img=$it",
+            username = "@siti$it",
+            name = "Siti ($it)",
         )
     }
 
@@ -67,11 +77,21 @@ class ForumsRepositoryImpl(
         storyId: Int,
         page: Int,
         size: Int,
-    ): Resource<List<Comment>> {
+    ): Resource<List<Reply>> {
         delay(2000L)
         val startingIndex = page * size
-        return if (startingIndex + size <= fakeComments.size) {
-            Resource.Success(fakeComments.slice(startingIndex until (startingIndex + size)))
+        return if (startingIndex + size <= fakeReplies.size) {
+            Resource.Success(fakeReplies.slice(startingIndex until (startingIndex + size)))
+        } else Resource.Success(emptyList())
+    }
+
+    override suspend fun getSupporters(
+        storyId: Int, page: Int, size: Int
+    ): Resource<List<Supporter>> {
+        delay(2000L)
+        val startingIndex = page * size
+        return if (startingIndex + size <= fakeSupporters.size) {
+            Resource.Success(fakeSupporters.slice(startingIndex until (startingIndex + size)))
         } else Resource.Success(emptyList())
     }
 }

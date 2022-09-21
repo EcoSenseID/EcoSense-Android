@@ -160,4 +160,5 @@
     <string name="cd_add_story">Create new story</string>
     <string name="supported_by">Supported by</string>
     <string name="close">Close</string>
+    <string name="cd_back">Back</string>
 </resources>

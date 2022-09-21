@@ -172,7 +172,7 @@ fun StoryDetailScreen(
                     count = commentsFeedState.comments.size,
                     key = { i -> commentsFeedState.comments[i].id },
                 ) { i ->
-                    if (i >= commentsFeedState.comments.size - 1 && !commentsFeedState.isEndReached && !commentsFeedState.isLoading) viewModel.onLoadNextCommentsFeed()
+                    if (i >= commentsFeedState.comments.lastIndex && !commentsFeedState.isEndReached && !commentsFeedState.isLoading) viewModel.onLoadNextCommentsFeed()
 
                     CommentItem(
                         comment = { commentsFeedState.comments[i] },
