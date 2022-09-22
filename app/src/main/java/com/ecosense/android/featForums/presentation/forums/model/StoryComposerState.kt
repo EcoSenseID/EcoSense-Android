@@ -1,14 +1,14 @@
 package com.ecosense.android.featForums.presentation.forums.model
 
 data class StoryComposerState(
-    val profilePictureUrl: String?,
+    val avatarUrl: String?,
     val caption: String?,
     val attachedPhotoUrl: String?,
     val isUploading: Boolean,
 ) {
     companion object {
         val defaultValue = StoryComposerState(
-            profilePictureUrl = null,
+            avatarUrl = null,
             caption = null,
             attachedPhotoUrl = null,
             isUploading = false,

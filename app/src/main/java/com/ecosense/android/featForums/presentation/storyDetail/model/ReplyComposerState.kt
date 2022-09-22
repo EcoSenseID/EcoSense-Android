@@ -1,14 +1,14 @@
 package com.ecosense.android.featForums.presentation.storyDetail.model
 
-data class CommentComposerState(
-    val profilePictureUrl: String?,
+data class ReplyComposerState(
+    val avatarUrl: String?,
     val caption: String?,
     val attachedPhotoUrl: String?,
     val isUploading: Boolean,
 ) {
     companion object {
-        val defaultValue = CommentComposerState(
-            profilePictureUrl = null,
+        val defaultValue = ReplyComposerState(
+            avatarUrl = null,
             caption = null,
             attachedPhotoUrl = null,
             isUploading = false,

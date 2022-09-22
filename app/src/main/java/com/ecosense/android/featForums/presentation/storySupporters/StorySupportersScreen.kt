@@ -55,7 +55,7 @@ fun StorySupportersScreen(
                 count = viewModel.state.supporters.count(),
                 key = { i -> viewModel.state.supporters[i].id },
             ) { i ->
-                if (i >= viewModel.state.supporters.lastIndex && !viewModel.state.isEndReached && !viewModel.state.isLoading) viewModel.onLoadNextCommentsFeed()
+                if (i >= viewModel.state.supporters.lastIndex && !viewModel.state.isEndReached && !viewModel.state.isLoading) viewModel.onLoadNextSupporters()
 
                 SupporterItem(supporter = { viewModel.state.supporters[i] })
 

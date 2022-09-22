@@ -11,7 +11,6 @@ import com.ecosense.android.core.util.UIText
 import com.ecosense.android.featForums.domain.model.Supporter
 import com.ecosense.android.featForums.domain.repository.ForumsRepository
 import com.ecosense.android.featForums.presentation.forums.model.StorySupportersState
-import com.ecosense.android.featForums.presentation.model.StoryPresentation
 import com.ecosense.android.featForums.presentation.model.toPresentation
 import com.ecosense.android.featForums.presentation.paginator.DefaultPaginator
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -52,10 +51,10 @@ class StorySupportersViewModel @Inject constructor(
 
     fun setStoryId(storyId: Int) {
         this.storyId = storyId
-        onLoadNextCommentsFeed()
+        onLoadNextSupporters()
     }
 
-    fun onLoadNextCommentsFeed() {
+    fun onLoadNextSupporters() {
         viewModelScope.launch {
             paginator.loadNextItems()
         }

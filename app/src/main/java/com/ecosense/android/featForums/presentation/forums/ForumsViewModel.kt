@@ -21,7 +21,6 @@ import javax.inject.Inject
 @HiltViewModel
 class ForumsViewModel @Inject constructor(
     private val forumsRepository: ForumsRepository,
-    private val authRepository: AuthRepository,
 ) : ViewModel() {
 
     var feedState by mutableStateOf(StoriesFeedState.defaultValue)

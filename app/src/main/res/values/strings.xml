@@ -161,4 +161,8 @@
     <string name="supported_by">Supported by</string>
     <string name="close">Close</string>
     <string name="cd_back">Back</string>
+    <string name="story">Story</string>
+    <string name="cd_attach_photo">Attach photo</string>
+    <string name="post">Post</string>
+    <string name="reply_to_this_story">Reply to this story</string>
 </resources>

@@ -1,7 +1,6 @@
 package com.ecosense.android.featForums.presentation.forums.component
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -105,46 +104,14 @@ fun StoryItem(
             }
 
             if (story().supportersAvatarsUrl.isNotEmpty()) {
-                Row(
-                    horizontalArrangement = Arrangement.Start,
-                    verticalAlignment = Alignment.CenterVertically,
+                StorySupportersSection(
+                    avatarUrls = { story().supportersAvatarsUrl },
+                    totalSupportersCount = { story().supportersCount },
                     modifier = Modifier
                         .clip(RoundedCornerShape(4.dp))
                         .clickable { onClickSupporters() }
                         .padding(MaterialTheme.spacing.extraSmall),
-                ) {
-                    Box(contentAlignment = Alignment.CenterStart) {
-                        for (i in story().supportersAvatarsUrl.indices) {
-                            Row {
-                                Spacer(modifier = Modifier.width((i * 12).dp))
-                                AsyncImage(
-                                    model = story().supportersAvatarsUrl[i],
-                                    contentDescription = null,
-                                    placeholder = painterResource(id = R.drawable.ic_ecosense_logo),
-                                    contentScale = ContentScale.Crop,
-                                    modifier = Modifier
-                                        .size(24.dp)
-                                        .clip(CircleShape)
-                                        .border(
-                                            width = 2.dp,
-                                            color = MaterialTheme.colors.surface,
-                                            shape = CircleShape,
-                                        ),
-                                )
-                            }
-                        }
-                    }
-
-                    Spacer(modifier = Modifier.width(MaterialTheme.spacing.small))
-
-                    val restCount = story().supportersCount - story().supportersAvatarsUrl.size
-                    if (restCount > 0) Text(
-                        text = "+$restCount",
-                        color = MaterialTheme.colors.onSurface.copy(alpha = 0.6f),
-                        style = MaterialTheme.typography.caption,
-                    )
-                }
-
+                )
 
                 Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
             }
@@ -169,7 +136,7 @@ fun StoryItem(
                         contentDescription = stringResource(R.string.cd_support),
                         tint = if (story().isSupported) MaterialTheme.colors.secondary
                         else MaterialTheme.colors.onSurface.copy(alpha = 0.6f),
-                        modifier = Modifier.size(16.dp)
+                        modifier = Modifier.size(16.dp),
                     )
 
                     Spacer(modifier = Modifier.width(MaterialTheme.spacing.small))
@@ -197,6 +164,7 @@ fun StoryItem(
                         painter = painterResource(id = R.drawable.ic_reply),
                         contentDescription = stringResource(R.string.cd_reply),
                         tint = MaterialTheme.colors.onSurface.copy(alpha = 0.6f),
+                        modifier = Modifier.size(16.dp),
                     )
 
                     Spacer(modifier = Modifier.width(MaterialTheme.spacing.small))
@@ -223,6 +191,7 @@ fun StoryItem(
                         painter = painterResource(id = R.drawable.ic_share),
                         contentDescription = stringResource(id = R.string.cd_share),
                         tint = MaterialTheme.colors.onSurface.copy(alpha = 0.6f),
+                        modifier = Modifier.size(16.dp),
                     )
                 }
             }
