@@ -19,6 +19,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.ecosense.android.R
+import com.ecosense.android.core.presentation.model.CampaignPresentation
 import com.ecosense.android.core.presentation.theme.spacing
 import com.ecosense.android.featForums.presentation.model.StoryPresentation
 
@@ -29,6 +30,7 @@ fun StoryItem(
     onClickReply: () -> Unit,
     onClickShare: () -> Unit,
     onClickSupporters: () -> Unit,
+    onClickSharedCampaign: (campaign: CampaignPresentation) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -100,6 +102,16 @@ fun StoryItem(
                         .clip(RoundedCornerShape(16.dp)),
                 )
 
+                Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
+            }
+
+            story().sharedCampaign?.let {
+                SharedCampaign(
+                    campaign = { it },
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(16.dp))
+                        .clickable { onClickSharedCampaign(it) },
+                )
                 Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
             }
 

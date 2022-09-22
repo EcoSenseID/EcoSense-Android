@@ -1,6 +1,7 @@
 package com.ecosense.android.featForums.data.repository
 
 import com.ecosense.android.core.domain.api.AuthApi
+import com.ecosense.android.core.domain.model.Campaign
 import com.ecosense.android.core.util.Resource
 import com.ecosense.android.featForums.data.api.ForumsApi
 import com.ecosense.android.featForums.domain.model.Reply
@@ -27,6 +28,16 @@ class ForumsRepositoryImpl(
                 )
             }",
             attachedPhotoUrl = if (it % 3 == 0) "https://cdn.statically.io/og/theme=dark/Story%20no.%20$it.jpg" else null,
+            sharedCampaign = if (it % 7 == 0) Campaign(
+                id = 1,
+                posterUrl = "https://cdn.statically.io/og/theme=dark/shared_campaign_$it.jpg",
+                title = "Shared Campaign $it",
+                endDate = "24 July 2022",
+                category = listOf("Water Pollution", "Plastic Free"),
+                participantsCount = 69420,
+                isTrending = true,
+                isNew = true,
+            ) else null,
             createdAt = System.currentTimeMillis() - (it * 90000000),
             supportersCount = (it * 420) % 69,
             repliesCount = (it * 69) % 15,

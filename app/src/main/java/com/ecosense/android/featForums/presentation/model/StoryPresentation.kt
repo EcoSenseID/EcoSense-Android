@@ -1,6 +1,8 @@
 package com.ecosense.android.featForums.presentation.model
 
 import android.os.Parcelable
+import com.ecosense.android.core.presentation.model.CampaignPresentation
+import com.ecosense.android.core.presentation.model.toPresentation
 import com.ecosense.android.featForums.domain.model.Story
 import com.ecosense.android.featForums.presentation.constants.PatternConstants
 import kotlinx.parcelize.Parcelize
@@ -15,6 +17,7 @@ data class StoryPresentation(
     val avatarUrl: String,
     val caption: String,
     val attachedPhotoUrl: String?,
+    val sharedCampaign: CampaignPresentation?,
     val createdAt: String,
     val supportersCount: Int,
     val supportersAvatarsUrl: List<String>,
@@ -30,6 +33,7 @@ fun Story.toPresentation(): StoryPresentation {
         avatarUrl = this.avatarUrl,
         caption = this.caption,
         attachedPhotoUrl = this.attachedPhotoUrl,
+        sharedCampaign = this.sharedCampaign?.toPresentation(),
         createdAt = SimpleDateFormat(
             PatternConstants.STORIES_DATE_FORMAT,
             Locale.getDefault(),

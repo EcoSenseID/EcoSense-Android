@@ -23,11 +23,13 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.ecosense.android.R
 import com.ecosense.android.core.presentation.theme.spacing
+import com.ecosense.android.destinations.CampaignDetailScreenDestination
 import com.ecosense.android.destinations.StorySupportersScreenDestination
-import com.ecosense.android.featForums.presentation.storyDetail.component.ReplyItem
+import com.ecosense.android.featForums.presentation.forums.component.SharedCampaign
 import com.ecosense.android.featForums.presentation.forums.component.StorySupportersSection
 import com.ecosense.android.featForums.presentation.model.StoryPresentation
 import com.ecosense.android.featForums.presentation.storyDetail.component.ReplyComposer
+import com.ecosense.android.featForums.presentation.storyDetail.component.ReplyItem
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
@@ -134,6 +136,20 @@ fun StoryDetailScreen(
                                 .fillMaxWidth()
                                 .padding(horizontal = MaterialTheme.spacing.medium)
                                 .clip(RoundedCornerShape(16.dp)),
+                        )
+
+                        Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
+                    }
+
+                    story.sharedCampaign?.let {
+                        SharedCampaign(
+                            campaign = { it },
+                            modifier = Modifier
+                                .padding(horizontal = MaterialTheme.spacing.medium)
+                                .clip(RoundedCornerShape(16.dp))
+                                .clickable {
+                                    navigator.navigate(CampaignDetailScreenDestination(id = it.id))
+                                },
                         )
 
                         Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
@@ -256,7 +272,7 @@ fun StoryDetailScreen(
                     },
                     onClickAttach = { /*TODO*/ },
                     onClickSend = { /*TODO*/ },
-                    modifier= Modifier
+                    modifier = Modifier
                         .fillMaxWidth()
                         .background(MaterialTheme.colors.surface)
                         .padding(MaterialTheme.spacing.medium),

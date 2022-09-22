@@ -1,4 +1,6 @@
-package com.ecosense.android.featForums.presentation.forums.model
+package com.ecosense.android.featForums.presentation.storyComposer
+
+import com.ecosense.android.featForums.presentation.storyDetail.model.ReplyComposerState
 
 data class StoryComposerState(
     val avatarUrl: String?,
@@ -7,7 +9,7 @@ data class StoryComposerState(
     val isUploading: Boolean,
 ) {
     companion object {
-        val defaultValue = StoryComposerState(
+        val defaultValue = ReplyComposerState(
             avatarUrl = null,
             caption = null,
             attachedPhotoUrl = null,

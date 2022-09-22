@@ -17,7 +17,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.ecosense.android.R
+import com.ecosense.android.core.presentation.model.CampaignPresentation
 import com.ecosense.android.core.presentation.theme.GradientForButtons
+import com.ecosense.android.destinations.CampaignDetailScreenDestination
+import com.ecosense.android.destinations.StoryComposerScreenDestination
 import com.ecosense.android.destinations.StoryDetailScreenDestination
 import com.ecosense.android.destinations.StorySupportersScreenDestination
 import com.ecosense.android.featForums.presentation.forums.component.StoryItem
@@ -62,7 +65,7 @@ fun ForumsScreen(
                     .size(56.dp)
                     .shadow(elevation = 8.dp, shape = CircleShape, clip = true)
                     .background(GradientForButtons)
-                    .clickable { /*TODO*/ },
+                    .clickable { navigator.navigate(StoryComposerScreenDestination(null)) },
             ) {
                 Icon(
                     imageVector = Icons.Rounded.Add,
@@ -93,6 +96,9 @@ fun ForumsScreen(
                     onClickReply = { navigator.navigate(StoryDetailScreenDestination(story)) },
                     onClickShare = { /*TODO*/ logcat { "onClickShare $i" } },
                     onClickSupporters = { navigator.navigate(StorySupportersScreenDestination(story.id)) },
+                    onClickSharedCampaign = { campaign: CampaignPresentation ->
+                        navigator.navigate(CampaignDetailScreenDestination(id = campaign.id))
+                    },
                     modifier = Modifier.clickable {
                         navigator.navigate(StoryDetailScreenDestination(story))
                     },

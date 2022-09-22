@@ -23,6 +23,8 @@ val GradientLighter = Brush.horizontalGradient(listOf(Color(0xff80DF14), Color(0
 val GradientForButtons = Brush.verticalGradient(listOf(Color(0xff80B014), Color(0xff036C5C)))
 val LightGrey = Color(0xffF8F8F8)
 val SuperDarkGrey = Color(0xff6E6E6E)
+val CategoryColors = listOf(Color(0xff004DC9), Color(0xff9B211B))
+
 val DarkGrey = Color(0xffC8C8C8)
 val DarkerGrey = Color(0xffA8A8A8)
 
