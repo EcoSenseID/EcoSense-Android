@@ -86,6 +86,26 @@ fun StoryItem(
                 )
             }
 
+            story().sharedCampaign?.let {
+                Text(
+                    text = stringResource(
+                        R.string.username_just_finished_a_campaign,
+                        story().username,
+                    ),
+                    color = MaterialTheme.colors.onPrimary,
+                    style = MaterialTheme.typography.caption,
+                    fontWeight = FontWeight.SemiBold,
+                    modifier = Modifier
+                        .padding(vertical = MaterialTheme.spacing.small)
+                        .clip(RoundedCornerShape(100))
+                        .background(MaterialTheme.colors.primary)
+                        .padding(
+                            horizontal = MaterialTheme.spacing.small,
+                            vertical = MaterialTheme.spacing.extraSmall,
+                        ),
+                )
+            }
+
             Text(
                 text = story().caption,
                 modifier = Modifier.fillMaxWidth(),

@@ -166,4 +166,5 @@
     <string name="post">Post</string>
     <string name="reply_to_this_story">Reply to this story</string>
     <string name="story_composer">Story Composer</string>
+    <string name="username_just_finished_a_campaign">%1$s just finished a campaign!</string>
 </resources>
