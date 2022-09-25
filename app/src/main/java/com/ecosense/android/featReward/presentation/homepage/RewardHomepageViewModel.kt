@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ecosense.android.core.presentation.util.UIEvent
 import com.ecosense.android.core.util.Resource
-import com.ecosense.android.featReward.domain.model.RewardHomepage
 import com.ecosense.android.featReward.domain.repository.RewardRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
@@ -44,13 +43,13 @@ class RewardHomepageViewModel @Inject constructor(
                     }
                     is Resource.Loading -> {
                         _state.value = state.value.copy(
-                            rewardHomepage = result.data ?: RewardHomepage.defaultValue,
+                            rewardHomepage = result.data ?: state.value.rewardHomepage,
                             isLoadingRewardHomepage = true
                         )
                     }
                     is Resource.Success -> {
                         _state.value = state.value.copy(
-                            rewardHomepage = result.data ?: RewardHomepage.defaultValue,
+                            rewardHomepage = result.data ?: state.value.rewardHomepage,
                             isLoadingRewardHomepage = false
                         )
                     }
