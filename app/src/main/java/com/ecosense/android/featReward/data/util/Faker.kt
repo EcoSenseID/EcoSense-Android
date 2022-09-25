@@ -15,12 +15,14 @@ object Faker {
         val result = mutableListOf<HotDealsRewards>()
 
         for (i in 1..5) {
-            HotDealsRewards(
-                partner = "Partner $i",
-                bannerUrl = "https://cdn.statically.io/og/theme=dark/HotDeals$i.jpg",
-                id = i,
-                title = "Hot Deals $i",
-                pointsNeeded = (50..200).random()
+            result.add(
+                HotDealsRewards(
+                    partner = "Partner $i",
+                    bannerUrl = "https://cdn.statically.io/og/theme=dark/HotDeals$i.jpg",
+                    id = i,
+                    title = "Hot Deals $i",
+                    pointsNeeded = (50..200).random()
+                )
             )
         }
 
@@ -31,12 +33,14 @@ object Faker {
         val result = mutableListOf<DonationRewards>()
 
         for (i in 1..5) {
-            DonationRewards(
-                partner = "Partner $i",
-                bannerUrl = "https://cdn.statically.io/og/theme=dark/HotDeals$i.jpg",
-                id = i,
-                title = "Hot Deals $i",
-                pointsNeeded = (50..200).random()
+            result.add(
+                DonationRewards(
+                    partner = "Partner $i",
+                    bannerUrl = "https://cdn.statically.io/og/theme=dark/HotDeals$i.jpg",
+                    id = i,
+                    title = "Hot Deals $i",
+                    pointsNeeded = (50..200).random()
+                )
             )
         }
 
@@ -54,14 +58,16 @@ object Faker {
         val result = mutableListOf<CategoryRewards>()
 
         for (i in 1..10) {
-            CategoryRewards(
-                partner = "Partner $i",
-                bannerUrl = "https://cdn.statically.io/og/theme=dark/${rewardCategory + i}.jpg",
-                numberOfRedeem = (1..3).random(),
-                id = i,
-                title = "$rewardCategory + i",
-                maxRedeem = 3,
-                pointsNeeded = (50..200).random()
+            result.add(
+                CategoryRewards(
+                    partner = "Partner $i",
+                    bannerUrl = "https://cdn.statically.io/og/theme=dark/${rewardCategory + i}.jpg",
+                    numberOfRedeem = (1..3).random(),
+                    id = i,
+                    title = "$rewardCategory + i",
+                    maxRedeem = 3,
+                    pointsNeeded = (50..200).random()
+                )
             )
         }
 
@@ -72,12 +78,14 @@ object Faker {
         val result = mutableListOf<MyRewards>()
 
         for (i in 1..10) {
-            MyRewards(
-                partner = "Partner $i",
-                bannerUrl = "https://cdn.statically.io/og/theme=dark/MyRewards$i.jpg",
-                id = i,
-                title = "My Rewards $i",
-                category = if (i < 3) "Entertainment" else if (i < 6) "Food & Beverage" else "Environment"
+            result.add(
+                MyRewards(
+                    partner = "Partner $i",
+                    bannerUrl = "https://cdn.statically.io/og/theme=dark/MyRewards$i.jpg",
+                    id = i,
+                    title = "My Rewards $i",
+                    category = if (i < 3) "Entertainment" else if (i < 6) "Food & Beverage" else "Environment"
+                )
             )
         }
 
