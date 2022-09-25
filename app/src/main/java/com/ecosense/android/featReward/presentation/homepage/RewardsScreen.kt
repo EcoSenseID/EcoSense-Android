@@ -1,7 +1,10 @@
 package com.ecosense.android.featReward.presentation.homepage
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.PhotoCamera
@@ -12,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
@@ -31,8 +35,12 @@ import kotlinx.coroutines.flow.collectLatest
 fun RewardsScreen(
     navigator: DestinationsNavigator, viewModel: RewardHomepageViewModel = hiltViewModel()
 ) {
+    val verticalScroll = rememberScrollState()
+    val donationHorizontalScroll = rememberScrollState()
+    val hotDealsHorizontalScroll = rememberScrollState()
+
     val scaffoldState = rememberScaffoldState()
-    val state = viewModel
+    val state = viewModel.state.value
 
     val context = LocalContext.current
     val focusManager = LocalFocusManager.current
@@ -59,10 +67,11 @@ fun RewardsScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(vertical = MaterialTheme.spacing.medium)
+                .verticalScroll(verticalScroll)
         ) {
             //TODO: find a way to pass the name value from profile/auth
             Text(text = "Kit Harrington")
-            Text(text = viewModel.state.value.rewardHomepage.totalPoints.toString())
+            Text(text = state.rewardHomepage.totalPoints.toString())
             Button(
                 onClick = {
                     navigator.navigate(
@@ -73,8 +82,11 @@ fun RewardsScreen(
                 Text(text = "My EcoRewards")
             }
 
-            Row(horizontalArrangement = Arrangement.SpaceEvenly) {
-                Column {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceEvenly
+            ) {
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     Icon(
                         imageVector = Icons.Outlined.PhotoCamera,
                         contentDescription = "All Rewards",
@@ -86,7 +98,7 @@ fun RewardsScreen(
                     )
                     Text(text = "All Rewards")
                 }
-                Column {
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     Icon(
                         imageVector = Icons.Outlined.PhotoCamera,
                         contentDescription = "Environment",
@@ -98,7 +110,7 @@ fun RewardsScreen(
                     )
                     Text(text = "Environment")
                 }
-                Column {
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     Icon(
                         imageVector = Icons.Outlined.PhotoCamera,
                         contentDescription = "Entertainment",
@@ -110,7 +122,7 @@ fun RewardsScreen(
                     )
                     Text(text = "Entertainment")
                 }
-                Column {
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     Icon(
                         imageVector = Icons.Outlined.PhotoCamera,
                         contentDescription = "Beverages",
@@ -122,7 +134,7 @@ fun RewardsScreen(
                     )
                     Text(text = "Beverages")
                 }
-                Column {
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     Icon(
                         imageVector = Icons.Outlined.PhotoCamera,
                         contentDescription = "Health",
@@ -136,7 +148,10 @@ fun RewardsScreen(
                 }
             }
 
-            Row(horizontalArrangement = Arrangement.SpaceBetween) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
                 Text(text = "Donation")
                 Text(
                     text = "See All",
@@ -147,17 +162,17 @@ fun RewardsScreen(
                     })
                 )
             }
-            viewModel.state.value.rewardHomepage.donationRewards.forEachIndexed { index, donation ->
-                Column(
-                    modifier = Modifier
-                        .padding(MaterialTheme.spacing.medium)
-                        .clickable(onClick = {
-                            navigator.navigate(
-                                RewardDetailScreenDestination(index)
-                            )
-                        })
-                ) {
-                    Box(modifier = Modifier.fillMaxSize()) {
+            Row(modifier = Modifier.horizontalScroll(donationHorizontalScroll)) {
+                state.rewardHomepage.donationRewards.forEachIndexed { index, donation ->
+                    Column(
+                        modifier = Modifier
+                            .padding(MaterialTheme.spacing.medium)
+                            .clickable(onClick = {
+                                navigator.navigate(
+                                    RewardDetailScreenDestination(index)
+                                )
+                            })
+                    ) {
                         AsyncImage(
                             model = ImageRequest.Builder(LocalContext.current)
                                 .data(donation.bannerUrl)
@@ -166,22 +181,19 @@ fun RewardsScreen(
                                 .build(),
                             contentDescription = donation.title,
                             contentScale = ContentScale.Crop,
-                            modifier = Modifier.fillMaxSize()
+                            modifier = Modifier.size(100.dp)
                         )
-                        Row(
-                            modifier = Modifier.fillMaxSize(),
-                            horizontalArrangement = Arrangement.Center,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Text(text = donation.title)
-                            Text(text = donation.partner)
-                            Text(text = "${donation.pointsNeeded} EcoPoints")
-                        }
+                        Text(text = donation.title)
+                        Text(text = donation.partner)
+                        Text(text = "${donation.pointsNeeded} EcoPoints")
                     }
                 }
             }
 
-            Row(horizontalArrangement = Arrangement.SpaceBetween) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
                 Text(text = "Hot Deals")
                 Text(
                     text = "See All",
@@ -192,17 +204,17 @@ fun RewardsScreen(
                     })
                 )
             }
-            viewModel.state.value.rewardHomepage.hotDealsRewards.forEachIndexed { index, hotDeals ->
-                Column(
-                    modifier = Modifier
-                        .padding(MaterialTheme.spacing.medium)
-                        .clickable(onClick = {
-                            navigator.navigate(
-                                RewardDetailScreenDestination(index)
-                            )
-                        })
-                ) {
-                    Box(modifier = Modifier.fillMaxSize()) {
+            Row(modifier = Modifier.horizontalScroll(hotDealsHorizontalScroll)) {
+                state.rewardHomepage.hotDealsRewards.forEachIndexed { index, hotDeals ->
+                    Column(
+                        modifier = Modifier
+                            .padding(MaterialTheme.spacing.medium)
+                            .clickable(onClick = {
+                                navigator.navigate(
+                                    RewardDetailScreenDestination(index)
+                                )
+                            })
+                    ) {
                         AsyncImage(
                             model = ImageRequest.Builder(LocalContext.current)
                                 .data(hotDeals.bannerUrl)
@@ -211,17 +223,11 @@ fun RewardsScreen(
                                 .build(),
                             contentDescription = hotDeals.title,
                             contentScale = ContentScale.Crop,
-                            modifier = Modifier.fillMaxSize()
+                            modifier = Modifier.size(100.dp)
                         )
-                        Row(
-                            modifier = Modifier.fillMaxSize(),
-                            horizontalArrangement = Arrangement.Center,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Text(text = hotDeals.title)
-                            Text(text = hotDeals.partner)
-                            Text(text = "${hotDeals.pointsNeeded} EcoPoints")
-                        }
+                        Text(text = hotDeals.title)
+                        Text(text = hotDeals.partner)
+                        Text(text = "${hotDeals.pointsNeeded} EcoPoints")
                     }
                 }
             }
