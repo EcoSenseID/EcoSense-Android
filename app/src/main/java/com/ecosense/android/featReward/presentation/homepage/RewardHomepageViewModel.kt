@@ -4,6 +4,7 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.ecosense.android.core.domain.repository.AuthRepository
 import com.ecosense.android.core.presentation.util.UIEvent
 import com.ecosense.android.core.util.Resource
 import com.ecosense.android.featReward.domain.repository.RewardRepository
@@ -18,6 +19,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class RewardHomepageViewModel @Inject constructor(
+    private val authRepository: AuthRepository,
     private val rewardRepository: RewardRepository
 ) : ViewModel() {
 
@@ -28,7 +30,17 @@ class RewardHomepageViewModel @Inject constructor(
     val eventFlow = _eventFlow.receiveAsFlow()
 
     init {
+        getProfile()
         getHomepage()
+    }
+
+    private var getProfileJob: Job? = null
+    private fun getProfile() {
+        getProfileJob?.cancel()
+        getProfileJob = viewModelScope.launch {
+            val user = authRepository.getCurrentUser()
+            user?.let { _state.value = state.value.copy(user = it) }
+        }
     }
 
     private var getHomepageJob: Job? = null

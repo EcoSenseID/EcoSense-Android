@@ -15,11 +15,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import coil.size.Scale
+import com.ecosense.android.R
 import com.ecosense.android.core.presentation.theme.spacing
 import com.ecosense.android.core.presentation.util.UIEvent
 import com.ecosense.android.core.presentation.util.asString
@@ -69,15 +71,18 @@ fun RewardsScreen(
                 .padding(vertical = MaterialTheme.spacing.medium)
                 .verticalScroll(verticalScroll)
         ) {
-            //TODO: find a way to pass the name value from profile/auth
-            Text(text = "Kit Harrington")
+            Text(
+                text = if (!state.user.displayName.isNullOrBlank()) state.user.displayName
+                else stringResource(R.string.ecosense_user)
+            )
             Text(text = state.rewardHomepage.totalPoints.toString())
             Button(
                 onClick = {
                     navigator.navigate(
                         MyRewardsScreenDestination()
                     )
-                }
+                },
+                modifier = Modifier.fillMaxWidth()
             ) {
                 Text(text = "My EcoRewards")
             }
