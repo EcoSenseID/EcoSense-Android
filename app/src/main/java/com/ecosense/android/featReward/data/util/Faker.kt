@@ -64,7 +64,7 @@ object Faker {
                     bannerUrl = "https://cdn.statically.io/og/theme=dark/${rewardCategory + i}.jpg",
                     numberOfRedeem = (1..3).random(),
                     id = i,
-                    title = "$rewardCategory + i",
+                    title = "$rewardCategory $i",
                     maxRedeem = 3,
                     pointsNeeded = (50..200).random()
                 )
