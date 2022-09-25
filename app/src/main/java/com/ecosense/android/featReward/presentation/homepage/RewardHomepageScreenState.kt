@@ -8,7 +8,11 @@ data class RewardHomepageScreenState(
 ) {
     companion object {
         val defaultValue = RewardHomepageScreenState(
-            rewardHomepage = RewardHomepage.defaultValue,
+            rewardHomepage = RewardHomepage(
+                totalPoints = 300,
+                donationRewards = emptyList(),
+                hotDealsRewards = emptyList()
+            ),
             isLoadingRewardHomepage = false
         )
     }
