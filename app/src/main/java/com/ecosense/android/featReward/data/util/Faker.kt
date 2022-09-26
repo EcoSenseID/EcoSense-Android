@@ -47,19 +47,12 @@ object Faker {
         return result
     }
 
-    fun getRewards(rewardCategory: String): Rewards {
-        return Rewards(
-            category = rewardCategory,
-            categoryRewards = getCategoryRewards(rewardCategory)
-        )
-    }
-
-    private fun getCategoryRewards(rewardCategory: String): List<CategoryRewards> {
-        val result = mutableListOf<CategoryRewards>()
+    fun getRewards(rewardCategory: String): List<Rewards> {
+        val result = mutableListOf<Rewards>()
 
         for (i in 1..10) {
             result.add(
-                CategoryRewards(
+                Rewards(
                     partner = "Partner $i",
                     bannerUrl = "https://cdn.statically.io/og/theme=dark/${rewardCategory + i}.jpg",
                     numberOfRedeem = (1..3).random(),

@@ -38,13 +38,13 @@ class MyRewardsViewModel @Inject constructor(
                     }
                     is Resource.Loading -> {
                         _state.value = state.value.copy(
-                            myReward = result.data ?: state.value.myReward,
+                            myRewards = result.data ?: state.value.myRewards,
                             isLoadingMyRewardList = true
                         )
                     }
                     is Resource.Success -> {
                         _state.value = state.value.copy(
-                            myReward = result.data ?: state.value.myReward,
+                            myRewards = result.data ?: state.value.myRewards,
                             isLoadingMyRewardList = false
                         )
                     }

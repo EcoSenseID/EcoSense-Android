@@ -21,17 +21,17 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import coil.size.Scale
 import com.ecosense.android.core.presentation.theme.spacing
-import com.ecosense.android.featReward.domain.model.CategoryRewards
 import com.ecosense.android.featReward.domain.model.MyRewards
+import com.ecosense.android.featReward.domain.model.Rewards
 import logcat.logcat
 
 @Composable
 fun RewardItem(
-    categoryReward: CategoryRewards?,
+    reward: Rewards?,
     myReward: MyRewards?,
     onClick: () -> Unit
 ) {
-    if (categoryReward != null && myReward == null) {
+    if (reward != null && myReward == null) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
@@ -52,11 +52,11 @@ fun RewardItem(
             ) {
                 AsyncImage(
                     model = ImageRequest.Builder(LocalContext.current)
-                        .data(categoryReward.bannerUrl)
+                        .data(reward.bannerUrl)
                         .crossfade(true)
                         .scale(Scale.FILL)
                         .build(),
-                    contentDescription = categoryReward.title,
+                    contentDescription = reward.title,
                     contentScale = ContentScale.Crop,
                     modifier = Modifier.fillMaxSize()
                 )
@@ -68,15 +68,15 @@ fun RewardItem(
                     .padding(horizontal = MaterialTheme.spacing.medium)
             ) {
                 Text(
-                    text = categoryReward.title,
+                    text = reward.title,
                     style = MaterialTheme.typography.h5,
                     fontWeight = FontWeight.Bold
                 )
                 Text(
-                    text = categoryReward.partner,
+                    text = reward.partner,
                     style = MaterialTheme.typography.subtitle2
                 )
-                if (categoryReward.numberOfRedeem >= categoryReward.maxRedeem) {
+                if (reward.numberOfRedeem >= reward.maxRedeem) {
                     Button(
                         onClick = {
                             // TODO: Redeem Rewards
@@ -87,7 +87,7 @@ fun RewardItem(
                         colors = ButtonDefaults.buttonColors(MaterialTheme.colors.primary)
                     ) {
                         Text(
-                            text = "Redeem ${categoryReward.pointsNeeded} Eco Points",
+                            text = "Redeem ${reward.pointsNeeded} Eco Points",
                             style = MaterialTheme.typography.caption
                         )
                     }
@@ -109,7 +109,7 @@ fun RewardItem(
                 }
             }
         }
-    } else if (categoryReward == null && myReward != null) {
+    } else if (reward == null && myReward != null) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier

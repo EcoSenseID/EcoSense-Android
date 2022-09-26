@@ -62,7 +62,7 @@ fun CategoryRewardsScreen(
                 onBackClick = {
                     navigator.popBackStack()
                 },
-                screenName = state.rewards.category
+                screenName = rewardCategory
             )
         },
         scaffoldState = scaffoldState
@@ -82,12 +82,12 @@ fun CategoryRewardsScreen(
                     }
                 }
                 LazyColumn(modifier = Modifier.fillMaxWidth()) {
-                    items(state.rewards.categoryRewards.size) { i ->
+                    items(state.rewards.size) { i ->
                         RewardItem(
-                            categoryReward = state.rewards.categoryRewards[i],
+                            reward = state.rewards[i],
                             myReward = null,
                             onClick = {
-                                navigator.navigate(RewardDetailScreenDestination(rewardId = state.rewards.categoryRewards[i].id))
+                                navigator.navigate(RewardDetailScreenDestination(rewardId = state.rewards[i].id))
                             }
                         )
                     }

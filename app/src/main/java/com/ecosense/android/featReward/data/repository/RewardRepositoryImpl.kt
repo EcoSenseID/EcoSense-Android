@@ -75,7 +75,7 @@ class RewardRepositoryImpl(
 //        }
     }
 
-    override fun getRewards(rewardCategory: String): Flow<Resource<Rewards>> = flow {
+    override fun getRewards(rewardCategory: String): Flow<Resource<List<Rewards>>> = flow {
         emit(Resource.Loading())
 
         // dummy data
@@ -94,18 +94,11 @@ class RewardRepositoryImpl(
 //                        ?: UIText.StringResource(R.string.em_unknown))
 //                )
 //
-//                response.category == null || response.categoryRewards == null -> {
+//                response.rewards == null -> {
 //                    emit(Resource.Error(UIText.StringResource(R.string.em_unknown)))
 //                }
 //
-//                else -> emit(
-//                    Resource.Success(
-//                        Rewards(
-//                            category = response.category,
-//                            categoryRewards = response.categoryRewards.map { it.toCategoryRewards() }
-//                        )
-//                    )
-//                )
+//                else -> emit(Resource.Success(response.rewards.map { it.toRewards() }))
 //            }
 //        } catch (e: Exception) {
 //            logcat { e.asLog() }

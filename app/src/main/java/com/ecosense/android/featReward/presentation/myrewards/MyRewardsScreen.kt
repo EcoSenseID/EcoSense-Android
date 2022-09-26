@@ -81,12 +81,12 @@ fun MyRewardsScreen(
                     }
                 }
                 LazyColumn(modifier = Modifier.fillMaxWidth()) {
-                    items(state.myReward.size) { i ->
+                    items(state.myRewards.size) { i ->
                         RewardItem(
-                            categoryReward = null,
-                            myReward = state.myReward[i],
+                            reward = null,
+                            myReward = state.myRewards[i],
                             onClick = {
-                                navigator.navigate(RewardDetailScreenDestination(rewardId = state.myReward[i].id))
+                                navigator.navigate(RewardDetailScreenDestination(rewardId = state.myRewards[i].id))
                             }
                         )
                     }

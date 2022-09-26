@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ecosense.android.core.presentation.util.UIEvent
 import com.ecosense.android.core.util.Resource
-import com.ecosense.android.featReward.domain.model.Rewards
 import com.ecosense.android.featReward.domain.repository.RewardRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
@@ -39,13 +38,13 @@ class CategoryRewardsViewModel @Inject constructor(
                     }
                     is Resource.Loading -> {
                         _state.value = state.value.copy(
-                            rewards = result.data ?: Rewards.defaultValue,
+                            rewards = result.data ?: state.value.rewards,
                             isLoadingRewardList = true
                         )
                     }
                     is Resource.Success -> {
                         _state.value = state.value.copy(
-                            rewards = result.data ?: Rewards.defaultValue,
+                            rewards = result.data ?: state.value.rewards,
                             isLoadingRewardList = false
                         )
                     }

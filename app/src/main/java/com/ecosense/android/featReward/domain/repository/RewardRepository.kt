@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.Flow
 interface RewardRepository {
     fun getRewardHomepage(): Flow<Resource<RewardHomepage>>
 
-    fun getRewards(rewardCategory: String): Flow<Resource<Rewards>>
+    fun getRewards(rewardCategory: String): Flow<Resource<List<Rewards>>>
 
     fun getMyRewards(): Flow<Resource<List<MyRewards>>>
 
