@@ -36,9 +36,9 @@ object Faker {
             result.add(
                 DonationRewards(
                     partner = "Partner $i",
-                    bannerUrl = "https://cdn.statically.io/og/theme=dark/HotDeals$i.jpg",
+                    bannerUrl = "https://cdn.statically.io/og/theme=dark/Donation$i.jpg",
                     id = i,
-                    title = "Hot Deals $i",
+                    title = "Donation $i",
                     pointsNeeded = (50..200).random()
                 )
             )
