@@ -12,7 +12,7 @@ data class RewardHomepageScreenState(
         val defaultValue = RewardHomepageScreenState(
             user = User.defaultValue,
             rewardHomepage = RewardHomepage(
-                totalPoints = 300,
+                totalPoints = 0,
                 donationRewards = emptyList(),
                 hotDealsRewards = emptyList()
             ),
