@@ -6,4 +6,14 @@ data class MyRewards(
     val id: Int,
     val title: String,
     val category: String
-)
+) {
+    companion object {
+        val defaultValue = MyRewards(
+            partner = "",
+            bannerUrl = "",
+            id = 0,
+            title = "",
+            category = ""
+        )
+    }
+}
