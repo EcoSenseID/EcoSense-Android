@@ -109,7 +109,66 @@ fun RewardItem(
                 }
             }
         }
-    } else {
-        // TODO: write code for my reward list
+    } else if (categoryReward == null && myReward != null) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .padding(
+                    horizontal = MaterialTheme.spacing.medium,
+                    vertical = MaterialTheme.spacing.small
+                )
+                .shadow(elevation = 2.dp, shape = RoundedCornerShape(8.dp))
+                .clip(shape = RoundedCornerShape(8.dp))
+                .clickable(onClick = onClick)
+                .background(MaterialTheme.colors.surface)
+                .fillMaxWidth()
+        ) {
+            Column(
+                modifier = Modifier
+                    .width(120.dp)
+                    .height(160.dp)
+            ) {
+                AsyncImage(
+                    model = ImageRequest.Builder(LocalContext.current)
+                        .data(myReward.bannerUrl)
+                        .crossfade(true)
+                        .scale(Scale.FILL)
+                        .build(),
+                    contentDescription = myReward.title,
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier.fillMaxSize()
+                )
+            }
+
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = MaterialTheme.spacing.medium)
+            ) {
+                Text(
+                    text = myReward.title,
+                    style = MaterialTheme.typography.h5,
+                    fontWeight = FontWeight.Bold
+                )
+                Text(
+                    text = myReward.partner,
+                    style = MaterialTheme.typography.subtitle2
+                )
+                Button(
+                    onClick = {
+                        // TODO: Use Rewards
+                        logcat("RewardsItem") { "use reward process running" }
+                    },
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(20.dp),
+                    colors = ButtonDefaults.buttonColors(MaterialTheme.colors.secondary)
+                ) {
+                    Text(
+                        text = "Use Now",
+                        style = MaterialTheme.typography.caption
+                    )
+                }
+            }
+        }
     }
 }
