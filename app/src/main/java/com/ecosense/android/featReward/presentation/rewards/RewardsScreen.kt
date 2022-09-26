@@ -1,4 +1,4 @@
-package com.ecosense.android.featReward.presentation.categoryrewards
+package com.ecosense.android.featReward.presentation.rewards
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -25,10 +25,10 @@ import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 @Destination
-fun CategoryRewardsScreen(
+fun RewardsScreen(
     navigator: DestinationsNavigator,
     rewardCategory: String,
-    viewModel: CategoryRewardsViewModel = hiltViewModel()
+    viewModel: RewardsViewModel = hiltViewModel()
 ) {
     remember { viewModel.getRewards(rewardCategory = rewardCategory) }
 

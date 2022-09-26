@@ -1,4 +1,4 @@
-package com.ecosense.android.featReward.presentation.categoryrewards
+package com.ecosense.android.featReward.presentation.rewards
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
@@ -17,11 +17,11 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class CategoryRewardsViewModel @Inject constructor(
+class RewardsViewModel @Inject constructor(
     private val rewardRepository: RewardRepository
 ) : ViewModel() {
-    private val _state = mutableStateOf(CategoryRewardsScreenState.defaultValue)
-    val state: State<CategoryRewardsScreenState> = _state
+    private val _state = mutableStateOf(RewardsScreenState.defaultValue)
+    val state: State<RewardsScreenState> = _state
 
     private val _eventFlow = Channel<UIEvent>()
     val eventFlow = _eventFlow.receiveAsFlow()

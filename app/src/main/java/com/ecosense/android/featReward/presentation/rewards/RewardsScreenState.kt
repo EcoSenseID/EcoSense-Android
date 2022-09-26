@@ -1,13 +1,13 @@
-package com.ecosense.android.featReward.presentation.categoryrewards
+package com.ecosense.android.featReward.presentation.rewards
 
 import com.ecosense.android.featReward.domain.model.Rewards
 
-data class CategoryRewardsScreenState(
+data class RewardsScreenState(
     val rewards: List<Rewards>,
     val isLoadingRewardList: Boolean
 ) {
     companion object {
-        val defaultValue = CategoryRewardsScreenState(
+        val defaultValue = RewardsScreenState(
             rewards = emptyList(),
             isLoadingRewardList = false
         )

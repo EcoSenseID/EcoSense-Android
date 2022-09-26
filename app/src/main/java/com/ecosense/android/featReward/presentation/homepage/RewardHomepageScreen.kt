@@ -26,16 +26,16 @@ import com.ecosense.android.R
 import com.ecosense.android.core.presentation.theme.spacing
 import com.ecosense.android.core.presentation.util.UIEvent
 import com.ecosense.android.core.presentation.util.asString
-import com.ecosense.android.destinations.CategoryRewardsScreenDestination
 import com.ecosense.android.destinations.MyRewardsScreenDestination
 import com.ecosense.android.destinations.RewardDetailScreenDestination
+import com.ecosense.android.destinations.RewardsScreenDestination
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 @Destination
-fun RewardsScreen(
+fun RewardHomepageScreen(
     navigator: DestinationsNavigator, viewModel: RewardHomepageViewModel = hiltViewModel()
 ) {
     val verticalScroll = rememberScrollState()
@@ -99,7 +99,7 @@ fun RewardsScreen(
                         contentDescription = "All Rewards",
                         modifier = Modifier.clickable(onClick = {
                             navigator.navigate(
-                                CategoryRewardsScreenDestination("All Rewards")
+                                RewardsScreenDestination("All Rewards")
                             )
                         })
                     )
@@ -111,7 +111,7 @@ fun RewardsScreen(
                         contentDescription = "Environment",
                         modifier = Modifier.clickable(onClick = {
                             navigator.navigate(
-                                CategoryRewardsScreenDestination("Environment")
+                                RewardsScreenDestination("Environment")
                             )
                         })
                     )
@@ -123,7 +123,7 @@ fun RewardsScreen(
                         contentDescription = "Entertainment",
                         modifier = Modifier.clickable(onClick = {
                             navigator.navigate(
-                                CategoryRewardsScreenDestination("Entertainment")
+                                RewardsScreenDestination("Entertainment")
                             )
                         })
                     )
@@ -135,7 +135,7 @@ fun RewardsScreen(
                         contentDescription = "Beverages",
                         modifier = Modifier.clickable(onClick = {
                             navigator.navigate(
-                                CategoryRewardsScreenDestination("Beverages")
+                                RewardsScreenDestination("Beverages")
                             )
                         })
                     )
@@ -147,7 +147,7 @@ fun RewardsScreen(
                         contentDescription = "Health",
                         modifier = Modifier.clickable(onClick = {
                             navigator.navigate(
-                                CategoryRewardsScreenDestination("Health")
+                                RewardsScreenDestination("Health")
                             )
                         })
                     )
@@ -164,7 +164,7 @@ fun RewardsScreen(
                     text = "See All",
                     modifier = Modifier.clickable(onClick = {
                         navigator.navigate(
-                            CategoryRewardsScreenDestination("Donation")
+                            RewardsScreenDestination("Donation")
                         )
                     })
                 )
@@ -206,7 +206,7 @@ fun RewardsScreen(
                     text = "See All",
                     modifier = Modifier.clickable(onClick = {
                         navigator.navigate(
-                            CategoryRewardsScreenDestination("Hot Deals")
+                            RewardsScreenDestination("Hot Deals")
                         )
                     })
                 )
