@@ -167,4 +167,13 @@
     <string name="reply_to_this_story">Reply to this story</string>
     <string name="story_composer">Story Composer</string>
     <string name="username_just_finished_a_campaign">%1$s just finished a campaign!</string>
+    <string name="login_title">Enjoy all features\nby logging in!</string>
+    <string name="welcome">Welcome</string>
+    <string name="full_name">Full Name</string>
+    <string name="reset_password">Reset password</string>
+    <string name="i_agree_to_the">I agree to the</string>
+    <string name="terms">Terms</string>
+    <string name="and">and</string>
+    <string name="privacy_policy">Privacy Policy</string>
+    <string name="em_agree_terms_privacy_policy">You must agree to terms and privacy policty to continue</string>
 </resources>

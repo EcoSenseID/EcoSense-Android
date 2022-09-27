@@ -1,8 +1,11 @@
 package com.ecosense.android.featAuth.presentation.resetPassword
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
@@ -14,19 +17,24 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.ExperimentalUnitApi
+import androidx.compose.ui.unit.TextUnit
+import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.ecosense.android.R
 import com.ecosense.android.core.presentation.AuthNavGraph
-import com.ecosense.android.core.presentation.component.RoundedEndsButton
+import com.ecosense.android.core.presentation.component.GradientButton
 import com.ecosense.android.core.presentation.theme.spacing
 import com.ecosense.android.core.presentation.util.UIEvent
 import com.ecosense.android.core.presentation.util.asString
+import com.ecosense.android.featAuth.presentation.component.AuthTopBar
 import com.ecosense.android.featAuth.presentation.component.EmailTextField
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlinx.coroutines.flow.collectLatest
 
+@OptIn(ExperimentalUnitApi::class)
 @Composable
 @Destination
 @AuthNavGraph
@@ -64,15 +72,22 @@ fun ResetPasswordScreen(
     ) {
         Column(
             modifier = Modifier
-                .padding(MaterialTheme.spacing.large)
                 .fillMaxSize()
+                .verticalScroll(rememberScrollState())
+                .background(MaterialTheme.colors.surface)
+                .padding(horizontal = MaterialTheme.spacing.medium)
         ) {
+            AuthTopBar(onClickCancel = { navigator.navigateUp() })
+
+            Spacer(modifier = Modifier.height(MaterialTheme.spacing.extraLarge))
 
             Text(
-                text = stringResource(R.string.reset_password_screen_title),
-                style = MaterialTheme.typography.h6,
-                fontWeight = FontWeight.SemiBold,
+                text = stringResource(R.string.reset_password),
+                fontSize = TextUnit(34f, TextUnitType.Sp),
+                fontWeight = FontWeight.ExtraBold,
             )
+
+            Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
 
             Text(
                 text = stringResource(R.string.reset_password_screen_caption),
@@ -88,7 +103,7 @@ fun ResetPasswordScreen(
 
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
 
-            RoundedEndsButton(
+            GradientButton(
                 enabled = !state.isLoading,
                 onClick = { viewModel.onSendInstructionClick() },
                 modifier = Modifier.fillMaxWidth()
@@ -97,7 +112,9 @@ fun ResetPasswordScreen(
                     text = stringResource(
                         if (state.isLoading) R.string.sending_instruction
                         else R.string.send_instruction
-                    )
+                    ),
+                    color = MaterialTheme.colors.onPrimary,
+                    fontWeight = FontWeight.Bold,
                 )
             }
 
@@ -113,6 +130,8 @@ fun ResetPasswordScreen(
                     )
                     .padding(MaterialTheme.spacing.medium)
             )
+
+            Spacer(modifier = Modifier.height(MaterialTheme.spacing.extraLarge))
         }
     }
 }
