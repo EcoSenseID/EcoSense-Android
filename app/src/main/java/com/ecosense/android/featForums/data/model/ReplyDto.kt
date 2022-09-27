@@ -1,6 +1,6 @@
 package com.ecosense.android.featForums.data.model
 
-data class CommentDto(
+data class ReplyDto(
     val id: Int,
     val content: String,
     val createdAt: Int,

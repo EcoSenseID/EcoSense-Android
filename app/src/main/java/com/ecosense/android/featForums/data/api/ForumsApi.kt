@@ -14,13 +14,13 @@ interface ForumsApi {
     ): GetStoriesDto
 
     @GET("comments")
-    suspend fun getStoryComments(
+    suspend fun getStoryReplies(
         @Header("Authorization") bearerToken: String,
         @Query("storyId") storyId: Int,
-    ): GetCommentsDto
+    ): GetRepliesDto
 
     @GET("likes")
-    suspend fun getStoryLikes(
+    suspend fun getStorySupporters(
         @Header("Authorization") bearerToken: String,
         @Query("storyId") storyId: Int,
     ): GetStoryLikesDto
@@ -36,7 +36,7 @@ interface ForumsApi {
 
     @Multipart
     @POST("postcomment")
-    suspend fun postNewComment(
+    suspend fun postNewReply(
         @Header("Authorization") bearerToken: String,
         @Part storyId: Int,
         @Part content: String,
@@ -45,14 +45,14 @@ interface ForumsApi {
 
     @FormUrlEncoded
     @POST("likestory")
-    suspend fun postLikeStory(
+    suspend fun postSupportStory(
         @Header("Authorization") bearerToken: String,
         @Field("storyId") storyId: Int,
     ): PostLikeStoryDto
 
     @FormUrlEncoded
     @POST("likecomment")
-    suspend fun postLikeComment(
+    suspend fun postSupportReply(
         @Header("Authorization") bearerToken: String,
         @Field("commentId") commentId: Int,
     ): PostLikeCommentDto

@@ -1,33 +1,33 @@
 package com.ecosense.android.featForums.presentation.storyDetail.model
 
-import com.ecosense.android.featForums.domain.model.Comment
+import com.ecosense.android.featForums.domain.model.Reply
 import com.ecosense.android.featForums.presentation.constants.PatternConstants
 import java.text.SimpleDateFormat
 import java.util.*
 
-data class CommentPresentation(
+data class ReplyPresentation(
     val id: Int,
     val name: String,
     val username: String,
-    val profilePictureUrl: String,
+    val avatarUrl: String,
     val caption: String,
-    val photoUrl: String?,
+    val attachedPhotoUrl: String?,
     val createdAt: String,
-    val likesCount: Int,
-    val isLiked: Boolean,
+    val supportersCount: Int,
+    val isSupported: Boolean,
 )
 
-fun Comment.toPresentation() = CommentPresentation(
+fun Reply.toPresentation() = ReplyPresentation(
     id = this.id,
     name = this.name,
     username = this.username,
-    profilePictureUrl = this.profilePictureUrl,
+    avatarUrl = this.avatarUrl,
     caption = this.caption,
-    photoUrl = this.photoUrl,
+    attachedPhotoUrl = this.attachedPhotoUrl,
     createdAt = SimpleDateFormat(
         PatternConstants.STORIES_DATE_FORMAT,
         Locale.getDefault(),
     ).format(Date().apply { time = this@toPresentation.createdAt }),
-    likesCount = this.likesCount,
-    isLiked = this.isLiked,
+    supportersCount = this.supportersCount,
+    isSupported = this.isSupported,
 )

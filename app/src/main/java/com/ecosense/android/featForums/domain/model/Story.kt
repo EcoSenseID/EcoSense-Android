@@ -1,14 +1,18 @@
 package com.ecosense.android.featForums.domain.model
 
+import com.ecosense.android.core.domain.model.Campaign
+
 data class Story(
     val id: Int,
     val name: String,
     val username: String,
-    val profilePictureUrl: String,
+    val avatarUrl: String,
     val caption: String,
-    val photoUrl: String?,
+    val attachedPhotoUrl: String?,
+    val sharedCampaign: Campaign?,
     val createdAt: Long,
-    val likesCount: Int,
-    val commentsCount: Int,
-    val isLiked: Boolean,
+    val supportersCount: Int,
+    val supportersAvatarsUrl: List<String>,
+    val repliesCount: Int,
+    val isSupported: Boolean,
 )

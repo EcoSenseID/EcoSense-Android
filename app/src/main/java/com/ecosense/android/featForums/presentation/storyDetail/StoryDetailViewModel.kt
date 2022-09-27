@@ -6,31 +6,37 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ecosense.android.R
+import com.ecosense.android.core.domain.repository.AuthRepository
 import com.ecosense.android.core.util.Resource
 import com.ecosense.android.core.util.UIText
-import com.ecosense.android.featForums.domain.model.Comment
+import com.ecosense.android.featForums.domain.model.Reply
 import com.ecosense.android.featForums.domain.repository.ForumsRepository
 import com.ecosense.android.featForums.presentation.model.StoryPresentation
 import com.ecosense.android.featForums.presentation.paginator.DefaultPaginator
-import com.ecosense.android.featForums.presentation.storyDetail.model.CommentsFeedState
+import com.ecosense.android.featForums.presentation.storyDetail.model.RepliesFeedState
+import com.ecosense.android.featForums.presentation.storyDetail.model.ReplyComposerState
 import com.ecosense.android.featForums.presentation.storyDetail.model.toPresentation
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class StoryDetailViewModel @Inject constructor(
     private val forumsRepository: ForumsRepository,
+    private val authRepository: AuthRepository,
 ) : ViewModel() {
 
     private var storyId: Int? = null
 
-    var commentsFeedState by mutableStateOf(CommentsFeedState.defaultValue)
+    var replyComposerState by mutableStateOf(ReplyComposerState.defaultValue)
         private set
 
-    private val paginator = DefaultPaginator(
-        initialKey = commentsFeedState.page,
-        getNextKey = { commentsFeedState.page + 1 },
+    var repliesState by mutableStateOf(RepliesFeedState.defaultValue)
+        private set
+
+    private val paginator = DefaultPaginator(initialKey = repliesState.page,
+        getNextKey = { repliesState.page + 1 },
         onRequest = { nextPage: Int ->
             storyId?.let { id ->
                 forumsRepository.getComments(
@@ -41,29 +47,50 @@ class StoryDetailViewModel @Inject constructor(
             } ?: Resource.Error(uiText = UIText.StringResource(R.string.em_comments))
         },
         onLoadUpdated = { isLoading ->
-            commentsFeedState = commentsFeedState.copy(isLoading = isLoading)
+            repliesState = repliesState.copy(isLoading = isLoading)
         },
         onError = { message: UIText? ->
-            commentsFeedState = commentsFeedState.copy(errorMessage = message)
+            repliesState = repliesState.copy(errorMessage = message)
         },
-        onSuccess = { items: List<Comment>?, newKey: Int ->
+        onSuccess = { items: List<Reply>?, newKey: Int ->
             val newComments = items?.map { it.toPresentation() }
-            commentsFeedState = commentsFeedState.copy(
-                comments = commentsFeedState.comments + (newComments ?: emptyList()),
+            repliesState = repliesState.copy(
+                replies = repliesState.replies + (newComments ?: emptyList()),
                 page = newKey,
                 isEndReached = items?.isEmpty() ?: false,
             )
+        })
+
+    init {
+        viewModelScope.launch {
+            authRepository.getCurrentUser()?.let {
+                replyComposerState = replyComposerState.copy(
+                    avatarUrl = it.photoUrl,
+                )
+            }
         }
-    )
+    }
 
     fun setStory(story: StoryPresentation) {
         storyId = story.id
         onLoadNextCommentsFeed()
     }
 
+    private var onLoadNextCommentsFeedJob: Job? = null
     fun onLoadNextCommentsFeed() {
-        viewModelScope.launch {
+        onLoadNextCommentsFeedJob?.cancel()
+        onLoadNextCommentsFeedJob = viewModelScope.launch {
             paginator.loadNextItems()
+        }
+    }
+
+    private var onChangeReplyComposerCaptionJob: Job? = null
+    fun onChangeReplyComposerCaption(value: String) {
+        onChangeReplyComposerCaptionJob?.cancel()
+        onChangeReplyComposerCaptionJob = viewModelScope.launch {
+            replyComposerState = replyComposerState.copy(
+                caption = value,
+            )
         }
     }
 }

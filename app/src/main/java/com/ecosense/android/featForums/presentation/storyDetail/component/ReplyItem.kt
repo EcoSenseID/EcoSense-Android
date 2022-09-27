@@ -1,4 +1,4 @@
-package com.ecosense.android.featForums.presentation.component
+package com.ecosense.android.featForums.presentation.storyDetail.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -8,9 +8,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ThumbUp
-import androidx.compose.material.icons.outlined.ThumbUp
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -23,12 +20,12 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.ecosense.android.R
 import com.ecosense.android.core.presentation.theme.spacing
-import com.ecosense.android.featForums.presentation.storyDetail.model.CommentPresentation
+import com.ecosense.android.featForums.presentation.storyDetail.model.ReplyPresentation
 
 @Composable
-fun CommentItem(
-    comment: () -> CommentPresentation,
-    onClickLike: () -> Unit,
+fun ReplyItem(
+    reply: () -> ReplyPresentation,
+    onClickSupport: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -38,7 +35,7 @@ fun CommentItem(
             .padding(MaterialTheme.spacing.medium),
     ) {
         AsyncImage(
-            model = comment().profilePictureUrl,
+            model = reply().avatarUrl,
             contentDescription = null,
             placeholder = painterResource(id = R.drawable.ic_ecosense_logo),
             contentScale = ContentScale.Crop,
@@ -55,45 +52,43 @@ fun CommentItem(
                 modifier = Modifier.fillMaxWidth(),
             ) {
                 Text(
-                    text = comment().name,
-                    fontWeight = FontWeight.SemiBold,
+                    text = reply().name,
+                    fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colors.primary,
                 )
 
                 Spacer(modifier = Modifier.width(MaterialTheme.spacing.small))
 
                 Text(
-                    text = comment().username,
-                    color = MaterialTheme.colors.onSurface.copy(0.7f),
+                    text = reply().username,
+                    color = MaterialTheme.colors.onSurface.copy(0.6f),
                 )
 
                 Spacer(modifier = Modifier.width(MaterialTheme.spacing.small))
 
                 Box(
                     modifier = Modifier
-                        .background(color = MaterialTheme.colors.onSurface.copy(alpha = 0.7f))
                         .clip(CircleShape)
-                        .size(2.dp)
+                        .background(color = MaterialTheme.colors.onSurface.copy(alpha = 0.6f))
+                        .size(4.dp)
                 )
 
                 Spacer(modifier = Modifier.width(MaterialTheme.spacing.small))
 
                 Text(
-                    text = comment().createdAt,
-                    color = MaterialTheme.colors.onSurface.copy(alpha = 0.7f),
+                    text = reply().createdAt,
+                    color = MaterialTheme.colors.onSurface.copy(alpha = 0.6f),
                 )
             }
 
-            Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
-
             Text(
-                text = comment().caption,
+                text = reply().caption,
                 modifier = Modifier.fillMaxWidth(),
             )
 
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
 
-            comment().photoUrl?.let {
+            reply().attachedPhotoUrl?.let {
                 AsyncImage(
                     model = it,
                     contentDescription = null,
@@ -105,23 +100,28 @@ fun CommentItem(
                 Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
             }
 
-
             Row(
                 horizontalArrangement = Arrangement.Start,
                 verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.clickable { onClickLike() },
+                modifier = Modifier
+                    .clip(RoundedCornerShape(4.dp))
+                    .clickable { onClickSupport() }
+                    .padding(MaterialTheme.spacing.extraSmall),
             ) {
                 Icon(
-                    imageVector = if (comment().isLiked) Icons.Filled.ThumbUp else Icons.Outlined.ThumbUp,
-                    contentDescription = stringResource(R.string.cd_like),
-                    tint = MaterialTheme.colors.onSurface.copy(alpha = 0.7f),
+                    painter = painterResource(id = R.drawable.ic_support),
+                    contentDescription = stringResource(R.string.cd_support),
+                    tint = if (reply().isSupported) MaterialTheme.colors.secondary
+                    else MaterialTheme.colors.onSurface.copy(alpha = 0.6f),
+                    modifier = Modifier.size(16.dp),
                 )
 
                 Spacer(modifier = Modifier.width(MaterialTheme.spacing.small))
 
                 Text(
-                    text = comment().likesCount.toString(),
-                    color = MaterialTheme.colors.onSurface.copy(alpha = 0.7f),
+                    text = reply().supportersCount.toString(),
+                    color = if (reply().isSupported) MaterialTheme.colors.secondary
+                    else MaterialTheme.colors.onSurface.copy(alpha = 0.6f),
                 )
             }
         }

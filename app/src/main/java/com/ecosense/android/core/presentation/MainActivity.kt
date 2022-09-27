@@ -32,9 +32,11 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         installSplashScreen().apply {
             setKeepOnScreenCondition { viewModel.isLoggedIn.value == null }
         }
+
         setContent {
             EcoSenseTheme {
                 val engine = rememberNavHostEngine()

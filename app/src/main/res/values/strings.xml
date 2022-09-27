@@ -147,8 +147,8 @@
     <string name="attach_proof_photo">Attach Proof Photo</string>
     <string name="choose_image_from">Choose Image From…</string>
     <string name="whoops">Whoops!</string>
-    <string name="cd_like">Like</string>
-    <string name="cd_comment">Comment</string>
+    <string name="cd_support">Support</string>
+    <string name="cd_reply">Reply</string>
     <string name="cd_share">Share</string>
     <string name="whats_happening">What\'s happening?</string>
     <string name="attachment">Attachment</string>
@@ -157,4 +157,14 @@
     <string name="ecoworld">EcoWorld</string>
     <string name="ecoreward">EcoReward</string>
     <string name="notifications">Notifications</string>
+    <string name="cd_add_story">Create new story</string>
+    <string name="supported_by">Supported by</string>
+    <string name="close">Close</string>
+    <string name="cd_back">Back</string>
+    <string name="story">Story</string>
+    <string name="cd_attach_photo">Attach photo</string>
+    <string name="post">Post</string>
+    <string name="reply_to_this_story">Reply to this story</string>
+    <string name="story_composer">Story Composer</string>
+    <string name="username_just_finished_a_campaign">%1$s just finished a campaign!</string>
 </resources>

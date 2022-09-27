@@ -1,10 +1,12 @@
 package com.ecosense.android.featForums.data.repository
 
 import com.ecosense.android.core.domain.api.AuthApi
+import com.ecosense.android.core.domain.model.Campaign
 import com.ecosense.android.core.util.Resource
 import com.ecosense.android.featForums.data.api.ForumsApi
-import com.ecosense.android.featForums.domain.model.Comment
+import com.ecosense.android.featForums.domain.model.Reply
 import com.ecosense.android.featForums.domain.model.Story
+import com.ecosense.android.featForums.domain.model.Supporter
 import com.ecosense.android.featForums.domain.repository.ForumsRepository
 import kotlinx.coroutines.delay
 
@@ -19,27 +21,55 @@ class ForumsRepositoryImpl(
             id = it,
             name = "John Doe ($it)",
             username = "@johndoe$it",
-            profilePictureUrl = "https://cdn.statically.io/og/theme=dark/$it.jpg",
-            caption = "lorem caption $it",
-            photoUrl = if (it % 3 == 0) "https://cdn.statically.io/og/theme=dark/Story$it.jpg" else null,
+            avatarUrl = "https://i.pravatar.cc/300?img=$it",
+            caption = "Bagaimana caramu untuk mengajak masyarakat melestarikan lingkungan? ${
+                "lorem ipsum ".repeat(
+                    (it * 69) % 15
+                )
+            }",
+            attachedPhotoUrl = if (it % 3 == 0) "https://cdn.statically.io/og/theme=dark/Story%20no.%20$it.jpg" else null,
+            sharedCampaign = if (it % 7 == 0) Campaign(
+                id = 1,
+                posterUrl = "https://cdn.statically.io/og/theme=dark/shared_campaign_$it.jpg",
+                title = "Shared Campaign $it",
+                endDate = "24 July 2022",
+                category = listOf("Water Pollution", "Plastic Free"),
+                participantsCount = 69420,
+                isTrending = true,
+                isNew = true,
+            ) else null,
             createdAt = System.currentTimeMillis() - (it * 90000000),
-            likesCount = (it * 420) % 69,
-            commentsCount = (it * 69) % 15,
-            isLiked = it % 11 == 0,
+            supportersCount = (it * 420) % 69,
+            repliesCount = (it * 69) % 15,
+            isSupported = it % 11 == 0,
+            supportersAvatarsUrl = if (it % 5 != 0) listOf(
+                "https://i.pravatar.cc/300?img=${it + 1}",
+                "https://i.pravatar.cc/300?img=${it + 2}",
+                "https://i.pravatar.cc/300?img=${it + 3}",
+            ) else emptyList()
         )
     }
 
-    private val fakeComments = (1..100).map {
-        Comment(
+    private val fakeReplies = (1..100).map {
+        Reply(
             id = it,
             name = "Siti ($it)",
             username = "@siti$it",
-            profilePictureUrl = "https://cdn.statically.io/og/theme=dark/$it.jpg",
+            avatarUrl = "https://i.pravatar.cc/300?img=$it",
             caption = "Comment caption $it",
-            photoUrl = if (it % 3 == 0) "https://cdn.statically.io/og/theme=dark/Story$it.jpg" else null,
+            attachedPhotoUrl = if (it % 3 == 0) "https://cdn.statically.io/og/theme=dark/Story$it.jpg" else null,
             createdAt = System.currentTimeMillis() - (it * 90000000),
-            likesCount = (it * 420) % 69,
-            isLiked = it % 11 == 0,
+            supportersCount = (it * 420) % 69,
+            isSupported = it % 11 == 0,
+        )
+    }
+
+    private val fakeSupporters = (1..100).map {
+        Supporter(
+            id = it,
+            avatarUrl = "https://i.pravatar.cc/300?img=$it",
+            username = "@siti$it",
+            name = "Siti ($it)",
         )
     }
 
@@ -58,11 +88,21 @@ class ForumsRepositoryImpl(
         storyId: Int,
         page: Int,
         size: Int,
-    ): Resource<List<Comment>> {
+    ): Resource<List<Reply>> {
         delay(2000L)
         val startingIndex = page * size
-        return if (startingIndex + size <= fakeComments.size) {
-            Resource.Success(fakeComments.slice(startingIndex until (startingIndex + size)))
+        return if (startingIndex + size <= fakeReplies.size) {
+            Resource.Success(fakeReplies.slice(startingIndex until (startingIndex + size)))
+        } else Resource.Success(emptyList())
+    }
+
+    override suspend fun getSupporters(
+        storyId: Int, page: Int, size: Int
+    ): Resource<List<Supporter>> {
+        delay(2000L)
+        val startingIndex = page * size
+        return if (startingIndex + size <= fakeSupporters.size) {
+            Resource.Success(fakeSupporters.slice(startingIndex until (startingIndex + size)))
         } else Resource.Success(emptyList())
     }
 }
