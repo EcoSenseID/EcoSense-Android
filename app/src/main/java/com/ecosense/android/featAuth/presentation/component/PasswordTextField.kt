@@ -4,11 +4,9 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Visibility
-import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -35,14 +33,16 @@ fun PasswordTextField(
         trailingIcon = {
             IconButton(onClick = onToggleVisibility) {
                 Icon(
-                    imageVector = if (isVisible) Icons.Filled.Visibility else
-                        Icons.Filled.VisibilityOff,
-                    contentDescription = if (isVisible) stringResource(R.string.hide_password) else
-                        stringResource(R.string.show_password)
+                    painter = painterResource(
+                        id = if (isVisible) R.drawable.ic_eye_closed
+                        else R.drawable.ic_eye
+                    ),
+                    contentDescription = if (isVisible) stringResource(R.string.hide_password) else stringResource(
+                        R.string.show_password
+                    )
                 )
             }
         },
-        visualTransformation = if (isVisible) VisualTransformation.None else
-            PasswordVisualTransformation(),
+        visualTransformation = if (isVisible) VisualTransformation.None else PasswordVisualTransformation(),
     )
 }
