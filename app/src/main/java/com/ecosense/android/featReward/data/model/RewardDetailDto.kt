@@ -11,6 +11,7 @@ data class RewardDetailDto(
     val error: Boolean?,
     val message: String?,
     val title: String?,
+    val partner: String?,
     val pointsNeeded: Int?,
     val howToUse: List<String>?
 ) {
@@ -21,6 +22,7 @@ data class RewardDetailDto(
         description = description ?: "",
         validity = validity ?: "",
         title = title ?: "",
+        partner = partner ?: "",
         pointsNeeded = pointsNeeded ?: 0,
         howToUse = howToUse ?: emptyList()
     )
