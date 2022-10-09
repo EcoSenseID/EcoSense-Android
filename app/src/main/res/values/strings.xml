@@ -157,4 +157,5 @@
     <string name="ecoworld">EcoWorld</string>
     <string name="ecoreward">EcoReward</string>
     <string name="notifications">Notifications</string>
+    <string name="redeem_reward">Redeem %s EcoPoints</string>
 </resources>
