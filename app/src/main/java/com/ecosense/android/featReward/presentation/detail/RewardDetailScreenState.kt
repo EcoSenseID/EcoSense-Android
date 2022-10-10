@@ -12,13 +12,14 @@ data class RewardDetailScreenState(
         val defaultValue = RewardDetailScreenState(
             rewardDetail = RewardDetail(
                 termsCondition = emptyList(),
-                isRedeemed = false,
                 bannerUrl = "",
                 description = "",
                 validity = "",
                 title = "",
                 partner = "",
                 pointsNeeded = 0,
+                maxRedeem = 0,
+                numberOfRedeem = 0,
                 howToUse = emptyList()
             ),
             isLoadingRewardDetail = false,

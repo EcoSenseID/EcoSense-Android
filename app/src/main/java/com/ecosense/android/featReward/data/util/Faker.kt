@@ -86,21 +86,20 @@ object Faker {
     }
 
     fun getRewardDetail(rewardId: Int): RewardDetail {
-        val redeemState = (0..1).random()
-
         return RewardDetail(
             termsCondition = listOf(
                 "Lorem Ipsum is simply dummy text of the printing and  typesetting industry.",
                 "Lorem Ipsum is simply dummy text.",
                 "Lorem Ipsum is simply dummy text of the printing."
             ),
-            isRedeemed = redeemState != 0,
             bannerUrl = "https://cdn.statically.io/og/theme=dark/RewardDetail$rewardId.jpg",
             description = "Lorem Ipsum is simply dummy text of the printing and  typesetting industry. Lorem Ipsum has been the industry's standard dummy  text ever since the 1500s.",
             validity = "1662138000",
             title = "Reward No.$rewardId",
             partner = "Partner $rewardId",
             pointsNeeded = (50..200).random(),
+            maxRedeem = 3,
+            numberOfRedeem = (1..3).random(),
             howToUse = listOf(
                 "Lorem Ipsum is simply dummy text of the printing.",
                 "Lorem Ipsum is simply dummy text of the printing and  typesetting industry.",

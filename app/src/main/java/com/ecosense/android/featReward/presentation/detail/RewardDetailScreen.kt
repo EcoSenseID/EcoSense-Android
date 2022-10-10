@@ -82,7 +82,18 @@ fun RewardDetailScreen(
         floatingActionButtonPosition = FabPosition.Center,
         floatingActionButton = {
             if (!state.isLoadingRewardDetail) {
-                if (!reward.isRedeemed) {
+                if (reward.numberOfRedeem >= reward.maxRedeem) {
+                    ExtendedFloatingActionButton(
+                        text = {
+                            Text(
+                                text = "Redeem Limit Reached",
+                                color = MaterialTheme.colors.onPrimary
+                            )
+                        },
+                        backgroundColor = Color.Gray,
+                        onClick = {}
+                    )
+                } else {
                     if (!state.isLoadingRedeemReward) {
                         ExtendedFloatingActionButton(
                             text = {
@@ -104,32 +115,6 @@ fun RewardDetailScreen(
                             text = {
                                 Text(
                                     text = "Redeeming Reward...",
-                                    color = MaterialTheme.colors.onPrimary
-                                )
-                            },
-                            backgroundColor = Color.Gray,
-                            onClick = {}
-                        )
-                    }
-                } else {
-                    if (!state.isLoadingUseReward) {
-                        ExtendedFloatingActionButton(
-                            text = {
-                                Text(
-                                    text = "Use Now",
-                                    color = MaterialTheme.colors.onPrimary
-                                )
-                            },
-                            backgroundColor = MaterialTheme.colors.primary,
-                            onClick = {
-                                viewModel.onUseRewardJob(rewardId = rewardId)
-                            }
-                        )
-                    } else {
-                        ExtendedFloatingActionButton(
-                            text = {
-                                Text(
-                                    text = "Using Reward...",
                                     color = MaterialTheme.colors.onPrimary
                                 )
                             },

@@ -13,6 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
@@ -78,6 +79,18 @@ fun RewardItem(
                 )
                 if (reward.numberOfRedeem >= reward.maxRedeem) {
                     Button(
+                        onClick = {},
+                        modifier = Modifier.fillMaxWidth(),
+                        shape = RoundedCornerShape(20.dp),
+                        colors = ButtonDefaults.buttonColors(Color.Gray)
+                    ) {
+                        Text(
+                            text = "Redeem Limit Reached",
+                            style = MaterialTheme.typography.caption
+                        )
+                    }
+                } else {
+                    Button(
                         onClick = {
                             // TODO: Redeem Rewards
                             logcat("RewardsItem") { "redeem reward process running" }
@@ -88,21 +101,6 @@ fun RewardItem(
                     ) {
                         Text(
                             text = "Redeem ${reward.pointsNeeded} Eco Points",
-                            style = MaterialTheme.typography.caption
-                        )
-                    }
-                } else {
-                    Button(
-                        onClick = {
-                            // TODO: Use Rewards
-                            logcat("RewardsItem") { "use reward process running" }
-                        },
-                        modifier = Modifier.fillMaxWidth(),
-                        shape = RoundedCornerShape(20.dp),
-                        colors = ButtonDefaults.buttonColors(MaterialTheme.colors.secondary)
-                    ) {
-                        Text(
-                            text = "Use Now",
                             style = MaterialTheme.typography.caption
                         )
                     }
