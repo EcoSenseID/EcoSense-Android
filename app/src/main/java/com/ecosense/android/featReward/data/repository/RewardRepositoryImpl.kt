@@ -7,10 +7,7 @@ import com.ecosense.android.core.util.SimpleResource
 import com.ecosense.android.core.util.UIText
 import com.ecosense.android.featReward.data.api.RewardApi
 import com.ecosense.android.featReward.data.util.Faker
-import com.ecosense.android.featReward.domain.model.MyRewards
-import com.ecosense.android.featReward.domain.model.RewardDetail
-import com.ecosense.android.featReward.domain.model.RewardHomepage
-import com.ecosense.android.featReward.domain.model.Rewards
+import com.ecosense.android.featReward.domain.model.*
 import com.ecosense.android.featReward.domain.repository.RewardRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -198,6 +195,49 @@ class RewardRepositoryImpl(
 //                        val response = Gson().fromJson<RewardDetailDto>(
 //                            e.response()?.errorBody()?.charStream(),
 //                            object : TypeToken<RewardDetailDto>() {}.type
+//                        )
+//                        UIText.DynamicString(response.message!!)
+//                    } catch (e: Exception) {
+//                        UIText.StringResource(R.string.em_unknown)
+//                    }
+//                }
+//
+//                is IOException -> UIText.StringResource(R.string.em_io_exception)
+//
+//                else -> UIText.StringResource(R.string.em_unknown)
+//
+//            }.let { emit(Resource.Error(it)) }
+//        }
+    }
+
+    override fun getMyRewardDetail(rewardId: Int): Flow<Resource<MyRewardDetail>> = flow {
+        emit(Resource.Loading())
+
+        // dummy data
+        val response = Faker.getMyRewardDetail(rewardId)
+        emit(Resource.Success(response))
+
+//        try {
+//            val idToken = authApi.getIdToken(true)
+//            val bearerToken = "Bearer $idToken"
+//            val response = rewardApi.getMyRewardDetail(bearerToken = bearerToken, rewardId = rewardId)
+//
+//            when (response.error) {
+//                true -> emit(Resource.Error(
+//                    uiText = response.message?.let { UIText.DynamicString(it) }
+//                        ?: UIText.StringResource(R.string.em_unknown))
+//                )
+//
+//                else -> emit(Resource.Success(response.toMyRewardDetail()))
+//            }
+//        } catch (e: Exception) {
+//            logcat { e.asLog() }
+//            when (e) {
+//                is HttpException -> {
+//                    try {
+//                        val response = Gson().fromJson<MyRewardDetailDto>(
+//                            e.response()?.errorBody()?.charStream(),
+//                            object : TypeToken<MyRewardDetailDto>() {}.type
 //                        )
 //                        UIText.DynamicString(response.message!!)
 //                    } catch (e: Exception) {
