@@ -1,4 +1,4 @@
-package com.ecosense.android.featReward.presentation.detail
+package com.ecosense.android.featReward.presentation.detail.rewarddetail
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
