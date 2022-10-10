@@ -1,4 +1,4 @@
-package com.ecosense.android.featReward.presentation.myrewards
+package com.ecosense.android.featReward.presentation.list.rewards
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -17,19 +17,20 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.ecosense.android.core.presentation.util.UIEvent
 import com.ecosense.android.core.presentation.util.asString
 import com.ecosense.android.destinations.RewardDetailScreenDestination
-import com.ecosense.android.featReward.presentation.component.RewardItem
 import com.ecosense.android.featReward.presentation.component.RewardTopBar
+import com.ecosense.android.featReward.presentation.list.component.RewardItem
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 @Destination
-fun MyRewardsScreen(
+fun RewardsScreen(
     navigator: DestinationsNavigator,
-    viewModel: MyRewardsViewModel = hiltViewModel()
+    rewardCategory: String,
+    viewModel: RewardsViewModel = hiltViewModel()
 ) {
-    remember { viewModel.getMyRewards() }
+    remember { viewModel.getRewards(rewardCategory = rewardCategory) }
 
     val scaffoldState = rememberScaffoldState()
 
@@ -61,14 +62,14 @@ fun MyRewardsScreen(
                 onBackClick = {
                     navigator.popBackStack()
                 },
-                screenName = "My EcoRewards"
+                screenName = rewardCategory
             )
         },
         scaffoldState = scaffoldState
     ) {
         Column(modifier = Modifier.fillMaxSize()) {
             Row {
-                if (state.isLoadingMyRewardList) {
+                if (state.isLoadingRewardList) {
                     Column(
                         modifier = Modifier.fillMaxSize(),
                         verticalArrangement = Arrangement.Center,
@@ -81,12 +82,12 @@ fun MyRewardsScreen(
                     }
                 }
                 LazyColumn(modifier = Modifier.fillMaxWidth()) {
-                    items(state.myRewards.size) { i ->
+                    items(state.rewards.size) { i ->
                         RewardItem(
-                            reward = null,
-                            myReward = state.myRewards[i],
+                            reward = state.rewards[i],
+                            myReward = null,
                             onClick = {
-                                navigator.navigate(RewardDetailScreenDestination(rewardId = state.myRewards[i].id))
+                                navigator.navigate(RewardDetailScreenDestination(rewardId = state.rewards[i].id))
                             }
                         )
                     }

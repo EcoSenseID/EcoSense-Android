@@ -1,4 +1,4 @@
-package com.ecosense.android.featReward.presentation.myrewards
+package com.ecosense.android.featReward.presentation.list.myrewards
 
 import com.ecosense.android.featReward.domain.model.MyRewards
 

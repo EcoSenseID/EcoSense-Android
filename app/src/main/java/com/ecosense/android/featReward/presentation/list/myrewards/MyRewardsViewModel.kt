@@ -1,4 +1,4 @@
-package com.ecosense.android.featReward.presentation.myrewards
+package com.ecosense.android.featReward.presentation.list.myrewards
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
