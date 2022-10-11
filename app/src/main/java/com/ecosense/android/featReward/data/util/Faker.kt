@@ -55,7 +55,7 @@ object Faker {
                 Rewards(
                     partner = "Partner $i",
                     bannerUrl = "https://cdn.statically.io/og/theme=dark/${rewardCategory + i}.jpg",
-                    numberOfRedeem = (1..3).random(),
+                    numberOfRedeem = if (i < 3) 1 else if (i < 6) 2 else 3,
                     id = i,
                     title = "$rewardCategory $i",
                     maxRedeem = 3,
@@ -76,6 +76,7 @@ object Faker {
                     partner = "Partner $i",
                     bannerUrl = "https://cdn.statically.io/og/theme=dark/MyRewards$i.jpg",
                     id = i,
+                    claimStatus = if (i < 3) 1 else if (i < 6) 2 else 3,
                     title = "My Rewards $i",
                     category = if (i < 3) "Entertainment" else if (i < 6) "Food & Beverage" else "Environment"
                 )
@@ -99,7 +100,7 @@ object Faker {
             partner = "Partner $rewardId",
             pointsNeeded = (50..200).random(),
             maxRedeem = 3,
-            numberOfRedeem = (1..3).random(),
+            numberOfRedeem = if (rewardId < 3) 1 else if (rewardId < 6) 2 else 3,
             howToUse = listOf(
                 "Lorem Ipsum is simply dummy text of the printing.",
                 "Lorem Ipsum is simply dummy text of the printing and  typesetting industry.",
@@ -121,7 +122,7 @@ object Faker {
             title = "My Reward No.$rewardId",
             partner = "Partner $rewardId",
             pointsNeeded = (50..200).random(),
-            claimStatus = (1..3).random(),
+            claimStatus = if (rewardId < 3) 1 else if (rewardId < 6) 2 else 3,
             howToUse = listOf(
                 "Lorem Ipsum is simply dummy text of the printing.",
                 "Lorem Ipsum is simply dummy text of the printing and  typesetting industry.",

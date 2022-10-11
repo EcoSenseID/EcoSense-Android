@@ -12,6 +12,7 @@ data class MyRewardsItem(
     val partner: String?,
     val bannerUrl: String?,
     val id: Int?,
+    val claimStatus: Int?,
     val title: String?,
     val category: String?
 ) {
@@ -19,6 +20,7 @@ data class MyRewardsItem(
         partner = partner ?: "",
         bannerUrl = bannerUrl ?: "",
         id = id ?: 0,
+        claimStatus = claimStatus ?: 0,
         title = title ?: "",
         category = category ?: ""
     )
