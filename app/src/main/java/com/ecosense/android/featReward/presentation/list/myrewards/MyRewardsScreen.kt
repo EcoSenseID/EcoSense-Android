@@ -16,7 +16,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.ecosense.android.core.presentation.util.UIEvent
 import com.ecosense.android.core.presentation.util.asString
-import com.ecosense.android.destinations.RewardDetailScreenDestination
+import com.ecosense.android.destinations.MyRewardDetailScreenDestination
 import com.ecosense.android.featReward.presentation.component.RewardTopBar
 import com.ecosense.android.featReward.presentation.list.component.RewardItem
 import com.ramcosta.composedestinations.annotation.Destination
@@ -85,8 +85,10 @@ fun MyRewardsScreen(
                         RewardItem(
                             reward = null,
                             myReward = state.myRewards[i],
+                            rewardViewModel = null,
+                            myRewardViewModel = viewModel,
                             onClick = {
-                                navigator.navigate(RewardDetailScreenDestination(rewardId = state.myRewards[i].id))
+                                navigator.navigate(MyRewardDetailScreenDestination(rewardId = state.myRewards[i].id))
                             }
                         )
                     }

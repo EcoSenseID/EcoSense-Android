@@ -86,6 +86,8 @@ fun RewardsScreen(
                         RewardItem(
                             reward = state.rewards[i],
                             myReward = null,
+                            rewardViewModel = viewModel,
+                            myRewardViewModel = null,
                             onClick = {
                                 navigator.navigate(RewardDetailScreenDestination(rewardId = state.rewards[i].id))
                             }
