@@ -12,7 +12,6 @@ import androidx.compose.material.Text
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
@@ -122,7 +121,7 @@ fun LoginScreen(
                 modifier = Modifier.fillMaxWidth(),
             ) {
                 Text(
-                    text = stringResource(R.string.forgot_password),
+                    text = stringResource(R.string.forgot_password_q),
                     color = MaterialTheme.colors.secondary,
                     fontWeight = FontWeight.SemiBold,
                     modifier = Modifier.clickable {

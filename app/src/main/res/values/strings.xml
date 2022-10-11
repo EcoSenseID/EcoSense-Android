@@ -9,7 +9,7 @@
     <string name="logout">Logout</string>
     <string name="hide_password">Hide password</string>
     <string name="show_password">Show password</string>
-    <string name="forgot_password">Forgot password?</string>
+    <string name="forgot_password_q">Forgot password?</string>
     <string name="new_here">New here?</string>
     <string name="create_an_account">Create an account</string>
     <string name="register">Register</string>
@@ -38,7 +38,7 @@
     <string name="registering_an_account">Registering an account…</string>
     <string name="em_repeat_password_blank">Please repeat your password in the given field</string>
     <string name="sending_instruction">Sending instruction…</string>
-    <string name="reset_password_screen_caption">Enter the email address that you registered with and we will send instructions on how to reset your password</string>
+    <string name="reset_password_screen_caption">Enter your email and we’ll send you a link to reset your password</string>
     <string name="sm_reset_password">Reset password instructions is successfully sent. Please check your email</string>
     <string name="login_screen_title">Yeay! You\'re back</string>
     <string name="login_screen_caption">Let\'s get you logged in first</string>
@@ -176,4 +176,12 @@
     <string name="and">and</string>
     <string name="privacy_policy">Privacy Policy</string>
     <string name="em_agree_terms_privacy_policy">You must agree to terms and privacy policty to continue</string>
+    <string name="forgot_password">Forgot Password</string>
+    <string name="forgot_password_submit">Submit</string>
+    <string name="forgot_password_submitting">Submitting...</string>
+    <string name="back_to_login_page">Back to login page</string>
+    <string name="check_your_mail">Check your mail</string>
+    <string name="open_email_app">Open email app</string>
+    <string name="skip_ill_confirm_later">Skip, I\'ll confirm later</string>
+    <string name="check_your_email_caption">We have sent a password recover instructions to your email</string>
 </resources>

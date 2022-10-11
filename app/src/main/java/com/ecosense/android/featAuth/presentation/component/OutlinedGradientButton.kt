@@ -14,6 +14,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.ecosense.android.core.presentation.theme.Gradient
 import com.ecosense.android.core.presentation.theme.GradientForButtons
 
 @Composable
@@ -34,7 +35,7 @@ fun OutlinedGradientButton(
             .fillMaxWidth()
             .height(height)
             .background(MaterialTheme.colors.surface)
-            .border(width = 1.dp, brush = GradientForButtons, shape = shape),
+            .border(width = 1.dp, brush = Gradient, shape = shape),
     ) {
         content.invoke(this)
     }
