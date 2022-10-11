@@ -5,8 +5,7 @@ import com.ecosense.android.featReward.domain.model.RewardDetail
 data class RewardDetailScreenState(
     val rewardDetail: RewardDetail,
     val isLoadingRewardDetail: Boolean,
-    val isLoadingRedeemReward: Boolean,
-    val isLoadingUseReward: Boolean
+    val isLoadingRedeemReward: Boolean
 ) {
     companion object {
         val defaultValue = RewardDetailScreenState(
@@ -23,8 +22,7 @@ data class RewardDetailScreenState(
                 howToUse = emptyList()
             ),
             isLoadingRewardDetail = false,
-            isLoadingRedeemReward = false,
-            isLoadingUseReward = false
+            isLoadingRedeemReward = false
         )
     }
 }
