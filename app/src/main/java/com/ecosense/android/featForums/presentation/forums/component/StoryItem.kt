@@ -64,13 +64,6 @@ fun StoryItem(
 
                 Spacer(modifier = Modifier.width(MaterialTheme.spacing.small))
 
-                Text(
-                    text = story().username,
-                    color = MaterialTheme.colors.onSurface.copy(0.6f),
-                )
-
-                Spacer(modifier = Modifier.width(MaterialTheme.spacing.small))
-
                 Box(
                     modifier = Modifier
                         .clip(CircleShape)
@@ -83,26 +76,6 @@ fun StoryItem(
                 Text(
                     text = story().createdAt,
                     color = MaterialTheme.colors.onSurface.copy(alpha = 0.6f),
-                )
-            }
-
-            story().sharedCampaign?.let {
-                Text(
-                    text = stringResource(
-                        R.string.username_just_finished_a_campaign,
-                        story().username,
-                    ),
-                    color = MaterialTheme.colors.onPrimary,
-                    style = MaterialTheme.typography.caption,
-                    fontWeight = FontWeight.SemiBold,
-                    modifier = Modifier
-                        .padding(vertical = MaterialTheme.spacing.small)
-                        .clip(RoundedCornerShape(100))
-                        .background(MaterialTheme.colors.primary)
-                        .padding(
-                            horizontal = MaterialTheme.spacing.small,
-                            vertical = MaterialTheme.spacing.extraSmall,
-                        ),
                 )
             }
 

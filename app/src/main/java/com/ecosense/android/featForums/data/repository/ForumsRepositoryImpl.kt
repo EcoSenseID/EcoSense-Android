@@ -20,7 +20,6 @@ class ForumsRepositoryImpl(
         Story(
             id = it,
             name = "John Doe ($it)",
-            username = "@johndoe$it",
             avatarUrl = "https://i.pravatar.cc/300?img=$it",
             caption = "Bagaimana caramu untuk mengajak masyarakat melestarikan lingkungan? ${
                 "lorem ipsum ".repeat(
@@ -54,7 +53,6 @@ class ForumsRepositoryImpl(
         Reply(
             id = it,
             name = "Siti ($it)",
-            username = "@siti$it",
             avatarUrl = "https://i.pravatar.cc/300?img=$it",
             caption = "Comment caption $it",
             attachedPhotoUrl = if (it % 3 == 0) "https://cdn.statically.io/og/theme=dark/Story$it.jpg" else null,
@@ -68,7 +66,6 @@ class ForumsRepositoryImpl(
         Supporter(
             id = it,
             avatarUrl = "https://i.pravatar.cc/300?img=$it",
-            username = "@siti$it",
             name = "Siti ($it)",
         )
     }

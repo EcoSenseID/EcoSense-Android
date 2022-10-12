@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -29,10 +30,7 @@ fun ReplyItem(
     modifier: Modifier = Modifier,
 ) {
     Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .background(MaterialTheme.colors.surface)
-            .padding(MaterialTheme.spacing.medium),
+        modifier = modifier,
     ) {
         AsyncImage(
             model = reply().avatarUrl,
@@ -55,13 +53,6 @@ fun ReplyItem(
                     text = reply().name,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colors.primary,
-                )
-
-                Spacer(modifier = Modifier.width(MaterialTheme.spacing.small))
-
-                Text(
-                    text = reply().username,
-                    color = MaterialTheme.colors.onSurface.copy(0.6f),
                 )
 
                 Spacer(modifier = Modifier.width(MaterialTheme.spacing.small))

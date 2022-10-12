@@ -5,6 +5,7 @@ data class ReplyComposerState(
     val caption: String?,
     val attachedPhotoUrl: String?,
     val isUploading: Boolean,
+    val isFocused: Boolean,
 ) {
     companion object {
         val defaultValue = ReplyComposerState(
@@ -12,6 +13,7 @@ data class ReplyComposerState(
             caption = null,
             attachedPhotoUrl = null,
             isUploading = false,
+            isFocused = false,
         )
     }
 }

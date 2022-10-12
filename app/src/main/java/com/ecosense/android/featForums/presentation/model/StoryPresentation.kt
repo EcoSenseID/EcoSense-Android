@@ -13,7 +13,6 @@ import java.util.*
 data class StoryPresentation(
     val id: Int,
     val name: String,
-    val username: String,
     val avatarUrl: String,
     val caption: String,
     val attachedPhotoUrl: String?,
@@ -29,7 +28,6 @@ fun Story.toPresentation(): StoryPresentation {
     return StoryPresentation(
         id = this.id,
         name = this.name,
-        username = this.username,
         avatarUrl = this.avatarUrl,
         caption = this.caption,
         attachedPhotoUrl = this.attachedPhotoUrl,

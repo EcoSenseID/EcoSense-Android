@@ -5,7 +5,6 @@ import com.ecosense.android.core.domain.model.Campaign
 data class Story(
     val id: Int,
     val name: String,
-    val username: String,
     val avatarUrl: String,
     val caption: String,
     val attachedPhotoUrl: String?,

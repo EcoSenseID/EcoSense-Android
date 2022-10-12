@@ -31,6 +31,7 @@ import logcat.logcat
 
 @Composable
 @Destination
+@RootNavGraph(start = true)
 fun ForumsScreen(
     navigator: DestinationsNavigator,
     viewModel: ForumsViewModel = hiltViewModel(),
@@ -64,7 +65,14 @@ fun ForumsScreen(
                     .size(56.dp)
                     .shadow(elevation = 8.dp, shape = CircleShape, clip = true)
                     .background(GradientForButtons)
-                    .clickable { navigator.navigate(StoryComposerScreenDestination(null)) },
+                    .clickable {
+                        navigator.navigate(
+                            StoryComposerScreenDestination(
+                                caption = null,
+                                campaign = null,
+                            )
+                        )
+                    },
             ) {
                 Icon(
                     imageVector = Icons.Rounded.Add,
