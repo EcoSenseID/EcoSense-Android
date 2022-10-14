@@ -178,10 +178,18 @@
     <string name="em_agree_terms_privacy_policy">You must agree to terms and privacy policty to continue</string>
     <string name="forgot_password">Forgot Password</string>
     <string name="forgot_password_submit">Submit</string>
-    <string name="forgot_password_submitting">Submitting...</string>
+    <string name="forgot_password_submitting">Submitting…</string>
     <string name="back_to_login_page">Back to login page</string>
     <string name="check_your_mail">Check your mail</string>
     <string name="open_email_app">Open email app</string>
     <string name="skip_ill_confirm_later">Skip, I\'ll confirm later</string>
     <string name="check_your_email_caption">We have sent a password recover instructions to your email</string>
+    <string name="get_rewards">Get Rewards</string>
+    <string name="total_ecopoints">Total EcoPoints</string>
+    <string name="my_stories">My Stories</string>
+    <string name="see_all">See All</string>
+    <string name="my_campaign_history">My Campaign History</string>
+    <string name="completed_at">Completed at:</string>
+    <string name="em_empty_campaign_history">You haven\'t joined any campaigns.\nLet\'s join one!</string>
+    <string name="em_empty_story_history">You haven\'t uploaded anything.\nLet\'s make one!</string>
 </resources>

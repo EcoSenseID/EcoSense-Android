@@ -2,7 +2,7 @@ package com.ecosense.android.featForums.domain.repository
 
 import com.ecosense.android.core.util.Resource
 import com.ecosense.android.featForums.domain.model.Reply
-import com.ecosense.android.featForums.domain.model.Story
+import com.ecosense.android.core.domain.model.Story
 import com.ecosense.android.featForums.domain.model.Supporter
 
 interface ForumsRepository {

@@ -5,7 +5,7 @@ import com.ecosense.android.core.domain.model.Campaign
 import com.ecosense.android.core.util.Resource
 import com.ecosense.android.featForums.data.api.ForumsApi
 import com.ecosense.android.featForums.domain.model.Reply
-import com.ecosense.android.featForums.domain.model.Story
+import com.ecosense.android.core.domain.model.Story
 import com.ecosense.android.featForums.domain.model.Supporter
 import com.ecosense.android.featForums.domain.repository.ForumsRepository
 import kotlinx.coroutines.delay

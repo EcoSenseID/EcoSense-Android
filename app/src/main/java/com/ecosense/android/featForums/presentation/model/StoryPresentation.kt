@@ -3,7 +3,7 @@ package com.ecosense.android.featForums.presentation.model
 import android.os.Parcelable
 import com.ecosense.android.core.presentation.model.CampaignPresentation
 import com.ecosense.android.core.presentation.model.toPresentation
-import com.ecosense.android.featForums.domain.model.Story
+import com.ecosense.android.core.domain.model.Story
 import com.ecosense.android.featForums.presentation.constants.PatternConstants
 import kotlinx.parcelize.Parcelize
 import java.text.SimpleDateFormat

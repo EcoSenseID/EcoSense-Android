@@ -29,7 +29,6 @@ fun GradientButton(
         modifier = modifier
             .clip(shape)
             .clickable { if (enabled) onClick() }
-            .fillMaxWidth()
             .height(height)
             .background(brush = GradientForButtons),
     ) {

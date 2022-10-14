@@ -7,9 +7,10 @@ import androidx.lifecycle.viewModelScope
 import com.ecosense.android.core.domain.repository.AuthRepository
 import com.ecosense.android.core.presentation.util.UIEvent
 import com.ecosense.android.core.util.Resource
-import com.ecosense.android.featProfile.domain.model.Contributions
+import com.ecosense.android.featForums.presentation.model.toPresentation
 import com.ecosense.android.featProfile.domain.repository.ProfileRepository
 import com.ecosense.android.featProfile.presentation.profile.model.ProfileScreenState
+import com.ecosense.android.featProfile.presentation.profile.model.toPresentation
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
@@ -21,8 +22,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
-    private val authRepository: AuthRepository,
-    private val profileRepository: ProfileRepository
+    private val authRepository: AuthRepository, private val profileRepository: ProfileRepository
 ) : ViewModel() {
 
     private val _state = mutableStateOf(ProfileScreenState.defaultValue)
@@ -33,7 +33,6 @@ class ProfileViewModel @Inject constructor(
 
     init {
         getProfile()
-        getContributions()
     }
 
     private var getProfileJob: Job? = null
@@ -42,29 +41,35 @@ class ProfileViewModel @Inject constructor(
         getProfileJob = viewModelScope.launch {
             val user = authRepository.getCurrentUser()
             user?.let { _state.value = state.value.copy(user = it) }
-        }
-    }
 
-    private var getContributionsJob: Job? = null
-    private fun getContributions() {
-        getContributionsJob?.cancel()
-        getContributionsJob = viewModelScope.launch {
-            profileRepository.getContributions().onEach { result ->
+            profileRepository.getProfile().onEach { result ->
                 when (result) {
                     is Resource.Error -> {
-                        _state.value = state.value.copy(isLoadingContributions = false)
+                        _state.value = state.value.copy(isLoading = false)
                         result.uiText?.let { _eventFlow.send(UIEvent.ShowSnackbar(it)) }
                     }
+
                     is Resource.Loading -> {
                         _state.value = state.value.copy(
-                            contributions = result.data ?: Contributions.defaultValue,
-                            isLoadingContributions = true
+                            isLoading = true,
+                            totalEcoPoints = result.data?.totalEcoPoints
+                                ?: state.value.totalEcoPoints,
+                            postedStories = result.data?.postedStories?.map { it.toPresentation() }
+                                ?: state.value.postedStories,
+                            completedCampaigns = result.data?.finishedCampaigns?.map { it.toPresentation() }
+                                ?: state.value.completedCampaigns,
                         )
                     }
+
                     is Resource.Success -> {
                         _state.value = state.value.copy(
-                            contributions = result.data ?: Contributions.defaultValue,
-                            isLoadingContributions = false
+                            isLoading = false,
+                            totalEcoPoints = result.data?.totalEcoPoints
+                                ?: state.value.totalEcoPoints,
+                            postedStories = result.data?.postedStories?.map { it.toPresentation() }
+                                ?: state.value.postedStories,
+                            completedCampaigns = result.data?.finishedCampaigns?.map { it.toPresentation() }
+                                ?: state.value.completedCampaigns,
                         )
                     }
                 }
@@ -80,9 +85,12 @@ class ProfileViewModel @Inject constructor(
         }
     }
 
+    private var setExpandDropdownMenuJob: Job? = null
     fun setExpandDropdownMenu(visible: Boolean) {
-        _state.value = state.value.copy(
-            isDropdownMenuExpanded = visible
-        )
+        setExpandDropdownMenuJob = viewModelScope.launch {
+            _state.value = state.value.copy(
+                isDropdownMenuExpanded = visible
+            )
+        }
     }
 }

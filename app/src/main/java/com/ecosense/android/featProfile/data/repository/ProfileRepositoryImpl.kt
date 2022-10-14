@@ -8,8 +8,8 @@ import com.ecosense.android.core.util.Resource
 import com.ecosense.android.core.util.SimpleResource
 import com.ecosense.android.core.util.UIText
 import com.ecosense.android.featProfile.data.api.ProfileApi
-import com.ecosense.android.featProfile.data.model.ContributionsDto
-import com.ecosense.android.featProfile.domain.model.Contributions
+import com.ecosense.android.featProfile.data.model.ProfileDto
+import com.ecosense.android.featProfile.domain.model.Profile
 import com.ecosense.android.featProfile.domain.repository.ProfileRepository
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -25,32 +25,24 @@ class ProfileRepositoryImpl(
     private val profileApi: ProfileApi,
     private val cloudStorageApi: CloudStorageApi,
 ) : ProfileRepository {
-    override fun getContributions(): Flow<Resource<Contributions>> = flow {
+    override fun getProfile(): Flow<Resource<Profile>> = flow {
         emit(Resource.Loading())
 
         try {
             val idToken = authApi.getIdToken(true)
             val bearerToken = "Bearer $idToken"
-            val response = profileApi.getContributions(bearerToken = bearerToken)
+            val response = profileApi.getProfile(bearerToken = bearerToken)
 
             when {
-                response.error == true -> emit(Resource.Error(
-                    uiText = response.message?.let { UIText.DynamicString(it) }
-                        ?: UIText.StringResource(R.string.em_unknown))
-                )
+                response.error == true -> emit(Resource.Error(uiText = response.message?.let {
+                    UIText.DynamicString(it)
+                } ?: UIText.StringResource(R.string.em_unknown)))
 
-                response.experiences == null || response.completedCampaigns == null -> {
+                response.finishedCampaigns == null || response.postedStories == null || response.totalEcoPoints == null -> {
                     emit(Resource.Error(UIText.StringResource(R.string.em_unknown)))
                 }
 
-                else -> emit(
-                    Resource.Success(
-                        Contributions(
-                            experiences = response.experiences.map { it.toExperience() },
-                            completedCampaigns = response.completedCampaigns.map { it.toCampaign() }
-                        )
-                    )
-                )
+                else -> emit(Resource.Success(response.toDomain()))
             }
 
         } catch (e: Exception) {
@@ -58,9 +50,9 @@ class ProfileRepositoryImpl(
             when (e) {
                 is HttpException -> {
                     try {
-                        val response = Gson().fromJson<ContributionsDto>(
+                        val response = Gson().fromJson<ProfileDto>(
                             e.response()?.errorBody()?.charStream(),
-                            object : TypeToken<ContributionsDto>() {}.type
+                            object : TypeToken<ProfileDto>() {}.type
                         )
                         UIText.DynamicString(response.message!!)
                     } catch (e: Exception) {
@@ -77,8 +69,7 @@ class ProfileRepositoryImpl(
     }
 
     override fun updateProfile(
-        newDisplayName: String?,
-        newPhotoUri: Uri?
+        newDisplayName: String?, newPhotoUri: Uri?
     ): Flow<SimpleResource> = flow {
         emit(Resource.Loading())
 
@@ -97,8 +88,7 @@ class ProfileRepositoryImpl(
         try {
             val uploadedPhotoUri: Uri? = newPhotoUri?.let { uri ->
                 cloudStorageApi.uploadProfilePicture(
-                    photoUri = uri,
-                    uid = authApi.getCurrentUser()?.uid ?: return@let null
+                    photoUri = uri, uid = authApi.getCurrentUser()?.uid ?: return@let null
                 )
             }
 

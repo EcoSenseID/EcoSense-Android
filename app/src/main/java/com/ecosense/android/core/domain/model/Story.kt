@@ -1,4 +1,4 @@
-package com.ecosense.android.featForums.domain.model
+package com.ecosense.android.core.domain.model
 
 import com.ecosense.android.core.domain.model.Campaign
 

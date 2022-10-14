@@ -5,12 +5,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.ecosense.android.core.domain.repository.AuthRepository
 import com.ecosense.android.core.util.UIText
-import com.ecosense.android.featForums.domain.model.Story
+import com.ecosense.android.core.domain.model.Story
 import com.ecosense.android.featForums.domain.repository.ForumsRepository
 import com.ecosense.android.featForums.presentation.forums.model.StoriesFeedState
-import com.ecosense.android.featForums.presentation.model.StoryPresentation
 import com.ecosense.android.featForums.presentation.model.toPresentation
 import com.ecosense.android.featForums.presentation.paginator.DefaultPaginator
 import dagger.hilt.android.lifecycle.HiltViewModel
