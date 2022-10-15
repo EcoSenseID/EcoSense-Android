@@ -4,6 +4,6 @@ import com.ecosense.android.core.domain.model.Story
 
 data class Profile(
     val totalEcoPoints: Int,
-    val finishedCampaigns: List<FinishedCampaign>,
-    val postedStories: List<Story>
+    val recentCampaigns: List<RecentCampaign>,
+    val recentStories: List<Story>
 )

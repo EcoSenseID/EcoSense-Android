@@ -1,6 +1,6 @@
 package com.ecosense.android.featForums.data.model
 
-data class PostNewStoryDto(
+data class PostSupportStoryDto(
     val error: Boolean?,
     val message: String?,
 )

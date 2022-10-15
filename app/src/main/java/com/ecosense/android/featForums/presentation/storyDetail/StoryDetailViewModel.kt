@@ -40,7 +40,7 @@ class StoryDetailViewModel @Inject constructor(
         getNextKey = { repliesState.page + 1 },
         onRequest = { nextPage: Int ->
             storyId?.let { id ->
-                forumsRepository.getComments(
+                forumsRepository.getStoryReplies(
                     storyId = id,
                     page = nextPage,
                     size = 20,

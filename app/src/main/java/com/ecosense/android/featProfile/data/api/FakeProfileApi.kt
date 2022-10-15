@@ -1,35 +1,20 @@
 package com.ecosense.android.featProfile.data.api
 
-import com.ecosense.android.featProfile.data.model.FinishedCampaignDto
-import com.ecosense.android.featProfile.data.model.PostedStoryDto
-import com.ecosense.android.featProfile.data.model.ProfileDto
-import com.ecosense.android.featProfile.data.model.SharedCampaignDto
+import com.ecosense.android.core.data.model.CategoryDto
+import com.ecosense.android.core.data.model.SharedCampaignDto
+import com.ecosense.android.core.data.model.StoryDto
+import com.ecosense.android.featProfile.data.model.*
 import kotlinx.coroutines.delay
 
 class FakeProfileApi : ProfileApi {
     override suspend fun getProfile(bearerToken: String): ProfileDto {
-        delay(1500)
+        delay(500)
         return ProfileDto(
-            finishedCampaigns = listOf(
-                FinishedCampaignDto(
-                    categories = listOf("Air Pollution", "Food Waste"),
-                    completedAt = 1665645721,
-                    id = 1,
-                    posterUrl = "https://cdn.statically.io/og/theme=dark/food_waste_1.jpg",
-                    title = "No More Food Waste: Hassle-Free Compost",
-                ),
-                FinishedCampaignDto(
-                    categories = listOf("Air Pollution", "Food Waste"),
-                    completedAt = 1665645721,
-                    id = 1,
-                    posterUrl = "https://cdn.statically.io/og/theme=dark/food_waste_2.jpg",
-                    title = "No More Food Waste: Hassle-Free Compost",
-                )
-            ),
             error = false,
             message = "Profile fetched successfully",
-            postedStories = listOf(
-                PostedStoryDto(
+            totalEcoPoints = 2700,
+            recentStories = listOf(
+                StoryDto(
                     id = 1,
                     name = "John Doe",
                     avatarUrl = "https://i.pravatar.cc/300?img=$1",
@@ -39,8 +24,11 @@ class FakeProfileApi : ProfileApi {
                         id = 1,
                         posterUrl = "https://cdn.statically.io/og/theme=dark/shared_campaign_1.jpg",
                         title = "Shared Campaign 1",
-                        endDate = "24 July 2022",
-                        category = listOf("Water Pollution", "Plastic Free"),
+                        endAt = System.currentTimeMillis(),
+                        categories = listOf(
+                            CategoryDto(name = "Air Pollution", colorHex = "#BADA55"),
+                            CategoryDto(name = "Food Waste", colorHex = "#FA6607"),
+                        ),
                         participantsCount = 69420,
                         isTrending = true,
                         isNew = true,
@@ -55,7 +43,7 @@ class FakeProfileApi : ProfileApi {
                         "https://i.pravatar.cc/300?img=4",
                     ),
                 ),
-                PostedStoryDto(
+                StoryDto(
                     id = 1,
                     name = "John Doe",
                     avatarUrl = "https://i.pravatar.cc/300?img=$1",
@@ -73,7 +61,47 @@ class FakeProfileApi : ProfileApi {
                     ),
                 )
             ),
-            totalEcoPoints = 2700,
+            recentCampaigns = listOf(
+                RecentCampaignDto(
+                    id = 1,
+                    posterUrl = "https://cdn.statically.io/og/theme=dark/food_waste_1.jpg",
+                    title = "No More Food Waste: Hassle-Free Compost",
+                    earnedPoints = 300,
+                    finishedAt = null,
+                    endAt = System.currentTimeMillis(),
+                    completionStatus = 1,
+                    categories = listOf(
+                        CategoryDto(name = "Air Pollution", colorHex = "#BADA55"),
+                        CategoryDto(name = "Food Waste", colorHex = "#FA6607"),
+                    ),
+                ),
+                RecentCampaignDto(
+                    id = 1,
+                    posterUrl = "https://cdn.statically.io/og/theme=dark/food_waste_1.jpg",
+                    title = "No More Food Waste: Hassle-Free Compost",
+                    earnedPoints = 300,
+                    finishedAt = 1665645721,
+                    endAt = System.currentTimeMillis(),
+                    completionStatus = 2,
+                    categories = listOf(
+                        CategoryDto(name = "Air Pollution", colorHex = "#BADA55"),
+                        CategoryDto(name = "Food Waste", colorHex = "#FA6607"),
+                    ),
+                ),
+                RecentCampaignDto(
+                    id = 1,
+                    posterUrl = "https://cdn.statically.io/og/theme=dark/food_waste_1.jpg",
+                    title = "No More Food Waste: Hassle-Free Compost",
+                    earnedPoints = 300,
+                    finishedAt = 1665645721,
+                    endAt = System.currentTimeMillis(),
+                    completionStatus = 3,
+                    categories = listOf(
+                        CategoryDto(name = "Air Pollution", colorHex = "#BADA55"),
+                        CategoryDto(name = "Food Waste", colorHex = "#FA6607"),
+                    ),
+                ),
+            ),
         )
     }
 }

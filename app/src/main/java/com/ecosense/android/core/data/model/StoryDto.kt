@@ -1,25 +1,31 @@
-package com.ecosense.android.featForums.data.model
+package com.ecosense.android.core.data.model
 
-import com.ecosense.android.featForums.domain.model.Reply
+import com.ecosense.android.core.domain.model.Story
 
-data class ReplyDto(
+data class StoryDto(
     val id: Int?,
     val name: String?,
     val avatarUrl: String?,
     val caption: String?,
     val attachedPhotoUrl: String?,
+    val sharedCampaign: SharedCampaignDto?,
     val createdAt: Long?,
     val supportersCount: Int?,
+    val repliesCount: Int?,
     val isSupported: Boolean?,
+    val supportersAvatarsUrl: List<String>?
 ) {
-    fun toDomain(): Reply = Reply(
+    fun toDomain(): Story = Story(
         id = this.id ?: 0,
         name = this.name ?: "",
         avatarUrl = this.avatarUrl ?: "",
         caption = this.caption ?: "",
         attachedPhotoUrl = this.attachedPhotoUrl,
+        sharedCampaign = this.sharedCampaign?.toDomain(),
         createdAt = this.createdAt ?: 0,
         supportersCount = this.supportersCount ?: 0,
+        supportersAvatarsUrl = this.supportersAvatarsUrl ?: emptyList(),
+        repliesCount = this.repliesCount ?: 0,
         isSupported = this.isSupported ?: false,
     )
 }

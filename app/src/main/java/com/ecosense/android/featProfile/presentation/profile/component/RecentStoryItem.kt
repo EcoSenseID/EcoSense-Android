@@ -1,7 +1,6 @@
 package com.ecosense.android.featProfile.presentation.profile.component
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -20,20 +19,20 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.ecosense.android.R
-import com.ecosense.android.core.presentation.model.CampaignPresentation
+import com.ecosense.android.core.presentation.model.SharedCampaignPresentation
 import com.ecosense.android.core.presentation.theme.spacing
 import com.ecosense.android.featForums.presentation.forums.component.SharedCampaign
 import com.ecosense.android.featForums.presentation.forums.component.StorySupportersSection
 import com.ecosense.android.featForums.presentation.model.StoryPresentation
 
 @Composable
-fun StoryHistoryItem(
+fun RecentStoryItem(
     story: () -> StoryPresentation,
     onClickSupport: () -> Unit,
     onClickReply: () -> Unit,
     onClickShare: () -> Unit,
     onClickSupporters: () -> Unit,
-    onClickSharedCampaign: (campaign: CampaignPresentation) -> Unit,
+    onClickSharedCampaign: (campaign: SharedCampaignPresentation) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Row(

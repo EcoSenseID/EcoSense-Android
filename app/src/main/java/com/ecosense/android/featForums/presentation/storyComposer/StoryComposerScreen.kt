@@ -25,7 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.ecosense.android.R
-import com.ecosense.android.core.presentation.model.CampaignPresentation
+import com.ecosense.android.core.presentation.model.SharedCampaignPresentation
 import com.ecosense.android.core.presentation.theme.spacing
 import com.ecosense.android.featForums.presentation.forums.component.SharedCampaign
 import com.ramcosta.composedestinations.annotation.Destination
@@ -35,7 +35,7 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 @Destination
 fun StoryComposerScreen(
     caption: String?,
-    campaign: CampaignPresentation?,
+    campaign: SharedCampaignPresentation?,
     navigator: DestinationsNavigator,
     viewModel: StoryComposerViewModel = hiltViewModel(),
 ) {
@@ -149,7 +149,7 @@ fun StoryComposerScreen(
                         ) {
                             IconButton(onClick = { /* TODO */ }) {
                                 Icon(
-                                    imageVector = Icons.Rounded.Photo,
+                                    painter = painterResource(id = R.drawable.ic_photo),
                                     contentDescription = stringResource(R.string.cd_attach_photo),
                                     tint = MaterialTheme.colors.secondary,
                                 )

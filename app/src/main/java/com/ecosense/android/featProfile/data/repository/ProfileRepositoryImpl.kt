@@ -25,6 +25,7 @@ class ProfileRepositoryImpl(
     private val profileApi: ProfileApi,
     private val cloudStorageApi: CloudStorageApi,
 ) : ProfileRepository {
+
     override fun getProfile(): Flow<Resource<Profile>> = flow {
         emit(Resource.Loading())
 
@@ -38,7 +39,7 @@ class ProfileRepositoryImpl(
                     UIText.DynamicString(it)
                 } ?: UIText.StringResource(R.string.em_unknown)))
 
-                response.finishedCampaigns == null || response.postedStories == null || response.totalEcoPoints == null -> {
+                response.recentCampaigns == null || response.recentStories == null || response.totalEcoPoints == null -> {
                     emit(Resource.Error(UIText.StringResource(R.string.em_unknown)))
                 }
 

@@ -15,6 +15,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
@@ -31,27 +32,26 @@ import coil.compose.AsyncImage
 import com.ecosense.android.R
 import com.ecosense.android.core.presentation.component.GradientButton
 import com.ecosense.android.core.presentation.modifier.brushForeground
-import com.ecosense.android.core.presentation.theme.GradientForButtons
+import com.ecosense.android.core.presentation.theme.Gradient
 import com.ecosense.android.core.presentation.theme.spacing
 import com.ecosense.android.core.presentation.util.UIEvent
 import com.ecosense.android.core.presentation.util.asString
-import com.ecosense.android.destinations.EditProfileScreenDestination
-import com.ecosense.android.destinations.StoryDetailScreenDestination
-import com.ecosense.android.featProfile.presentation.profile.component.CampaignHistoryItem
+import com.ecosense.android.destinations.*
 import com.ecosense.android.featProfile.presentation.profile.component.ProfileTopBar
-import com.ecosense.android.featProfile.presentation.profile.component.StoryHistoryItem
-import com.google.accompanist.pager.ExperimentalPagerApi
+import com.ecosense.android.featProfile.presentation.profile.component.RecentCampaignItem
+import com.ecosense.android.featProfile.presentation.profile.component.RecentStoryItem
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootNavGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlinx.coroutines.flow.collectLatest
 
-@OptIn(ExperimentalPagerApi::class, ExperimentalUnitApi::class)
+@OptIn(ExperimentalUnitApi::class, ExperimentalMaterialApi::class)
 @Composable
 @Destination
 @RootNavGraph(start = true)
 fun ProfileScreen(
-    navigator: DestinationsNavigator, viewModel: ProfileViewModel = hiltViewModel()
+    navigator: DestinationsNavigator,
+    viewModel: ProfileViewModel = hiltViewModel(),
 ) {
     val scaffoldState = rememberScaffoldState()
 
@@ -85,8 +85,8 @@ fun ProfileScreen(
                 onDropdownMenuDismissRequest = { viewModel.setExpandDropdownMenu(false) }) {
                 DropdownMenuItem(onClick = {
                     viewModel.setExpandDropdownMenu(false)
-                    navigator.navigate(EditProfileScreenDestination)
-                }) { Text(text = stringResource(R.string.edit_profile)) }
+                    navigator.navigate(SettingsScreenDestination)
+                }) { Text(text = stringResource(R.string.settings)) }
 
                 DropdownMenuItem(onClick = { viewModel.onLogoutClick() }) {
                     Text(text = stringResource(R.string.logout))
@@ -125,7 +125,7 @@ fun ProfileScreen(
                         else stringResource(R.string.ecosense_user),
                         fontSize = TextUnit(22f, TextUnitType.Sp),
                         fontWeight = FontWeight.ExtraBold,
-                        modifier = Modifier.brushForeground(brush = GradientForButtons),
+                        modifier = Modifier.brushForeground(brush = Gradient),
                     )
 
                     Spacer(modifier = Modifier.height(MaterialTheme.spacing.large))
@@ -158,12 +158,19 @@ fun ProfileScreen(
                                         .size(32.dp)
                                         .clip(CircleShape)
                                         .background(MaterialTheme.colors.primary)
-                                        .padding(MaterialTheme.spacing.small),
+                                        .padding(MaterialTheme.spacing.extraSmall)
+                                        .border(
+                                            width = 1.dp,
+                                            color = MaterialTheme.colors.onPrimary,
+                                            shape = CircleShape,
+                                        )
+                                        .padding(MaterialTheme.spacing.extraSmall),
                                 ) {
                                     AsyncImage(
-                                        model = R.drawable.ic_ecosense_white,
+                                        model = R.drawable.ic_ecosense_logo_vector,
                                         contentDescription = null,
-                                        modifier = Modifier.fillMaxSize()
+                                        colorFilter = ColorFilter.tint(MaterialTheme.colors.onPrimary),
+                                        modifier = Modifier.fillMaxSize(),
                                     )
                                 }
 
@@ -186,7 +193,7 @@ fun ProfileScreen(
                         )
 
                         GradientButton(
-                            onClick = { /*TODO*/ },
+                            onClick = { navigator.navigate(RewardsScreenDestination) },
                             height = 36.dp,
                             modifier = Modifier.weight(1f),
                         ) {
@@ -211,7 +218,7 @@ fun ProfileScreen(
                             style = MaterialTheme.typography.h6,
                         )
 
-                        TextButton(onClick = { /*TODO*/ }) {
+                        TextButton(onClick = { navigator.navigate(StoryHistoryScreenDestination) }) {
                             Text(
                                 text = stringResource(R.string.see_all),
                                 fontWeight = FontWeight.SemiBold,
@@ -223,14 +230,19 @@ fun ProfileScreen(
                         }
                     }
 
-                    for (i in state.postedStories.indices) {
-                        StoryHistoryItem(
-                            story = { state.postedStories[i] },
-                            onClickSupport = { /*TODO*/ },
-                            onClickReply = { /*TODO*/ },
-                            onClickShare = { /*TODO*/ },
-                            onClickSupporters = { /*TODO*/ },
-                            onClickSharedCampaign = { /*TODO*/ },
+                    for (i in state.recentStories.indices) {
+                        val story = state.recentStories[i]
+                        RecentStoryItem(
+                            story = { story },
+                            onClickSupport = { /* TODO: not yet implemented */ },
+                            onClickReply = { navigator.navigate(StoryDetailScreenDestination(story)) },
+                            onClickShare = { /* TODO: not yet implemented */ },
+                            onClickSupporters = {
+                                navigator.navigate(StorySupportersScreenDestination(story.id))
+                            },
+                            onClickSharedCampaign = { campaign ->
+                                navigator.navigate(CampaignDetailScreenDestination(id = campaign.id))
+                            },
                             modifier = Modifier
                                 .clip(RoundedCornerShape(16.dp))
                                 .border(
@@ -238,28 +250,34 @@ fun ProfileScreen(
                                     color = MaterialTheme.colors.onSurface.copy(alpha = 0.1f),
                                     shape = RoundedCornerShape(16.dp),
                                 )
-                                .clickable {
-                                    navigator.navigate(
-                                        StoryDetailScreenDestination(state.postedStories[i])
-                                    )
-                                }
+                                .clickable { navigator.navigate(StoryDetailScreenDestination(story)) }
                                 .fillMaxWidth()
                                 .background(MaterialTheme.colors.surface)
                                 .padding(MaterialTheme.spacing.medium),
                         )
 
-                        if (i != state.postedStories.lastIndex) Spacer(
+                        if (i != state.recentStories.lastIndex) Spacer(
                             modifier = Modifier.height(MaterialTheme.spacing.small)
                         )
                     }
 
-                    if (state.postedStories.isEmpty()) Column(modifier = Modifier.fillMaxWidth()) {
+                    if (state.recentStories.isEmpty()) Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(MaterialTheme.spacing.medium),
+                    ) {
                         AsyncImage(
                             model = R.drawable.character_06,
                             contentDescription = null,
+                            modifier = Modifier.width(120.dp),
                         )
 
-                        Text(text = stringResource(R.string.em_empty_story_history))
+                        Text(
+                            text = stringResource(R.string.em_empty_story_history),
+                            fontWeight = FontWeight.Bold,
+                            textAlign = TextAlign.Center,
+                        )
                     }
 
                     Spacer(modifier = Modifier.height(MaterialTheme.spacing.large))
@@ -275,7 +293,7 @@ fun ProfileScreen(
                             style = MaterialTheme.typography.h6,
                         )
 
-                        TextButton(onClick = { /*TODO*/ }) {
+                        TextButton(onClick = { navigator.navigate(CampaignHistoryScreenDestination) }) {
                             Text(
                                 text = stringResource(R.string.see_all),
                                 fontWeight = FontWeight.SemiBold,
@@ -287,25 +305,46 @@ fun ProfileScreen(
                         }
                     }
 
-                    for (i in state.completedCampaigns.indices) {
-                        CampaignHistoryItem(
-                            campaign = { state.completedCampaigns[i] },
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .clip(RoundedCornerShape(16.dp)),
+                    for (i in state.recentCampaigns.indices) {
+                        val campaign = state.recentCampaigns[i]
+                        Card(
+                            shape = RoundedCornerShape(16.dp),
+                            onClick = {
+                                navigator.navigate(CampaignDetailScreenDestination(campaign.id))
+                            },
+                            modifier = Modifier.fillMaxWidth(),
+                        ) {
+                            RecentCampaignItem(
+                                campaign = { campaign },
+                                modifier = Modifier.fillMaxWidth(),
+                            )
+                        }
+
+                        if (i != state.recentCampaigns.lastIndex) Spacer(
+                            modifier = Modifier.height(MaterialTheme.spacing.medium)
                         )
                     }
 
-                    if (state.completedCampaigns.isEmpty()) Column(
-                        modifier = Modifier.fillMaxWidth()
+                    if (state.recentCampaigns.isEmpty()) Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(MaterialTheme.spacing.medium),
                     ) {
                         AsyncImage(
                             model = R.drawable.character_04,
                             contentDescription = null,
+                            modifier = Modifier.width(120.dp),
                         )
 
-                        Text(text = stringResource(R.string.em_empty_campaign_history))
+                        Text(
+                            text = stringResource(R.string.em_empty_campaign_history),
+                            fontWeight = FontWeight.Bold,
+                            textAlign = TextAlign.Center,
+                        )
                     }
+
+                    Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
                 }
             }
         }

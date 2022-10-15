@@ -17,7 +17,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.ecosense.android.R
-import com.ecosense.android.core.presentation.model.CampaignPresentation
+import com.ecosense.android.core.presentation.model.SharedCampaignPresentation
 import com.ecosense.android.core.presentation.theme.GradientForButtons
 import com.ecosense.android.destinations.CampaignDetailScreenDestination
 import com.ecosense.android.destinations.StoryComposerScreenDestination
@@ -25,7 +25,6 @@ import com.ecosense.android.destinations.StoryDetailScreenDestination
 import com.ecosense.android.destinations.StorySupportersScreenDestination
 import com.ecosense.android.featForums.presentation.forums.component.StoryItem
 import com.ramcosta.composedestinations.annotation.Destination
-import com.ramcosta.composedestinations.annotation.RootNavGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import logcat.logcat
 
@@ -100,9 +99,9 @@ fun ForumsScreen(
                     story = { story },
                     onClickSupport = { viewModel.onClickSupport(storyId = story.id) },
                     onClickReply = { navigator.navigate(StoryDetailScreenDestination(story)) },
-                    onClickShare = { /*TODO*/ logcat { "onClickShare $i" } },
+                    onClickShare = { /* TODO: implement share feature */ logcat { "onClickShare $i" } },
                     onClickSupporters = { navigator.navigate(StorySupportersScreenDestination(story.id)) },
-                    onClickSharedCampaign = { campaign: CampaignPresentation ->
+                    onClickSharedCampaign = { campaign: SharedCampaignPresentation ->
                         navigator.navigate(CampaignDetailScreenDestination(id = campaign.id))
                     },
                     modifier = Modifier.clickable {

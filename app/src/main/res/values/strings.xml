@@ -192,4 +192,9 @@
     <string name="completed_at">Completed at:</string>
     <string name="em_empty_campaign_history">You haven\'t joined any campaigns.\nLet\'s join one!</string>
     <string name="em_empty_story_history">You haven\'t uploaded anything.\nLet\'s make one!</string>
+    <string name="ecopoints">EcoPoints</string>
+    <string name="campaign_finshed_at">Campaign finished at</string>
+    <string name="campaign_will_end_at">Campaign will end at</string>
+    <string name="completion_is_being_verified">Completion is being verified</string>
+    <string name="settings">Settings</string>
 </resources>

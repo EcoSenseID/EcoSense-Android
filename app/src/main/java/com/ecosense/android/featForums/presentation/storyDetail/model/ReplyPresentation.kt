@@ -1,7 +1,7 @@
 package com.ecosense.android.featForums.presentation.storyDetail.model
 
 import com.ecosense.android.featForums.domain.model.Reply
-import com.ecosense.android.featForums.presentation.constants.PatternConstants
+import com.ecosense.android.core.presentation.constants.PatternConstants
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -23,7 +23,7 @@ fun Reply.toPresentation() = ReplyPresentation(
     caption = this.caption,
     attachedPhotoUrl = this.attachedPhotoUrl,
     createdAt = SimpleDateFormat(
-        PatternConstants.STORIES_DATE_FORMAT,
+        PatternConstants.DEFAULT_DATE_FORMAT,
         Locale.getDefault(),
     ).format(Date().apply { time = this@toPresentation.createdAt }),
     supportersCount = this.supportersCount,

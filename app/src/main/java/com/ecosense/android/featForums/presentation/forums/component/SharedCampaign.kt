@@ -14,15 +14,15 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import com.ecosense.android.core.presentation.model.CampaignPresentation
+import com.ecosense.android.core.presentation.model.SharedCampaignPresentation
 import com.ecosense.android.core.presentation.modifier.brushForeground
-import com.ecosense.android.core.presentation.theme.CategoryColors
 import com.ecosense.android.core.presentation.theme.GradientForButtons
 import com.ecosense.android.core.presentation.theme.spacing
+import com.ecosense.android.core.presentation.util.colorFromHex
 
 @Composable
 fun SharedCampaign(
-    campaign: () -> CampaignPresentation,
+    campaign: () -> SharedCampaignPresentation,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -51,12 +51,12 @@ fun SharedCampaign(
 
             items(count = campaign().categories.size) { i ->
                 Text(
-                    text = campaign().categories[i],
+                    text = campaign().categories[i].name,
                     color = MaterialTheme.colors.onPrimary,
                     style = MaterialTheme.typography.caption,
                     modifier = Modifier
                         .clip(RoundedCornerShape(100))
-                        .background(CategoryColors[i % CategoryColors.size])
+                        .background(colorFromHex(campaign().categories[i].colorHex))
                         .padding(horizontal = MaterialTheme.spacing.small),
                 )
 

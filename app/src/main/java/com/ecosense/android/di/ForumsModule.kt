@@ -1,6 +1,7 @@
 package com.ecosense.android.di
 
 import com.ecosense.android.core.domain.api.AuthApi
+import com.ecosense.android.featForums.data.api.FakeForumsApi
 import com.ecosense.android.featForums.data.api.ForumsApi
 import com.ecosense.android.featForums.data.repository.ForumsRepositoryImpl
 import com.ecosense.android.featForums.domain.repository.ForumsRepository
@@ -29,5 +30,8 @@ object ForumsModule {
     @Singleton
     fun provideApi(
         coreRetrofit: Retrofit
-    ): ForumsApi = coreRetrofit.create(ForumsApi::class.java)
+    ): ForumsApi {
+//        return coreRetrofit.create(ForumsApi::class.java)
+        return FakeForumsApi()
+    }
 }

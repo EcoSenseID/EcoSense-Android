@@ -1,10 +1,9 @@
 package com.ecosense.android.featForums.presentation.model
 
 import android.os.Parcelable
-import com.ecosense.android.core.presentation.model.CampaignPresentation
-import com.ecosense.android.core.presentation.model.toPresentation
 import com.ecosense.android.core.domain.model.Story
-import com.ecosense.android.featForums.presentation.constants.PatternConstants
+import com.ecosense.android.core.presentation.constants.PatternConstants
+import com.ecosense.android.core.presentation.model.SharedCampaignPresentation
 import kotlinx.parcelize.Parcelize
 import java.text.SimpleDateFormat
 import java.util.*
@@ -16,7 +15,7 @@ data class StoryPresentation(
     val avatarUrl: String,
     val caption: String,
     val attachedPhotoUrl: String?,
-    val sharedCampaign: CampaignPresentation?,
+    val sharedCampaign: SharedCampaignPresentation?,
     val createdAt: String,
     val supportersCount: Int,
     val supportersAvatarsUrl: List<String>,
@@ -33,7 +32,7 @@ fun Story.toPresentation(): StoryPresentation {
         attachedPhotoUrl = this.attachedPhotoUrl,
         sharedCampaign = this.sharedCampaign?.toPresentation(),
         createdAt = SimpleDateFormat(
-            PatternConstants.STORIES_DATE_FORMAT,
+            PatternConstants.DEFAULT_DATE_FORMAT,
             Locale.getDefault(),
         ).format(Date().apply { time = this@toPresentation.createdAt }),
         supportersCount = this.supportersCount,

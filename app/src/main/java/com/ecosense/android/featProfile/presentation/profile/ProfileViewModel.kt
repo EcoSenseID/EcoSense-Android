@@ -54,10 +54,10 @@ class ProfileViewModel @Inject constructor(
                             isLoading = true,
                             totalEcoPoints = result.data?.totalEcoPoints
                                 ?: state.value.totalEcoPoints,
-                            postedStories = result.data?.postedStories?.map { it.toPresentation() }
-                                ?: state.value.postedStories,
-                            completedCampaigns = result.data?.finishedCampaigns?.map { it.toPresentation() }
-                                ?: state.value.completedCampaigns,
+                            recentStories = result.data?.recentStories?.map { it.toPresentation() }
+                                ?: state.value.recentStories,
+                            recentCampaigns = result.data?.recentCampaigns?.map { it.toPresentation() }
+                                ?: state.value.recentCampaigns,
                         )
                     }
 
@@ -66,10 +66,10 @@ class ProfileViewModel @Inject constructor(
                             isLoading = false,
                             totalEcoPoints = result.data?.totalEcoPoints
                                 ?: state.value.totalEcoPoints,
-                            postedStories = result.data?.postedStories?.map { it.toPresentation() }
-                                ?: state.value.postedStories,
-                            completedCampaigns = result.data?.finishedCampaigns?.map { it.toPresentation() }
-                                ?: state.value.completedCampaigns,
+                            recentStories = result.data?.recentStories?.map { it.toPresentation() }
+                                ?: state.value.recentStories,
+                            recentCampaigns = result.data?.recentCampaigns?.map { it.toPresentation() }
+                                ?: state.value.recentCampaigns,
                         )
                     }
                 }

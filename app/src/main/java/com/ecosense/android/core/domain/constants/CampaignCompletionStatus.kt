@@ -1,6 +1,6 @@
 package com.ecosense.android.core.domain.constants
 
-object CampaignStatusConstants {
+object CampaignCompletionStatus {
     const val NOT_JOINED: Int = 0
     const val UNFINISHED: Int = 1
     const val BEING_VERIFIED: Int = 2

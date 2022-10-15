@@ -13,47 +13,51 @@ interface ForumsApi {
         @Query("size") size: Int,
     ): GetStoriesDto
 
-    @GET("comments")
+    @GET("replies")
     suspend fun getStoryReplies(
         @Header("Authorization") bearerToken: String,
         @Query("storyId") storyId: Int,
+        @Query("page") page: Int,
+        @Query("size") size: Int,
     ): GetRepliesDto
 
-    @GET("likes")
+    @GET("supporters")
     suspend fun getStorySupporters(
         @Header("Authorization") bearerToken: String,
         @Query("storyId") storyId: Int,
-    ): GetStoryLikesDto
+        @Query("page") page: Int,
+        @Query("size") size: Int,
+    ): GetStorySupportersDto
 
     @Multipart
     @POST("poststory")
     suspend fun postNewStory(
         @Header("Authorization") bearerToken: String,
-        @Part campaignId: Int? = null,
+        @Part sharedCampaignId: Int? = null,
         @Part caption: String,
-        @Part photo: MultipartBody.Part?,
+        @Part attachedPhoto: MultipartBody.Part?,
     ): PostNewStoryDto
 
     @Multipart
-    @POST("postcomment")
+    @POST("postreply")
     suspend fun postNewReply(
         @Header("Authorization") bearerToken: String,
         @Part storyId: Int,
-        @Part content: String,
-        @Part photo: MultipartBody.Part?,
-    ): PostNewCommentDto
+        @Part caption: String,
+        @Part attachedPhoto: MultipartBody.Part?,
+    ): PostNewReplyDto
 
     @FormUrlEncoded
-    @POST("likestory")
+    @POST("supportstory")
     suspend fun postSupportStory(
         @Header("Authorization") bearerToken: String,
         @Field("storyId") storyId: Int,
-    ): PostLikeStoryDto
+    ): PostSupportStoryDto
 
     @FormUrlEncoded
-    @POST("likecomment")
+    @POST("supportreply")
     suspend fun postSupportReply(
         @Header("Authorization") bearerToken: String,
-        @Field("commentId") commentId: Int,
-    ): PostLikeCommentDto
+        @Field("replyId") replyId: Int,
+    ): PostSupportReplyDto
 }
