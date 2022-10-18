@@ -48,7 +48,6 @@ import kotlinx.coroutines.flow.collectLatest
 @OptIn(ExperimentalUnitApi::class, ExperimentalMaterialApi::class)
 @Composable
 @Destination
-@RootNavGraph(start = true)
 fun ProfileScreen(
     navigator: DestinationsNavigator,
     viewModel: ProfileViewModel = hiltViewModel(),
@@ -87,10 +86,6 @@ fun ProfileScreen(
                     viewModel.setExpandDropdownMenu(false)
                     navigator.navigate(SettingsScreenDestination)
                 }) { Text(text = stringResource(R.string.settings)) }
-
-                DropdownMenuItem(onClick = { viewModel.onLogoutClick() }) {
-                    Text(text = stringResource(R.string.logout))
-                }
             }
         },
     ) { scaffoldPadding ->

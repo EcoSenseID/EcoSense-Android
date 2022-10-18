@@ -44,7 +44,8 @@ fun StoryComposerScreen(
     remember { caption?.let { viewModel.onChangeCaption(caption) } }
 
     Scaffold(
-        scaffoldState = scaffoldState, topBar = {
+        scaffoldState = scaffoldState,
+        topBar = {
             TopAppBar(
                 backgroundColor = MaterialTheme.colors.background,
                 elevation = 0.dp,
@@ -74,7 +75,8 @@ fun StoryComposerScreen(
                     Spacer(modifier = Modifier.weight(1f))
                 }
             }
-        }, modifier = Modifier.fillMaxSize()
+        },
+        modifier = Modifier.fillMaxSize(),
     ) { scaffoldPadding ->
         Surface(
             modifier = Modifier

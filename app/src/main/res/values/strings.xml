@@ -6,7 +6,7 @@
     <string name="login">Login</string>
     <string name="or">Or</string>
     <string name="email">Email</string>
-    <string name="logout">Logout</string>
+    <string name="log_out">Log Out</string>
     <string name="hide_password">Hide password</string>
     <string name="show_password">Show password</string>
     <string name="forgot_password_q">Forgot password?</string>
@@ -197,4 +197,11 @@
     <string name="campaign_will_end_at">Campaign will end at</string>
     <string name="completion_is_being_verified">Completion is being verified</string>
     <string name="settings">Settings</string>
+    <string name="account_settings">Account Settings</string>
+    <string name="about_ecosense_application">About EcoSense Application</string>
+    <string name="version">Version</string>
+    <string name="change_password">Change Password</string>
+    <string name="find_us">Find Us:</string>
+    <string name="url_ecosense_instagram">https://www.instagram.com/ecosense.id/</string>
+    <string name="url_ecosense_youtube">https://www.youtube.com/channel/UCs-0Jjdv7gEA-bDgqLneSsA/</string>
 </resources>

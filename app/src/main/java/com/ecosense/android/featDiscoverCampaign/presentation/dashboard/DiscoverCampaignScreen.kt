@@ -36,7 +36,7 @@ import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 @Destination
-//@RootNavGraph(start = true)
+@RootNavGraph(start = true)
 fun DiscoverCampaignScreen(
     navigator: DestinationsNavigator, viewModel: DiscoverCampaignViewModel = hiltViewModel()
 ) {

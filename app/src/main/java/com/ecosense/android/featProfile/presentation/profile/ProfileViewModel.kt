@@ -22,7 +22,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
-    private val authRepository: AuthRepository, private val profileRepository: ProfileRepository
+    private val authRepository: AuthRepository,
+    private val profileRepository: ProfileRepository,
 ) : ViewModel() {
 
     private val _state = mutableStateOf(ProfileScreenState.defaultValue)
@@ -74,14 +75,6 @@ class ProfileViewModel @Inject constructor(
                     }
                 }
             }.launchIn(this)
-        }
-    }
-
-    private var onLogoutClickJob: Job? = null
-    fun onLogoutClick() {
-        onLogoutClickJob?.cancel()
-        onLogoutClickJob = viewModelScope.launch {
-            authRepository.logout()
         }
     }
 
