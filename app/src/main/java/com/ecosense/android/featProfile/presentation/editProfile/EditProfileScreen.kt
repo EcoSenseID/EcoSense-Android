@@ -6,34 +6,34 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.Save
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import coil.size.Scale
 import com.ecosense.android.R
+import com.ecosense.android.core.presentation.component.GradientButton
 import com.ecosense.android.core.presentation.theme.spacing
 import com.ecosense.android.core.presentation.util.UIEvent
 import com.ecosense.android.core.presentation.util.asString
@@ -41,18 +41,21 @@ import com.ecosense.android.featAuth.presentation.component.AuthTextField
 import com.ecosense.android.featAuth.presentation.component.EmailTextField
 import com.ecosense.android.featProfile.presentation.component.EditProfileTopBar
 import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.annotation.RootNavGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlinx.coroutines.flow.collectLatest
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 @Destination
 fun EditProfileScreen(
     navigator: DestinationsNavigator,
-    viewModel: EditProfileViewModel = hiltViewModel()
+    viewModel: EditProfileViewModel = hiltViewModel(),
 ) {
     val scaffoldState = rememberScaffoldState()
+    val successSheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
 
-    val imagePickerLauncher = rememberLauncherForActivityResult(
+    val imagePicker = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()
     ) { uri: Uri? -> viewModel.onImagePicked(uri) }
 
@@ -86,127 +89,115 @@ fun EditProfileScreen(
             )
         },
         scaffoldState = scaffoldState,
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier.fillMaxSize(),
     ) { scaffoldPadding ->
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
+        LazyColumn(
             modifier = Modifier
-                .fillMaxWidth()
+                .fillMaxSize()
                 .padding(scaffoldPadding)
-                .padding(MaterialTheme.spacing.medium)
-                .shadow(
-                    elevation = 2.dp,
-                    shape = RoundedCornerShape(8.dp),
-                    clip = true,
-                )
-                .background(color = MaterialTheme.colors.surface)
-                .padding(MaterialTheme.spacing.medium)
-                .fillMaxWidth()
+                .background(MaterialTheme.colors.surface),
         ) {
-            Row(
-                horizontalArrangement = Arrangement.SpaceEvenly,
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                AsyncImage(
-                    model = ImageRequest.Builder(LocalContext.current)
-                        .data(state.photoUrl)
-                        .placeholder(R.drawable.ic_ecosense_logo)
-                        .error(R.drawable.ic_ecosense_logo)
-                        .crossfade(true)
-                        .scale(Scale.FILL)
-                        .build(),
-                    contentDescription = stringResource(R.string.cd_profile_picture),
-                    contentScale = ContentScale.Crop,
+            item {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier
-                        .size(90.dp)
-                        .clip(CircleShape)
-                )
+                        .fillMaxWidth()
+                        .padding(MaterialTheme.spacing.medium),
+                ) {
+                    Spacer(modifier = Modifier.height(MaterialTheme.spacing.extraLarge))
 
-                Spacer(modifier = Modifier.width(MaterialTheme.spacing.medium))
+                    Box(contentAlignment = Alignment.BottomEnd) {
+                        AsyncImage(
+                            model = ImageRequest.Builder(LocalContext.current).data(state.photoUrl)
+                                .placeholder(R.drawable.ic_ecosense_logo)
+                                .error(R.drawable.ic_ecosense_logo).crossfade(true)
+                                .scale(Scale.FILL).build(),
+                            contentDescription = stringResource(R.string.cd_profile_picture),
+                            contentScale = ContentScale.Crop,
+                            modifier = Modifier
+                                .size(90.dp)
+                                .clip(CircleShape)
+                                .clickable {
+                                    imagePicker.launch(
+                                        context.getString(R.string.content_type_image)
+                                    )
+                                },
+                        )
 
-                Row(
-                    horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier
-                        .clip(RoundedCornerShape(8.dp))
-                        .clickable {
-                            imagePickerLauncher.launch(
-                                context.getString(R.string.content_type_image)
+                        Box(
+                            modifier = Modifier
+                                .clip(CircleShape)
+                                .clickable {
+                                    imagePicker.launch(
+                                        context.getString(R.string.content_type_image)
+                                    )
+                                }
+                                .background(MaterialTheme.colors.primary)
+                                .padding(MaterialTheme.spacing.small)
+                                .size(16.dp),
+                        ) {
+                            AsyncImage(
+                                model = R.drawable.ic_pencil,
+                                contentDescription = stringResource(R.string.cd_change_profile_picture),
+                                colorFilter = ColorFilter.tint(MaterialTheme.colors.onPrimary),
+                                modifier = Modifier.fillMaxSize(),
                             )
                         }
-                        .padding(MaterialTheme.spacing.small)
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Edit,
-                        contentDescription = null,
-                        tint = MaterialTheme.colors.primary,
+                    }
+
+                    Spacer(modifier = Modifier.height(MaterialTheme.spacing.large))
+
+                    AuthTextField(
+                        value = state.displayName ?: "",
+                        onValueChange = { viewModel.onDisplayNameChange(it) },
+                        label = { Text(text = stringResource(R.string.name)) },
+                        placeholder = { Text(text = stringResource(R.string.name)) },
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
                     )
-                    Spacer(modifier = Modifier.width(MaterialTheme.spacing.small))
-                    Text(
-                        text = stringResource(R.string.change_profile_picture),
-                        style = MaterialTheme.typography.subtitle2.copy(
-                            textDecoration = TextDecoration.Underline,
-                        ),
-                        color = MaterialTheme.colors.primaryVariant,
-                        fontWeight = FontWeight.SemiBold,
-                    )
-                }
-            }
 
-            Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
+                    Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
 
-            AuthTextField(
-                value = state.displayName ?: "",
-                onValueChange = { viewModel.onDisplayNameChange(it) },
-                label = { Text(text = stringResource(R.string.name)) },
-                placeholder = { Text(text = stringResource(R.string.name)) },
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
-            )
-
-            Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
-
-            EmailTextField(
-                value = state.email ?: "",
-                enabled = false,
-                trailingIcon = {
-                    Icon(
-                        imageVector =
-                        if (state.isEmailVerified == true) Icons.Default.Check
-                        else Icons.Default.Warning,
-                        contentDescription = stringResource(
-                            if (state.isEmailVerified == true) R.string.email_is_verified
-                            else R.string.email_is_unverified
+                    EmailTextField(value = state.email ?: "", enabled = false, trailingIcon = {
+                        Icon(
+                            imageVector = if (state.isEmailVerified == true) Icons.Default.Check
+                            else Icons.Default.Warning, contentDescription = stringResource(
+                                if (state.isEmailVerified == true) R.string.email_is_verified
+                                else R.string.email_is_unverified
+                            )
                         )
-                    )
+                    })
+
+                    Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
+
+                    if (state.isEmailVerified == false) {
+                        Row(
+                            horizontalArrangement = Arrangement.Center,
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            Text(text = stringResource(R.string.email_is_not_verified).plus(" "))
+                            Text(text = stringResource(
+                                if (state.isEmailVerificationLoading) R.string.sending
+                                else R.string.send_email_verification
+                            ),
+                                color = MaterialTheme.colors.primaryVariant,
+                                fontWeight = FontWeight.SemiBold,
+                                modifier = Modifier.clickable { viewModel.onSendEmailVerificationClick() })
+                        }
+                    }
+
+                    Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
+
+                    GradientButton(
+                        onClick = { viewModel.onSaveClick() },
+                        modifier = Modifier.fillMaxWidth(),
+                    ) {
+                        Text(
+                            text = stringResource(id = R.string.save),
+                            color = MaterialTheme.colors.onPrimary,
+                            fontWeight = FontWeight.SemiBold,
+                        )
+                    }
                 }
-            )
-
-            Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
-
-            if (state.isEmailVerified == false) {
-                Row(
-                    horizontalArrangement = Arrangement.Center,
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Text(text = stringResource(R.string.email_is_not_verified).plus(" "))
-                    Text(
-                        text = stringResource(
-                            if (state.isEmailVerificationLoading) R.string.sending
-                            else R.string.send_email_verification
-                        ),
-                        color = MaterialTheme.colors.primaryVariant,
-                        fontWeight = FontWeight.SemiBold,
-                        modifier = Modifier.clickable { viewModel.onSendEmailVerificationClick() }
-                    )
-                }
-            }
-
-            Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
-
-            Button(onClick = { viewModel.onSaveClick() }) {
-                Icon(imageVector = Icons.Default.Save, contentDescription = null)
-                Spacer(modifier = Modifier.width(MaterialTheme.spacing.small))
-                Text(text = stringResource(id = R.string.save))
             }
         }
     }
