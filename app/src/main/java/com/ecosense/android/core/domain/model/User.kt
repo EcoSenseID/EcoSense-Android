@@ -6,6 +6,7 @@ data class User(
     val email: String?,
     val photoUrl: String?,
     val isEmailVerified: Boolean?,
+    val authProvider: AuthProvider?,
 ) {
     companion object {
         val defaultValue = User(
@@ -14,6 +15,7 @@ data class User(
             email = null,
             photoUrl = null,
             isEmailVerified = null,
+            authProvider = null,
         )
     }
 }

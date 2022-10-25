@@ -213,5 +213,10 @@
     <string name="confirm_change">Confirm change</string>
     <string name="new_password">New Password</string>
     <string name="retype_new_password">Retype New Password</string>
-    <string name="changing_password">Changing Password...</string>
+    <string name="changing_password">Changing Password…</string>
+    <string name="change_email">Change Email</string>
+    <string name="current_email">Current Email</string>
+    <string name="new_email">New Email</string>
+    <string name="your_current_email_is">Your current email is</string>
+    <string name="changing_email">Changing email…</string>
 </resources>

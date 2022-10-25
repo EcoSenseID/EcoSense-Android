@@ -154,7 +154,9 @@ class AuthRepositoryImpl(
     }
 
     override fun updatePassword(
-        oldPassword: String, newPassword: String, repeatedNewPassword: String
+        oldPassword: String,
+        newPassword: String,
+        repeatedNewPassword: String,
     ): Flow<SimpleResource> = flow {
         emit(Resource.Loading())
 
@@ -203,7 +205,31 @@ class AuthRepositoryImpl(
         password: String,
         newEmail: String,
     ): Flow<SimpleResource> = flow {
-        // TODO: not yet implemented
+        emit(Resource.Loading())
+
+        when {
+            newEmail.isBlank() -> {
+                emit(Resource.Error(UIText.StringResource(R.string.em_email_blank)))
+                return@flow
+            }
+
+            !PatternsCompat.EMAIL_ADDRESS.matcher(newEmail).matches() -> {
+                emit(Resource.Error(UIText.StringResource(R.string.em_invalid_email)))
+                return@flow
+            }
+
+            password.isBlank() -> {
+                emit(Resource.Error(UIText.StringResource(R.string.em_password_blank)))
+                return@flow
+            }
+        }
+
+        try {
+            authApi.updateEmail(password = password, newEmail = newEmail).also { emit(it) }
+        } catch (e: Exception) {
+            logcat { e.asLog() }
+            emit(Resource.Error(UIText.StringResource(R.string.em_unknown)))
+        }
     }
 
     override fun logout() = authApi.logout()

@@ -3,6 +3,7 @@ package com.ecosense.android.core.data.api
 import android.net.Uri
 import com.ecosense.android.R
 import com.ecosense.android.core.domain.api.AuthApi
+import com.ecosense.android.core.domain.model.AuthProvider
 import com.ecosense.android.core.domain.model.User
 import com.ecosense.android.core.util.Resource
 import com.ecosense.android.core.util.SimpleResource
@@ -45,7 +46,12 @@ class FirebaseAuthApi : AuthApi {
                     displayName = firebaseUser?.displayName,
                     email = firebaseUser?.email,
                     photoUrl = firebaseUser?.photoUrl?.let { it.toString() },
-                    isEmailVerified = firebaseUser?.isEmailVerified
+                    isEmailVerified = firebaseUser?.isEmailVerified,
+                    authProvider = when (firebaseUser?.providerData?.first { it.providerId != FirebaseAuthProvider.PROVIDER_ID }?.providerId) {
+                        GoogleAuthProvider.PROVIDER_ID -> AuthProvider.GOOGLE
+                        EmailAuthProvider.PROVIDER_ID -> AuthProvider.EMAIL
+                        else -> AuthProvider.OTHER
+                    },
                 )
             )
         }
@@ -188,8 +194,25 @@ class FirebaseAuthApi : AuthApi {
         password: String,
         newEmail: String,
     ): SimpleResource {
-        return Resource.Error(UIText.StringResource(R.string.em_unknown))
-        // TODO: not yet implemented
+        val user = firebaseAuth.currentUser
+            ?: return Resource.Error(UIText.StringResource(R.string.em_unknown))
+
+        val email = user.email ?: return Resource.Error(UIText.StringResource(R.string.em_unknown))
+
+        val reauthResult = reauthenticate(email, password)
+
+        if (reauthResult is Resource.Error) return reauthResult
+
+        return suspendCoroutine { cont ->
+            user.updateEmail(newEmail).addOnCompleteListener { task ->
+                when {
+                    task.isSuccessful -> cont.resume(Resource.Success(Unit))
+                    else -> when (task.exception) {
+                        else -> R.string.em_unknown
+                    }.let { cont.resume(Resource.Error(UIText.StringResource(it))) }
+                }
+            }
+        }
     }
 
     override suspend fun sendEmailVerification(): SimpleResource = suspendCoroutine { cont ->

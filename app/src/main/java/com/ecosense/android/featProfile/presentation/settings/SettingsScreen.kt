@@ -10,6 +10,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.ChevronRight
 import androidx.compose.runtime.Composable
@@ -32,15 +33,16 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.ecosense.android.BuildConfig
 import com.ecosense.android.R
+import com.ecosense.android.core.domain.model.AuthProvider
 import com.ecosense.android.core.presentation.component.RoundedEndsButton
 import com.ecosense.android.core.presentation.modifier.brushForeground
 import com.ecosense.android.core.presentation.theme.DarkRed
 import com.ecosense.android.core.presentation.theme.Gradient
 import com.ecosense.android.core.presentation.theme.spacing
+import com.ecosense.android.destinations.ChangeEmailScreenDestination
 import com.ecosense.android.destinations.ChangePasswordScreenDestination
 import com.ecosense.android.destinations.EditProfileScreenDestination
 import com.ramcosta.composedestinations.annotation.Destination
-import com.ramcosta.composedestinations.annotation.RootNavGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import logcat.logcat
 
@@ -171,35 +173,68 @@ fun SettingsScreen(
                         )
                     }
 
-                    Spacer(modifier = Modifier.height(MaterialTheme.spacing.extraSmall))
+                    if (viewModel.userState.authProvider == AuthProvider.EMAIL) {
+                        Spacer(modifier = Modifier.height(MaterialTheme.spacing.extraSmall))
 
-                    OutlinedButton(
-                        onClick = { navigator.navigate(ChangePasswordScreenDestination) },
-                        shape = RoundedCornerShape(100),
-                        colors = ButtonDefaults.outlinedButtonColors(
-                            contentColor = MaterialTheme.colors.onSurface,
-                        ),
-                    ) {
-                        AsyncImage(
-                            model = R.drawable.ic_padlock,
-                            contentDescription = null,
-                            modifier = Modifier.size(16.dp),
-                        )
+                        OutlinedButton(
+                            onClick = { navigator.navigate(ChangeEmailScreenDestination) },
+                            shape = RoundedCornerShape(100),
+                            colors = ButtonDefaults.outlinedButtonColors(
+                                contentColor = MaterialTheme.colors.onSurface,
+                            ),
+                        ) {
+                            AsyncImage(
+                                model = R.drawable.ic_email,
+                                contentDescription = null,
+                                modifier = Modifier.size(16.dp),
+                            )
 
-                        Spacer(modifier = Modifier.width(MaterialTheme.spacing.small))
+                            Spacer(modifier = Modifier.width(MaterialTheme.spacing.small))
 
-                        Text(
-                            text = stringResource(R.string.change_password),
-                            style = MaterialTheme.typography.subtitle1,
-                            fontWeight = FontWeight.SemiBold,
-                        )
+                            Text(
+                                text = stringResource(R.string.change_email),
+                                style = MaterialTheme.typography.subtitle1,
+                                fontWeight = FontWeight.SemiBold,
+                            )
 
-                        Spacer(modifier = Modifier.weight(1f))
+                            Spacer(modifier = Modifier.weight(1f))
 
-                        Icon(
-                            imageVector = Icons.Rounded.ChevronRight,
-                            contentDescription = null,
-                        )
+                            Icon(
+                                imageVector = Icons.Rounded.ChevronRight,
+                                contentDescription = null,
+                            )
+                        }
+
+                        Spacer(modifier = Modifier.height(MaterialTheme.spacing.extraSmall))
+
+                        OutlinedButton(
+                            onClick = { navigator.navigate(ChangePasswordScreenDestination) },
+                            shape = RoundedCornerShape(100),
+                            colors = ButtonDefaults.outlinedButtonColors(
+                                contentColor = MaterialTheme.colors.onSurface,
+                            ),
+                        ) {
+                            AsyncImage(
+                                model = R.drawable.ic_padlock,
+                                contentDescription = null,
+                                modifier = Modifier.size(16.dp),
+                            )
+
+                            Spacer(modifier = Modifier.width(MaterialTheme.spacing.small))
+
+                            Text(
+                                text = stringResource(R.string.change_password),
+                                style = MaterialTheme.typography.subtitle1,
+                                fontWeight = FontWeight.SemiBold,
+                            )
+
+                            Spacer(modifier = Modifier.weight(1f))
+
+                            Icon(
+                                imageVector = Icons.Rounded.ChevronRight,
+                                contentDescription = null,
+                            )
+                        }
                     }
 
                     Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))

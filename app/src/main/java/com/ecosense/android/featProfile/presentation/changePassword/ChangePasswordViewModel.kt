@@ -118,7 +118,7 @@ class ChangePasswordViewModel @Inject constructor(
                         isLoading = false
                         val uiText = UIText.StringResource(R.string.sm_changes_saved)
                         _eventFlow.send(UIEvent.ShowSnackbar(uiText))
-                        delay(2000)
+                        delay(1000)
                         _eventFlow.send(UIEvent.Finish)
                     }
                 }

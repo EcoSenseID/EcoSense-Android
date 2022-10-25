@@ -1,4 +1,4 @@
-package com.ecosense.android.featProfile.presentation.changePassword
+package com.ecosense.android.featProfile.presentation.changeEmail
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -21,6 +21,7 @@ import com.ecosense.android.core.presentation.component.GradientButton
 import com.ecosense.android.core.presentation.theme.spacing
 import com.ecosense.android.core.presentation.util.UIEvent
 import com.ecosense.android.core.presentation.util.asString
+import com.ecosense.android.featAuth.presentation.component.EmailTextField
 import com.ecosense.android.featAuth.presentation.component.PasswordTextField
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -28,9 +29,9 @@ import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 @Destination
-fun ChangePasswordScreen(
+fun ChangeEmailScreen(
     navigator: DestinationsNavigator,
-    viewModel: ChangePasswordViewModel = hiltViewModel(),
+    viewModel: ChangeEmailViewModel = hiltViewModel(),
 ) {
     val scaffoldState = rememberScaffoldState()
     val context = LocalContext.current
@@ -71,7 +72,7 @@ fun ChangePasswordScreen(
                     }
 
                     Text(
-                        text = stringResource(R.string.change_password),
+                        text = stringResource(R.string.change_email),
                         color = MaterialTheme.colors.primary,
                         style = MaterialTheme.typography.h6,
                         fontWeight = FontWeight.Bold,
@@ -96,37 +97,37 @@ fun ChangePasswordScreen(
                 ) {
                     Spacer(modifier = Modifier.height(MaterialTheme.spacing.large))
 
-                    PasswordTextField(
-                        value = viewModel.currentPasswordValue,
-                        isVisible = viewModel.currentPasswordVisibility,
-                        onValueChange = { viewModel.onValueChangeCurrentPassword(it) },
-                        onToggleVisibility = { viewModel.onToggleVisibilityCurrentPassword() },
-                        label = { Text(text = stringResource(R.string.current_password)) },
-                        placeholder = { Text(text = stringResource(R.string.current_password)) },
+                    Row(
+                        horizontalArrangement = Arrangement.Center,
+                        modifier = Modifier.fillMaxWidth(),
+                    ) {
+                        Text(text = stringResource(R.string.your_current_email_is))
+                        Spacer(modifier = Modifier.width(MaterialTheme.spacing.extraSmall))
+                        Text(
+                            text = viewModel.currentEmailValue,
+                            fontWeight = FontWeight.Bold,
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
+
+                    EmailTextField(
+                        value = viewModel.newEmailValue,
+                        enabled = !viewModel.isLoading,
+                        onValueChange = { viewModel.onValueChangeNewEmail(it) },
+                        label = { Text(text = stringResource(R.string.new_email)) },
+                        placeholder = { Text(text = stringResource(R.string.new_email)) },
                         modifier = Modifier.fillMaxWidth(),
                     )
 
                     Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
 
                     PasswordTextField(
-                        value = viewModel.newPasswordValue,
-                        isVisible = viewModel.newPasswordVisibility,
-                        onValueChange = { viewModel.onValueChangeNewPassword(it) },
-                        onToggleVisibility = { viewModel.onToggleVisibilityNewPassword() },
-                        label = { Text(text = stringResource(R.string.new_password)) },
-                        placeholder = { Text(text = stringResource(R.string.new_password)) },
-                        modifier = Modifier.fillMaxWidth(),
-                    )
-
-                    Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
-
-                    PasswordTextField(
-                        value = viewModel.repeatedNewPasswordValue,
-                        isVisible = viewModel.repeatedNewPasswordVisibility,
-                        onValueChange = { viewModel.onValueChangeRepeatedNewPassword(it) },
-                        onToggleVisibility = { viewModel.onToggleVisibilityRepeatedNewPassword() },
-                        label = { Text(text = stringResource(R.string.retype_new_password)) },
-                        placeholder = { Text(text = stringResource(R.string.retype_new_password)) },
+                        value = viewModel.passwordValue,
+                        enabled = !viewModel.isLoading,
+                        isVisible = viewModel.passwordVisibility,
+                        onValueChange = { viewModel.onValueChangePassword(it) },
+                        onToggleVisibility = { viewModel.onToggleVisibilityPassword() },
                         modifier = Modifier.fillMaxWidth(),
                     )
 
@@ -138,7 +139,7 @@ fun ChangePasswordScreen(
                         modifier = Modifier.fillMaxWidth(),
                     ) {
                         Text(
-                            text = if (viewModel.isLoading) stringResource(R.string.changing_password)
+                            text = if (viewModel.isLoading) stringResource(R.string.changing_email)
                             else stringResource(id = R.string.confirm_change),
                             color = MaterialTheme.colors.onPrimary,
                             fontWeight = FontWeight.SemiBold,
