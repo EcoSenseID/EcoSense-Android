@@ -112,6 +112,7 @@ fun SettingsScreen(
                             model = user.photoUrl,
                             contentDescription = null,
                             placeholder = painterResource(id = R.drawable.ic_ecosense_logo),
+                            fallback = painterResource(id = R.drawable.ic_ecosense_logo),
                             contentScale = ContentScale.Crop,
                             modifier = Modifier
                                 .size(64.dp)

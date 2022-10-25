@@ -7,10 +7,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
@@ -24,6 +22,7 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -41,7 +40,6 @@ import com.ecosense.android.featAuth.presentation.component.AuthTextField
 import com.ecosense.android.featAuth.presentation.component.EmailTextField
 import com.ecosense.android.featProfile.presentation.component.EditProfileTopBar
 import com.ramcosta.composedestinations.annotation.Destination
-import com.ramcosta.composedestinations.annotation.RootNavGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlinx.coroutines.flow.collectLatest
 
@@ -114,14 +112,11 @@ fun EditProfileScreen(
                                 .scale(Scale.FILL).build(),
                             contentDescription = stringResource(R.string.cd_profile_picture),
                             contentScale = ContentScale.Crop,
+                            fallback = painterResource(id = R.drawable.ic_ecosense_logo),
                             modifier = Modifier
                                 .size(90.dp)
                                 .clip(CircleShape)
-                                .clickable {
-                                    imagePicker.launch(
-                                        context.getString(R.string.content_type_image)
-                                    )
-                                },
+                                .clickable { imagePicker.launch(context.getString(R.string.content_type_image)) },
                         )
 
                         Box(
@@ -179,7 +174,7 @@ fun EditProfileScreen(
                                 if (state.isEmailVerificationLoading) R.string.sending
                                 else R.string.send_email_verification
                             ),
-                                color = MaterialTheme.colors.primaryVariant,
+                                color = MaterialTheme.colors.primary,
                                 fontWeight = FontWeight.SemiBold,
                                 modifier = Modifier.clickable { viewModel.onSendEmailVerificationClick() })
                         }

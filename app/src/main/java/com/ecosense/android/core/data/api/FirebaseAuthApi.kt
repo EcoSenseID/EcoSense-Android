@@ -44,7 +44,7 @@ class FirebaseAuthApi : AuthApi {
                     uid = firebaseUser?.uid,
                     displayName = firebaseUser?.displayName,
                     email = firebaseUser?.email,
-                    photoUrl = firebaseUser?.photoUrl?.toString(),
+                    photoUrl = firebaseUser?.photoUrl?.let { it.toString() },
                     isEmailVerified = firebaseUser?.isEmailVerified
                 )
             )

@@ -42,6 +42,7 @@ fun RecentStoryItem(
             model = story().avatarUrl,
             contentDescription = null,
             placeholder = painterResource(id = R.drawable.ic_ecosense_logo),
+            fallback = painterResource(id = R.drawable.ic_ecosense_logo),
             contentScale = ContentScale.Crop,
             modifier = Modifier
                 .size(48.dp)
