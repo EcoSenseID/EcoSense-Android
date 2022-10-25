@@ -205,4 +205,13 @@
     <string name="url_ecosense_instagram">https://www.instagram.com/ecosense.id/</string>
     <string name="url_ecosense_youtube">https://www.youtube.com/channel/UCs-0Jjdv7gEA-bDgqLneSsA/</string>
     <string name="cd_change_profile_picture">Change profile picture</string>
+    <string name="em_recent_login_required">Unable to reauthenticate</string>
+    <string name="em_new_password_blank">New password can not be blank!</string>
+    <string name="em_new_password_same">New password can not be the same with old password!</string>
+    <string name="em_new_password_too_short">New password must be at least 6 characters long</string>
+    <string name="current_password">Current Password</string>
+    <string name="confirm_change">Confirm change</string>
+    <string name="new_password">New Password</string>
+    <string name="retype_new_password">Retype New Password</string>
+    <string name="changing_password">Changing Password...</string>
 </resources>

@@ -29,5 +29,16 @@ interface AuthRepository {
         email: String,
     ): Flow<SimpleResource>
 
+    fun updatePassword(
+        oldPassword: String,
+        newPassword: String,
+        repeatedNewPassword: String,
+    ): Flow<SimpleResource>
+
+    fun updateEmail(
+        password: String,
+        newEmail: String,
+    ): Flow<SimpleResource>
+
     fun logout()
 }

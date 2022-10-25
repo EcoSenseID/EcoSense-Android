@@ -5,4 +5,5 @@ import com.ecosense.android.core.util.UIText
 sealed class UIEvent {
     data class ShowSnackbar(val uiText: UIText) : UIEvent()
     object HideKeyboard : UIEvent()
+    object Finish: UIEvent()
 }
