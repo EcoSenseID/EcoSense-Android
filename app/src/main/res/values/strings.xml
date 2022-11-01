@@ -219,4 +219,8 @@
     <string name="new_email">New Email</string>
     <string name="your_current_email_is">Your current email is</string>
     <string name="changing_email">Changing email…</string>
+    <string name="confirm_logout">Are you sure you want to log out?</string>
+    <string name="yes">Yes</string>
+    <string name="application_language">Application Language</string>
+    <string name="language">Language</string>
 </resources>
