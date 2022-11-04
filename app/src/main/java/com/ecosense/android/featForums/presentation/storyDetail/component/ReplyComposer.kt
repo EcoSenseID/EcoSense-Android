@@ -1,16 +1,17 @@
 package com.ecosense.android.featForums.presentation.storyDetail.component
 
-import androidx.compose.foundation.background
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Photo
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusState
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -26,32 +27,34 @@ import com.ecosense.android.featForums.presentation.storyDetail.model.ReplyCompo
 fun ReplyComposer(
     state: () -> ReplyComposerState,
     onChangeCaption: (value: String) -> Unit,
+    onFocusChangeCaption: (state: FocusState) -> Unit,
     onClickAttach: () -> Unit,
     onClickSend: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Row(modifier = modifier) {
-        AsyncImage(
-            model = state().avatarUrl,
-            contentDescription = null,
-            placeholder = painterResource(id = R.drawable.ic_ecosense_logo),
-            contentScale = ContentScale.Crop,
-            modifier = Modifier
-                .size(48.dp)
-                .clip(CircleShape),
-        )
-
-        Spacer(modifier = Modifier.width(MaterialTheme.spacing.medium))
+    Row(
+        modifier = modifier.border(
+            width = 1.dp,
+            color = MaterialTheme.colors.onSurface.copy(alpha = 0.1f),
+            shape = RoundedCornerShape(16.dp),
+        ),
+    ) {
+        AnimatedVisibility(visible = !state().isFocused) {
+            AsyncImage(
+                model = state().avatarUrl,
+                contentDescription = null,
+                placeholder = painterResource(id = R.drawable.ic_ecosense_logo),
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .padding(MaterialTheme.spacing.medium)
+                    .size(48.dp)
+                    .clip(CircleShape),
+            )
+        }
 
         Column(
-            modifier = Modifier
-                .fillMaxHeight()
-                .weight(1f)
-                .border(
-                    width = 1.dp,
-                    color = MaterialTheme.colors.onSurface.copy(alpha = 0.1f),
-                    shape = RoundedCornerShape(16.dp),
-                ),
+            verticalArrangement = Arrangement.Center,
+            modifier = Modifier.weight(1f),
         ) {
             TextField(
                 value = state().caption ?: "",
@@ -62,27 +65,31 @@ fun ReplyComposer(
                     focusedIndicatorColor = Color.Transparent,
                     unfocusedIndicatorColor = Color.Transparent,
                 ),
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .onFocusChanged { onFocusChangeCaption(it) },
             )
 
-            Row(
-                horizontalArrangement = Arrangement.SpaceBetween,
-                modifier = Modifier.fillMaxWidth(),
-            ) {
-                IconButton(onClick = { onClickAttach() }) {
-                    Icon(
-                        imageVector = Icons.Rounded.Photo,
-                        contentDescription = stringResource(R.string.cd_attach_photo),
-                        tint = MaterialTheme.colors.secondary,
-                    )
-                }
+            AnimatedVisibility(visible = state().isFocused) {
+                Row(
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    modifier = Modifier.fillMaxWidth(),
+                ) {
+                    IconButton(onClick = { onClickAttach() }) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_photo),
+                            contentDescription = stringResource(R.string.cd_attach_photo),
+                            tint = MaterialTheme.colors.secondary,
+                        )
+                    }
 
-                TextButton(onClick = { onClickSend() }) {
-                    Text(
-                        text = stringResource(R.string.post),
-                        color = MaterialTheme.colors.secondary,
-                        fontWeight = FontWeight.SemiBold,
-                    )
+                    TextButton(onClick = { onClickSend() }) {
+                        Text(
+                            text = stringResource(R.string.post),
+                            color = MaterialTheme.colors.secondary,
+                            fontWeight = FontWeight.SemiBold,
+                        )
+                    }
                 }
             }
         }

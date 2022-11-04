@@ -31,7 +31,7 @@ class StorySupportersViewModel @Inject constructor(
         getNextKey = { state.page + 1 },
         onRequest = { nextPage: Int ->
             storyId?.let { id ->
-                forumsRepository.getSupporters(
+                forumsRepository.getStorySupporters(
                     storyId = id,
                     page = nextPage,
                     size = 20,

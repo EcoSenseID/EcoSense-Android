@@ -14,7 +14,7 @@ import logcat.asLog
 import logcat.logcat
 
 class AuthRepositoryImpl(
-    private val authApi: AuthApi
+    private val authApi: AuthApi,
 ) : AuthRepository {
 
     override val isLoggedIn: Flow<Boolean> = authApi.isLoggedIn
@@ -43,9 +43,7 @@ class AuthRepositoryImpl(
         }
 
         try {
-            authApi
-                .loginWithEmail(email = email, password = password)
-                .also { emit(it) }
+            authApi.loginWithEmail(email = email, password = password).also { emit(it) }
         } catch (e: Exception) {
             emit(Resource.Error(UIText.StringResource(R.string.em_unknown)))
         }
@@ -64,9 +62,7 @@ class AuthRepositoryImpl(
         }
 
         try {
-            authApi
-                .loginWithGoogle(idToken = idToken)
-                .also { emit(it) }
+            authApi.loginWithGoogle(idToken = idToken).also { emit(it) }
         } catch (e: Exception) {
             emit(Resource.Error(UIText.StringResource(R.string.em_unknown)))
         }
@@ -118,16 +114,14 @@ class AuthRepositoryImpl(
         }
 
         try {
-            authApi
-                .registerWithEmail(email = email, password = password)
-                .also { result ->
-                    when (result) {
-                        is Resource.Success -> {
-                            emit(authApi.updateProfile(newDisplayName = name, newPhotoUri = null))
-                        }
-                        else -> emit(result)
+            authApi.registerWithEmail(email = email, password = password).also { result ->
+                when (result) {
+                    is Resource.Success -> {
+                        emit(authApi.updateProfile(newDisplayName = name, newPhotoUri = null))
                     }
+                    else -> emit(result)
                 }
+            }
 
         } catch (e: Exception) {
             logcat { e.asLog() }
@@ -153,10 +147,87 @@ class AuthRepositoryImpl(
         }
 
         try {
-            authApi
-                .sendPasswordResetEmail(email = email)
+            authApi.sendPasswordResetEmail(email = email).also { emit(it) }
+        } catch (e: Exception) {
+            emit(Resource.Error(UIText.StringResource(R.string.em_unknown)))
+        }
+    }
+
+    override fun updatePassword(
+        oldPassword: String,
+        newPassword: String,
+        repeatedNewPassword: String,
+    ): Flow<SimpleResource> = flow {
+        emit(Resource.Loading())
+
+        when {
+            oldPassword.isBlank() -> {
+                emit(Resource.Error(UIText.StringResource(R.string.em_password_blank)))
+                return@flow
+            }
+
+            newPassword.isBlank() -> {
+                emit(Resource.Error(UIText.StringResource(R.string.em_new_password_blank)))
+                return@flow
+            }
+
+            oldPassword == newPassword -> {
+                emit(Resource.Error(UIText.StringResource(R.string.em_new_password_same)))
+                return@flow
+            }
+
+            newPassword.length < MINIMUM_PASSWORD_LENGTH -> {
+                emit(Resource.Error(UIText.StringResource(R.string.em_new_password_too_short)))
+                return@flow
+            }
+
+            repeatedNewPassword.isBlank() -> {
+                emit(Resource.Error(UIText.StringResource(R.string.em_repeat_password_blank)))
+                return@flow
+            }
+
+            newPassword != repeatedNewPassword -> {
+                emit(Resource.Error(UIText.StringResource(R.string.em_password_not_match)))
+                return@flow
+            }
+        }
+
+        try {
+            authApi.updatePassword(oldPassword = oldPassword, newPassword = newPassword)
                 .also { emit(it) }
         } catch (e: Exception) {
+            logcat { e.asLog() }
+            emit(Resource.Error(UIText.StringResource(R.string.em_unknown)))
+        }
+    }
+
+    override fun updateEmail(
+        password: String,
+        newEmail: String,
+    ): Flow<SimpleResource> = flow {
+        emit(Resource.Loading())
+
+        when {
+            newEmail.isBlank() -> {
+                emit(Resource.Error(UIText.StringResource(R.string.em_email_blank)))
+                return@flow
+            }
+
+            !PatternsCompat.EMAIL_ADDRESS.matcher(newEmail).matches() -> {
+                emit(Resource.Error(UIText.StringResource(R.string.em_invalid_email)))
+                return@flow
+            }
+
+            password.isBlank() -> {
+                emit(Resource.Error(UIText.StringResource(R.string.em_password_blank)))
+                return@flow
+            }
+        }
+
+        try {
+            authApi.updateEmail(password = password, newEmail = newEmail).also { emit(it) }
+        } catch (e: Exception) {
+            logcat { e.asLog() }
             emit(Resource.Error(UIText.StringResource(R.string.em_unknown)))
         }
     }

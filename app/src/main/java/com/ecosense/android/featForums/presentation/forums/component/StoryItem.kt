@@ -19,7 +19,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.ecosense.android.R
-import com.ecosense.android.core.presentation.model.CampaignPresentation
+import com.ecosense.android.core.presentation.model.SharedCampaignPresentation
 import com.ecosense.android.core.presentation.theme.spacing
 import com.ecosense.android.featForums.presentation.model.StoryPresentation
 
@@ -30,7 +30,7 @@ fun StoryItem(
     onClickReply: () -> Unit,
     onClickShare: () -> Unit,
     onClickSupporters: () -> Unit,
-    onClickSharedCampaign: (campaign: CampaignPresentation) -> Unit,
+    onClickSharedCampaign: (campaign: SharedCampaignPresentation) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -43,6 +43,7 @@ fun StoryItem(
             model = story().avatarUrl,
             contentDescription = null,
             placeholder = painterResource(id = R.drawable.ic_ecosense_logo),
+            fallback = painterResource(id = R.drawable.ic_ecosense_logo),
             contentScale = ContentScale.Crop,
             modifier = Modifier
                 .size(48.dp)
@@ -64,13 +65,6 @@ fun StoryItem(
 
                 Spacer(modifier = Modifier.width(MaterialTheme.spacing.small))
 
-                Text(
-                    text = story().username,
-                    color = MaterialTheme.colors.onSurface.copy(0.6f),
-                )
-
-                Spacer(modifier = Modifier.width(MaterialTheme.spacing.small))
-
                 Box(
                     modifier = Modifier
                         .clip(CircleShape)
@@ -86,26 +80,6 @@ fun StoryItem(
                 )
             }
 
-            story().sharedCampaign?.let {
-                Text(
-                    text = stringResource(
-                        R.string.username_just_finished_a_campaign,
-                        story().username,
-                    ),
-                    color = MaterialTheme.colors.onPrimary,
-                    style = MaterialTheme.typography.caption,
-                    fontWeight = FontWeight.SemiBold,
-                    modifier = Modifier
-                        .padding(vertical = MaterialTheme.spacing.small)
-                        .clip(RoundedCornerShape(100))
-                        .background(MaterialTheme.colors.primary)
-                        .padding(
-                            horizontal = MaterialTheme.spacing.small,
-                            vertical = MaterialTheme.spacing.extraSmall,
-                        ),
-                )
-            }
-
             Text(
                 text = story().caption,
                 modifier = Modifier.fillMaxWidth(),
@@ -113,9 +87,9 @@ fun StoryItem(
 
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
 
-            story().attachedPhotoUrl?.let {
+            if (!story().attachedPhotoUrl.isNullOrBlank()) {
                 AsyncImage(
-                    model = it,
+                    model = story().attachedPhotoUrl,
                     contentDescription = null,
                     modifier = Modifier
                         .fillMaxWidth()
@@ -157,10 +131,9 @@ fun StoryItem(
                     horizontalArrangement = Arrangement.Start,
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier
-                        .weight(1f)
                         .fillMaxHeight()
                         .clip(RoundedCornerShape(4.dp))
-                        .clickable { onClickSupport() }
+                        .clickable { if (!story().isLoadingSupport) onClickSupport() }
                         .padding(MaterialTheme.spacing.extraSmall),
                 ) {
                     Icon(
@@ -180,13 +153,12 @@ fun StoryItem(
                     )
                 }
 
-                Spacer(modifier = Modifier.width(MaterialTheme.spacing.medium))
+                Spacer(modifier = Modifier.weight(1f))
 
                 Row(
                     horizontalArrangement = Arrangement.Start,
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier
-                        .weight(1f)
                         .fillMaxHeight()
                         .clip(RoundedCornerShape(4.dp))
                         .clickable { onClickReply() }
@@ -207,13 +179,12 @@ fun StoryItem(
                     )
                 }
 
-                Spacer(modifier = Modifier.width(MaterialTheme.spacing.medium))
+                Spacer(modifier = Modifier.weight(1f))
 
                 Row(
                     horizontalArrangement = Arrangement.Start,
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier
-                        .weight(1f)
                         .fillMaxHeight()
                         .clip(RoundedCornerShape(4.dp))
                         .clickable { onClickShare() }
@@ -226,6 +197,8 @@ fun StoryItem(
                         modifier = Modifier.size(16.dp),
                     )
                 }
+
+                Spacer(modifier = Modifier.weight(1f))
             }
         }
     }

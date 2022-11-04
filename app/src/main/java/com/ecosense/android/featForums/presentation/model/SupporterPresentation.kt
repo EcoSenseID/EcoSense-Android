@@ -5,13 +5,11 @@ import com.ecosense.android.featForums.domain.model.Supporter
 data class SupporterPresentation(
     val id: Int,
     val avatarUrl: String,
-    val username: String,
     val name: String,
 )
 
 fun Supporter.toPresentation() = SupporterPresentation(
     id = this.id,
     avatarUrl = this.avatarUrl,
-    username = this.username,
     name = this.name,
 )

@@ -2,6 +2,7 @@ package com.ecosense.android.featForums.data.api
 
 import com.ecosense.android.featForums.data.model.*
 import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.http.*
 
 interface ForumsApi {
@@ -13,47 +14,65 @@ interface ForumsApi {
         @Query("size") size: Int,
     ): GetStoriesDto
 
-    @GET("comments")
+    @GET("replies")
     suspend fun getStoryReplies(
         @Header("Authorization") bearerToken: String,
         @Query("storyId") storyId: Int,
+        @Query("page") page: Int,
+        @Query("size") size: Int,
     ): GetRepliesDto
 
-    @GET("likes")
+    @GET("supporters")
     suspend fun getStorySupporters(
         @Header("Authorization") bearerToken: String,
         @Query("storyId") storyId: Int,
-    ): GetStoryLikesDto
+        @Query("page") page: Int,
+        @Query("size") size: Int,
+    ): GetStorySupportersDto
 
     @Multipart
     @POST("poststory")
     suspend fun postNewStory(
         @Header("Authorization") bearerToken: String,
-        @Part campaignId: Int? = null,
-        @Part caption: String,
-        @Part photo: MultipartBody.Part?,
+        @Part("caption") caption: RequestBody,
+        @Part("sharedCampaignId") sharedCampaignId: RequestBody? = null,
+        @Part attachedPhoto: MultipartBody.Part? = null,
     ): PostNewStoryDto
 
     @Multipart
-    @POST("postcomment")
+    @POST("postreply")
     suspend fun postNewReply(
         @Header("Authorization") bearerToken: String,
-        @Part storyId: Int,
-        @Part content: String,
-        @Part photo: MultipartBody.Part?,
-    ): PostNewCommentDto
+        @Part("storyId") storyId: RequestBody,
+        @Part("caption") caption: RequestBody,
+        @Part attachedPhoto: MultipartBody.Part? = null,
+    ): PostNewReplyDto
 
     @FormUrlEncoded
-    @POST("likestory")
+    @POST("supportstory")
     suspend fun postSupportStory(
         @Header("Authorization") bearerToken: String,
         @Field("storyId") storyId: Int,
-    ): PostLikeStoryDto
+    ): PostSupportStoryDto
 
     @FormUrlEncoded
-    @POST("likecomment")
+    @POST("unsupportstory")
+    suspend fun postUnsupportStory(
+        @Header("Authorization") bearerToken: String,
+        @Field("storyId") storyId: Int,
+    ): PostUnsupportStoryDto
+
+    @FormUrlEncoded
+    @POST("supportreply")
     suspend fun postSupportReply(
         @Header("Authorization") bearerToken: String,
-        @Field("commentId") commentId: Int,
-    ): PostLikeCommentDto
+        @Field("replyId") replyId: Int,
+    ): PostSupportReplyDto
+
+    @FormUrlEncoded
+    @POST("unsupportreply")
+    suspend fun postUnsupportReply(
+        @Header("Authorization") bearerToken: String,
+        @Field("replyId") replyId: Int,
+    ): PostUnsupportReplyDto
 }

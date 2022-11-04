@@ -29,10 +29,7 @@ fun ReplyItem(
     modifier: Modifier = Modifier,
 ) {
     Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .background(MaterialTheme.colors.surface)
-            .padding(MaterialTheme.spacing.medium),
+        modifier = modifier,
     ) {
         AsyncImage(
             model = reply().avatarUrl,
@@ -59,13 +56,6 @@ fun ReplyItem(
 
                 Spacer(modifier = Modifier.width(MaterialTheme.spacing.small))
 
-                Text(
-                    text = reply().username,
-                    color = MaterialTheme.colors.onSurface.copy(0.6f),
-                )
-
-                Spacer(modifier = Modifier.width(MaterialTheme.spacing.small))
-
                 Box(
                     modifier = Modifier
                         .clip(CircleShape)
@@ -88,9 +78,9 @@ fun ReplyItem(
 
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
 
-            reply().attachedPhotoUrl?.let {
+            if (!reply().attachedPhotoUrl.isNullOrBlank()) {
                 AsyncImage(
-                    model = it,
+                    model = reply().attachedPhotoUrl,
                     contentDescription = null,
                     modifier = Modifier
                         .fillMaxWidth()

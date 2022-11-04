@@ -9,24 +9,28 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.ecosense.android.R
-import com.ecosense.android.core.presentation.model.CampaignPresentation
+import com.ecosense.android.core.presentation.model.SharedCampaignPresentation
 import com.ecosense.android.core.presentation.theme.GradientForButtons
+import com.ecosense.android.core.presentation.util.UIEvent
+import com.ecosense.android.core.presentation.util.asString
 import com.ecosense.android.destinations.CampaignDetailScreenDestination
 import com.ecosense.android.destinations.StoryComposerScreenDestination
 import com.ecosense.android.destinations.StoryDetailScreenDestination
 import com.ecosense.android.destinations.StorySupportersScreenDestination
 import com.ecosense.android.featForums.presentation.forums.component.StoryItem
 import com.ramcosta.composedestinations.annotation.Destination
-import com.ramcosta.composedestinations.annotation.RootNavGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import kotlinx.coroutines.flow.collectLatest
 import logcat.logcat
 
 @Composable
@@ -36,6 +40,22 @@ fun ForumsScreen(
     viewModel: ForumsViewModel = hiltViewModel(),
 ) {
     val scaffoldState = rememberScaffoldState()
+    val context = LocalContext.current
+
+    LaunchedEffect(key1 = true) {
+        viewModel.eventFlow.collectLatest { event ->
+            when (event) {
+                is UIEvent.ShowSnackbar -> {
+                    scaffoldState.snackbarHostState.showSnackbar(
+                        message = event.uiText.asString(context)
+                    )
+                }
+                is UIEvent.HideKeyboard -> {}
+                is UIEvent.Finish -> {}
+            }
+        }
+    }
+
     Scaffold(
         scaffoldState = scaffoldState,
         topBar = {
@@ -64,7 +84,14 @@ fun ForumsScreen(
                     .size(56.dp)
                     .shadow(elevation = 8.dp, shape = CircleShape, clip = true)
                     .background(GradientForButtons)
-                    .clickable { navigator.navigate(StoryComposerScreenDestination(null)) },
+                    .clickable {
+                        navigator.navigate(
+                            StoryComposerScreenDestination(
+                                caption = null,
+                                campaign = null,
+                            )
+                        )
+                    },
             ) {
                 Icon(
                     imageVector = Icons.Rounded.Add,
@@ -81,21 +108,17 @@ fun ForumsScreen(
                 .fillMaxSize()
                 .padding(scaffoldPadding),
         ) {
-            val feedState = viewModel.feedState
-            items(
-                count = feedState.stories.size,
-                key = { i -> feedState.stories[i].id },
-            ) { i ->
-                if (i >= feedState.stories.size - 1 && !feedState.isEndReached && !feedState.isLoading) viewModel.onLoadNextStoriesFeed()
+            items(count = viewModel.stories.size) { i ->
+                if (i >= viewModel.stories.size - 1 && !viewModel.feedState.isEndReached && !viewModel.feedState.isLoading) viewModel.onLoadNextStoriesFeed()
 
-                val story = feedState.stories[i]
+                val story = viewModel.stories[i]
                 StoryItem(
                     story = { story },
                     onClickSupport = { viewModel.onClickSupport(storyId = story.id) },
                     onClickReply = { navigator.navigate(StoryDetailScreenDestination(story)) },
-                    onClickShare = { /*TODO*/ logcat { "onClickShare $i" } },
+                    onClickShare = { /* TODO: implement share feature */ logcat { "onClickShare $i" } },
                     onClickSupporters = { navigator.navigate(StorySupportersScreenDestination(story.id)) },
-                    onClickSharedCampaign = { campaign: CampaignPresentation ->
+                    onClickSharedCampaign = { campaign: SharedCampaignPresentation ->
                         navigator.navigate(CampaignDetailScreenDestination(id = campaign.id))
                     },
                     modifier = Modifier.clickable {
@@ -107,7 +130,7 @@ fun ForumsScreen(
             }
 
             item {
-                if (feedState.isLoading) {
+                if (viewModel.feedState.isLoading) {
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()

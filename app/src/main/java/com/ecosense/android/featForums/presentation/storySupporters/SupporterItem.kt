@@ -6,6 +6,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
@@ -23,10 +24,8 @@ fun SupporterItem(
     modifier: Modifier = Modifier,
 ) {
     Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .background(MaterialTheme.colors.surface)
-            .padding(MaterialTheme.spacing.medium),
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = modifier,
     ) {
         AsyncImage(
             model = supporter().avatarUrl,
@@ -40,19 +39,11 @@ fun SupporterItem(
 
         Spacer(modifier = Modifier.width(MaterialTheme.spacing.medium))
 
-        Column(modifier = Modifier.weight(1f)) {
-            Text(
-                text = supporter().name,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colors.primary,
-            )
-
-            Spacer(modifier = Modifier.width(MaterialTheme.spacing.small))
-
-            Text(
-                text = supporter().username,
-                color = MaterialTheme.colors.onSurface.copy(0.6f),
-            )
-        }
+        Text(
+            text = supporter().name,
+            fontWeight = FontWeight.Bold,
+            color = MaterialTheme.colors.primary,
+            modifier = Modifier.weight(1f),
+        )
     }
 }

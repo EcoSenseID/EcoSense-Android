@@ -1,14 +1,13 @@
 package com.ecosense.android.featForums.presentation.storyDetail.model
 
 import com.ecosense.android.featForums.domain.model.Reply
-import com.ecosense.android.featForums.presentation.constants.PatternConstants
+import com.ecosense.android.core.presentation.constants.PatternConstants
 import java.text.SimpleDateFormat
 import java.util.*
 
 data class ReplyPresentation(
     val id: Int,
     val name: String,
-    val username: String,
     val avatarUrl: String,
     val caption: String,
     val attachedPhotoUrl: String?,
@@ -20,12 +19,11 @@ data class ReplyPresentation(
 fun Reply.toPresentation() = ReplyPresentation(
     id = this.id,
     name = this.name,
-    username = this.username,
     avatarUrl = this.avatarUrl,
     caption = this.caption,
     attachedPhotoUrl = this.attachedPhotoUrl,
     createdAt = SimpleDateFormat(
-        PatternConstants.STORIES_DATE_FORMAT,
+        PatternConstants.DEFAULT_DATE_FORMAT,
         Locale.getDefault(),
     ).format(Date().apply { time = this@toPresentation.createdAt }),
     supportersCount = this.supportersCount,

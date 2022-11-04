@@ -3,6 +3,7 @@ package com.ecosense.android.featForums.presentation.storyDetail
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.focus.FocusState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ecosense.android.R
@@ -39,7 +40,7 @@ class StoryDetailViewModel @Inject constructor(
         getNextKey = { repliesState.page + 1 },
         onRequest = { nextPage: Int ->
             storyId?.let { id ->
-                forumsRepository.getComments(
+                forumsRepository.getStoryReplies(
                     storyId = id,
                     page = nextPage,
                     size = 20,
@@ -90,6 +91,16 @@ class StoryDetailViewModel @Inject constructor(
         onChangeReplyComposerCaptionJob = viewModelScope.launch {
             replyComposerState = replyComposerState.copy(
                 caption = value,
+            )
+        }
+    }
+
+    private var onFocusChangeCaptionJob: Job? = null
+    fun onFocusChangeCaption(focusState: FocusState) {
+        onFocusChangeCaptionJob?.cancel()
+        onFocusChangeCaptionJob = viewModelScope.launch {
+            replyComposerState = replyComposerState.copy(
+                isFocused = focusState.isFocused,
             )
         }
     }

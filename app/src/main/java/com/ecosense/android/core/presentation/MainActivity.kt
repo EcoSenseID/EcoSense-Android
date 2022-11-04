@@ -18,6 +18,7 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import com.ecosense.android.NavGraphs
 import com.ecosense.android.appCurrentDestinationAsState
 import com.ecosense.android.core.presentation.component.BottomBar
+import com.ecosense.android.core.presentation.component.BottomBarDestination
 import com.ecosense.android.core.presentation.theme.EcoSenseTheme
 import com.ecosense.android.startAppDestination
 import com.ramcosta.composedestinations.DestinationsNavHost
@@ -61,23 +62,28 @@ class MainActivity : ComponentActivity() {
                                     modifier = Modifier.weight(1f),
                                 )
 
-                                Divider()
+                                val currentDestination =
+                                    navController.appCurrentDestinationAsState().value
+                                        ?: NavGraphs.root.startAppDestination
 
-                                BottomBar(
-                                    currentDestination = {
-                                        navController.appCurrentDestinationAsState().value
-                                            ?: NavGraphs.root.startAppDestination
-                                    },
-                                    onItemClick = { destination ->
-                                        navController.navigateTo(destination.direction) {
-                                            popUpTo(navController.graph.findStartDestination().id) {
-                                                saveState = true
+                                if (BottomBarDestination.values()
+                                        .any { it.direction == currentDestination }
+                                ) {
+                                    Divider()
+
+                                    BottomBar(
+                                        currentDestination = { currentDestination },
+                                        onItemClick = { destination ->
+                                            navController.navigateTo(destination.direction) {
+                                                popUpTo(navController.graph.findStartDestination().id) {
+                                                    saveState = true
+                                                }
+                                                launchSingleTop = true
+                                                restoreState = true
                                             }
-                                            launchSingleTop = true
-                                            restoreState = true
-                                        }
-                                    },
-                                )
+                                        },
+                                    )
+                                }
                             }
                         }
                     }

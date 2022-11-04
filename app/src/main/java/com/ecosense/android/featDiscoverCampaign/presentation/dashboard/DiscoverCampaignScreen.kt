@@ -60,6 +60,7 @@ fun DiscoverCampaignScreen(
                 is UIEvent.HideKeyboard -> {
                     focusManager.clearFocus()
                 }
+                else -> {}
             }
         }
     }
