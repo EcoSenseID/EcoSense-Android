@@ -1,5 +1,8 @@
 package com.ecosense.android.featForums.presentation.storyComposer
 
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
@@ -10,14 +13,16 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
-import androidx.compose.material.icons.rounded.Photo
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -27,9 +32,12 @@ import coil.compose.AsyncImage
 import com.ecosense.android.R
 import com.ecosense.android.core.presentation.model.SharedCampaignPresentation
 import com.ecosense.android.core.presentation.theme.spacing
+import com.ecosense.android.core.presentation.util.UIEvent
+import com.ecosense.android.core.presentation.util.asString
 import com.ecosense.android.featForums.presentation.forums.component.SharedCampaign
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 @Destination
@@ -39,9 +47,29 @@ fun StoryComposerScreen(
     navigator: DestinationsNavigator,
     viewModel: StoryComposerViewModel = hiltViewModel(),
 ) {
+    remember { caption?.let { viewModel.onChangeCaption(caption) } }
+    remember { campaign?.let { viewModel.onReceivedSharedCampaign(campaign) } }
+
+    val context = LocalContext.current
+    val focusManager = LocalFocusManager.current
+
     val scaffoldState = rememberScaffoldState()
 
-    remember { caption?.let { viewModel.onChangeCaption(caption) } }
+    val imagePicker = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent()
+    ) { uri: Uri? -> viewModel.onImagePicked(uri) }
+
+    LaunchedEffect(key1 = true) {
+        viewModel.eventFlow.collectLatest { event ->
+            when (event) {
+                is UIEvent.ShowSnackbar -> scaffoldState.snackbarHostState.showSnackbar(
+                    message = event.uiText.asString(context)
+                )
+                is UIEvent.HideKeyboard -> focusManager.clearFocus()
+                is UIEvent.Finish -> navigator.navigateUp()
+            }
+        }
+    }
 
     Scaffold(
         scaffoldState = scaffoldState,
@@ -117,6 +145,7 @@ fun StoryComposerScreen(
                         TextField(
                             value = viewModel.state.caption ?: "",
                             onValueChange = { viewModel.onChangeCaption(it) },
+                            enabled = !viewModel.state.isUploading,
                             placeholder = { Text(text = stringResource(R.string.whats_happening)) },
                             colors = TextFieldDefaults.textFieldColors(
                                 backgroundColor = Color.Transparent,
@@ -126,7 +155,7 @@ fun StoryComposerScreen(
                             modifier = Modifier.fillMaxWidth(),
                         )
 
-                        viewModel.state.attachedPhotoUrl?.let {
+                        viewModel.state.attachedPhotoUri?.let {
                             AsyncImage(
                                 model = it,
                                 contentDescription = null,
@@ -138,7 +167,7 @@ fun StoryComposerScreen(
                             )
                         }
 
-                        campaign?.let {
+                        viewModel.state.sharedCampaign?.let {
                             SharedCampaign(
                                 campaign = { it },
                                 modifier = Modifier.padding(MaterialTheme.spacing.small),
@@ -149,7 +178,12 @@ fun StoryComposerScreen(
                             horizontalArrangement = Arrangement.SpaceBetween,
                             modifier = Modifier.fillMaxWidth(),
                         ) {
-                            IconButton(onClick = { /* TODO */ }) {
+                            IconButton(
+                                onClick = {
+                                    imagePicker.launch(context.getString(R.string.content_type_image))
+                                },
+                                enabled = !viewModel.state.isUploading,
+                            ) {
                                 Icon(
                                     painter = painterResource(id = R.drawable.ic_photo),
                                     contentDescription = stringResource(R.string.cd_attach_photo),
@@ -157,9 +191,15 @@ fun StoryComposerScreen(
                                 )
                             }
 
-                            TextButton(onClick = { viewModel.onClickSend() }) {
+                            TextButton(
+                                onClick = { viewModel.onClickSend() },
+                                enabled = !viewModel.state.isUploading,
+                            ) {
                                 Text(
-                                    text = stringResource(R.string.post),
+                                    text = stringResource(
+                                        if (viewModel.state.isUploading) R.string.posting
+                                        else R.string.post
+                                    ),
                                     color = MaterialTheme.colors.secondary,
                                     fontWeight = FontWeight.SemiBold,
                                 )

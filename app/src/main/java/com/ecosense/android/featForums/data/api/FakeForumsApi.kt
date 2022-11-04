@@ -6,6 +6,9 @@ import com.ecosense.android.core.data.model.StoryDto
 import com.ecosense.android.featForums.data.model.*
 import kotlinx.coroutines.delay
 import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import retrofit2.http.Header
+import retrofit2.http.Part
 
 class FakeForumsApi : ForumsApi {
 
@@ -125,10 +128,10 @@ class FakeForumsApi : ForumsApi {
     }
 
     override suspend fun postNewStory(
-        bearerToken: String,
-        sharedCampaignId: Int?,
-        caption: String,
-        attachedPhoto: MultipartBody.Part?,
+        @Header(value = "Authorization") bearerToken: String,
+        @Part caption: RequestBody,
+        @Part sharedCampaignId: RequestBody?,
+        @Part attachedPhoto: MultipartBody.Part?
     ): PostNewStoryDto {
         delay(500L)
         return PostNewStoryDto(
@@ -138,10 +141,10 @@ class FakeForumsApi : ForumsApi {
     }
 
     override suspend fun postNewReply(
-        bearerToken: String,
-        storyId: Int,
-        caption: String,
-        attachedPhoto: MultipartBody.Part?,
+        @Header(value = "Authorization") bearerToken: String,
+        @Part storyId: RequestBody,
+        @Part caption: RequestBody,
+        @Part attachedPhoto: MultipartBody.Part?
     ): PostNewReplyDto {
         delay(500L)
         return PostNewReplyDto(
@@ -161,12 +164,34 @@ class FakeForumsApi : ForumsApi {
         )
     }
 
+    override suspend fun postUnsupportStory(
+        bearerToken: String,
+        storyId: Int
+    ): PostUnsupportStoryDto {
+        delay(500L)
+        return PostUnsupportStoryDto(
+            error = false,
+            message = "Success",
+        )
+    }
+
     override suspend fun postSupportReply(
         bearerToken: String,
         replyId: Int,
     ): PostSupportReplyDto {
         delay(500L)
         return PostSupportReplyDto(
+            error = false,
+            message = "Success",
+        )
+    }
+
+    override suspend fun postUnsupportReply(
+        bearerToken: String,
+        replyId: Int
+    ): PostUnsupportReplyDto {
+        delay(500L)
+        return PostUnsupportReplyDto(
             error = false,
             message = "Success",
         )

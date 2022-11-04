@@ -87,9 +87,9 @@ fun StoryItem(
 
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
 
-            story().attachedPhotoUrl?.let {
+            if (!story().attachedPhotoUrl.isNullOrBlank()) {
                 AsyncImage(
-                    model = it,
+                    model = story().attachedPhotoUrl,
                     contentDescription = null,
                     modifier = Modifier
                         .fillMaxWidth()
@@ -131,10 +131,9 @@ fun StoryItem(
                     horizontalArrangement = Arrangement.Start,
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier
-                        .weight(1f)
                         .fillMaxHeight()
                         .clip(RoundedCornerShape(4.dp))
-                        .clickable { onClickSupport() }
+                        .clickable { if (!story().isLoadingSupport) onClickSupport() }
                         .padding(MaterialTheme.spacing.extraSmall),
                 ) {
                     Icon(
@@ -154,13 +153,12 @@ fun StoryItem(
                     )
                 }
 
-                Spacer(modifier = Modifier.width(MaterialTheme.spacing.medium))
+                Spacer(modifier = Modifier.weight(1f))
 
                 Row(
                     horizontalArrangement = Arrangement.Start,
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier
-                        .weight(1f)
                         .fillMaxHeight()
                         .clip(RoundedCornerShape(4.dp))
                         .clickable { onClickReply() }
@@ -181,13 +179,12 @@ fun StoryItem(
                     )
                 }
 
-                Spacer(modifier = Modifier.width(MaterialTheme.spacing.medium))
+                Spacer(modifier = Modifier.weight(1f))
 
                 Row(
                     horizontalArrangement = Arrangement.Start,
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier
-                        .weight(1f)
                         .fillMaxHeight()
                         .clip(RoundedCornerShape(4.dp))
                         .clickable { onClickShare() }
@@ -200,6 +197,8 @@ fun StoryItem(
                         modifier = Modifier.size(16.dp),
                     )
                 }
+
+                Spacer(modifier = Modifier.weight(1f))
             }
         }
     }

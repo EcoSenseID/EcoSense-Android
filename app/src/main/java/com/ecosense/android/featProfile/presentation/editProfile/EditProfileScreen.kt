@@ -51,7 +51,6 @@ fun EditProfileScreen(
     viewModel: EditProfileViewModel = hiltViewModel(),
 ) {
     val scaffoldState = rememberScaffoldState()
-    val successSheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
 
     val imagePicker = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()
@@ -75,6 +74,7 @@ fun EditProfileScreen(
                 is UIEvent.HideKeyboard -> {
                     focusManager.clearFocus()
                 }
+                is UIEvent.Finish -> {}
             }
         }
     }

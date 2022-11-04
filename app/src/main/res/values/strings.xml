@@ -223,4 +223,6 @@
     <string name="yes">Yes</string>
     <string name="application_language">Application Language</string>
     <string name="language">Language</string>
+    <string name="em_caption_blank">Caption can not be blank!</string>
+    <string name="posting">Posting…</string>
 </resources>

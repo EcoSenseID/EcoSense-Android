@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -79,9 +78,9 @@ fun ReplyItem(
 
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
 
-            reply().attachedPhotoUrl?.let {
+            if (!reply().attachedPhotoUrl.isNullOrBlank()) {
                 AsyncImage(
-                    model = it,
+                    model = reply().attachedPhotoUrl,
                     contentDescription = null,
                     modifier = Modifier
                         .fillMaxWidth()

@@ -86,9 +86,9 @@ fun RecentStoryItem(
 
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
 
-            story().attachedPhotoUrl?.let {
+            if (!story().attachedPhotoUrl.isNullOrBlank()) {
                 AsyncImage(
-                    model = it,
+                    model = story().attachedPhotoUrl,
                     contentDescription = null,
                     modifier = Modifier
                         .fillMaxWidth()

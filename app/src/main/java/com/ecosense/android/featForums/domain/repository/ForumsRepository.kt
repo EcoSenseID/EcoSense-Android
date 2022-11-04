@@ -1,5 +1,6 @@
 package com.ecosense.android.featForums.domain.repository
 
+import android.net.Uri
 import com.ecosense.android.core.domain.model.Story
 import com.ecosense.android.core.util.Resource
 import com.ecosense.android.core.util.SimpleResource
@@ -42,7 +43,21 @@ interface ForumsRepository {
         storyId: Int,
     ): Flow<SimpleResource>
 
+    fun postUnsupportStory(
+        storyId: Int
+    ): Flow<SimpleResource>
+
     fun postSupportReply(
         replyId: Int,
     ): Flow<SimpleResource>
+
+    fun postUnsupportReply(
+        replyId: Int,
+    ): Flow<SimpleResource>
+
+    suspend fun getNewTempJpegUri(): Uri
+
+    suspend fun findJpegByUri(
+        uri: Uri,
+    ): File?
 }

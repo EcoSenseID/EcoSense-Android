@@ -2,6 +2,7 @@ package com.ecosense.android.featForums.data.api
 
 import com.ecosense.android.featForums.data.model.*
 import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.http.*
 
 interface ForumsApi {
@@ -33,18 +34,18 @@ interface ForumsApi {
     @POST("poststory")
     suspend fun postNewStory(
         @Header("Authorization") bearerToken: String,
-        @Part sharedCampaignId: Int? = null,
-        @Part caption: String,
-        @Part attachedPhoto: MultipartBody.Part?,
+        @Part("caption") caption: RequestBody,
+        @Part("sharedCampaignId") sharedCampaignId: RequestBody? = null,
+        @Part attachedPhoto: MultipartBody.Part? = null,
     ): PostNewStoryDto
 
     @Multipart
     @POST("postreply")
     suspend fun postNewReply(
         @Header("Authorization") bearerToken: String,
-        @Part storyId: Int,
-        @Part caption: String,
-        @Part attachedPhoto: MultipartBody.Part?,
+        @Part("storyId") storyId: RequestBody,
+        @Part("caption") caption: RequestBody,
+        @Part attachedPhoto: MultipartBody.Part? = null,
     ): PostNewReplyDto
 
     @FormUrlEncoded
@@ -55,9 +56,23 @@ interface ForumsApi {
     ): PostSupportStoryDto
 
     @FormUrlEncoded
+    @POST("unsupportstory")
+    suspend fun postUnsupportStory(
+        @Header("Authorization") bearerToken: String,
+        @Field("storyId") storyId: Int,
+    ): PostUnsupportStoryDto
+
+    @FormUrlEncoded
     @POST("supportreply")
     suspend fun postSupportReply(
         @Header("Authorization") bearerToken: String,
         @Field("replyId") replyId: Int,
     ): PostSupportReplyDto
+
+    @FormUrlEncoded
+    @POST("unsupportreply")
+    suspend fun postUnsupportReply(
+        @Header("Authorization") bearerToken: String,
+        @Field("replyId") replyId: Int,
+    ): PostUnsupportReplyDto
 }

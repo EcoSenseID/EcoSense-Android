@@ -21,6 +21,7 @@ data class StoryPresentation(
     val supportersAvatarsUrl: List<String>,
     val repliesCount: Int,
     val isSupported: Boolean,
+    val isLoadingSupport: Boolean,
 ) : Parcelable
 
 fun Story.toPresentation(): StoryPresentation {
@@ -39,5 +40,6 @@ fun Story.toPresentation(): StoryPresentation {
         repliesCount = this.repliesCount,
         isSupported = this.isSupported,
         supportersAvatarsUrl = this.supportersAvatarsUrl,
+        isLoadingSupport = false,
     )
 }

@@ -22,7 +22,7 @@ data class StoryDto(
         caption = this.caption ?: "",
         attachedPhotoUrl = this.attachedPhotoUrl,
         sharedCampaign = this.sharedCampaign?.toDomain(),
-        createdAt = this.createdAt ?: 0,
+        createdAt = (this.createdAt ?: 0) * 1000,
         supportersCount = this.supportersCount ?: 0,
         supportersAvatarsUrl = this.supportersAvatarsUrl ?: emptyList(),
         repliesCount = this.repliesCount ?: 0,
