@@ -72,6 +72,7 @@ fun ProfileScreen(
                 is UIEvent.HideKeyboard -> {
                     focusManager.clearFocus()
                 }
+                else -> {}
             }
         }
     }

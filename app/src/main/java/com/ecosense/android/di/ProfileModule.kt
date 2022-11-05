@@ -21,8 +21,7 @@ object ProfileModule {
     fun provideProfileApi(
         coreRetrofit: Retrofit
     ): ProfileApi {
-//        return coreRetrofit.create(ProfileApi::class.java)
-        return FakeProfileApi()
+        return coreRetrofit.create(ProfileApi::class.java)
     }
 
     @Provides

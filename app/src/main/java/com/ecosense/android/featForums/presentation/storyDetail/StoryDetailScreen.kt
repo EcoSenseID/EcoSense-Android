@@ -23,6 +23,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.ecosense.android.R
 import com.ecosense.android.core.presentation.theme.spacing
+import com.ecosense.android.destinations.CampaignDetailScreenDestination
 import com.ecosense.android.destinations.StorySupportersScreenDestination
 import com.ecosense.android.featForums.presentation.forums.component.SharedCampaign
 import com.ecosense.android.featForums.presentation.forums.component.StorySupportersSection
@@ -137,7 +138,11 @@ fun StoryDetailScreen(
                                     campaign = { it },
                                     modifier = Modifier
                                         .clip(RoundedCornerShape(16.dp))
-                                        .clickable { /* TODO: not yet implemented */ },
+                                        .clickable {
+                                            navigator.navigate(
+                                                CampaignDetailScreenDestination(id = it.id)
+                                            )
+                                        },
                                 )
                                 Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
                             }
@@ -176,7 +181,6 @@ fun StoryDetailScreen(
                                     horizontalArrangement = Arrangement.Start,
                                     verticalAlignment = Alignment.CenterVertically,
                                     modifier = Modifier
-                                        .weight(1f)
                                         .fillMaxHeight()
                                         .clip(RoundedCornerShape(4.dp))
                                         .clickable { /* TODO: not yet implemented */ }
@@ -199,7 +203,7 @@ fun StoryDetailScreen(
                                     )
                                 }
 
-                                Spacer(modifier = Modifier.width(MaterialTheme.spacing.medium))
+                                Spacer(modifier = Modifier.weight(1f))
 
                                 Row(
                                     horizontalArrangement = Arrangement.Start,
@@ -208,7 +212,7 @@ fun StoryDetailScreen(
                                         .weight(1f)
                                         .fillMaxHeight()
                                         .clip(RoundedCornerShape(4.dp))
-                                        .clickable { /* TODO: not yet implemented */ }
+                                        .clickable { }
                                         .padding(MaterialTheme.spacing.extraSmall),
                                 ) {
                                     Icon(
@@ -226,13 +230,12 @@ fun StoryDetailScreen(
                                     )
                                 }
 
-                                Spacer(modifier = Modifier.width(MaterialTheme.spacing.medium))
+                                Spacer(modifier = Modifier.weight(1f))
 
                                 Row(
                                     horizontalArrangement = Arrangement.Start,
                                     verticalAlignment = Alignment.CenterVertically,
                                     modifier = Modifier
-                                        .weight(1f)
                                         .fillMaxHeight()
                                         .clip(RoundedCornerShape(4.dp))
                                         .clickable { /* TODO: not yet implemented */ }
@@ -253,10 +256,7 @@ fun StoryDetailScreen(
                 item { Divider() }
 
                 val repliesState = viewModel.repliesState
-                items(
-                    count = repliesState.replies.size,
-                    key = { i -> repliesState.replies[i].id },
-                ) { i ->
+                items(count = repliesState.replies.size) { i ->
                     if (i >= repliesState.replies.lastIndex && !repliesState.isEndReached && !repliesState.isLoading) viewModel.onLoadNextCommentsFeed()
 
                     if (i == 0) Spacer(

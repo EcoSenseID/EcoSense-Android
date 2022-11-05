@@ -130,7 +130,6 @@ fun RecentStoryItem(
                     horizontalArrangement = Arrangement.Start,
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier
-                        .weight(1f)
                         .fillMaxHeight()
                         .clip(RoundedCornerShape(4.dp))
                         .clickable { onClickSupport() }
@@ -153,13 +152,12 @@ fun RecentStoryItem(
                     )
                 }
 
-                Spacer(modifier = Modifier.width(MaterialTheme.spacing.medium))
+                Spacer(modifier = Modifier.weight(1f))
 
                 Row(
                     horizontalArrangement = Arrangement.Start,
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier
-                        .weight(1f)
                         .fillMaxHeight()
                         .clip(RoundedCornerShape(4.dp))
                         .clickable { onClickReply() }
@@ -180,7 +178,7 @@ fun RecentStoryItem(
                     )
                 }
 
-                Spacer(modifier = Modifier.width(MaterialTheme.spacing.medium))
+                Spacer(modifier = Modifier.weight(1f))
 
                 Row(
                     horizontalArrangement = Arrangement.Start,
