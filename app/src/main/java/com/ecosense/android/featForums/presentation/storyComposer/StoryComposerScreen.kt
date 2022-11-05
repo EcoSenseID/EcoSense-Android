@@ -168,7 +168,7 @@ fun StoryComposerScreen(
                         viewModel.state.attachedPhotoUri?.let {
                             AsyncImage(
                                 model = it,
-                                contentDescription = null,
+                                contentDescription = stringResource(R.string.attached_photo),
                                 contentScale = ContentScale.Fit,
                                 modifier = Modifier
                                     .fillMaxWidth()

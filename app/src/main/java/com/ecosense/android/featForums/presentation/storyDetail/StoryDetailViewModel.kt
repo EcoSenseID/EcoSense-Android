@@ -1,5 +1,6 @@
 package com.ecosense.android.featForums.presentation.storyDetail
 
+import android.net.Uri
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -50,11 +51,12 @@ class StoryDetailViewModel @Inject constructor(
     private val _eventFlow = Channel<UIEvent>()
     val eventFlow = _eventFlow.receiveAsFlow()
 
-    private val paginator = DefaultPaginator(initialKey = repliesState.page,
+    private val paginator = DefaultPaginator(
+        initialKey = repliesState.page,
         getNextKey = { repliesState.page + 1 },
         onRequest = { nextPage: Int ->
             forumsRepository.getStoryReplies(
-                storyId = storyDetail.id, // TODO: check if this is right
+                storyId = storyDetail.id,
                 page = nextPage,
                 size = 20,
             )
@@ -72,7 +74,8 @@ class StoryDetailViewModel @Inject constructor(
                 page = newKey,
                 isEndReached = newReplies.isEmpty(),
             )
-        })
+        },
+    )
 
     init {
         viewModelScope.launch {
@@ -86,11 +89,11 @@ class StoryDetailViewModel @Inject constructor(
 
     fun setStory(story: StoryPresentation) {
         storyDetail = story
-        onLoadNextCommentsFeed()
+        onLoadNextRepliesFeed()
     }
 
     private var onLoadNextCommentsFeedJob: Job? = null
-    fun onLoadNextCommentsFeed() {
+    fun onLoadNextRepliesFeed() {
         onLoadNextCommentsFeedJob?.cancel()
         onLoadNextCommentsFeedJob = viewModelScope.launch {
             paginator.loadNextItems()
@@ -107,6 +110,47 @@ class StoryDetailViewModel @Inject constructor(
         }
     }
 
+    private var onClickSendReplyJob: Job? = null
+    fun onClickSendReply() {
+        onClickSendReplyJob?.cancel()
+        onClickSendReplyJob = viewModelScope.launch {
+            _eventFlow.send(UIEvent.HideKeyboard)
+
+            forumsRepository.postNewReply(storyId = storyDetail.id,
+                caption = replyComposerState.caption,
+                attachedPhoto = replyComposerState.attachedPhotoUri?.let {
+                    forumsRepository.findJpegByUri(it)
+                }).onEach { result ->
+                when (result) {
+                    is Resource.Error -> {
+                        replyComposerState = replyComposerState.copy(isUploading = false)
+                        result.uiText?.let { _eventFlow.send(UIEvent.ShowSnackbar(it)) }
+                    }
+
+                    is Resource.Loading -> {
+                        replyComposerState = replyComposerState.copy(isUploading = true)
+                    }
+
+                    is Resource.Success -> {
+                        replyComposerState = ReplyComposerState.defaultValue
+                        reloadRepliesFeed()
+                    }
+                }
+            }.launchIn(this)
+        }
+    }
+
+    fun reloadRepliesFeed() {
+        repliesState = RepliesFeedState.defaultValue
+        _replies.clear()
+        paginator.reset()
+        onLoadNextRepliesFeed()
+    }
+
+    fun onImagePicked(uri: Uri?) {
+        uri?.let { replyComposerState = replyComposerState.copy(attachedPhotoUri = it) }
+    }
+
     private var onFocusChangeCaptionJob: Job? = null
     fun onFocusChangeCaption(focusState: FocusState) {
         onFocusChangeCaptionJob?.cancel()
@@ -119,8 +163,8 @@ class StoryDetailViewModel @Inject constructor(
 
     private var onClickSupportStoryJob: Job? = null
     fun onClickSupportStory() {
-        onClickSupportReplyJob?.cancel()
-        onClickSupportReplyJob = viewModelScope.launch {
+        onClickSupportStoryJob?.cancel()
+        onClickSupportStoryJob = viewModelScope.launch {
             val oldStory = storyDetail.copy()
 
             (if (oldStory.isSupported) forumsRepository.postUnsupportStory(storyId = oldStory.id)

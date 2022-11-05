@@ -1,5 +1,8 @@
 package com.ecosense.android.featForums.presentation.storyDetail
 
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -18,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -53,6 +57,11 @@ fun StoryDetailScreen(
     val scaffoldState = rememberScaffoldState()
 
     val context = LocalContext.current
+    val focusManager = LocalFocusManager.current
+
+    val imagePicker = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent()
+    ) { uri: Uri? -> viewModel.onImagePicked(uri) }
 
     LaunchedEffect(key1 = true) {
         viewModel.eventFlow.collectLatest { event ->
@@ -60,6 +69,7 @@ fun StoryDetailScreen(
                 is UIEvent.ShowSnackbar -> scaffoldState.snackbarHostState.showSnackbar(
                     message = event.uiText.asString(context)
                 )
+                is UIEvent.HideKeyboard -> focusManager.clearFocus()
                 else -> {}
             }
         }
@@ -146,8 +156,9 @@ fun StoryDetailScreen(
                             if (!viewModel.storyDetail.attachedPhotoUrl.isNullOrBlank()) {
                                 AsyncImage(
                                     model = viewModel.storyDetail.attachedPhotoUrl,
-                                    error = painterResource(id = R.drawable.error_picture),
                                     contentDescription = null,
+                                    error = painterResource(id = R.drawable.error_picture),
+                                    contentScale = ContentScale.Crop,
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .clip(RoundedCornerShape(16.dp)),
@@ -281,7 +292,7 @@ fun StoryDetailScreen(
 
                 val repliesState = viewModel.repliesState
                 items(count = viewModel.replies.size) { i ->
-                    if (i >= viewModel.replies.lastIndex && !repliesState.isEndReached && !repliesState.isLoading) viewModel.onLoadNextCommentsFeed()
+                    if (i >= viewModel.replies.lastIndex && !repliesState.isEndReached && !repliesState.isLoading) viewModel.onLoadNextRepliesFeed()
 
                     if (i == 0) Spacer(
                         modifier = Modifier
@@ -317,8 +328,6 @@ fun StoryDetailScreen(
                 }
             }
 
-
-
             if (viewModel.isLoggedIn.collectAsState().value == true) {
                 Divider()
 
@@ -326,8 +335,8 @@ fun StoryDetailScreen(
                     state = { viewModel.replyComposerState },
                     onChangeCaption = { viewModel.onChangeReplyComposerCaption(it) },
                     onFocusChangeCaption = { viewModel.onFocusChangeCaption(it) },
-                    onClickAttach = { /*TODO: not yet implemented */ },
-                    onClickSend = { /*TODO: not yet implemented */ },
+                    onClickAttach = { imagePicker.launch(context.getString(R.string.content_type_image)) },
+                    onClickSend = { viewModel.onClickSendReply() },
                     modifier = Modifier
                         .fillMaxWidth()
                         .background(MaterialTheme.colors.surface)
