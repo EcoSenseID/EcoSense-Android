@@ -1,5 +1,6 @@
 package com.ecosense.android.featProfile.presentation.profile
 
+import android.content.Intent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -227,14 +228,34 @@ fun ProfileScreen(
                     }
 
                     for (i in viewModel.recentStories.indices) {
-                        val story = viewModel.recentStories[i]
                         RecentStoryItem(
-                            story = { story },
-                            onClickSupport = { viewModel.onClickSupport(storyId = story.id) },
-                            onClickReply = { navigator.navigate(StoryDetailScreenDestination(story)) },
-                            onClickShare = { /* TODO: not yet implemented */ },
+                            story = { viewModel.recentStories[i] },
+                            onClickSupport = { viewModel.onClickSupport(viewModel.recentStories[i].id) },
+                            onClickReply = {
+                                navigator.navigate(
+                                    StoryDetailScreenDestination(
+                                        viewModel.recentStories[i].id
+                                    )
+                                )
+                            },
+                            onClickShare = {
+                                val shareText = context.getString(
+                                    R.string.format_share_message,
+                                    viewModel.recentStories[i].id,
+                                )
+
+                                Intent(Intent.ACTION_SEND).let { intent ->
+                                    intent.type = context.getString(R.string.intent_type_plain_text)
+                                    intent.putExtra(Intent.EXTRA_TEXT, shareText)
+                                    context.startActivity(intent)
+                                }
+                            },
                             onClickSupporters = {
-                                navigator.navigate(StorySupportersScreenDestination(story.id))
+                                navigator.navigate(
+                                    StorySupportersScreenDestination(
+                                        viewModel.recentStories[i].id
+                                    )
+                                )
                             },
                             onClickSharedCampaign = { campaign ->
                                 navigator.navigate(CampaignDetailScreenDestination(id = campaign.id))
@@ -246,7 +267,11 @@ fun ProfileScreen(
                                     color = MaterialTheme.colors.onSurface.copy(alpha = 0.1f),
                                     shape = RoundedCornerShape(16.dp),
                                 )
-                                .clickable { navigator.navigate(StoryDetailScreenDestination(story)) }
+                                .clickable {
+                                    navigator.navigate(
+                                        StoryDetailScreenDestination(viewModel.recentStories[i].id)
+                                    )
+                                }
                                 .fillMaxWidth()
                                 .background(MaterialTheme.colors.surface)
                                 .padding(MaterialTheme.spacing.medium),

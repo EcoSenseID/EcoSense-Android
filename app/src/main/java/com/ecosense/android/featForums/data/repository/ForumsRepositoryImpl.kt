@@ -73,6 +73,32 @@ class ForumsRepositoryImpl(
         }
     }
 
+    override fun getStoryDetail(
+        storyId: Int,
+    ): Flow<Resource<Story>> = flow {
+        emit(Resource.Loading())
+
+        try {
+            val idToken = authApi.getIdToken(true)
+            val bearerToken = "Bearer $idToken"
+            val response = forumsApi.getStoryDetail(bearerToken = bearerToken, storyId = storyId)
+
+            when (response.error) {
+                true -> emit(Resource.Error(uiText = response.message?.let {
+                    UIText.DynamicString(it)
+                } ?: UIText.StringResource(R.string.em_unknown)))
+                else -> emit(Resource.Success(response.toDomain()))
+            }
+
+        } catch (e: Exception) {
+            logcat { e.asLog() }
+            when (e) {
+                is IOException -> UIText.StringResource(R.string.em_io_exception)
+                else -> UIText.StringResource(R.string.em_unknown)
+            }.let { emit(Resource.Error(it)) }
+        }
+    }
+
     override suspend fun getStoryReplies(
         storyId: Int,
         page: Int,

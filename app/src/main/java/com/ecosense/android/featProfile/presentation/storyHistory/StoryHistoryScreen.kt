@@ -1,5 +1,6 @@
 package com.ecosense.android.featProfile.presentation.storyHistory
 
+import android.content.Intent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -13,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -33,6 +35,8 @@ fun StoryHistoryScreen(
     viewModel: StoryHistoryViewModel = hiltViewModel(),
 ) {
     val scaffoldState = rememberScaffoldState()
+
+    val context = LocalContext.current
 
     Scaffold(
         scaffoldState = scaffoldState,
@@ -90,8 +94,19 @@ fun StoryHistoryScreen(
                 RecentStoryItem(
                     story = { viewModel.stories[i] },
                     onClickSupport = { viewModel.onClickSupport(storyId = viewModel.stories[i].id) },
-                    onClickReply = { navigator.navigate(StoryDetailScreenDestination(viewModel.stories[i])) },
-                    onClickShare = { /* TODO: not yet implemented */ },
+                    onClickReply = { navigator.navigate(StoryDetailScreenDestination(viewModel.stories[i].id)) },
+                    onClickShare = {
+                        val shareText = context.getString(
+                            R.string.format_share_message,
+                            viewModel.stories[i].id,
+                        )
+
+                        Intent(Intent.ACTION_SEND).let { intent ->
+                            intent.type = context.getString(R.string.intent_type_plain_text)
+                            intent.putExtra(Intent.EXTRA_TEXT, shareText)
+                            context.startActivity(intent)
+                        }
+                    },
                     onClickSupporters = {
                         navigator.navigate(StorySupportersScreenDestination(viewModel.stories[i].id))
                     },
@@ -106,7 +121,7 @@ fun StoryHistoryScreen(
                             color = MaterialTheme.colors.onSurface.copy(alpha = 0.1f),
                             shape = RoundedCornerShape(16.dp),
                         )
-                        .clickable { navigator.navigate(StoryDetailScreenDestination(viewModel.stories[i])) }
+                        .clickable { navigator.navigate(StoryDetailScreenDestination(viewModel.stories[i].id)) }
                         .fillMaxWidth()
                         .background(MaterialTheme.colors.surface)
                         .padding(MaterialTheme.spacing.medium),

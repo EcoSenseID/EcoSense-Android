@@ -229,4 +229,7 @@
     <string name="em_please_login_first">Please login first</string>
     <string name="login_to_join_this_conversation">Login to join this conversation</string>
     <string name="attached_photo">Attached photo</string>
+    <string name="filter_view_http_ecosense_deeplinks">Open app</string>
+    <string name="format_share_message">Hi, check this out!\nhttps://ecosense.id/deeplinks/storydetail/%1$d</string>
+    <string name="intent_type_plain_text">text/plain</string>
 </resources>

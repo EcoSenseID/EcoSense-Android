@@ -15,6 +15,7 @@ import com.ecosense.android.core.util.UIText
 import com.ecosense.android.featForums.domain.model.Reply
 import com.ecosense.android.featForums.domain.repository.ForumsRepository
 import com.ecosense.android.featForums.presentation.model.StoryPresentation
+import com.ecosense.android.featForums.presentation.model.toPresentation
 import com.ecosense.android.featForums.presentation.paginator.DefaultPaginator
 import com.ecosense.android.featForums.presentation.storyDetail.model.RepliesFeedState
 import com.ecosense.android.featForums.presentation.storyDetail.model.ReplyComposerState
@@ -36,6 +37,9 @@ class StoryDetailViewModel @Inject constructor(
     val isLoggedIn: StateFlow<Boolean?> =
         authRepository.isLoggedIn.stateIn(viewModelScope, SharingStarted.Eagerly, null)
 
+    var isLoadingStoryDetail by mutableStateOf(false)
+        private set
+
     var storyDetail by mutableStateOf(StoryPresentation.defaultValue)
         private set
 
@@ -51,6 +55,9 @@ class StoryDetailViewModel @Inject constructor(
     private val _eventFlow = Channel<UIEvent>()
     val eventFlow = _eventFlow.receiveAsFlow()
 
+    var isRefreshing by mutableStateOf(false)
+        private set
+
     private val paginator = DefaultPaginator(
         initialKey = repliesState.page,
         getNextKey = { repliesState.page + 1 },
@@ -61,14 +68,17 @@ class StoryDetailViewModel @Inject constructor(
                 size = 20,
             )
         },
-        onLoadUpdated = { isLoading ->
-            repliesState = repliesState.copy(isLoading = isLoading)
-        },
+        onLoadUpdated = { isLoading -> repliesState = repliesState.copy(isLoading = isLoading) },
         onError = { message: UIText? ->
             repliesState = repliesState.copy(errorMessage = message)
+            if (isRefreshing) isRefreshing = false
         },
         onSuccess = { items: List<Reply>?, newKey: Int ->
             val newReplies = items?.map { it.toPresentation() } ?: emptyList()
+            if (isRefreshing) {
+                _replies.clear()
+                isRefreshing = false
+            }
             _replies.addAll(newReplies)
             repliesState = repliesState.copy(
                 page = newKey,
@@ -80,16 +90,9 @@ class StoryDetailViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             authRepository.getCurrentUser()?.let {
-                replyComposerState = replyComposerState.copy(
-                    avatarUrl = it.photoUrl,
-                )
+                replyComposerState = replyComposerState.copy(avatarUrl = it.photoUrl)
             }
         }
-    }
-
-    fun setStory(story: StoryPresentation) {
-        storyDetail = story
-        onLoadNextRepliesFeed()
     }
 
     private var onLoadNextCommentsFeedJob: Job? = null
@@ -104,9 +107,7 @@ class StoryDetailViewModel @Inject constructor(
     fun onChangeReplyComposerCaption(value: String) {
         onChangeReplyComposerCaptionJob?.cancel()
         onChangeReplyComposerCaptionJob = viewModelScope.launch {
-            replyComposerState = replyComposerState.copy(
-                caption = value,
-            )
+            replyComposerState = replyComposerState.copy(caption = value)
         }
     }
 
@@ -133,18 +134,19 @@ class StoryDetailViewModel @Inject constructor(
 
                     is Resource.Success -> {
                         replyComposerState = ReplyComposerState.defaultValue
-                        reloadRepliesFeed()
+                        onRefresh()
                     }
                 }
             }.launchIn(this)
         }
     }
 
-    fun reloadRepliesFeed() {
+    fun onRefresh() {
+        isRefreshing = true
         repliesState = RepliesFeedState.defaultValue
-        _replies.clear()
         paginator.reset()
         onLoadNextRepliesFeed()
+        onLoadStoryDetail()
     }
 
     fun onImagePicked(uri: Uri?) {
@@ -216,6 +218,31 @@ class StoryDetailViewModel @Inject constructor(
                             else oldReply.supportersCount + 1,
                             isSupported = !oldReply.isSupported,
                         )
+                    }
+                }
+            }.launchIn(this)
+        }
+    }
+
+    fun setStoryId(storyId: Int) {
+        storyDetail = storyDetail.copy(id = storyId)
+        onRefresh()
+    }
+
+    private var onLoadStoryDetailJob: Job? = null
+    private fun onLoadStoryDetail() {
+        onLoadStoryDetailJob?.cancel()
+        onLoadStoryDetailJob = viewModelScope.launch {
+            forumsRepository.getStoryDetail(storyDetail.id).onEach { result ->
+                when (result) {
+                    is Resource.Error -> {
+                        isLoadingStoryDetail = false
+                        result.uiText?.let { _eventFlow.send(UIEvent.ShowSnackbar(it)) }
+                    }
+                    is Resource.Loading -> isLoadingStoryDetail = true
+                    is Resource.Success -> {
+                        isLoadingStoryDetail = false
+                        result.data?.let { storyDetail = it.toPresentation() }
                     }
                 }
             }.launchIn(this)

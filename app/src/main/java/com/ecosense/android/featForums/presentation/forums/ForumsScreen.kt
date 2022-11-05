@@ -1,5 +1,6 @@
 package com.ecosense.android.featForums.presentation.forums
 
+import android.content.Intent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -32,7 +33,6 @@ import com.google.accompanist.swiperefresh.SwipeRefreshState
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlinx.coroutines.flow.collectLatest
-import logcat.logcat
 
 @Composable
 @Destination
@@ -114,24 +114,32 @@ fun ForumsScreen(
                 items(count = viewModel.stories.size) { i ->
                     if (i >= viewModel.stories.size - 1 && !viewModel.feedState.isEndReached && !viewModel.feedState.isLoading) viewModel.onLoadNextStoriesFeed()
 
-                    val story = viewModel.stories[i]
                     StoryItem(
-                        story = { story },
-                        onClickSupport = { viewModel.onClickSupport(storyId = story.id) },
-                        onClickReply = { navigator.navigate(StoryDetailScreenDestination(story)) },
-                        onClickShare = { /* TODO: implement share feature */ logcat { "onClickShare $i" } },
+                        story = { viewModel.stories[i] },
+                        onClickSupport = { viewModel.onClickSupport(viewModel.stories[i].id) },
+                        onClickReply = { navigator.navigate(StoryDetailScreenDestination(viewModel.stories[i].id)) },
+                        onClickShare = {
+                            val shareText = context.getString(
+                                R.string.format_share_message,
+                                viewModel.stories[i].id
+                            )
+
+                            Intent(Intent.ACTION_SEND).let { intent ->
+                                intent.type = context.getString(R.string.intent_type_plain_text)
+                                intent.putExtra(Intent.EXTRA_TEXT, shareText)
+                                context.startActivity(intent)
+                            }
+                        },
                         onClickSupporters = {
                             navigator.navigate(
-                                StorySupportersScreenDestination(
-                                    story.id
-                                )
+                                StorySupportersScreenDestination(storyId = viewModel.stories[i].id)
                             )
                         },
                         onClickSharedCampaign = { campaign: SharedCampaignPresentation ->
                             navigator.navigate(CampaignDetailScreenDestination(id = campaign.id))
                         },
                         modifier = Modifier.clickable {
-                            navigator.navigate(StoryDetailScreenDestination(story))
+                            navigator.navigate(StoryDetailScreenDestination(viewModel.stories[i].id))
                         },
                     )
 

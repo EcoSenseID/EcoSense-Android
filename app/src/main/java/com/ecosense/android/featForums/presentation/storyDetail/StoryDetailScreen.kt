@@ -1,5 +1,6 @@
 package com.ecosense.android.featForums.presentation.storyDetail
 
+import android.content.Intent
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -38,21 +39,29 @@ import com.ecosense.android.destinations.LoginScreenDestination
 import com.ecosense.android.destinations.StorySupportersScreenDestination
 import com.ecosense.android.featForums.presentation.forums.component.SharedCampaign
 import com.ecosense.android.featForums.presentation.forums.component.StorySupportersSection
-import com.ecosense.android.featForums.presentation.model.StoryPresentation
 import com.ecosense.android.featForums.presentation.storyDetail.component.ReplyComposer
 import com.ecosense.android.featForums.presentation.storyDetail.component.ReplyItem
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.SwipeRefreshState
+import com.ramcosta.composedestinations.annotation.DeepLink
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlinx.coroutines.flow.collectLatest
 
+@Destination(
+    route = Destination.ROOT_NAV_GRAPH_ROUTE,
+    deepLinks = [
+        DeepLink(uriPattern = "http://ecosense.id/deeplinks/storydetail/{storyId}"),
+        DeepLink(uriPattern = "https://ecosense.id/deeplinks/storydetail/{storyId}"),
+    ],
+)
 @Composable
-@Destination
 fun StoryDetailScreen(
-    story: StoryPresentation,
+    storyId: Int,
     navigator: DestinationsNavigator,
-    viewModel: StoryDetailViewModel = hiltViewModel()
+    viewModel: StoryDetailViewModel = hiltViewModel(),
 ) {
-    remember { viewModel.setStory(story = story) }
+    remember { if (storyId != -1) viewModel.setStoryId(storyId = storyId) }
 
     val scaffoldState = rememberScaffoldState()
 
@@ -110,268 +119,284 @@ fun StoryDetailScreen(
         },
         modifier = Modifier.fillMaxSize(),
     ) { scaffoldPadding ->
-        Column(
+        SwipeRefresh(
+            state = SwipeRefreshState(isRefreshing = viewModel.isRefreshing),
+            onRefresh = { viewModel.onRefresh() },
             modifier = Modifier
                 .fillMaxSize()
                 .padding(scaffoldPadding)
         ) {
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f)
-            ) {
-                item {
-                    Row(
+            Column(modifier = Modifier.fillMaxSize()) {
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f)
+                ) {
+                    item {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .background(MaterialTheme.colors.surface)
+                                .padding(MaterialTheme.spacing.medium),
+                        ) {
+                            AsyncImage(
+                                model = viewModel.storyDetail.avatarUrl,
+                                contentDescription = null,
+                                placeholder = painterResource(id = R.drawable.ic_ecosense_logo),
+                                contentScale = ContentScale.Crop,
+                                modifier = Modifier
+                                    .size(48.dp)
+                                    .clip(CircleShape),
+                            )
+
+                            Spacer(modifier = Modifier.width(MaterialTheme.spacing.medium))
+
+                            Column(modifier = Modifier.weight(1f)) {
+                                Text(
+                                    text = viewModel.storyDetail.name,
+                                    fontWeight = FontWeight.Bold,
+                                    color = MaterialTheme.colors.primary,
+                                )
+
+                                Text(
+                                    text = viewModel.storyDetail.caption,
+                                    modifier = Modifier.fillMaxWidth(),
+                                )
+
+                                Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
+
+                                if (!viewModel.storyDetail.attachedPhotoUrl.isNullOrBlank()) {
+                                    AsyncImage(
+                                        model = viewModel.storyDetail.attachedPhotoUrl,
+                                        contentDescription = null,
+                                        error = painterResource(id = R.drawable.error_picture),
+                                        contentScale = ContentScale.Crop,
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .clip(RoundedCornerShape(16.dp)),
+                                    )
+
+                                    Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
+                                }
+
+                                viewModel.storyDetail.sharedCampaign?.let {
+                                    SharedCampaign(
+                                        campaign = { it },
+                                        modifier = Modifier
+                                            .clip(RoundedCornerShape(16.dp))
+                                            .clickable {
+                                                navigator.navigate(
+                                                    CampaignDetailScreenDestination(id = it.id)
+                                                )
+                                            },
+                                    )
+                                    Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
+                                }
+
+                                if (viewModel.storyDetail.supportersAvatarsUrl.isNotEmpty()) {
+                                    StorySupportersSection(
+                                        avatarUrls = { viewModel.storyDetail.supportersAvatarsUrl },
+                                        totalSupportersCount = { viewModel.storyDetail.supportersCount },
+                                        modifier = Modifier
+                                            .clip(RoundedCornerShape(4.dp))
+                                            .clickable {
+                                                navigator.navigate(
+                                                    StorySupportersScreenDestination(viewModel.storyDetail.id)
+                                                )
+                                            }
+                                            .padding(MaterialTheme.spacing.extraSmall),
+                                    )
+
+                                    Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
+                                }
+
+
+                                Text(
+                                    text = viewModel.storyDetail.createdAt,
+                                    color = MaterialTheme.colors.onSurface.copy(alpha = 0.6f),
+                                )
+
+                                Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
+
+                                Row(
+                                    horizontalArrangement = Arrangement.Start,
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    modifier = Modifier.fillMaxWidth(),
+                                ) {
+                                    Row(
+                                        horizontalArrangement = Arrangement.Start,
+                                        verticalAlignment = Alignment.CenterVertically,
+                                        modifier = Modifier
+                                            .fillMaxHeight()
+                                            .clip(RoundedCornerShape(4.dp))
+                                            .clickable { viewModel.onClickSupportStory() }
+                                            .padding(MaterialTheme.spacing.extraSmall),
+                                    ) {
+                                        Icon(
+                                            painter = painterResource(id = R.drawable.ic_support),
+                                            contentDescription = stringResource(R.string.cd_support),
+                                            tint = if (viewModel.storyDetail.isSupported) MaterialTheme.colors.secondary
+                                            else MaterialTheme.colors.onSurface.copy(alpha = 0.6f),
+                                            modifier = Modifier.size(16.dp),
+                                        )
+
+                                        Spacer(modifier = Modifier.width(MaterialTheme.spacing.small))
+
+                                        Text(
+                                            text = viewModel.storyDetail.supportersCount.toString(),
+                                            color = if (viewModel.storyDetail.isSupported) MaterialTheme.colors.secondary
+                                            else MaterialTheme.colors.onSurface.copy(alpha = 0.6f),
+                                        )
+                                    }
+
+                                    Spacer(modifier = Modifier.weight(1f))
+
+                                    Row(
+                                        horizontalArrangement = Arrangement.Start,
+                                        verticalAlignment = Alignment.CenterVertically,
+                                        modifier = Modifier
+                                            .fillMaxHeight()
+                                            .clip(RoundedCornerShape(4.dp))
+                                            .clickable { }
+                                            .padding(MaterialTheme.spacing.extraSmall),
+                                    ) {
+                                        Icon(
+                                            painter = painterResource(id = R.drawable.ic_reply),
+                                            contentDescription = stringResource(R.string.cd_reply),
+                                            tint = MaterialTheme.colors.onSurface.copy(alpha = 0.6f),
+                                            modifier = Modifier.size(16.dp),
+                                        )
+
+                                        Spacer(modifier = Modifier.width(MaterialTheme.spacing.small))
+
+                                        Text(
+                                            text = viewModel.storyDetail.repliesCount.toString(),
+                                            color = MaterialTheme.colors.onSurface.copy(alpha = 0.6f),
+                                        )
+                                    }
+
+                                    Spacer(modifier = Modifier.weight(1f))
+
+                                    Row(
+                                        horizontalArrangement = Arrangement.Start,
+                                        verticalAlignment = Alignment.CenterVertically,
+                                        modifier = Modifier
+                                            .fillMaxHeight()
+                                            .clip(RoundedCornerShape(4.dp))
+                                            .clickable {
+                                                val shareText = context.getString(
+                                                    R.string.format_share_message,
+                                                    viewModel.storyDetail.id,
+                                                )
+
+                                                Intent(Intent.ACTION_SEND).let { intent ->
+                                                    intent.type =
+                                                        context.getString(R.string.intent_type_plain_text)
+                                                    intent.putExtra(Intent.EXTRA_TEXT, shareText)
+                                                    context.startActivity(intent)
+                                                }
+                                            }
+                                            .padding(MaterialTheme.spacing.extraSmall),
+                                    ) {
+                                        Icon(
+                                            painter = painterResource(id = R.drawable.ic_share),
+                                            contentDescription = stringResource(id = R.string.cd_share),
+                                            tint = MaterialTheme.colors.onSurface.copy(alpha = 0.6f),
+                                            modifier = Modifier.size(16.dp),
+                                        )
+                                    }
+
+                                    Spacer(modifier = Modifier.weight(1f))
+                                }
+                            }
+                        }
+                    }
+
+                    item { Divider() }
+
+                    val repliesState = viewModel.repliesState
+                    items(count = viewModel.replies.size) { i ->
+                        if (i >= viewModel.replies.lastIndex && !repliesState.isEndReached && !repliesState.isLoading) viewModel.onLoadNextRepliesFeed()
+
+                        if (i == 0) Spacer(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(MaterialTheme.spacing.medium)
+                                .background(MaterialTheme.colors.surface)
+                        )
+
+                        ReplyItem(
+                            reply = { viewModel.replies[i] },
+                            onClickSupport = { viewModel.onClickSupportReply(viewModel.replies[i].id) },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .background(MaterialTheme.colors.surface)
+                                .padding(
+                                    horizontal = MaterialTheme.spacing.medium,
+                                    vertical = MaterialTheme.spacing.small,
+                                ),
+                        )
+                    }
+
+                    item {
+                        if (repliesState.isLoading) {
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(8.dp),
+                                horizontalArrangement = Arrangement.Center
+                            ) {
+                                CircularProgressIndicator()
+                            }
+                        }
+                    }
+                }
+
+                if (viewModel.isLoggedIn.collectAsState().value == true) {
+                    Divider()
+
+                    ReplyComposer(
+                        state = { viewModel.replyComposerState },
+                        onChangeCaption = { viewModel.onChangeReplyComposerCaption(it) },
+                        onFocusChangeCaption = { viewModel.onFocusChangeCaption(it) },
+                        onClickAttach = { imagePicker.launch(context.getString(R.string.content_type_image)) },
+                        onClickSend = { viewModel.onClickSendReply() },
                         modifier = Modifier
                             .fillMaxWidth()
                             .background(MaterialTheme.colors.surface)
                             .padding(MaterialTheme.spacing.medium),
-                    ) {
-                        AsyncImage(
-                            model = viewModel.storyDetail.avatarUrl,
-                            contentDescription = null,
-                            placeholder = painterResource(id = R.drawable.ic_ecosense_logo),
-                            contentScale = ContentScale.Crop,
-                            modifier = Modifier
-                                .size(48.dp)
-                                .clip(CircleShape),
-                        )
-
-                        Spacer(modifier = Modifier.width(MaterialTheme.spacing.medium))
-
-                        Column(modifier = Modifier.weight(1f)) {
-                            Text(
-                                text = viewModel.storyDetail.name,
-                                fontWeight = FontWeight.Bold,
-                                color = MaterialTheme.colors.primary,
-                            )
-
-                            Text(
-                                text = viewModel.storyDetail.caption,
-                                modifier = Modifier.fillMaxWidth(),
-                            )
-
-                            Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
-
-                            if (!viewModel.storyDetail.attachedPhotoUrl.isNullOrBlank()) {
-                                AsyncImage(
-                                    model = viewModel.storyDetail.attachedPhotoUrl,
-                                    contentDescription = null,
-                                    error = painterResource(id = R.drawable.error_picture),
-                                    contentScale = ContentScale.Crop,
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .clip(RoundedCornerShape(16.dp)),
-                                )
-
-                                Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
-                            }
-
-                            viewModel.storyDetail.sharedCampaign?.let {
-                                SharedCampaign(
-                                    campaign = { it },
-                                    modifier = Modifier
-                                        .clip(RoundedCornerShape(16.dp))
-                                        .clickable {
-                                            navigator.navigate(
-                                                CampaignDetailScreenDestination(id = it.id)
-                                            )
-                                        },
-                                )
-                                Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
-                            }
-
-                            if (viewModel.storyDetail.supportersAvatarsUrl.isNotEmpty()) {
-                                StorySupportersSection(
-                                    avatarUrls = { viewModel.storyDetail.supportersAvatarsUrl },
-                                    totalSupportersCount = { viewModel.storyDetail.supportersCount },
-                                    modifier = Modifier
-                                        .clip(RoundedCornerShape(4.dp))
-                                        .clickable {
-                                            navigator.navigate(
-                                                StorySupportersScreenDestination(viewModel.storyDetail.id)
-                                            )
-                                        }
-                                        .padding(MaterialTheme.spacing.extraSmall),
-                                )
-
-                                Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
-                            }
-
-
-                            Text(
-                                text = viewModel.storyDetail.createdAt,
-                                color = MaterialTheme.colors.onSurface.copy(alpha = 0.6f),
-                            )
-
-                            Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
-
-                            Row(
-                                horizontalArrangement = Arrangement.Start,
-                                verticalAlignment = Alignment.CenterVertically,
-                                modifier = Modifier.fillMaxWidth(),
-                            ) {
-                                Row(
-                                    horizontalArrangement = Arrangement.Start,
-                                    verticalAlignment = Alignment.CenterVertically,
-                                    modifier = Modifier
-                                        .fillMaxHeight()
-                                        .clip(RoundedCornerShape(4.dp))
-                                        .clickable { viewModel.onClickSupportStory() }
-                                        .padding(MaterialTheme.spacing.extraSmall),
-                                ) {
-                                    Icon(
-                                        painter = painterResource(id = R.drawable.ic_support),
-                                        contentDescription = stringResource(R.string.cd_support),
-                                        tint = if (viewModel.storyDetail.isSupported) MaterialTheme.colors.secondary
-                                        else MaterialTheme.colors.onSurface.copy(alpha = 0.6f),
-                                        modifier = Modifier.size(16.dp),
-                                    )
-
-                                    Spacer(modifier = Modifier.width(MaterialTheme.spacing.small))
-
-                                    Text(
-                                        text = viewModel.storyDetail.supportersCount.toString(),
-                                        color = if (viewModel.storyDetail.isSupported) MaterialTheme.colors.secondary
-                                        else MaterialTheme.colors.onSurface.copy(alpha = 0.6f),
-                                    )
-                                }
-
-                                Spacer(modifier = Modifier.weight(1f))
-
-                                Row(
-                                    horizontalArrangement = Arrangement.Start,
-                                    verticalAlignment = Alignment.CenterVertically,
-                                    modifier = Modifier
-                                        .fillMaxHeight()
-                                        .clip(RoundedCornerShape(4.dp))
-                                        .clickable { }
-                                        .padding(MaterialTheme.spacing.extraSmall),
-                                ) {
-                                    Icon(
-                                        painter = painterResource(id = R.drawable.ic_reply),
-                                        contentDescription = stringResource(R.string.cd_reply),
-                                        tint = MaterialTheme.colors.onSurface.copy(alpha = 0.6f),
-                                        modifier = Modifier.size(16.dp),
-                                    )
-
-                                    Spacer(modifier = Modifier.width(MaterialTheme.spacing.small))
-
-                                    Text(
-                                        text = viewModel.storyDetail.repliesCount.toString(),
-                                        color = MaterialTheme.colors.onSurface.copy(alpha = 0.6f),
-                                    )
-                                }
-
-                                Spacer(modifier = Modifier.weight(1f))
-
-                                Row(
-                                    horizontalArrangement = Arrangement.Start,
-                                    verticalAlignment = Alignment.CenterVertically,
-                                    modifier = Modifier
-                                        .fillMaxHeight()
-                                        .clip(RoundedCornerShape(4.dp))
-                                        .clickable { /* TODO: not yet implemented */ }
-                                        .padding(MaterialTheme.spacing.extraSmall),
-                                ) {
-                                    Icon(
-                                        painter = painterResource(id = R.drawable.ic_share),
-                                        contentDescription = stringResource(id = R.string.cd_share),
-                                        tint = MaterialTheme.colors.onSurface.copy(alpha = 0.6f),
-                                        modifier = Modifier.size(16.dp),
-                                    )
-                                }
-
-                                Spacer(modifier = Modifier.weight(1f))
-                            }
-                        }
-                    }
-                }
-
-                item { Divider() }
-
-                val repliesState = viewModel.repliesState
-                items(count = viewModel.replies.size) { i ->
-                    if (i >= viewModel.replies.lastIndex && !repliesState.isEndReached && !repliesState.isLoading) viewModel.onLoadNextRepliesFeed()
-
-                    if (i == 0) Spacer(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(MaterialTheme.spacing.medium)
-                            .background(MaterialTheme.colors.surface)
                     )
-
-                    ReplyItem(
-                        reply = { viewModel.replies[i] },
-                        onClickSupport = { viewModel.onClickSupportReply(viewModel.replies[i].id) },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .background(MaterialTheme.colors.surface)
-                            .padding(
-                                horizontal = MaterialTheme.spacing.medium,
-                                vertical = MaterialTheme.spacing.small,
-                            ),
-                    )
-                }
-
-                item {
-                    if (repliesState.isLoading) {
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(8.dp),
-                            horizontalArrangement = Arrangement.Center
-                        ) {
-                            CircularProgressIndicator()
-                        }
-                    }
-                }
-            }
-
-            if (viewModel.isLoggedIn.collectAsState().value == true) {
-                Divider()
-
-                ReplyComposer(
-                    state = { viewModel.replyComposerState },
-                    onChangeCaption = { viewModel.onChangeReplyComposerCaption(it) },
-                    onFocusChangeCaption = { viewModel.onFocusChangeCaption(it) },
-                    onClickAttach = { imagePicker.launch(context.getString(R.string.content_type_image)) },
-                    onClickSend = { viewModel.onClickSendReply() },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(MaterialTheme.colors.surface)
-                        .padding(MaterialTheme.spacing.medium),
-                )
-            } else Card(
-                shape = RoundedCornerShape(16.dp),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(MaterialTheme.spacing.medium),
-            ) {
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
+                } else Card(
+                    shape = RoundedCornerShape(16.dp),
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(MaterialTheme.spacing.medium),
                 ) {
-                    Text(
-                        text = stringResource(R.string.login_to_join_this_conversation),
-                        color = MaterialTheme.colors.primary,
-                        style = MaterialTheme.typography.h6,
-                        fontWeight = FontWeight.Bold,
-                    )
-
-                    Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
-
-                    GradientButton(
-                        onClick = { navigator.navigate(LoginScreenDestination) },
-                        modifier = Modifier.fillMaxWidth(),
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(MaterialTheme.spacing.medium),
                     ) {
                         Text(
-                            text = stringResource(id = R.string.login),
-                            fontWeight = FontWeight.SemiBold,
-                            color = MaterialTheme.colors.onPrimary,
+                            text = stringResource(R.string.login_to_join_this_conversation),
+                            color = MaterialTheme.colors.primary,
+                            style = MaterialTheme.typography.h6,
+                            fontWeight = FontWeight.Bold,
                         )
+
+                        Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
+
+                        GradientButton(
+                            onClick = { navigator.navigate(LoginScreenDestination) },
+                            modifier = Modifier.fillMaxWidth(),
+                        ) {
+                            Text(
+                                text = stringResource(id = R.string.login),
+                                fontWeight = FontWeight.SemiBold,
+                                color = MaterialTheme.colors.onPrimary,
+                            )
+                        }
                     }
                 }
             }

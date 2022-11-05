@@ -14,6 +14,12 @@ interface ForumsApi {
         @Query("size") size: Int,
     ): GetStoriesDto
 
+    @GET("storydetail")
+    suspend fun getStoryDetail(
+        @Header("Authorization") bearerToken: String,
+        @Query("id") storyId: Int,
+    ): GetStoryDetailDto
+
     @GET("replies")
     suspend fun getStoryReplies(
         @Header("Authorization") bearerToken: String,

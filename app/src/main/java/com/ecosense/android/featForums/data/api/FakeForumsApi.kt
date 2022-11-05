@@ -85,6 +85,24 @@ class FakeForumsApi : ForumsApi {
         )
     }
 
+    override suspend fun getStoryDetail(bearerToken: String, storyId: Int): GetStoryDetailDto {
+        return GetStoryDetailDto(
+            attachedPhotoUrl = null,
+            avatarUrl = null,
+            caption = null,
+            createdAt = null,
+            error = null,
+            id = null,
+            isSupported = null,
+            message = null,
+            name = null,
+            repliesCount = null,
+            sharedCampaign = null,
+            supportersAvatarsUrl = null,
+            supportersCount = null,
+        )
+    }
+
     override suspend fun getStoryReplies(
         bearerToken: String,
         storyId: Int,
@@ -165,8 +183,7 @@ class FakeForumsApi : ForumsApi {
     }
 
     override suspend fun postUnsupportStory(
-        bearerToken: String,
-        storyId: Int
+        bearerToken: String, storyId: Int
     ): PostUnsupportStoryDto {
         delay(500L)
         return PostUnsupportStoryDto(
@@ -187,8 +204,7 @@ class FakeForumsApi : ForumsApi {
     }
 
     override suspend fun postUnsupportReply(
-        bearerToken: String,
-        replyId: Int
+        bearerToken: String, replyId: Int
     ): PostUnsupportReplyDto {
         delay(500L)
         return PostUnsupportReplyDto(
