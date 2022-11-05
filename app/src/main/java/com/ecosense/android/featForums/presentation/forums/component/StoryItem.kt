@@ -90,6 +90,7 @@ fun StoryItem(
             if (!story().attachedPhotoUrl.isNullOrBlank()) {
                 AsyncImage(
                     model = story().attachedPhotoUrl,
+                    error = painterResource(id = R.drawable.error_picture),
                     contentDescription = null,
                     modifier = Modifier
                         .fillMaxWidth()
