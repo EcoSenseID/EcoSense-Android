@@ -19,6 +19,7 @@ import com.ecosense.android.featForums.domain.model.Supporter
 import com.ecosense.android.featForums.domain.repository.ForumsRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.withContext
 import logcat.asLog
@@ -45,7 +46,6 @@ class ForumsRepositoryImpl(
         try {
             val idToken = authApi.getIdToken(true)
             val bearerToken = "Bearer $idToken"
-            logcat { "getStories. page: $page, size: $size" }
             val response = forumsApi.getStories(
                 bearerToken = bearerToken,
                 page = page,
@@ -157,6 +157,11 @@ class ForumsRepositoryImpl(
             return@flow
         }
 
+        if (authApi.isLoggedIn.firstOrNull() != true) {
+            emit(Resource.Error(UIText.StringResource(R.string.em_please_login_first)))
+            return@flow
+        }
+
         try {
             val idToken = authApi.getIdToken(true)
             val bearerToken = "Bearer $idToken"
@@ -215,6 +220,11 @@ class ForumsRepositoryImpl(
             return@flow
         }
 
+        if (authApi.isLoggedIn.firstOrNull() != true) {
+            emit(Resource.Error(UIText.StringResource(R.string.em_please_login_first)))
+            return@flow
+        }
+
         try {
             val idToken = authApi.getIdToken(true)
             val bearerToken = "Bearer $idToken"
@@ -264,6 +274,11 @@ class ForumsRepositoryImpl(
     ): Flow<SimpleResource> = flow {
         emit(Resource.Loading())
 
+        if (authApi.isLoggedIn.firstOrNull() != true) {
+            emit(Resource.Error(UIText.StringResource(R.string.em_please_login_first)))
+            return@flow
+        }
+
         try {
             val idToken = authApi.getIdToken(true)
             val bearerToken = "Bearer $idToken"
@@ -297,6 +312,11 @@ class ForumsRepositoryImpl(
         storyId: Int,
     ): Flow<SimpleResource> = flow {
         emit(Resource.Loading())
+
+        if (authApi.isLoggedIn.firstOrNull() != true) {
+            emit(Resource.Error(UIText.StringResource(R.string.em_please_login_first)))
+            return@flow
+        }
 
         try {
             val idToken = authApi.getIdToken(true)
@@ -332,6 +352,11 @@ class ForumsRepositoryImpl(
     ): Flow<SimpleResource> = flow {
         emit(Resource.Loading())
 
+        if (authApi.isLoggedIn.firstOrNull() != true) {
+            emit(Resource.Error(UIText.StringResource(R.string.em_please_login_first)))
+            return@flow
+        }
+
         try {
             val idToken = authApi.getIdToken(true)
             val bearerToken = "Bearer $idToken"
@@ -365,6 +390,11 @@ class ForumsRepositoryImpl(
         replyId: Int,
     ): Flow<SimpleResource> = flow {
         emit(Resource.Loading())
+
+        if (authApi.isLoggedIn.firstOrNull() != true) {
+            emit(Resource.Error(UIText.StringResource(R.string.em_please_login_first)))
+            return@flow
+        }
 
         try {
             val idToken = authApi.getIdToken(true)

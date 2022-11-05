@@ -7,6 +7,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ecosense.android.core.domain.model.Story
+import com.ecosense.android.core.domain.repository.AuthRepository
 import com.ecosense.android.core.presentation.util.UIEvent
 import com.ecosense.android.core.util.Resource
 import com.ecosense.android.core.util.UIText
@@ -18,16 +19,18 @@ import com.ecosense.android.featForums.presentation.paginator.DefaultPaginator
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class ForumsViewModel @Inject constructor(
     private val forumsRepository: ForumsRepository,
+    authRepository: AuthRepository,
 ) : ViewModel() {
+
+    val isLoggedIn: StateFlow<Boolean?> =
+        authRepository.isLoggedIn.stateIn(viewModelScope, SharingStarted.Eagerly, null)
 
     private val _stories = mutableStateListOf<StoryPresentation>()
     val stories: List<StoryPresentation> = _stories

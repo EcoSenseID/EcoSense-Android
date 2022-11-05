@@ -25,7 +25,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.ecosense.android.R
-import com.ecosense.android.core.presentation.AuthNavGraph
 import com.ecosense.android.core.presentation.component.GradientButton
 import com.ecosense.android.core.presentation.theme.spacing
 import com.ecosense.android.core.presentation.util.UIEvent
@@ -39,10 +38,8 @@ import kotlinx.coroutines.flow.collectLatest
 @OptIn(ExperimentalUnitApi::class)
 @Composable
 @Destination
-@AuthNavGraph
 fun RegistrationScreen(
-    navigator: DestinationsNavigator,
-    viewModel: RegistrationViewModel = hiltViewModel()
+    navigator: DestinationsNavigator, viewModel: RegistrationViewModel = hiltViewModel()
 ) {
     val googleSignInLauncher = rememberLauncherForActivityResult(
         contract = GoogleSignInContract,
@@ -68,6 +65,7 @@ fun RegistrationScreen(
                 is UIEvent.HideKeyboard -> {
                     focusManager.clearFocus()
                 }
+                else -> {}
             }
         }
     }
@@ -121,14 +119,12 @@ fun RegistrationScreen(
 
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
 
-            PasswordTextField(
-                value = state.repeatedPassword,
+            PasswordTextField(value = state.repeatedPassword,
                 isVisible = state.isRepeatedPasswordVisible,
                 onValueChange = { viewModel.onRepeatedPasswordValueChange(it) },
                 onToggleVisibility = { viewModel.onToggleRepeatedPasswordVisibility() },
                 label = { Text(text = stringResource(R.string.repeat_password)) },
-                placeholder = { Text(text = stringResource(R.string.repeat_password)) }
-            )
+                placeholder = { Text(text = stringResource(R.string.repeat_password)) })
 
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
 
@@ -137,8 +133,10 @@ fun RegistrationScreen(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.fillMaxWidth(),
             ) {
-                Checkbox(checked = state.isAgreeTermsPrivacyPolicy,
-                    onCheckedChange = {viewModel.onCheckedChangeTermsPrivacyPolicy()},)
+                Checkbox(
+                    checked = state.isAgreeTermsPrivacyPolicy,
+                    onCheckedChange = { viewModel.onCheckedChangeTermsPrivacyPolicy() },
+                )
 
                 Text(text = stringResource(R.string.i_agree_to_the).plus(" "))
 

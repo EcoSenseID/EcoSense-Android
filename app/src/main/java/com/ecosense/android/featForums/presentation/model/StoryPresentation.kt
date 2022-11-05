@@ -22,7 +22,24 @@ data class StoryPresentation(
     val repliesCount: Int,
     val isSupported: Boolean,
     val isLoadingSupport: Boolean,
-) : Parcelable
+) : Parcelable {
+    companion object {
+        val defaultValue = StoryPresentation(
+            id = 0,
+            name = "",
+            avatarUrl = "",
+            caption = "",
+            attachedPhotoUrl = "",
+            sharedCampaign = null,
+            createdAt = "",
+            supportersCount = 0,
+            supportersAvatarsUrl = emptyList(),
+            repliesCount = 0,
+            isSupported = false,
+            isLoadingSupport = false,
+        )
+    }
+}
 
 fun Story.toPresentation(): StoryPresentation {
     return StoryPresentation(

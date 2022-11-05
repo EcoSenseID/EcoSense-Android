@@ -23,10 +23,7 @@ import com.ecosense.android.core.presentation.model.SharedCampaignPresentation
 import com.ecosense.android.core.presentation.theme.GradientForButtons
 import com.ecosense.android.core.presentation.util.UIEvent
 import com.ecosense.android.core.presentation.util.asString
-import com.ecosense.android.destinations.CampaignDetailScreenDestination
-import com.ecosense.android.destinations.StoryComposerScreenDestination
-import com.ecosense.android.destinations.StoryDetailScreenDestination
-import com.ecosense.android.destinations.StorySupportersScreenDestination
+import com.ecosense.android.destinations.*
 import com.ecosense.android.featForums.presentation.forums.component.StoryItem
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -86,10 +83,8 @@ fun ForumsScreen(
                     .background(GradientForButtons)
                     .clickable {
                         navigator.navigate(
-                            StoryComposerScreenDestination(
-                                caption = null,
-                                campaign = null,
-                            )
+                            if (viewModel.isLoggedIn.value != true) LoginScreenDestination()
+                            else StoryComposerScreenDestination(null, null)
                         )
                     },
             ) {

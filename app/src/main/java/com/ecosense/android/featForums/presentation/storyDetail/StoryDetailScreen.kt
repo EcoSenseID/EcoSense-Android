@@ -10,11 +10,14 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -22,8 +25,12 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.ecosense.android.R
+import com.ecosense.android.core.presentation.component.GradientButton
 import com.ecosense.android.core.presentation.theme.spacing
+import com.ecosense.android.core.presentation.util.UIEvent
+import com.ecosense.android.core.presentation.util.asString
 import com.ecosense.android.destinations.CampaignDetailScreenDestination
+import com.ecosense.android.destinations.LoginScreenDestination
 import com.ecosense.android.destinations.StorySupportersScreenDestination
 import com.ecosense.android.featForums.presentation.forums.component.SharedCampaign
 import com.ecosense.android.featForums.presentation.forums.component.StorySupportersSection
@@ -32,6 +39,7 @@ import com.ecosense.android.featForums.presentation.storyDetail.component.ReplyC
 import com.ecosense.android.featForums.presentation.storyDetail.component.ReplyItem
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 @Destination
@@ -43,6 +51,20 @@ fun StoryDetailScreen(
     remember { viewModel.setStory(story = story) }
 
     val scaffoldState = rememberScaffoldState()
+
+    val context = LocalContext.current
+
+    LaunchedEffect(key1 = true) {
+        viewModel.eventFlow.collectLatest { event ->
+            when (event) {
+                is UIEvent.ShowSnackbar -> scaffoldState.snackbarHostState.showSnackbar(
+                    message = event.uiText.asString(context)
+                )
+                else -> {}
+            }
+        }
+    }
+
     Scaffold(
         scaffoldState = scaffoldState,
         topBar = {
@@ -96,7 +118,7 @@ fun StoryDetailScreen(
                             .padding(MaterialTheme.spacing.medium),
                     ) {
                         AsyncImage(
-                            model = story.avatarUrl,
+                            model = viewModel.storyDetail.avatarUrl,
                             contentDescription = null,
                             placeholder = painterResource(id = R.drawable.ic_ecosense_logo),
                             contentScale = ContentScale.Crop,
@@ -109,21 +131,21 @@ fun StoryDetailScreen(
 
                         Column(modifier = Modifier.weight(1f)) {
                             Text(
-                                text = story.name,
+                                text = viewModel.storyDetail.name,
                                 fontWeight = FontWeight.Bold,
                                 color = MaterialTheme.colors.primary,
                             )
 
                             Text(
-                                text = story.caption,
+                                text = viewModel.storyDetail.caption,
                                 modifier = Modifier.fillMaxWidth(),
                             )
 
                             Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
 
-                            story.attachedPhotoUrl?.let {
+                            if (!viewModel.storyDetail.attachedPhotoUrl.isNullOrBlank()) {
                                 AsyncImage(
-                                    model = it,
+                                    model = viewModel.storyDetail.attachedPhotoUrl,
                                     error = painterResource(id = R.drawable.error_picture),
                                     contentDescription = null,
                                     modifier = Modifier
@@ -134,7 +156,7 @@ fun StoryDetailScreen(
                                 Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
                             }
 
-                            story.sharedCampaign?.let {
+                            viewModel.storyDetail.sharedCampaign?.let {
                                 SharedCampaign(
                                     campaign = { it },
                                     modifier = Modifier
@@ -148,15 +170,15 @@ fun StoryDetailScreen(
                                 Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
                             }
 
-                            if (story.supportersAvatarsUrl.isNotEmpty()) {
+                            if (viewModel.storyDetail.supportersAvatarsUrl.isNotEmpty()) {
                                 StorySupportersSection(
-                                    avatarUrls = { story.supportersAvatarsUrl },
-                                    totalSupportersCount = { story.supportersCount },
+                                    avatarUrls = { viewModel.storyDetail.supportersAvatarsUrl },
+                                    totalSupportersCount = { viewModel.storyDetail.supportersCount },
                                     modifier = Modifier
                                         .clip(RoundedCornerShape(4.dp))
                                         .clickable {
                                             navigator.navigate(
-                                                StorySupportersScreenDestination(story.id)
+                                                StorySupportersScreenDestination(viewModel.storyDetail.id)
                                             )
                                         }
                                         .padding(MaterialTheme.spacing.extraSmall),
@@ -167,7 +189,7 @@ fun StoryDetailScreen(
 
 
                             Text(
-                                text = story.createdAt,
+                                text = viewModel.storyDetail.createdAt,
                                 color = MaterialTheme.colors.onSurface.copy(alpha = 0.6f),
                             )
 
@@ -184,13 +206,13 @@ fun StoryDetailScreen(
                                     modifier = Modifier
                                         .fillMaxHeight()
                                         .clip(RoundedCornerShape(4.dp))
-                                        .clickable { /* TODO: not yet implemented */ }
+                                        .clickable { viewModel.onClickSupportStory() }
                                         .padding(MaterialTheme.spacing.extraSmall),
                                 ) {
                                     Icon(
                                         painter = painterResource(id = R.drawable.ic_support),
                                         contentDescription = stringResource(R.string.cd_support),
-                                        tint = if (story.isSupported) MaterialTheme.colors.secondary
+                                        tint = if (viewModel.storyDetail.isSupported) MaterialTheme.colors.secondary
                                         else MaterialTheme.colors.onSurface.copy(alpha = 0.6f),
                                         modifier = Modifier.size(16.dp),
                                     )
@@ -198,8 +220,8 @@ fun StoryDetailScreen(
                                     Spacer(modifier = Modifier.width(MaterialTheme.spacing.small))
 
                                     Text(
-                                        text = story.supportersCount.toString(),
-                                        color = if (story.isSupported) MaterialTheme.colors.secondary
+                                        text = viewModel.storyDetail.supportersCount.toString(),
+                                        color = if (viewModel.storyDetail.isSupported) MaterialTheme.colors.secondary
                                         else MaterialTheme.colors.onSurface.copy(alpha = 0.6f),
                                     )
                                 }
@@ -225,7 +247,7 @@ fun StoryDetailScreen(
                                     Spacer(modifier = Modifier.width(MaterialTheme.spacing.small))
 
                                     Text(
-                                        text = story.repliesCount.toString(),
+                                        text = viewModel.storyDetail.repliesCount.toString(),
                                         color = MaterialTheme.colors.onSurface.copy(alpha = 0.6f),
                                     )
                                 }
@@ -258,8 +280,8 @@ fun StoryDetailScreen(
                 item { Divider() }
 
                 val repliesState = viewModel.repliesState
-                items(count = repliesState.replies.size) { i ->
-                    if (i >= repliesState.replies.lastIndex && !repliesState.isEndReached && !repliesState.isLoading) viewModel.onLoadNextCommentsFeed()
+                items(count = viewModel.replies.size) { i ->
+                    if (i >= viewModel.replies.lastIndex && !repliesState.isEndReached && !repliesState.isLoading) viewModel.onLoadNextCommentsFeed()
 
                     if (i == 0) Spacer(
                         modifier = Modifier
@@ -269,8 +291,8 @@ fun StoryDetailScreen(
                     )
 
                     ReplyItem(
-                        reply = { repliesState.replies[i] },
-                        onClickSupport = { /*TODO*/ },
+                        reply = { viewModel.replies[i] },
+                        onClickSupport = { viewModel.onClickSupportReply(viewModel.replies[i].id) },
                         modifier = Modifier
                             .fillMaxWidth()
                             .background(MaterialTheme.colors.surface)
@@ -295,19 +317,55 @@ fun StoryDetailScreen(
                 }
             }
 
-            Divider()
 
-            ReplyComposer(
-                state = { viewModel.replyComposerState },
-                onChangeCaption = { viewModel.onChangeReplyComposerCaption(it) },
-                onFocusChangeCaption = { viewModel.onFocusChangeCaption(it) },
-                onClickAttach = { /*TODO*/ },
-                onClickSend = { /*TODO*/ },
+
+            if (viewModel.isLoggedIn.collectAsState().value == true) {
+                Divider()
+
+                ReplyComposer(
+                    state = { viewModel.replyComposerState },
+                    onChangeCaption = { viewModel.onChangeReplyComposerCaption(it) },
+                    onFocusChangeCaption = { viewModel.onFocusChangeCaption(it) },
+                    onClickAttach = { /*TODO: not yet implemented */ },
+                    onClickSend = { /*TODO: not yet implemented */ },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(MaterialTheme.colors.surface)
+                        .padding(MaterialTheme.spacing.medium),
+                )
+            } else Card(
+                shape = RoundedCornerShape(16.dp),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(MaterialTheme.colors.surface)
                     .padding(MaterialTheme.spacing.medium),
-            )
+            ) {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(MaterialTheme.spacing.medium),
+                ) {
+                    Text(
+                        text = stringResource(R.string.login_to_join_this_conversation),
+                        color = MaterialTheme.colors.primary,
+                        style = MaterialTheme.typography.h6,
+                        fontWeight = FontWeight.Bold,
+                    )
+
+                    Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
+
+                    GradientButton(
+                        onClick = { navigator.navigate(LoginScreenDestination) },
+                        modifier = Modifier.fillMaxWidth(),
+                    ) {
+                        Text(
+                            text = stringResource(id = R.string.login),
+                            fontWeight = FontWeight.SemiBold,
+                            color = MaterialTheme.colors.onPrimary,
+                        )
+                    }
+                }
+            }
         }
     }
 }
