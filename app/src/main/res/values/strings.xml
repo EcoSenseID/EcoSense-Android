@@ -225,4 +225,5 @@
     <string name="language">Language</string>
     <string name="em_caption_blank">Caption can not be blank!</string>
     <string name="posting">Posting…</string>
+    <string name="my_story_history">My Story History</string>
 </resources>

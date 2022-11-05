@@ -41,7 +41,6 @@ import com.ecosense.android.featProfile.presentation.profile.component.ProfileTo
 import com.ecosense.android.featProfile.presentation.profile.component.RecentCampaignItem
 import com.ecosense.android.featProfile.presentation.profile.component.RecentStoryItem
 import com.ramcosta.composedestinations.annotation.Destination
-import com.ramcosta.composedestinations.annotation.RootNavGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlinx.coroutines.flow.collectLatest
 
@@ -72,6 +71,7 @@ fun ProfileScreen(
                 is UIEvent.HideKeyboard -> {
                     focusManager.clearFocus()
                 }
+                else -> {}
             }
         }
     }
@@ -226,11 +226,11 @@ fun ProfileScreen(
                         }
                     }
 
-                    for (i in state.recentStories.indices) {
-                        val story = state.recentStories[i]
+                    for (i in viewModel.recentStories.indices) {
+                        val story = viewModel.recentStories[i]
                         RecentStoryItem(
                             story = { story },
-                            onClickSupport = { /* TODO: not yet implemented */ },
+                            onClickSupport = { viewModel.onClickSupport(storyId = story.id) },
                             onClickReply = { navigator.navigate(StoryDetailScreenDestination(story)) },
                             onClickShare = { /* TODO: not yet implemented */ },
                             onClickSupporters = {
@@ -252,12 +252,12 @@ fun ProfileScreen(
                                 .padding(MaterialTheme.spacing.medium),
                         )
 
-                        if (i != state.recentStories.lastIndex) Spacer(
+                        if (i != viewModel.recentStories.lastIndex) Spacer(
                             modifier = Modifier.height(MaterialTheme.spacing.small)
                         )
                     }
 
-                    if (state.recentStories.isEmpty()) Column(
+                    if (viewModel.recentStories.isEmpty()) Column(
                         horizontalAlignment = Alignment.CenterHorizontally,
                         modifier = Modifier
                             .fillMaxWidth()
