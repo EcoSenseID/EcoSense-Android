@@ -8,7 +8,6 @@ data class ProfileScreenState(
     val isDropdownMenuExpanded: Boolean,
     val isLoading: Boolean,
     val totalEcoPoints: Int,
-    val recentStories: List<StoryPresentation>,
     val recentCampaigns: List<RecentCampaignPresentation>,
 ) {
     companion object {
@@ -17,7 +16,6 @@ data class ProfileScreenState(
             isDropdownMenuExpanded = false,
             isLoading = false,
             totalEcoPoints = 0,
-            recentStories = emptyList(),
             recentCampaigns = emptyList(),
         )
     }

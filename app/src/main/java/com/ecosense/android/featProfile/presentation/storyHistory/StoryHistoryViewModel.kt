@@ -48,6 +48,7 @@ class StoryHistoryViewModel @Inject constructor(
                     is Resource.Success -> {
                         isLoading = false
                         result.data?.let { storiesList ->
+                            _stories.clear()
                             _stories.addAll(storiesList.map { it.toPresentation() })
                         }
                     }

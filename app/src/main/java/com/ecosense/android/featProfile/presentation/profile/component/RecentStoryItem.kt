@@ -184,7 +184,6 @@ fun RecentStoryItem(
                     horizontalArrangement = Arrangement.Start,
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier
-                        .weight(1f)
                         .fillMaxHeight()
                         .clip(RoundedCornerShape(4.dp))
                         .clickable { onClickShare() }
@@ -197,6 +196,8 @@ fun RecentStoryItem(
                         modifier = Modifier.size(16.dp),
                     )
                 }
+
+                Spacer(modifier = Modifier.weight(1f))
             }
         }
     }

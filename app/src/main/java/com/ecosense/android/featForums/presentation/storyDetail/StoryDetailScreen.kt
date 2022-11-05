@@ -209,7 +209,6 @@ fun StoryDetailScreen(
                                     horizontalArrangement = Arrangement.Start,
                                     verticalAlignment = Alignment.CenterVertically,
                                     modifier = Modifier
-                                        .weight(1f)
                                         .fillMaxHeight()
                                         .clip(RoundedCornerShape(4.dp))
                                         .clickable { }
@@ -248,6 +247,8 @@ fun StoryDetailScreen(
                                         modifier = Modifier.size(16.dp),
                                     )
                                 }
+
+                                Spacer(modifier = Modifier.weight(1f))
                             }
                         }
                     }
