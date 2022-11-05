@@ -16,7 +16,7 @@ data class StorySupportersState(
             isLoading = false,
             isEndReached = false,
             errorMessage = null,
-            page = 0,
+            page = 1,
         )
     }
 }
