@@ -41,14 +41,24 @@ class ForumsViewModel @Inject constructor(
     private val _eventFlow = Channel<UIEvent>()
     val eventFlow = _eventFlow.receiveAsFlow()
 
+    var isRefreshingFeed by mutableStateOf(false)
+        private set
+
     private val feedPaginator = DefaultPaginator(
         initialKey = feedState.page,
         getNextKey = { feedState.page + 1 },
         onRequest = { nextPage -> forumsRepository.getStories(nextPage, 20) },
         onLoadUpdated = { isLoading -> feedState = feedState.copy(isLoading = isLoading) },
-        onError = { message: UIText? -> feedState = feedState.copy(errorMessage = message) },
+        onError = { message: UIText? ->
+            feedState = feedState.copy(errorMessage = message)
+            if (isRefreshingFeed) isRefreshingFeed = false
+        },
         onSuccess = { items: List<Story>?, newKey: Int ->
             val newStories = items?.map { it.toPresentation() } ?: emptyList()
+            if (isRefreshingFeed) {
+                _stories.clear()
+                isRefreshingFeed = false
+            }
             _stories.addAll(newStories)
             feedState = feedState.copy(
                 page = newKey,
@@ -99,5 +109,12 @@ class ForumsViewModel @Inject constructor(
                 }
             }.launchIn(this)
         }
+    }
+
+    fun refreshStoriesFeed() {
+        isRefreshingFeed = true
+        feedState = StoriesFeedState.defaultValue
+        feedPaginator.reset()
+        onLoadNextStoriesFeed()
     }
 }

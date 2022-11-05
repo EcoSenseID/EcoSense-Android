@@ -18,13 +18,17 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
 import com.ecosense.android.R
 import com.ecosense.android.core.presentation.model.SharedCampaignPresentation
 import com.ecosense.android.core.presentation.theme.GradientForButtons
 import com.ecosense.android.core.presentation.util.UIEvent
 import com.ecosense.android.core.presentation.util.asString
+import com.ecosense.android.core.util.OnLifecycleEvent
 import com.ecosense.android.destinations.*
 import com.ecosense.android.featForums.presentation.forums.component.StoryItem
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.SwipeRefreshState
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlinx.coroutines.flow.collectLatest
@@ -38,6 +42,8 @@ fun ForumsScreen(
 ) {
     val scaffoldState = rememberScaffoldState()
     val context = LocalContext.current
+
+    OnLifecycleEvent { if (it == Lifecycle.Event.ON_RESUME) viewModel.refreshStoriesFeed() }
 
     LaunchedEffect(key1 = true) {
         viewModel.eventFlow.collectLatest { event ->
@@ -98,41 +104,50 @@ fun ForumsScreen(
         },
         modifier = Modifier.fillMaxSize(),
     ) { scaffoldPadding ->
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(scaffoldPadding),
+
+        SwipeRefresh(
+            state = SwipeRefreshState(isRefreshing = viewModel.isRefreshingFeed),
+            onRefresh = { viewModel.refreshStoriesFeed() },
+            modifier = Modifier.padding(scaffoldPadding),
         ) {
-            items(count = viewModel.stories.size) { i ->
-                if (i >= viewModel.stories.size - 1 && !viewModel.feedState.isEndReached && !viewModel.feedState.isLoading) viewModel.onLoadNextStoriesFeed()
+            LazyColumn(modifier = Modifier.fillMaxSize()) {
+                items(count = viewModel.stories.size) { i ->
+                    if (i >= viewModel.stories.size - 1 && !viewModel.feedState.isEndReached && !viewModel.feedState.isLoading) viewModel.onLoadNextStoriesFeed()
 
-                val story = viewModel.stories[i]
-                StoryItem(
-                    story = { story },
-                    onClickSupport = { viewModel.onClickSupport(storyId = story.id) },
-                    onClickReply = { navigator.navigate(StoryDetailScreenDestination(story)) },
-                    onClickShare = { /* TODO: implement share feature */ logcat { "onClickShare $i" } },
-                    onClickSupporters = { navigator.navigate(StorySupportersScreenDestination(story.id)) },
-                    onClickSharedCampaign = { campaign: SharedCampaignPresentation ->
-                        navigator.navigate(CampaignDetailScreenDestination(id = campaign.id))
-                    },
-                    modifier = Modifier.clickable {
-                        navigator.navigate(StoryDetailScreenDestination(story))
-                    },
-                )
+                    val story = viewModel.stories[i]
+                    StoryItem(
+                        story = { story },
+                        onClickSupport = { viewModel.onClickSupport(storyId = story.id) },
+                        onClickReply = { navigator.navigate(StoryDetailScreenDestination(story)) },
+                        onClickShare = { /* TODO: implement share feature */ logcat { "onClickShare $i" } },
+                        onClickSupporters = {
+                            navigator.navigate(
+                                StorySupportersScreenDestination(
+                                    story.id
+                                )
+                            )
+                        },
+                        onClickSharedCampaign = { campaign: SharedCampaignPresentation ->
+                            navigator.navigate(CampaignDetailScreenDestination(id = campaign.id))
+                        },
+                        modifier = Modifier.clickable {
+                            navigator.navigate(StoryDetailScreenDestination(story))
+                        },
+                    )
 
-                Divider()
-            }
+                    Divider()
+                }
 
-            item {
-                if (viewModel.feedState.isLoading) {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(8.dp),
-                        horizontalArrangement = Arrangement.Center
-                    ) {
-                        CircularProgressIndicator()
+                item {
+                    if (viewModel.feedState.isLoading) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(8.dp),
+                            horizontalArrangement = Arrangement.Center
+                        ) {
+                            CircularProgressIndicator()
+                        }
                     }
                 }
             }
