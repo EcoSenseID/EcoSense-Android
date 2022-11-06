@@ -19,6 +19,7 @@ import com.ecosense.android.featForums.domain.model.Supporter
 import com.ecosense.android.featForums.domain.repository.ForumsRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.withContext
 import logcat.asLog
@@ -45,7 +46,6 @@ class ForumsRepositoryImpl(
         try {
             val idToken = authApi.getIdToken(true)
             val bearerToken = "Bearer $idToken"
-            logcat { "getStories. page: $page, size: $size" }
             val response = forumsApi.getStories(
                 bearerToken = bearerToken,
                 page = page,
@@ -70,6 +70,32 @@ class ForumsRepositoryImpl(
                 is IOException -> UIText.StringResource(R.string.em_io_exception)
                 else -> UIText.StringResource(R.string.em_unknown)
             }.let { return Resource.Error(it) }
+        }
+    }
+
+    override fun getStoryDetail(
+        storyId: Int,
+    ): Flow<Resource<Story>> = flow {
+        emit(Resource.Loading())
+
+        try {
+            val idToken = authApi.getIdToken(true)
+            val bearerToken = "Bearer $idToken"
+            val response = forumsApi.getStoryDetail(bearerToken = bearerToken, storyId = storyId)
+
+            when (response.error) {
+                true -> emit(Resource.Error(uiText = response.message?.let {
+                    UIText.DynamicString(it)
+                } ?: UIText.StringResource(R.string.em_unknown)))
+                else -> emit(Resource.Success(response.toDomain()))
+            }
+
+        } catch (e: Exception) {
+            logcat { e.asLog() }
+            when (e) {
+                is IOException -> UIText.StringResource(R.string.em_io_exception)
+                else -> UIText.StringResource(R.string.em_unknown)
+            }.let { emit(Resource.Error(it)) }
         }
     }
 
@@ -157,6 +183,11 @@ class ForumsRepositoryImpl(
             return@flow
         }
 
+        if (authApi.isLoggedIn.firstOrNull() != true) {
+            emit(Resource.Error(UIText.StringResource(R.string.em_please_login_first)))
+            return@flow
+        }
+
         try {
             val idToken = authApi.getIdToken(true)
             val bearerToken = "Bearer $idToken"
@@ -215,6 +246,11 @@ class ForumsRepositoryImpl(
             return@flow
         }
 
+        if (authApi.isLoggedIn.firstOrNull() != true) {
+            emit(Resource.Error(UIText.StringResource(R.string.em_please_login_first)))
+            return@flow
+        }
+
         try {
             val idToken = authApi.getIdToken(true)
             val bearerToken = "Bearer $idToken"
@@ -264,6 +300,11 @@ class ForumsRepositoryImpl(
     ): Flow<SimpleResource> = flow {
         emit(Resource.Loading())
 
+        if (authApi.isLoggedIn.firstOrNull() != true) {
+            emit(Resource.Error(UIText.StringResource(R.string.em_please_login_first)))
+            return@flow
+        }
+
         try {
             val idToken = authApi.getIdToken(true)
             val bearerToken = "Bearer $idToken"
@@ -297,6 +338,11 @@ class ForumsRepositoryImpl(
         storyId: Int,
     ): Flow<SimpleResource> = flow {
         emit(Resource.Loading())
+
+        if (authApi.isLoggedIn.firstOrNull() != true) {
+            emit(Resource.Error(UIText.StringResource(R.string.em_please_login_first)))
+            return@flow
+        }
 
         try {
             val idToken = authApi.getIdToken(true)
@@ -332,6 +378,11 @@ class ForumsRepositoryImpl(
     ): Flow<SimpleResource> = flow {
         emit(Resource.Loading())
 
+        if (authApi.isLoggedIn.firstOrNull() != true) {
+            emit(Resource.Error(UIText.StringResource(R.string.em_please_login_first)))
+            return@flow
+        }
+
         try {
             val idToken = authApi.getIdToken(true)
             val bearerToken = "Bearer $idToken"
@@ -365,6 +416,11 @@ class ForumsRepositoryImpl(
         replyId: Int,
     ): Flow<SimpleResource> = flow {
         emit(Resource.Loading())
+
+        if (authApi.isLoggedIn.firstOrNull() != true) {
+            emit(Resource.Error(UIText.StringResource(R.string.em_please_login_first)))
+            return@flow
+        }
 
         try {
             val idToken = authApi.getIdToken(true)

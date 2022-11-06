@@ -57,7 +57,6 @@ class FirebaseAuthApi : AuthApi {
         }
     }
 
-
     override suspend fun getIdToken(
         forceRefresh: Boolean,
     ): String? = suspendCoroutine { cont ->
@@ -66,7 +65,7 @@ class FirebaseAuthApi : AuthApi {
                 task.isSuccessful -> cont.resume(task.result.token)
                 else -> cont.resume(null)
             }
-        }
+        } ?: cont.resume(null)
     }
 
     override suspend fun loginWithEmail(

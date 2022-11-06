@@ -5,7 +5,6 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -59,23 +58,37 @@ fun ReplyComposer(
             TextField(
                 value = state().caption ?: "",
                 onValueChange = onChangeCaption,
+                enabled = !state().isUploading,
                 placeholder = { Text(text = stringResource(R.string.reply_to_this_story)) },
                 colors = TextFieldDefaults.textFieldColors(
                     backgroundColor = Color.Transparent,
                     focusedIndicatorColor = Color.Transparent,
                     unfocusedIndicatorColor = Color.Transparent,
+                    disabledIndicatorColor = Color.Transparent,
                 ),
                 modifier = Modifier
                     .fillMaxWidth()
                     .onFocusChanged { onFocusChangeCaption(it) },
             )
 
+            state().attachedPhotoUri?.let {
+                AsyncImage(
+                    model = it,
+                    contentDescription = stringResource(R.string.attached_photo),
+                    contentScale = ContentScale.Fit,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(MaterialTheme.spacing.small)
+                        .clip(RoundedCornerShape(16.dp)),
+                )
+            }
+
             AnimatedVisibility(visible = state().isFocused) {
                 Row(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     modifier = Modifier.fillMaxWidth(),
                 ) {
-                    IconButton(onClick = { onClickAttach() }) {
+                    IconButton(onClick = { if (!state().isUploading) onClickAttach() }) {
                         Icon(
                             painter = painterResource(id = R.drawable.ic_photo),
                             contentDescription = stringResource(R.string.cd_attach_photo),
@@ -83,7 +96,10 @@ fun ReplyComposer(
                         )
                     }
 
-                    TextButton(onClick = { onClickSend() }) {
+                    TextButton(
+                        onClick = { onClickSend() },
+                        enabled = !state().isUploading,
+                    ) {
                         Text(
                             text = stringResource(R.string.post),
                             color = MaterialTheme.colors.secondary,

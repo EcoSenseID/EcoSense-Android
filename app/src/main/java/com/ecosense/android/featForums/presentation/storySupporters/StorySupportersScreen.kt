@@ -65,10 +65,7 @@ fun StorySupportersScreen(
         modifier = Modifier.fillMaxSize(),
     ) {
         LazyColumn(modifier = Modifier.fillMaxSize()) {
-            items(
-                count = viewModel.state.supporters.count(),
-                key = { i -> viewModel.state.supporters[i].id },
-            ) { i ->
+            items(count = viewModel.state.supporters.count()) { i ->
                 if (i >= viewModel.state.supporters.lastIndex && !viewModel.state.isEndReached && !viewModel.state.isLoading) viewModel.onLoadNextSupporters()
 
                 SupporterItem(

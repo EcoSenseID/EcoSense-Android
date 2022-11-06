@@ -24,7 +24,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.ecosense.android.R
-import com.ecosense.android.core.presentation.AuthNavGraph
 import com.ecosense.android.core.presentation.component.GradientButton
 import com.ecosense.android.core.presentation.theme.spacing
 import com.ecosense.android.core.presentation.util.UIEvent
@@ -39,9 +38,9 @@ import kotlinx.coroutines.flow.collectLatest
 @OptIn(ExperimentalUnitApi::class)
 @Composable
 @Destination
-@AuthNavGraph
 fun ResetPasswordScreen(
-    navigator: DestinationsNavigator, viewModel: ResetPasswordViewModel = hiltViewModel()
+    navigator: DestinationsNavigator,
+    viewModel: ResetPasswordViewModel = hiltViewModel(),
 ) {
     val scaffoldState = rememberScaffoldState()
 
@@ -63,6 +62,7 @@ fun ResetPasswordScreen(
                 is UIEvent.HideKeyboard -> {
                     focusManager.clearFocus()
                 }
+                else -> {}
             }
         }
     }
@@ -161,8 +161,7 @@ fun ResetPasswordScreen(
 
                 GradientButton(
                     onClick = {
-                        Intent(Intent.ACTION_MAIN)
-                            .apply { addCategory(Intent.CATEGORY_APP_EMAIL) }
+                        Intent(Intent.ACTION_MAIN).apply { addCategory(Intent.CATEGORY_APP_EMAIL) }
                             .apply { addFlags(Intent.FLAG_ACTIVITY_NEW_TASK) }
                             .let { context.startActivity(it) }
                     },

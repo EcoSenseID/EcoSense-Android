@@ -1,7 +1,7 @@
 package com.ecosense.android.featForums.presentation.storyDetail.model
 
-import com.ecosense.android.featForums.domain.model.Reply
 import com.ecosense.android.core.presentation.constants.PatternConstants
+import com.ecosense.android.featForums.domain.model.Reply
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -14,6 +14,7 @@ data class ReplyPresentation(
     val createdAt: String,
     val supportersCount: Int,
     val isSupported: Boolean,
+    val isLoadingSupport: Boolean,
 )
 
 fun Reply.toPresentation() = ReplyPresentation(
@@ -28,4 +29,5 @@ fun Reply.toPresentation() = ReplyPresentation(
     ).format(Date().apply { time = this@toPresentation.createdAt }),
     supportersCount = this.supportersCount,
     isSupported = this.isSupported,
+    isLoadingSupport = false,
 )

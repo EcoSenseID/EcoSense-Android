@@ -1,5 +1,6 @@
 package com.ecosense.android.featForums.presentation.forums
 
+import android.content.Intent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -18,20 +19,20 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
 import com.ecosense.android.R
 import com.ecosense.android.core.presentation.model.SharedCampaignPresentation
 import com.ecosense.android.core.presentation.theme.GradientForButtons
 import com.ecosense.android.core.presentation.util.UIEvent
 import com.ecosense.android.core.presentation.util.asString
-import com.ecosense.android.destinations.CampaignDetailScreenDestination
-import com.ecosense.android.destinations.StoryComposerScreenDestination
-import com.ecosense.android.destinations.StoryDetailScreenDestination
-import com.ecosense.android.destinations.StorySupportersScreenDestination
+import com.ecosense.android.core.util.OnLifecycleEvent
+import com.ecosense.android.destinations.*
 import com.ecosense.android.featForums.presentation.forums.component.StoryItem
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.SwipeRefreshState
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlinx.coroutines.flow.collectLatest
-import logcat.logcat
 
 @Composable
 @Destination
@@ -41,6 +42,8 @@ fun ForumsScreen(
 ) {
     val scaffoldState = rememberScaffoldState()
     val context = LocalContext.current
+
+    OnLifecycleEvent { if (it == Lifecycle.Event.ON_RESUME) viewModel.refreshStoriesFeed() }
 
     LaunchedEffect(key1 = true) {
         viewModel.eventFlow.collectLatest { event ->
@@ -86,10 +89,8 @@ fun ForumsScreen(
                     .background(GradientForButtons)
                     .clickable {
                         navigator.navigate(
-                            StoryComposerScreenDestination(
-                                caption = null,
-                                campaign = null,
-                            )
+                            if (viewModel.isLoggedIn.value != true) LoginScreenDestination()
+                            else StoryComposerScreenDestination(null, null)
                         )
                     },
             ) {
@@ -103,41 +104,58 @@ fun ForumsScreen(
         },
         modifier = Modifier.fillMaxSize(),
     ) { scaffoldPadding ->
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(scaffoldPadding),
+
+        SwipeRefresh(
+            state = SwipeRefreshState(isRefreshing = viewModel.isRefreshingFeed),
+            onRefresh = { viewModel.refreshStoriesFeed() },
+            modifier = Modifier.padding(scaffoldPadding),
         ) {
-            items(count = viewModel.stories.size) { i ->
-                if (i >= viewModel.stories.size - 1 && !viewModel.feedState.isEndReached && !viewModel.feedState.isLoading) viewModel.onLoadNextStoriesFeed()
+            LazyColumn(modifier = Modifier.fillMaxSize()) {
+                items(count = viewModel.stories.size) { i ->
+                    if (i >= viewModel.stories.size - 1 && !viewModel.feedState.isEndReached && !viewModel.feedState.isLoading) viewModel.onLoadNextStoriesFeed()
 
-                val story = viewModel.stories[i]
-                StoryItem(
-                    story = { story },
-                    onClickSupport = { viewModel.onClickSupport(storyId = story.id) },
-                    onClickReply = { navigator.navigate(StoryDetailScreenDestination(story)) },
-                    onClickShare = { /* TODO: implement share feature */ logcat { "onClickShare $i" } },
-                    onClickSupporters = { navigator.navigate(StorySupportersScreenDestination(story.id)) },
-                    onClickSharedCampaign = { campaign: SharedCampaignPresentation ->
-                        navigator.navigate(CampaignDetailScreenDestination(id = campaign.id))
-                    },
-                    modifier = Modifier.clickable {
-                        navigator.navigate(StoryDetailScreenDestination(story))
-                    },
-                )
+                    StoryItem(
+                        story = { viewModel.stories[i] },
+                        onClickSupport = { viewModel.onClickSupport(viewModel.stories[i].id) },
+                        onClickReply = { navigator.navigate(StoryDetailScreenDestination(viewModel.stories[i].id)) },
+                        onClickShare = {
+                            val shareText = context.getString(
+                                R.string.format_share_message,
+                                viewModel.stories[i].id
+                            )
 
-                Divider()
-            }
+                            Intent(Intent.ACTION_SEND).let { intent ->
+                                intent.type = context.getString(R.string.intent_type_plain_text)
+                                intent.putExtra(Intent.EXTRA_TEXT, shareText)
+                                context.startActivity(intent)
+                            }
+                        },
+                        onClickSupporters = {
+                            navigator.navigate(
+                                StorySupportersScreenDestination(storyId = viewModel.stories[i].id)
+                            )
+                        },
+                        onClickSharedCampaign = { campaign: SharedCampaignPresentation ->
+                            navigator.navigate(CampaignDetailScreenDestination(id = campaign.id))
+                        },
+                        modifier = Modifier.clickable {
+                            navigator.navigate(StoryDetailScreenDestination(viewModel.stories[i].id))
+                        },
+                    )
 
-            item {
-                if (viewModel.feedState.isLoading) {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(8.dp),
-                        horizontalArrangement = Arrangement.Center
-                    ) {
-                        CircularProgressIndicator()
+                    Divider()
+                }
+
+                item {
+                    if (viewModel.feedState.isLoading) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(8.dp),
+                            horizontalArrangement = Arrangement.Center
+                        ) {
+                            CircularProgressIndicator()
+                        }
                     }
                 }
             }

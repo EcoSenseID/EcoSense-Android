@@ -3,6 +3,7 @@ package com.ecosense.android.featForums.presentation.storyComposer
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
@@ -78,29 +79,37 @@ fun StoryComposerScreen(
                 backgroundColor = MaterialTheme.colors.background,
                 elevation = 0.dp,
             ) {
-                Row(
-                    horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.fillMaxSize(),
-                ) {
-                    Row(modifier = Modifier.weight(1f)) {
-                        IconButton(onClick = { navigator.navigateUp() }) {
-                            Icon(
-                                imageVector = Icons.Rounded.ArrowBack,
-                                contentDescription = stringResource(id = R.string.cd_back),
-                                tint = MaterialTheme.colors.secondary,
-                            )
+                Column(modifier = Modifier.fillMaxSize()) {
+                    Row(
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1f),
+                    ) {
+                        Row(modifier = Modifier.weight(1f)) {
+                            IconButton(onClick = { navigator.navigateUp() }) {
+                                Icon(
+                                    imageVector = Icons.Rounded.ArrowBack,
+                                    contentDescription = stringResource(id = R.string.cd_back),
+                                    tint = MaterialTheme.colors.secondary,
+                                )
+                            }
                         }
+
+                        Text(
+                            text = stringResource(R.string.create_a_story),
+                            color = MaterialTheme.colors.primary,
+                            style = MaterialTheme.typography.h6,
+                            fontWeight = FontWeight.Bold,
+                        )
+
+                        Spacer(modifier = Modifier.weight(1f))
                     }
 
-                    Text(
-                        text = stringResource(R.string.create_a_story),
-                        color = MaterialTheme.colors.primary,
-                        style = MaterialTheme.typography.h6,
-                        fontWeight = FontWeight.Bold,
-                    )
-
-                    Spacer(modifier = Modifier.weight(1f))
+                    AnimatedVisibility(visible = viewModel.state.isUploading) {
+                        LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
+                    }
                 }
             }
         },
@@ -151,6 +160,7 @@ fun StoryComposerScreen(
                                 backgroundColor = Color.Transparent,
                                 focusedIndicatorColor = Color.Transparent,
                                 unfocusedIndicatorColor = Color.Transparent,
+                                disabledIndicatorColor = Color.Transparent,
                             ),
                             modifier = Modifier.fillMaxWidth(),
                         )
@@ -158,7 +168,7 @@ fun StoryComposerScreen(
                         viewModel.state.attachedPhotoUri?.let {
                             AsyncImage(
                                 model = it,
-                                contentDescription = null,
+                                contentDescription = stringResource(R.string.attached_photo),
                                 contentScale = ContentScale.Fit,
                                 modifier = Modifier
                                     .fillMaxWidth()

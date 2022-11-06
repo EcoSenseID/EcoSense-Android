@@ -169,6 +169,9 @@ dependencies {
     // Accompanist-SystemUIController
     implementation "com.google.accompanist:accompanist-systemuicontroller:0.17.0"
 
+    // Accompanist-SwipeRefresh
+    implementation "com.google.accompanist:accompanist-swiperefresh:0.19.0"
+
     // SplashScreen
     implementation 'androidx.core:core-splashscreen:1.0.0'
 

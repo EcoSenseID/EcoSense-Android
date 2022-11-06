@@ -15,6 +15,10 @@ interface ForumsRepository {
         size: Int,
     ): Resource<List<Story>>
 
+    fun getStoryDetail(
+        storyId: Int,
+    ): Flow<Resource<Story>>
+
     suspend fun getStoryReplies(
         storyId: Int,
         page: Int,

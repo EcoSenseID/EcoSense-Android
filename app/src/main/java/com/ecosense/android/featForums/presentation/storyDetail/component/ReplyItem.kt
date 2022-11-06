@@ -76,18 +76,18 @@ fun ReplyItem(
                 modifier = Modifier.fillMaxWidth(),
             )
 
-            Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
-
             if (!reply().attachedPhotoUrl.isNullOrBlank()) {
+                Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
+
                 AsyncImage(
                     model = reply().attachedPhotoUrl,
+                    error = painterResource(id = R.drawable.error_picture),
                     contentDescription = null,
+                    contentScale = ContentScale.Crop,
                     modifier = Modifier
                         .fillMaxWidth()
                         .clip(RoundedCornerShape(16.dp)),
                 )
-
-                Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
             }
 
             Row(

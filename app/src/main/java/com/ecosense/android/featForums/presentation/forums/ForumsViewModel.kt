@@ -7,6 +7,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ecosense.android.core.domain.model.Story
+import com.ecosense.android.core.domain.repository.AuthRepository
 import com.ecosense.android.core.presentation.util.UIEvent
 import com.ecosense.android.core.util.Resource
 import com.ecosense.android.core.util.UIText
@@ -18,16 +19,18 @@ import com.ecosense.android.featForums.presentation.paginator.DefaultPaginator
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class ForumsViewModel @Inject constructor(
     private val forumsRepository: ForumsRepository,
+    authRepository: AuthRepository,
 ) : ViewModel() {
+
+    val isLoggedIn: StateFlow<Boolean?> =
+        authRepository.isLoggedIn.stateIn(viewModelScope, SharingStarted.Eagerly, null)
 
     private val _stories = mutableStateListOf<StoryPresentation>()
     val stories: List<StoryPresentation> = _stories
@@ -38,14 +41,24 @@ class ForumsViewModel @Inject constructor(
     private val _eventFlow = Channel<UIEvent>()
     val eventFlow = _eventFlow.receiveAsFlow()
 
+    var isRefreshingFeed by mutableStateOf(false)
+        private set
+
     private val feedPaginator = DefaultPaginator(
         initialKey = feedState.page,
         getNextKey = { feedState.page + 1 },
         onRequest = { nextPage -> forumsRepository.getStories(nextPage, 20) },
         onLoadUpdated = { isLoading -> feedState = feedState.copy(isLoading = isLoading) },
-        onError = { message: UIText? -> feedState = feedState.copy(errorMessage = message) },
+        onError = { message: UIText? ->
+            feedState = feedState.copy(errorMessage = message)
+            if (isRefreshingFeed) isRefreshingFeed = false
+        },
         onSuccess = { items: List<Story>?, newKey: Int ->
             val newStories = items?.map { it.toPresentation() } ?: emptyList()
+            if (isRefreshingFeed) {
+                _stories.clear()
+                isRefreshingFeed = false
+            }
             _stories.addAll(newStories)
             feedState = feedState.copy(
                 page = newKey,
@@ -96,5 +109,12 @@ class ForumsViewModel @Inject constructor(
                 }
             }.launchIn(this)
         }
+    }
+
+    fun refreshStoriesFeed() {
+        isRefreshingFeed = true
+        feedState = StoriesFeedState.defaultValue
+        feedPaginator.reset()
+        onLoadNextStoriesFeed()
     }
 }

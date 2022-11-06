@@ -11,9 +11,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import com.ecosense.android.R
 import com.ecosense.android.core.presentation.model.SharedCampaignPresentation
 import com.ecosense.android.core.presentation.modifier.brushForeground
 import com.ecosense.android.core.presentation.theme.GradientForButtons
@@ -68,6 +70,7 @@ fun SharedCampaign(
 
         AsyncImage(
             model = campaign().posterUrl,
+            error = painterResource(id = R.drawable.error_picture),
             contentDescription = null,
             contentScale = ContentScale.Crop,
             modifier = Modifier

@@ -25,7 +25,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.ecosense.android.R
-import com.ecosense.android.core.presentation.AuthNavGraph
 import com.ecosense.android.core.presentation.component.GradientButton
 import com.ecosense.android.core.presentation.theme.spacing
 import com.ecosense.android.core.presentation.util.UIEvent
@@ -44,9 +43,9 @@ import kotlinx.coroutines.flow.collectLatest
 @OptIn(ExperimentalUnitApi::class)
 @Composable
 @Destination
-@AuthNavGraph(start = true)
 fun LoginScreen(
-    navigator: DestinationsNavigator, viewModel: LoginViewModel = hiltViewModel()
+    navigator: DestinationsNavigator,
+    viewModel: LoginViewModel = hiltViewModel(),
 ) {
     val googleSignInLauncher = rememberLauncherForActivityResult(
         contract = GoogleSignInContract,
@@ -73,6 +72,7 @@ fun LoginScreen(
                 is UIEvent.HideKeyboard -> {
                     focusManager.clearFocus()
                 }
+                else -> {}
             }
         }
     }
