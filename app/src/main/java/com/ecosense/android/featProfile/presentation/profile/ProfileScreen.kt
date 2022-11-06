@@ -13,6 +13,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ChevronRight
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -80,9 +81,12 @@ fun ProfileScreen(
     Scaffold(
         scaffoldState = scaffoldState,
         topBar = {
-            ProfileTopBar(isDropdownMenuExpanded = state.isDropdownMenuExpanded,
+            ProfileTopBar(
+                isDropdownMenuVisible = viewModel.isLoggedIn.collectAsState().value == true,
+                isDropdownMenuExpanded = state.isDropdownMenuExpanded,
                 onExpandDropdownMenu = { viewModel.setExpandDropdownMenu(true) },
-                onDropdownMenuDismissRequest = { viewModel.setExpandDropdownMenu(false) }) {
+                onDropdownMenuDismissRequest = { viewModel.setExpandDropdownMenu(false) },
+            ) {
                 DropdownMenuItem(onClick = {
                     viewModel.setExpandDropdownMenu(false)
                     navigator.navigate(SettingsScreenDestination)
@@ -90,7 +94,43 @@ fun ProfileScreen(
             }
         },
     ) { scaffoldPadding ->
-        LazyColumn(
+        if (viewModel.isLoggedIn.collectAsState().value != true) Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center,
+            modifier = Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colors.surface)
+                .padding(scaffoldPadding)
+                .padding(MaterialTheme.spacing.medium),
+        ) {
+            AsyncImage(
+                model = R.drawable.character_03,
+                contentDescription = null,
+                modifier = Modifier.width(160.dp),
+            )
+
+            Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
+
+            Text(
+                text = stringResource(id = R.string.em_please_login_first),
+                color = MaterialTheme.colors.onSurface,
+                style = MaterialTheme.typography.h6,
+                fontWeight = FontWeight.Bold,
+            )
+
+            Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
+
+            GradientButton(
+                onClick = { navigator.navigate(LoginScreenDestination) },
+                modifier = Modifier.fillMaxWidth(),
+            ) {
+                Text(
+                    text = stringResource(id = R.string.login),
+                    fontWeight = FontWeight.SemiBold,
+                    color = MaterialTheme.colors.onPrimary,
+                )
+            }
+        } else LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
                 .background(MaterialTheme.colors.surface)

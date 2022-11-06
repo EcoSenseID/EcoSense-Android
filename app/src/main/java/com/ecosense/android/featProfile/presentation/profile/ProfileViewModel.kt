@@ -17,9 +17,7 @@ import com.ecosense.android.featProfile.presentation.profile.model.toPresentatio
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -30,9 +28,11 @@ class ProfileViewModel @Inject constructor(
     private val forumsRepository: ForumsRepository,
 ) : ViewModel() {
 
+    val isLoggedIn: StateFlow<Boolean?> = authRepository.isLoggedIn
+        .stateIn(viewModelScope, SharingStarted.Eagerly, null)
+
     private val _state = mutableStateOf(ProfileScreenState.defaultValue)
     val state: State<ProfileScreenState> = _state
-
 
     private val _recentStories = mutableStateListOf<StoryPresentation>()
     val recentStories: List<StoryPresentation> = _recentStories
