@@ -94,9 +94,7 @@ fun CampaignHistoryScreen(
                     )
                 }
 
-                if (i != viewModel.campaigns.lastIndex) Spacer(
-                    modifier = Modifier.height(MaterialTheme.spacing.medium)
-                )
+                Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
             }
         }
     }
