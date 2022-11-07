@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -15,6 +14,7 @@ import com.ecosense.android.R
 
 @Composable
 fun ProfileTopBar(
+    isDropdownMenuVisible: Boolean,
     onExpandDropdownMenu: () -> Unit,
     isDropdownMenuExpanded: Boolean,
     onDropdownMenuDismissRequest: () -> Unit,
@@ -42,7 +42,7 @@ fun ProfileTopBar(
                 horizontalArrangement = Arrangement.End,
                 modifier = Modifier.weight(1f),
             ) {
-                IconButton(onClick = onExpandDropdownMenu) {
+                if (isDropdownMenuVisible) IconButton(onClick = onExpandDropdownMenu) {
                     Icon(
                         imageVector = Icons.Default.MoreVert,
                         contentDescription = stringResource(R.string.cd_options_menu),

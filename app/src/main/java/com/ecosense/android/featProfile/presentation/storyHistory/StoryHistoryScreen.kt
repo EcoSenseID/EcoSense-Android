@@ -127,9 +127,7 @@ fun StoryHistoryScreen(
                         .padding(MaterialTheme.spacing.medium),
                 )
 
-                if (i != viewModel.stories.lastIndex) Spacer(
-                    modifier = Modifier.height(MaterialTheme.spacing.small)
-                )
+                Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
             }
         }
     }
