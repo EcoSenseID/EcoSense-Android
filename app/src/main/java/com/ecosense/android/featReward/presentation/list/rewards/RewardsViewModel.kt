@@ -28,11 +28,23 @@ class RewardsViewModel @Inject constructor(
     private val _eventFlow = Channel<UIEvent>()
     val eventFlow = _eventFlow.receiveAsFlow()
 
+    fun onEmailValueChange(value: String) {
+        _state.value = state.value.copy(email = value)
+    }
+
+    fun onWalletTypeValueChange(value: String) {
+        _state.value = state.value.copy(walletType = value)
+    }
+
+    fun onWalletNumberValueChange(value: String) {
+        _state.value = state.value.copy(walletNumber = value)
+    }
+
     private var getRewardsJob: Job? = null
-    fun getRewards(rewardCategory: String) {
+    fun getRewards(categoryId: Int) {
         getRewardsJob?.cancel()
         getRewardsJob = viewModelScope.launch {
-            rewardRepository.getRewards(rewardCategory = rewardCategory).onEach { result ->
+            rewardRepository.getRewards(categoryId = categoryId).onEach { result ->
                 when (result) {
                     is Resource.Error -> {
                         _state.value = state.value.copy(isLoadingRewardList = false)
@@ -56,21 +68,51 @@ class RewardsViewModel @Inject constructor(
     }
 
     private var onRedeemRewardJob: Job? = null
-    fun onRedeemRewardJob(rewardId: Int) {
+    fun onRedeemRewardJob(rewardId: Int, rewardCategory: String) {
         onRedeemRewardJob?.cancel()
         onRedeemRewardJob = viewModelScope.launch {
-            rewardRepository.setRedeemReward(rewardId = rewardId).onEach { result ->
+            rewardRepository.setRedeemReward(rewardId = rewardId, rewardCategory = rewardCategory)
+                .onEach { result ->
+                    when (result) {
+                        is Resource.Error -> {
+                            _state.value = state.value.copy(isLoadingRedeemReward = false)
+                            result.uiText?.let { _eventFlow.send(UIEvent.ShowSnackbar(it)) }
+                        }
+                        is Resource.Loading -> {
+                            _state.value = state.value.copy(isLoadingRedeemReward = true)
+                        }
+                        is Resource.Success -> {
+                            _state.value = state.value.copy(isLoadingRedeemReward = false)
+                            _eventFlow.send(UIEvent.ShowSnackbar(UIText.StringResource(R.string.redeem_reward_success)))
+                        }
+                    }
+                }.launchIn(this)
+        }
+    }
+
+    private var onRequestRewardJob: Job? = null
+    fun onRequestRewardJob(
+        rewardId: Int
+    ) {
+        onRequestRewardJob?.cancel()
+        onRequestRewardJob = viewModelScope.launch {
+            rewardRepository.setRequestReward(
+                rewardId = rewardId,
+                email = state.value.email,
+                walletType = state.value.walletType,
+                walletNumber = state.value.walletNumber
+            ).onEach { result ->
                 when (result) {
                     is Resource.Error -> {
-                        _state.value = state.value.copy(isLoadingRedeemReward = false)
+                        _state.value = state.value.copy(isLoadingRequestReward = false)
                         result.uiText?.let { _eventFlow.send(UIEvent.ShowSnackbar(it)) }
                     }
                     is Resource.Loading -> {
-                        _state.value = state.value.copy(isLoadingRedeemReward = true)
+                        _state.value = state.value.copy(isLoadingRequestReward = true)
                     }
                     is Resource.Success -> {
-                        _state.value = state.value.copy(isLoadingRedeemReward = false)
-                        _eventFlow.send(UIEvent.ShowSnackbar(UIText.StringResource(R.string.join_campaign_success)))
+                        _state.value = state.value.copy(isLoadingRequestReward = false)
+                        _eventFlow.send(UIEvent.ShowSnackbar(UIText.StringResource(R.string.request_reward_success)))
                     }
                 }
             }.launchIn(this)
