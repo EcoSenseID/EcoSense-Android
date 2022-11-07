@@ -158,4 +158,7 @@
     <string name="ecoreward">EcoReward</string>
     <string name="notifications">Notifications</string>
     <string name="redeem_reward">Redeem %s EcoPoints</string>
+    <string name="redeem_reward_success">Successfully redeemed the reward! You can use it on My EcoReward page.</string>
+    <string name="request_reward_success">Successfully requested the reward! This process will be done manually, please be patient.</string>
+    <string name="use_reward_success">Reward used successfully!</string>
 </resources>
