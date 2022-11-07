@@ -29,10 +29,10 @@ import kotlinx.coroutines.flow.collectLatest
 @Destination
 fun MyRewardDetailScreen(
     navigator: DestinationsNavigator,
-    rewardId: Int,
+    claimId: Int,
     viewModel: MyRewardDetailViewModel = hiltViewModel()
 ) {
-    remember { viewModel.getMyRewardDetail(rewardId = rewardId) }
+    remember { viewModel.getMyRewardDetail(claimId = claimId) }
     val scaffoldState = rememberScaffoldState()
     val scrollState = rememberScrollState()
 
@@ -83,7 +83,7 @@ fun MyRewardDetailScreen(
                                 },
                                 backgroundColor = MaterialTheme.colors.primary,
                                 onClick = {
-                                    viewModel.onUseRewardJob(rewardId = rewardId)
+                                    viewModel.onUseRewardJob(claimId = claimId)
                                 }
                             )
                         } else {

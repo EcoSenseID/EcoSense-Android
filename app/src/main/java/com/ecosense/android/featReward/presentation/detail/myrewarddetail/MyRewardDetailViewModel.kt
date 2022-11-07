@@ -29,10 +29,10 @@ class MyRewardDetailViewModel @Inject constructor(
     val eventFlow = _eventFlow.receiveAsFlow()
 
     private var getMyRewardDetail: Job? = null
-    fun getMyRewardDetail(rewardId: Int) {
+    fun getMyRewardDetail(claimId: Int) {
         getMyRewardDetail?.cancel()
         getMyRewardDetail = viewModelScope.launch {
-            rewardRepository.getMyRewardDetail(rewardId = rewardId).onEach { result ->
+            rewardRepository.getMyRewardDetail(claimId = claimId).onEach { result ->
                 when (result) {
                     is Resource.Error -> {
                         _state.value = state.value.copy(isLoadingMyRewardDetail = false)
@@ -56,10 +56,10 @@ class MyRewardDetailViewModel @Inject constructor(
     }
 
     private var onUseRewardJob: Job? = null
-    fun onUseRewardJob(rewardId: Int) {
+    fun onUseRewardJob(claimId: Int) {
         onUseRewardJob?.cancel()
         onUseRewardJob = viewModelScope.launch {
-            rewardRepository.setUseReward(rewardId = rewardId).onEach { result ->
+            rewardRepository.setUseReward(claimId = claimId).onEach { result ->
                 when (result) {
                     is Resource.Error -> {
                         _state.value = state.value.copy(isLoadingUseReward = false)
@@ -70,8 +70,8 @@ class MyRewardDetailViewModel @Inject constructor(
                     }
                     is Resource.Success -> {
                         _state.value = state.value.copy(isLoadingUseReward = false)
-                        _eventFlow.send(UIEvent.ShowSnackbar(UIText.StringResource(R.string.join_campaign_success)))
-                        getMyRewardDetail(rewardId = rewardId)
+                        _eventFlow.send(UIEvent.ShowSnackbar(UIText.StringResource(R.string.use_reward_success)))
+                        getMyRewardDetail(claimId = claimId)
                     }
                 }
             }.launchIn(this)

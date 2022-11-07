@@ -56,10 +56,10 @@ class MyRewardsViewModel @Inject constructor(
     }
 
     private var onUseRewardJob: Job? = null
-    fun onUseRewardJob(rewardId: Int) {
+    fun onUseRewardJob(claimId: Int) {
         onUseRewardJob?.cancel()
         onUseRewardJob = viewModelScope.launch {
-            rewardRepository.setUseReward(rewardId = rewardId).onEach { result ->
+            rewardRepository.setUseReward(claimId = claimId).onEach { result ->
                 when (result) {
                     is Resource.Error -> {
                         _state.value = state.value.copy(isLoadingUseReward = false)
@@ -70,7 +70,7 @@ class MyRewardsViewModel @Inject constructor(
                     }
                     is Resource.Success -> {
                         _state.value = state.value.copy(isLoadingUseReward = false)
-                        _eventFlow.send(UIEvent.ShowSnackbar(UIText.StringResource(R.string.join_campaign_success)))
+                        _eventFlow.send(UIEvent.ShowSnackbar(UIText.StringResource(R.string.use_reward_success)))
                         getMyRewards()
                     }
                 }

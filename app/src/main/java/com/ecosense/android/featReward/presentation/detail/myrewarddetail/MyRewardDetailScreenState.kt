@@ -16,7 +16,7 @@ data class MyRewardDetailScreenState(
                 validity = "",
                 title = "",
                 partner = "",
-                pointsNeeded = 0,
+                category = "",
                 claimStatus = 0,
                 howToUse = emptyList()
             ),
