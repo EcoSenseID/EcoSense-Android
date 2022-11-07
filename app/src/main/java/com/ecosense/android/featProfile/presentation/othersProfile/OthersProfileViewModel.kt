@@ -30,7 +30,7 @@ class OthersProfileViewModel @Inject constructor(
     var profile by mutableStateOf(OthersProfilePresentation.defaultValue)
         private set
 
-    var isLoading by mutableStateOf(false)
+    var isRefreshing by mutableStateOf(false)
         private set
 
     private val _recentStories = mutableStateListOf<StoryPresentation>()
@@ -53,14 +53,14 @@ class OthersProfileViewModel @Inject constructor(
             ).onEach { result ->
                 when (result) {
                     is Resource.Error -> {
-                        isLoading = false
+                        isRefreshing = false
                         result.uiText?.let { _eventFlow.send(UIEvent.ShowSnackbar(it)) }
                     }
 
-                    is Resource.Loading -> isLoading = true
+                    is Resource.Loading -> isRefreshing = true
 
                     is Resource.Success -> {
-                        isLoading = true
+                        isRefreshing = false
                         result.data?.let { profile = it.toPresentation() }
                         result.data?.recentStories?.map { it.toPresentation() }?.let {
                             _recentStories.clear()

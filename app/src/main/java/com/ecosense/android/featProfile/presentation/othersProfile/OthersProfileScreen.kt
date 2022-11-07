@@ -42,6 +42,8 @@ import com.ecosense.android.core.util.OnLifecycleEvent
 import com.ecosense.android.destinations.*
 import com.ecosense.android.featProfile.presentation.component.RecentStoryItem
 import com.ecosense.android.featProfile.presentation.profile.component.RecentCampaignItem
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.SwipeRefreshState
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlinx.coroutines.flow.collectLatest
@@ -115,209 +117,214 @@ fun OthersProfileScreen(
             }
         },
     ) { scaffoldPadding ->
-        LazyColumn(
+        SwipeRefresh(
+            state = SwipeRefreshState(isRefreshing = viewModel.isRefreshing),
+            onRefresh = { viewModel.onRefreshProfile() },
             modifier = Modifier
                 .fillMaxSize()
                 .background(MaterialTheme.colors.surface)
                 .padding(scaffoldPadding),
         ) {
-            item {
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(MaterialTheme.spacing.medium),
-                ) {
-                    Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
-
-                    AsyncImage(
-                        model = viewModel.profile.avatarUrl,
-                        contentDescription = null,
-                        placeholder = painterResource(id = R.drawable.ic_ecosense_logo),
-                        error = painterResource(id = R.drawable.ic_ecosense_logo),
-                        contentScale = ContentScale.Crop,
-                        modifier = Modifier
-                            .padding(MaterialTheme.spacing.medium)
-                            .size(72.dp)
-                            .clip(CircleShape),
-                    )
-
-                    Text(
-                        text = if (!viewModel.profile.name.isBlank()) viewModel.profile.name
-                        else stringResource(R.string.ecosense_user),
-                        fontSize = TextUnit(22f, TextUnitType.Sp),
-                        fontWeight = FontWeight.ExtraBold,
-                        modifier = Modifier.brushForeground(brush = Gradient),
-                    )
-
-                    Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
-
-                    Row(
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier.fillMaxWidth(),
-                    ) {
-                        Text(
-                            text = stringResource(R.string.stories),
-                            fontWeight = FontWeight.Bold,
-                            style = MaterialTheme.typography.h6,
-                        )
-
-                        TextButton(onClick = {
-                            navigator.navigate(
-                                StoryHistoryScreenDestination(userId = viewModel.profile.userId)
-                            )
-                        }) {
-                            Text(
-                                text = stringResource(R.string.see_all),
-                                fontWeight = FontWeight.SemiBold,
-                            )
-                            Icon(
-                                imageVector = Icons.Rounded.ChevronRight,
-                                contentDescription = null,
-                            )
-                        }
-                    }
-
-                    for (i in viewModel.recentStories.indices) {
-                        RecentStoryItem(
-                            story = { viewModel.recentStories[i] },
-                            onClickSupport = { viewModel.onClickSupport(viewModel.recentStories[i].id) },
-                            onClickReply = {
-                                navigator.navigate(
-                                    StoryDetailScreenDestination(
-                                        viewModel.recentStories[i].id
-                                    )
-                                )
-                            },
-                            onClickShare = {
-                                val shareText = context.getString(
-                                    R.string.format_share_message,
-                                    viewModel.recentStories[i].id,
-                                )
-
-                                Intent(Intent.ACTION_SEND).let { intent ->
-                                    intent.type = context.getString(R.string.intent_type_plain_text)
-                                    intent.putExtra(Intent.EXTRA_TEXT, shareText)
-                                    context.startActivity(intent)
-                                }
-                            },
-                            onClickSupporters = {
-                                navigator.navigate(
-                                    StorySupportersScreenDestination(viewModel.recentStories[i].id)
-                                )
-                            },
-                            onClickSharedCampaign = { campaign ->
-                                navigator.navigate(CampaignDetailScreenDestination(id = campaign.id))
-                            },
-                            modifier = Modifier
-                                .clip(RoundedCornerShape(16.dp))
-                                .border(
-                                    width = 1.dp,
-                                    color = MaterialTheme.colors.onSurface.copy(alpha = 0.1f),
-                                    shape = RoundedCornerShape(16.dp),
-                                )
-                                .clickable {
-                                    navigator.navigate(
-                                        StoryDetailScreenDestination(viewModel.recentStories[i].id)
-                                    )
-                                }
-                                .fillMaxWidth()
-                                .background(MaterialTheme.colors.surface)
-                                .padding(MaterialTheme.spacing.medium),
-                        )
-
-                        if (i != viewModel.recentStories.lastIndex) Spacer(
-                            modifier = Modifier.height(MaterialTheme.spacing.small)
-                        )
-                    }
-
-                    if (viewModel.recentStories.isEmpty()) Column(
+            LazyColumn(modifier = Modifier.fillMaxSize()) {
+                item {
+                    Column(
                         horizontalAlignment = Alignment.CenterHorizontally,
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(MaterialTheme.spacing.medium),
                     ) {
+                        Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
+
                         AsyncImage(
-                            model = R.drawable.character_06,
+                            model = viewModel.profile.avatarUrl,
                             contentDescription = null,
-                            modifier = Modifier.width(120.dp),
+                            placeholder = painterResource(id = R.drawable.ic_ecosense_logo),
+                            error = painterResource(id = R.drawable.ic_ecosense_logo),
+                            contentScale = ContentScale.Crop,
+                            modifier = Modifier
+                                .padding(MaterialTheme.spacing.medium)
+                                .size(72.dp)
+                                .clip(CircleShape),
                         )
 
                         Text(
-                            text = stringResource(R.string.this_user_has_not_uploaded_anything),
-                            fontWeight = FontWeight.Bold,
-                            textAlign = TextAlign.Center,
-                        )
-                    }
-
-                    Spacer(modifier = Modifier.height(MaterialTheme.spacing.large))
-
-                    Row(
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier.fillMaxWidth(),
-                    ) {
-                        Text(
-                            text = stringResource(R.string.campaign_history),
-                            fontWeight = FontWeight.Bold,
-                            style = MaterialTheme.typography.h6,
+                            text = if (!viewModel.profile.name.isBlank()) viewModel.profile.name
+                            else stringResource(R.string.ecosense_user),
+                            fontSize = TextUnit(22f, TextUnitType.Sp),
+                            fontWeight = FontWeight.ExtraBold,
+                            modifier = Modifier.brushForeground(brush = Gradient),
                         )
 
-                        TextButton(onClick = {
-                            navigator.navigate(CampaignHistoryScreenDestination(userId = viewModel.profile.userId))
-                        }) {
-                            Text(
-                                text = stringResource(R.string.see_all),
-                                fontWeight = FontWeight.SemiBold,
-                            )
-                            Icon(
-                                imageVector = Icons.Rounded.ChevronRight,
-                                contentDescription = null,
-                            )
-                        }
-                    }
+                        Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
 
-                    for (i in viewModel.profile.recentCampaigns.indices) {
-                        val campaign = viewModel.profile.recentCampaigns[i]
-                        Card(
-                            shape = RoundedCornerShape(16.dp),
-                            onClick = {
-                                navigator.navigate(CampaignDetailScreenDestination(campaign.id))
-                            },
+                        Row(
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically,
                             modifier = Modifier.fillMaxWidth(),
                         ) {
-                            RecentCampaignItem(
-                                campaign = { campaign },
-                                modifier = Modifier.fillMaxWidth(),
+                            Text(
+                                text = stringResource(R.string.stories),
+                                fontWeight = FontWeight.Bold,
+                                style = MaterialTheme.typography.h6,
+                            )
+
+                            TextButton(onClick = {
+                                navigator.navigate(
+                                    StoryHistoryScreenDestination(userId = viewModel.profile.userId)
+                                )
+                            }) {
+                                Text(
+                                    text = stringResource(R.string.see_all),
+                                    fontWeight = FontWeight.SemiBold,
+                                )
+                                Icon(
+                                    imageVector = Icons.Rounded.ChevronRight,
+                                    contentDescription = null,
+                                )
+                            }
+                        }
+
+                        for (i in viewModel.recentStories.indices) {
+                            RecentStoryItem(
+                                story = { viewModel.recentStories[i] },
+                                onClickSupport = { viewModel.onClickSupport(viewModel.recentStories[i].id) },
+                                onClickReply = {
+                                    navigator.navigate(
+                                        StoryDetailScreenDestination(
+                                            viewModel.recentStories[i].id
+                                        )
+                                    )
+                                },
+                                onClickShare = {
+                                    val shareText = context.getString(
+                                        R.string.format_share_message,
+                                        viewModel.recentStories[i].id,
+                                    )
+
+                                    Intent(Intent.ACTION_SEND).let { intent ->
+                                        intent.type =
+                                            context.getString(R.string.intent_type_plain_text)
+                                        intent.putExtra(Intent.EXTRA_TEXT, shareText)
+                                        context.startActivity(intent)
+                                    }
+                                },
+                                onClickSupporters = {
+                                    navigator.navigate(
+                                        StorySupportersScreenDestination(viewModel.recentStories[i].id)
+                                    )
+                                },
+                                onClickSharedCampaign = { campaign ->
+                                    navigator.navigate(CampaignDetailScreenDestination(id = campaign.id))
+                                },
+                                modifier = Modifier
+                                    .clip(RoundedCornerShape(16.dp))
+                                    .border(
+                                        width = 1.dp,
+                                        color = MaterialTheme.colors.onSurface.copy(alpha = 0.1f),
+                                        shape = RoundedCornerShape(16.dp),
+                                    )
+                                    .clickable {
+                                        navigator.navigate(
+                                            StoryDetailScreenDestination(viewModel.recentStories[i].id)
+                                        )
+                                    }
+                                    .fillMaxWidth()
+                                    .background(MaterialTheme.colors.surface)
+                                    .padding(MaterialTheme.spacing.medium),
+                            )
+
+                            if (i != viewModel.recentStories.lastIndex) Spacer(
+                                modifier = Modifier.height(MaterialTheme.spacing.small)
                             )
                         }
 
-                        if (i != viewModel.profile.recentCampaigns.lastIndex) Spacer(
-                            modifier = Modifier.height(MaterialTheme.spacing.medium)
-                        )
+                        if (viewModel.recentStories.isEmpty()) Column(
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(MaterialTheme.spacing.medium),
+                        ) {
+                            AsyncImage(
+                                model = R.drawable.character_06,
+                                contentDescription = null,
+                                modifier = Modifier.width(120.dp),
+                            )
+
+                            Text(
+                                text = stringResource(R.string.this_user_has_not_uploaded_anything),
+                                fontWeight = FontWeight.Bold,
+                                textAlign = TextAlign.Center,
+                            )
+                        }
+
+                        Spacer(modifier = Modifier.height(MaterialTheme.spacing.large))
+
+                        Row(
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier.fillMaxWidth(),
+                        ) {
+                            Text(
+                                text = stringResource(R.string.campaign_history),
+                                fontWeight = FontWeight.Bold,
+                                style = MaterialTheme.typography.h6,
+                            )
+
+                            TextButton(onClick = {
+                                navigator.navigate(CampaignHistoryScreenDestination(userId = viewModel.profile.userId))
+                            }) {
+                                Text(
+                                    text = stringResource(R.string.see_all),
+                                    fontWeight = FontWeight.SemiBold,
+                                )
+                                Icon(
+                                    imageVector = Icons.Rounded.ChevronRight,
+                                    contentDescription = null,
+                                )
+                            }
+                        }
+
+                        for (i in viewModel.profile.recentCampaigns.indices) {
+                            val campaign = viewModel.profile.recentCampaigns[i]
+                            Card(
+                                shape = RoundedCornerShape(16.dp),
+                                onClick = {
+                                    navigator.navigate(CampaignDetailScreenDestination(campaign.id))
+                                },
+                                modifier = Modifier.fillMaxWidth(),
+                            ) {
+                                RecentCampaignItem(
+                                    campaign = { campaign },
+                                    modifier = Modifier.fillMaxWidth(),
+                                )
+                            }
+
+                            if (i != viewModel.profile.recentCampaigns.lastIndex) Spacer(
+                                modifier = Modifier.height(MaterialTheme.spacing.medium)
+                            )
+                        }
+
+                        if (viewModel.profile.recentCampaigns.isEmpty()) Column(
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(MaterialTheme.spacing.medium),
+                        ) {
+                            AsyncImage(
+                                model = R.drawable.character_04,
+                                contentDescription = null,
+                                modifier = Modifier.width(120.dp),
+                            )
+
+                            Text(
+                                text = stringResource(R.string.this_user_has_not_joined_any_campaigns),
+                                fontWeight = FontWeight.Bold,
+                                textAlign = TextAlign.Center,
+                            )
+                        }
+
+                        Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
                     }
-
-                    if (viewModel.profile.recentCampaigns.isEmpty()) Column(
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(MaterialTheme.spacing.medium),
-                    ) {
-                        AsyncImage(
-                            model = R.drawable.character_04,
-                            contentDescription = null,
-                            modifier = Modifier.width(120.dp),
-                        )
-
-                        Text(
-                            text = stringResource(R.string.this_user_has_not_joined_any_campaigns),
-                            fontWeight = FontWeight.Bold,
-                            textAlign = TextAlign.Center,
-                        )
-                    }
-
-                    Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
                 }
             }
         }
