@@ -11,6 +11,8 @@ import com.ecosense.android.core.util.UIText
 import com.google.firebase.FirebaseTooManyRequestsException
 import com.google.firebase.auth.*
 import com.google.firebase.auth.ktx.userProfileChangeRequest
+import com.google.firebase.functions.ktx.functions
+import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
@@ -155,7 +157,13 @@ class FirebaseAuthApi : AuthApi {
 
         user.updateProfile(profileUpdates).addOnCompleteListener { task ->
             when {
-                task.isSuccessful -> cont.resume(Resource.Success(Unit))
+                task.isSuccessful -> {
+                    Firebase.functions.getHttpsCallable("onUpdateUserDetail")
+                        .call(hashMapOf("email" to user.email)).addOnCompleteListener { cfTask ->
+                            logcat { cfTask.exception?.asLog() ?: "onUpdateUserDetail success" }
+                        }
+                    cont.resume(Resource.Success(Unit))
+                }
                 else -> when (task.exception) {
                     is FirebaseAuthInvalidUserException -> R.string.em_invalid_credentials
                     else -> R.string.em_unknown
