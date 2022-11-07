@@ -70,7 +70,7 @@ fun SharedCampaign(
 
         AsyncImage(
             model = campaign().posterUrl,
-            error = painterResource(id = R.drawable.error_picture),
+            error = painterResource(id = R.drawable.error_placeholder),
             contentDescription = null,
             contentScale = ContentScale.Crop,
             modifier = Modifier

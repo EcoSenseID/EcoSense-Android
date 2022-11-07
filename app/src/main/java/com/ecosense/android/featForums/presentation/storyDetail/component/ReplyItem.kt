@@ -26,6 +26,7 @@ import com.ecosense.android.featForums.presentation.storyDetail.model.ReplyPrese
 fun ReplyItem(
     reply: () -> ReplyPresentation,
     onClickSupport: () -> Unit,
+    onClickProfile: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -35,10 +36,12 @@ fun ReplyItem(
             model = reply().avatarUrl,
             contentDescription = null,
             placeholder = painterResource(id = R.drawable.ic_ecosense_logo),
+            error = painterResource(id = R.drawable.ic_ecosense_logo),
             contentScale = ContentScale.Crop,
             modifier = Modifier
                 .size(48.dp)
-                .clip(CircleShape),
+                .clip(CircleShape)
+                .clickable { onClickProfile() },
         )
 
         Spacer(modifier = Modifier.width(MaterialTheme.spacing.medium))
@@ -52,6 +55,7 @@ fun ReplyItem(
                     text = reply().name,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colors.primary,
+                    modifier = Modifier.clickable { onClickProfile() },
                 )
 
                 Spacer(modifier = Modifier.width(MaterialTheme.spacing.small))
@@ -81,7 +85,7 @@ fun ReplyItem(
 
                 AsyncImage(
                     model = reply().attachedPhotoUrl,
-                    error = painterResource(id = R.drawable.error_picture),
+                    error = painterResource(id = R.drawable.error_placeholder),
                     contentDescription = null,
                     contentScale = ContentScale.Crop,
                     modifier = Modifier

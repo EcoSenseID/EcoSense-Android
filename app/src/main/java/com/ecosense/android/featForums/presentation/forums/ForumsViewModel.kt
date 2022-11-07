@@ -68,7 +68,7 @@ class ForumsViewModel @Inject constructor(
     )
 
     init {
-        refreshStoriesFeed()
+        onLoadNextStoriesFeed()
     }
 
     private var onLoadNextStoriesFeedJob: Job? = null

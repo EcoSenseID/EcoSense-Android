@@ -2,6 +2,7 @@ package com.ecosense.android.core.domain.model
 
 data class Story(
     val id: Int,
+    val userId: Int,
     val name: String,
     val avatarUrl: String,
     val caption: String,

@@ -11,6 +11,7 @@ import java.util.*
 @Parcelize
 data class StoryPresentation(
     val id: Int,
+    val userId: Int,
     val name: String,
     val avatarUrl: String,
     val caption: String,
@@ -26,6 +27,7 @@ data class StoryPresentation(
     companion object {
         val defaultValue = StoryPresentation(
             id = 0,
+            userId = 0,
             name = "",
             avatarUrl = "",
             caption = "",
@@ -44,6 +46,7 @@ data class StoryPresentation(
 fun Story.toPresentation(): StoryPresentation {
     return StoryPresentation(
         id = this.id,
+        userId = this.userId,
         name = this.name,
         avatarUrl = this.avatarUrl,
         caption = this.caption,

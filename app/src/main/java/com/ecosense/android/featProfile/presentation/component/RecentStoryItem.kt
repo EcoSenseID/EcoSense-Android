@@ -1,4 +1,4 @@
-package com.ecosense.android.featProfile.presentation.profile.component
+package com.ecosense.android.featProfile.presentation.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -42,7 +42,7 @@ fun RecentStoryItem(
             model = story().avatarUrl,
             contentDescription = null,
             placeholder = painterResource(id = R.drawable.ic_ecosense_logo),
-            fallback = painterResource(id = R.drawable.ic_ecosense_logo),
+            error = painterResource(id = R.drawable.ic_ecosense_logo),
             contentScale = ContentScale.Crop,
             modifier = Modifier
                 .size(48.dp)
@@ -89,7 +89,7 @@ fun RecentStoryItem(
             if (!story().attachedPhotoUrl.isNullOrBlank()) {
                 AsyncImage(
                     model = story().attachedPhotoUrl,
-                    error = painterResource(id = R.drawable.error_picture),
+                    error = painterResource(id = R.drawable.error_placeholder),
                     contentDescription = null,
                     modifier = Modifier
                         .fillMaxWidth()

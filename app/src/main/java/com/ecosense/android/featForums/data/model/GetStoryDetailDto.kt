@@ -10,6 +10,7 @@ data class GetStoryDetailDto(
     val createdAt: Long?,
     val error: Boolean?,
     val id: Int?,
+    val userId: Int?,
     val isSupported: Boolean?,
     val message: String?,
     val name: String?,
@@ -20,6 +21,7 @@ data class GetStoryDetailDto(
 ) {
     fun toDomain() = Story(
         id = this.id ?: 0,
+        userId = this.userId ?: 0,
         name = this.name ?: "",
         avatarUrl = this.avatarUrl ?: "",
         caption = this.caption ?: "",

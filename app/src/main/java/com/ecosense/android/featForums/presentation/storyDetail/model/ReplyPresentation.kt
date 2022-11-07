@@ -8,6 +8,7 @@ import java.util.*
 data class ReplyPresentation(
     val id: Int,
     val name: String,
+    val userId: Int,
     val avatarUrl: String,
     val caption: String,
     val attachedPhotoUrl: String?,
@@ -20,6 +21,7 @@ data class ReplyPresentation(
 fun Reply.toPresentation() = ReplyPresentation(
     id = this.id,
     name = this.name,
+    userId = this.userId,
     avatarUrl = this.avatarUrl,
     caption = this.caption,
     attachedPhotoUrl = this.attachedPhotoUrl,

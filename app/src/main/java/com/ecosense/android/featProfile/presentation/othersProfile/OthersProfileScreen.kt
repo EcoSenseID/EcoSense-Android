@@ -1,4 +1,4 @@
-package com.ecosense.android.featProfile.presentation.profile
+package com.ecosense.android.featProfile.presentation.othersProfile
 
 import android.content.Intent
 import androidx.compose.foundation.background
@@ -10,14 +10,14 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.ChevronRight
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
@@ -33,7 +33,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import coil.compose.AsyncImage
 import com.ecosense.android.R
-import com.ecosense.android.core.presentation.component.GradientButton
 import com.ecosense.android.core.presentation.modifier.brushForeground
 import com.ecosense.android.core.presentation.theme.Gradient
 import com.ecosense.android.core.presentation.theme.spacing
@@ -41,9 +40,8 @@ import com.ecosense.android.core.presentation.util.UIEvent
 import com.ecosense.android.core.presentation.util.asString
 import com.ecosense.android.core.util.OnLifecycleEvent
 import com.ecosense.android.destinations.*
-import com.ecosense.android.featProfile.presentation.profile.component.ProfileTopBar
-import com.ecosense.android.featProfile.presentation.profile.component.RecentCampaignItem
 import com.ecosense.android.featProfile.presentation.component.RecentStoryItem
+import com.ecosense.android.featProfile.presentation.profile.component.RecentCampaignItem
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlinx.coroutines.flow.collectLatest
@@ -51,18 +49,19 @@ import kotlinx.coroutines.flow.collectLatest
 @OptIn(ExperimentalUnitApi::class, ExperimentalMaterialApi::class)
 @Composable
 @Destination
-fun ProfileScreen(
+fun OthersProfileScreen(
+    userId: Int,
     navigator: DestinationsNavigator,
-    viewModel: ProfileViewModel = hiltViewModel(),
+    viewModel: OthersProfileViewModel = hiltViewModel(),
 ) {
+    remember { viewModel.setUserId(userId) }
+
     OnLifecycleEvent { if (it == Lifecycle.Event.ON_RESUME) viewModel.onRefreshProfile() }
 
     val scaffoldState = rememberScaffoldState()
 
     val focusManager = LocalFocusManager.current
     val context = LocalContext.current
-
-    val state = viewModel.state.value
 
     LaunchedEffect(key1 = true) {
         viewModel.eventFlow.collectLatest { event ->
@@ -85,56 +84,38 @@ fun ProfileScreen(
     Scaffold(
         scaffoldState = scaffoldState,
         topBar = {
-            ProfileTopBar(
-                isDropdownMenuVisible = viewModel.isLoggedIn.collectAsState().value == true,
-                isDropdownMenuExpanded = state.isDropdownMenuExpanded,
-                onExpandDropdownMenu = { viewModel.setExpandDropdownMenu(true) },
-                onDropdownMenuDismissRequest = { viewModel.setExpandDropdownMenu(false) },
+            TopAppBar(
+                backgroundColor = MaterialTheme.colors.background,
+                elevation = 0.dp,
             ) {
-                DropdownMenuItem(onClick = {
-                    viewModel.setExpandDropdownMenu(false)
-                    navigator.navigate(SettingsScreenDestination)
-                }) { Text(text = stringResource(R.string.settings)) }
+                Row(
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.fillMaxSize(),
+                ) {
+                    Row(modifier = Modifier.weight(1f)) {
+                        IconButton(onClick = { navigator.navigateUp() }) {
+                            Icon(
+                                imageVector = Icons.Rounded.ArrowBack,
+                                contentDescription = stringResource(id = R.string.cd_back),
+                                tint = MaterialTheme.colors.secondary,
+                            )
+                        }
+                    }
+
+                    Text(
+                        text = stringResource(R.string.profile),
+                        color = MaterialTheme.colors.primary,
+                        style = MaterialTheme.typography.h6,
+                        fontWeight = FontWeight.Bold,
+                    )
+
+                    Spacer(modifier = Modifier.weight(1f))
+                }
             }
         },
     ) { scaffoldPadding ->
-        if (viewModel.isLoggedIn.collectAsState().value != true) Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center,
-            modifier = Modifier
-                .fillMaxSize()
-                .background(MaterialTheme.colors.surface)
-                .padding(scaffoldPadding)
-                .padding(MaterialTheme.spacing.medium),
-        ) {
-            AsyncImage(
-                model = R.drawable.character_03,
-                contentDescription = null,
-                modifier = Modifier.width(160.dp),
-            )
-
-            Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
-
-            Text(
-                text = stringResource(id = R.string.em_please_login_first),
-                color = MaterialTheme.colors.onSurface,
-                style = MaterialTheme.typography.h6,
-                fontWeight = FontWeight.Bold,
-            )
-
-            Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
-
-            GradientButton(
-                onClick = { navigator.navigate(LoginScreenDestination) },
-                modifier = Modifier.fillMaxWidth(),
-            ) {
-                Text(
-                    text = stringResource(id = R.string.login),
-                    fontWeight = FontWeight.SemiBold,
-                    color = MaterialTheme.colors.onPrimary,
-                )
-            }
-        } else LazyColumn(
+        LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
                 .background(MaterialTheme.colors.surface)
@@ -150,10 +131,10 @@ fun ProfileScreen(
                     Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
 
                     AsyncImage(
-                        model = state.user.photoUrl,
+                        model = viewModel.profile.avatarUrl,
                         contentDescription = null,
                         placeholder = painterResource(id = R.drawable.ic_ecosense_logo),
-                        fallback = painterResource(id = R.drawable.ic_ecosense_logo),
+                        error = painterResource(id = R.drawable.ic_ecosense_logo),
                         contentScale = ContentScale.Crop,
                         modifier = Modifier
                             .padding(MaterialTheme.spacing.medium)
@@ -162,89 +143,12 @@ fun ProfileScreen(
                     )
 
                     Text(
-                        text = if (!state.user.displayName.isNullOrBlank()) state.user.displayName
+                        text = if (!viewModel.profile.name.isBlank()) viewModel.profile.name
                         else stringResource(R.string.ecosense_user),
                         fontSize = TextUnit(22f, TextUnitType.Sp),
                         fontWeight = FontWeight.ExtraBold,
                         modifier = Modifier.brushForeground(brush = Gradient),
                     )
-
-                    Spacer(modifier = Modifier.height(MaterialTheme.spacing.large))
-
-                    Row(
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .border(
-                                width = 1.dp,
-                                color = MaterialTheme.colors.onSurface.copy(alpha = 0.1f),
-                                shape = RoundedCornerShape(16.dp),
-                            )
-                            .padding(MaterialTheme.spacing.medium + MaterialTheme.spacing.small),
-                    ) {
-                        Column(modifier = Modifier.weight(1f)) {
-                            Text(
-                                text = stringResource(R.string.total_ecopoints),
-                                fontWeight = FontWeight.Bold,
-                                color = MaterialTheme.colors.onSurface.copy(alpha = 0.4f),
-                                textAlign = TextAlign.Center,
-                                modifier = Modifier.fillMaxWidth()
-                            )
-
-                            Row(verticalAlignment = Alignment.CenterVertically) {
-                                Box(
-                                    contentAlignment = Alignment.Center,
-                                    modifier = Modifier
-                                        .size(32.dp)
-                                        .clip(CircleShape)
-                                        .background(MaterialTheme.colors.primary)
-                                        .padding(MaterialTheme.spacing.extraSmall)
-                                        .border(
-                                            width = 1.dp,
-                                            color = MaterialTheme.colors.onPrimary,
-                                            shape = CircleShape,
-                                        )
-                                        .padding(MaterialTheme.spacing.extraSmall),
-                                ) {
-                                    AsyncImage(
-                                        model = R.drawable.ic_ecosense_logo_vector,
-                                        contentDescription = null,
-                                        colorFilter = ColorFilter.tint(MaterialTheme.colors.onPrimary),
-                                        modifier = Modifier.fillMaxSize(),
-                                    )
-                                }
-
-                                Spacer(modifier = Modifier.width(MaterialTheme.spacing.small))
-
-                                Text(
-                                    text = state.totalEcoPoints.toString(),
-                                    fontSize = TextUnit(32f, TextUnitType.Sp),
-                                    color = MaterialTheme.colors.primary,
-                                    fontWeight = FontWeight.ExtraBold,
-                                    textAlign = TextAlign.Center,
-                                )
-                            }
-                        }
-
-                        Spacer(
-                            modifier = Modifier.width(
-                                MaterialTheme.spacing.medium + MaterialTheme.spacing.small
-                            ),
-                        )
-
-                        GradientButton(
-                            onClick = { navigator.navigate(RewardsScreenDestination) },
-                            height = 36.dp,
-                            modifier = Modifier.weight(1f),
-                        ) {
-                            Text(
-                                text = stringResource(R.string.get_rewards),
-                                color = MaterialTheme.colors.onPrimary,
-                                fontWeight = FontWeight.Bold,
-                            )
-                        }
-                    }
 
                     Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
 
@@ -254,13 +158,15 @@ fun ProfileScreen(
                         modifier = Modifier.fillMaxWidth(),
                     ) {
                         Text(
-                            text = stringResource(R.string.my_stories),
+                            text = stringResource(R.string.stories),
                             fontWeight = FontWeight.Bold,
                             style = MaterialTheme.typography.h6,
                         )
 
                         TextButton(onClick = {
-                            navigator.navigate(StoryHistoryScreenDestination(userId = null))
+                            navigator.navigate(
+                                StoryHistoryScreenDestination(userId = viewModel.profile.userId)
+                            )
                         }) {
                             Text(
                                 text = stringResource(R.string.see_all),
@@ -298,9 +204,7 @@ fun ProfileScreen(
                             },
                             onClickSupporters = {
                                 navigator.navigate(
-                                    StorySupportersScreenDestination(
-                                        viewModel.recentStories[i].id
-                                    )
+                                    StorySupportersScreenDestination(viewModel.recentStories[i].id)
                                 )
                             },
                             onClickSharedCampaign = { campaign ->
@@ -341,7 +245,7 @@ fun ProfileScreen(
                         )
 
                         Text(
-                            text = stringResource(R.string.em_empty_story_history),
+                            text = stringResource(R.string.this_user_has_not_uploaded_anything),
                             fontWeight = FontWeight.Bold,
                             textAlign = TextAlign.Center,
                         )
@@ -355,16 +259,14 @@ fun ProfileScreen(
                         modifier = Modifier.fillMaxWidth(),
                     ) {
                         Text(
-                            text = stringResource(R.string.my_campaign_history),
+                            text = stringResource(R.string.campaign_history),
                             fontWeight = FontWeight.Bold,
                             style = MaterialTheme.typography.h6,
                         )
 
-                        TextButton(
-                            onClick = {
-                                navigator.navigate(CampaignHistoryScreenDestination(userId = null))
-                            },
-                        ) {
+                        TextButton(onClick = {
+                            navigator.navigate(CampaignHistoryScreenDestination(userId = viewModel.profile.userId))
+                        }) {
                             Text(
                                 text = stringResource(R.string.see_all),
                                 fontWeight = FontWeight.SemiBold,
@@ -376,8 +278,8 @@ fun ProfileScreen(
                         }
                     }
 
-                    for (i in state.recentCampaigns.indices) {
-                        val campaign = state.recentCampaigns[i]
+                    for (i in viewModel.profile.recentCampaigns.indices) {
+                        val campaign = viewModel.profile.recentCampaigns[i]
                         Card(
                             shape = RoundedCornerShape(16.dp),
                             onClick = {
@@ -391,12 +293,12 @@ fun ProfileScreen(
                             )
                         }
 
-                        if (i != state.recentCampaigns.lastIndex) Spacer(
+                        if (i != viewModel.profile.recentCampaigns.lastIndex) Spacer(
                             modifier = Modifier.height(MaterialTheme.spacing.medium)
                         )
                     }
 
-                    if (state.recentCampaigns.isEmpty()) Column(
+                    if (viewModel.profile.recentCampaigns.isEmpty()) Column(
                         horizontalAlignment = Alignment.CenterHorizontally,
                         modifier = Modifier
                             .fillMaxWidth()
@@ -409,7 +311,7 @@ fun ProfileScreen(
                         )
 
                         Text(
-                            text = stringResource(R.string.em_empty_campaign_history),
+                            text = stringResource(R.string.this_user_has_not_joined_any_campaigns),
                             fontWeight = FontWeight.Bold,
                             textAlign = TextAlign.Center,
                         )

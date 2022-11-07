@@ -21,6 +21,11 @@ class SettingsViewModel @Inject constructor(
         private set
 
     init {
+        onRefreshUserState()
+    }
+
+    private var onRefreshUserStateJob: Job? = null
+    fun onRefreshUserState() {
         viewModelScope.launch {
             authRepository.getCurrentUser()?.let { userState = it }
         }
