@@ -14,7 +14,7 @@ data class RewardHomepageScreenState(
             rewardHomepage = RewardHomepage(
                 totalPoints = 0,
                 donationRewards = emptyList(),
-                hotDealsRewards = emptyList()
+                walletRewards = emptyList()
             ),
             isLoadingRewardHomepage = false
         )

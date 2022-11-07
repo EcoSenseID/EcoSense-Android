@@ -7,11 +7,8 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.PhotoCamera
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -91,72 +88,6 @@ fun RewardHomepageScreen(
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceEvenly
-            ) {
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Icon(
-                        imageVector = Icons.Outlined.PhotoCamera,
-                        contentDescription = "All Rewards",
-                        modifier = Modifier.clickable(onClick = {
-                            navigator.navigate(
-                                RewardsScreenDestination("All Rewards")
-                            )
-                        })
-                    )
-                    Text(text = "All Rewards")
-                }
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Icon(
-                        imageVector = Icons.Outlined.PhotoCamera,
-                        contentDescription = "Environment",
-                        modifier = Modifier.clickable(onClick = {
-                            navigator.navigate(
-                                RewardsScreenDestination("Environment")
-                            )
-                        })
-                    )
-                    Text(text = "Environment")
-                }
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Icon(
-                        imageVector = Icons.Outlined.PhotoCamera,
-                        contentDescription = "Entertainment",
-                        modifier = Modifier.clickable(onClick = {
-                            navigator.navigate(
-                                RewardsScreenDestination("Entertainment")
-                            )
-                        })
-                    )
-                    Text(text = "Entertainment")
-                }
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Icon(
-                        imageVector = Icons.Outlined.PhotoCamera,
-                        contentDescription = "Beverages",
-                        modifier = Modifier.clickable(onClick = {
-                            navigator.navigate(
-                                RewardsScreenDestination("Beverages")
-                            )
-                        })
-                    )
-                    Text(text = "Beverages")
-                }
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Icon(
-                        imageVector = Icons.Outlined.PhotoCamera,
-                        contentDescription = "Health",
-                        modifier = Modifier.clickable(onClick = {
-                            navigator.navigate(
-                                RewardsScreenDestination("Health")
-                            )
-                        })
-                    )
-                    Text(text = "Health")
-                }
-            }
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(text = "Donation")
@@ -164,7 +95,11 @@ fun RewardHomepageScreen(
                     text = "See All",
                     modifier = Modifier.clickable(onClick = {
                         navigator.navigate(
-                            RewardsScreenDestination("Donation")
+                            RewardsScreenDestination(
+                                "Donation",
+                                2,
+                                state.rewardHomepage.totalPoints
+                            )
                         )
                     })
                 )
@@ -176,7 +111,10 @@ fun RewardHomepageScreen(
                             .padding(MaterialTheme.spacing.medium)
                             .clickable(onClick = {
                                 navigator.navigate(
-                                    RewardDetailScreenDestination(index)
+                                    RewardDetailScreenDestination(
+                                        index + 1,
+                                        state.rewardHomepage.totalPoints
+                                    )
                                 )
                             })
                     ) {
@@ -201,24 +139,31 @@ fun RewardHomepageScreen(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Text(text = "Hot Deals")
+                Text(text = "E-Wallet")
                 Text(
                     text = "See All",
                     modifier = Modifier.clickable(onClick = {
                         navigator.navigate(
-                            RewardsScreenDestination("Hot Deals")
+                            RewardsScreenDestination(
+                                "E-Wallet",
+                                1,
+                                state.rewardHomepage.totalPoints
+                            )
                         )
                     })
                 )
             }
             Row(modifier = Modifier.horizontalScroll(hotDealsHorizontalScroll)) {
-                state.rewardHomepage.hotDealsRewards.forEachIndexed { index, hotDeals ->
+                state.rewardHomepage.walletRewards.forEachIndexed { index, hotDeals ->
                     Column(
                         modifier = Modifier
                             .padding(MaterialTheme.spacing.medium)
                             .clickable(onClick = {
                                 navigator.navigate(
-                                    RewardDetailScreenDestination(index)
+                                    RewardDetailScreenDestination(
+                                        index + 1,
+                                        state.rewardHomepage.totalPoints
+                                    )
                                 )
                             })
                     ) {
