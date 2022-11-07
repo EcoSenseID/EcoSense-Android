@@ -7,6 +7,7 @@ data class RewardDetail(
     val validity: String,
     val title: String,
     val partner: String,
+    val category: String,
     val pointsNeeded: Int,
     val maxRedeem: Int,
     val numberOfRedeem: Int,

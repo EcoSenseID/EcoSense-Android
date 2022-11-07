@@ -6,21 +6,21 @@ object Faker {
     fun getRewardHomepage(): RewardHomepage {
         return RewardHomepage(
             totalPoints = 300,
-            hotDealsRewards = getHotDealsRewards(),
+            walletRewards = getWalletRewards(),
             donationRewards = getDonationRewards()
         )
     }
 
-    private fun getHotDealsRewards(): List<HotDealsRewards> {
-        val result = mutableListOf<HotDealsRewards>()
+    private fun getWalletRewards(): List<WalletRewards> {
+        val result = mutableListOf<WalletRewards>()
 
         for (i in 1..5) {
             result.add(
-                HotDealsRewards(
+                WalletRewards(
                     partner = "Partner $i",
-                    bannerUrl = "https://cdn.statically.io/og/theme=dark/HotDeals$i.jpg",
+                    bannerUrl = "https://cdn.statically.io/og/theme=dark/E-Wallet$i.jpg",
                     id = i,
-                    title = "Hot Deals $i",
+                    title = "E-Wallet $i",
                     pointsNeeded = (50..200).random()
                 )
             )
@@ -58,6 +58,7 @@ object Faker {
                     numberOfRedeem = if (i < 3) 1 else if (i < 6) 2 else 3,
                     id = i,
                     title = "$rewardCategory $i",
+                    category = rewardCategory,
                     maxRedeem = 3,
                     pointsNeeded = (50..200).random()
                 )
@@ -75,10 +76,10 @@ object Faker {
                 MyRewards(
                     partner = "Partner $i",
                     bannerUrl = "https://cdn.statically.io/og/theme=dark/MyRewards$i.jpg",
-                    id = i,
+                    claimId = i,
                     claimStatus = if (i < 3) 1 else if (i < 6) 2 else 3,
                     title = "My Rewards $i",
-                    category = if (i < 3) "Entertainment" else if (i < 6) "Food & Beverage" else "Environment"
+                    category = if (i < 3) "E-Wallet" else if (i < 6) "Donation" else "Voucher"
                 )
             )
         }
@@ -98,6 +99,7 @@ object Faker {
             validity = "1662138000",
             title = "Reward No.$rewardId",
             partner = "Partner $rewardId",
+            category = if (rewardId < 3) "E-Wallet" else if (rewardId < 6) "Donation" else "Voucher",
             pointsNeeded = (50..200).random(),
             maxRedeem = 3,
             numberOfRedeem = if (rewardId < 3) 1 else if (rewardId < 6) 2 else 3,
@@ -121,7 +123,7 @@ object Faker {
             validity = "1662138000",
             title = "My Reward No.$rewardId",
             partner = "Partner $rewardId",
-            pointsNeeded = (50..200).random(),
+            category = if (rewardId < 3) "E-Wallet" else if (rewardId < 6) "Donation" else "Voucher",
             claimStatus = if (rewardId < 3) 1 else if (rewardId < 6) 2 else 3,
             howToUse = listOf(
                 "Lorem Ipsum is simply dummy text of the printing.",

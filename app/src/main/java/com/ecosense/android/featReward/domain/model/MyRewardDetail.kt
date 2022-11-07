@@ -7,7 +7,7 @@ data class MyRewardDetail(
     val validity: String,
     val title: String,
     val partner: String,
-    val pointsNeeded: Int,
+    val category: String,
     val claimStatus: Int,
     val howToUse: List<String>
 )

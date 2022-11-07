@@ -11,7 +11,7 @@ data class MyRewardsDto(
 data class MyRewardsItem(
     val partner: String?,
     val bannerUrl: String?,
-    val id: Int?,
+    val claimId: Int?,
     val claimStatus: Int?,
     val title: String?,
     val category: String?
@@ -19,7 +19,7 @@ data class MyRewardsItem(
     fun toMyRewards() = MyRewards(
         partner = partner ?: "",
         bannerUrl = bannerUrl ?: "",
-        id = id ?: 0,
+        claimId = claimId ?: 0,
         claimStatus = claimStatus ?: 0,
         title = title ?: "",
         category = category ?: ""

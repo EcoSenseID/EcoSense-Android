@@ -2,6 +2,6 @@ package com.ecosense.android.featReward.domain.model
 
 data class RewardHomepage(
     val totalPoints: Int,
-    val hotDealsRewards: List<HotDealsRewards>,
+    val walletRewards: List<WalletRewards>,
     val donationRewards: List<DonationRewards>
 )

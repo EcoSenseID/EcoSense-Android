@@ -14,6 +14,7 @@ data class RewardsItem(
     val numberOfRedeem: Int?,
     val id: Int?,
     val title: String?,
+    val category: String?,
     val maxRedeem: Int?,
     val pointsNeeded: Int?
 ) {
@@ -23,6 +24,7 @@ data class RewardsItem(
         numberOfRedeem = numberOfRedeem ?: 0,
         id = id ?: 0,
         title = title ?: "",
+        category = category ?: "",
         maxRedeem = maxRedeem ?: 0,
         pointsNeeded = pointsNeeded ?: 0
     )

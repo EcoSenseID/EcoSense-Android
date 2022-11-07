@@ -6,6 +6,7 @@ data class Rewards(
     val numberOfRedeem: Int,
     val id: Int,
     val title: String,
+    val category: String,
     val maxRedeem: Int,
     val pointsNeeded: Int
 ) {
@@ -16,6 +17,7 @@ data class Rewards(
             numberOfRedeem = 0,
             id = 0,
             title = "",
+            category = "",
             maxRedeem = 0,
             pointsNeeded = 0
         )
