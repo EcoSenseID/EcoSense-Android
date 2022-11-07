@@ -36,6 +36,7 @@ import com.ecosense.android.core.presentation.util.UIEvent
 import com.ecosense.android.core.presentation.util.asString
 import com.ecosense.android.destinations.CampaignDetailScreenDestination
 import com.ecosense.android.destinations.LoginScreenDestination
+import com.ecosense.android.destinations.OthersProfileScreenDestination
 import com.ecosense.android.destinations.StorySupportersScreenDestination
 import com.ecosense.android.featForums.presentation.forums.component.SharedCampaign
 import com.ecosense.android.featForums.presentation.forums.component.StorySupportersSection
@@ -143,10 +144,18 @@ fun StoryDetailScreen(
                                 model = viewModel.storyDetail.avatarUrl,
                                 contentDescription = null,
                                 placeholder = painterResource(id = R.drawable.ic_ecosense_logo),
+                                error = painterResource(id = R.drawable.ic_ecosense_logo),
                                 contentScale = ContentScale.Crop,
                                 modifier = Modifier
                                     .size(48.dp)
-                                    .clip(CircleShape),
+                                    .clip(CircleShape)
+                                    .clickable {
+                                        navigator.navigate(
+                                            OthersProfileScreenDestination(
+                                                userId = viewModel.storyDetail.userId
+                                            )
+                                        )
+                                    },
                             )
 
                             Spacer(modifier = Modifier.width(MaterialTheme.spacing.medium))
@@ -169,7 +178,7 @@ fun StoryDetailScreen(
                                     AsyncImage(
                                         model = viewModel.storyDetail.attachedPhotoUrl,
                                         contentDescription = null,
-                                        error = painterResource(id = R.drawable.error_picture),
+                                        error = painterResource(id = R.drawable.error_placeholder),
                                         contentScale = ContentScale.Crop,
                                         modifier = Modifier
                                             .fillMaxWidth()
@@ -328,6 +337,13 @@ fun StoryDetailScreen(
                         ReplyItem(
                             reply = { viewModel.replies[i] },
                             onClickSupport = { viewModel.onClickSupportReply(viewModel.replies[i].id) },
+                            onClickProfile = {
+                                navigator.navigate(
+                                    OthersProfileScreenDestination(
+                                        userId = viewModel.replies[i].userId,
+                                    )
+                                )
+                            },
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .background(MaterialTheme.colors.surface)

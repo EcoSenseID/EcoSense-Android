@@ -1,6 +1,7 @@
 package com.ecosense.android.featForums.presentation.storySupporters
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.*
@@ -16,6 +17,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.ecosense.android.R
 import com.ecosense.android.core.presentation.theme.spacing
+import com.ecosense.android.destinations.OthersProfileScreenDestination
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
@@ -73,6 +75,13 @@ fun StorySupportersScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .background(MaterialTheme.colors.surface)
+                        .clickable {
+                            navigator.navigate(
+                                OthersProfileScreenDestination(
+                                    userId = viewModel.state.supporters[i].userId
+                                )
+                            )
+                        }
                         .padding(horizontal = MaterialTheme.spacing.medium)
                         .padding(vertical = MaterialTheme.spacing.small),
                 )

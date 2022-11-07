@@ -8,9 +8,10 @@ import androidx.lifecycle.viewModelScope
 import com.ecosense.android.core.presentation.util.UIEvent
 import com.ecosense.android.core.util.Resource
 import com.ecosense.android.featProfile.domain.repository.ProfileRepository
-import com.ecosense.android.featProfile.presentation.profile.model.RecentCampaignPresentation
-import com.ecosense.android.featProfile.presentation.profile.model.toPresentation
+import com.ecosense.android.featProfile.presentation.model.RecentCampaignPresentation
+import com.ecosense.android.featProfile.presentation.model.toPresentation
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -22,6 +23,7 @@ import javax.inject.Inject
 class CampaignHistoryViewModel @Inject constructor(
     private val profileRepository: ProfileRepository,
 ) : ViewModel() {
+    private var mUserId by mutableStateOf<Int?>(null)
 
     var campaigns by mutableStateOf(emptyList<RecentCampaignPresentation>())
         private set
@@ -32,9 +34,18 @@ class CampaignHistoryViewModel @Inject constructor(
     private val _eventFlow = Channel<UIEvent>()
     val eventFlow = _eventFlow.receiveAsFlow()
 
-    init {
-        viewModelScope.launch {
-            profileRepository.getCampaignsHistory().onEach { result ->
+    fun setUserId(userId: Int?) {
+        mUserId = userId
+        refresh()
+    }
+
+    private var refreshJob: Job? = null
+    private fun refresh() {
+        refreshJob?.cancel()
+        refreshJob =  viewModelScope.launch {
+            profileRepository.getCampaignsHistory(
+                userId = mUserId,
+            ).onEach { result ->
                 when (result) {
                     is Resource.Error -> {
                         isLoading = false

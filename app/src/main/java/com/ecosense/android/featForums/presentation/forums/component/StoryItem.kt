@@ -26,6 +26,7 @@ import com.ecosense.android.featForums.presentation.model.StoryPresentation
 @Composable
 fun StoryItem(
     story: () -> StoryPresentation,
+    onClickProfile: () -> Unit,
     onClickSupport: () -> Unit,
     onClickReply: () -> Unit,
     onClickShare: () -> Unit,
@@ -43,11 +44,12 @@ fun StoryItem(
             model = story().avatarUrl,
             contentDescription = null,
             placeholder = painterResource(id = R.drawable.ic_ecosense_logo),
-            fallback = painterResource(id = R.drawable.ic_ecosense_logo),
+            error = painterResource(id = R.drawable.ic_ecosense_logo),
             contentScale = ContentScale.Crop,
             modifier = Modifier
                 .size(48.dp)
-                .clip(CircleShape),
+                .clip(CircleShape)
+                .clickable { onClickProfile() },
         )
 
         Spacer(modifier = Modifier.width(MaterialTheme.spacing.medium))
@@ -61,6 +63,7 @@ fun StoryItem(
                     text = story().name,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colors.primary,
+                    modifier = Modifier.clickable { onClickProfile() }
                 )
 
                 Spacer(modifier = Modifier.width(MaterialTheme.spacing.small))
@@ -90,7 +93,7 @@ fun StoryItem(
             if (!story().attachedPhotoUrl.isNullOrBlank()) {
                 AsyncImage(
                     model = story().attachedPhotoUrl,
-                    error = painterResource(id = R.drawable.error_picture),
+                    error = painterResource(id = R.drawable.error_placeholder),
                     contentDescription = null,
                     modifier = Modifier
                         .fillMaxWidth()

@@ -3,10 +3,7 @@ package com.ecosense.android.featProfile.data.api
 import com.ecosense.android.core.data.model.CategoryDto
 import com.ecosense.android.core.data.model.SharedCampaignDto
 import com.ecosense.android.core.data.model.StoryDto
-import com.ecosense.android.featProfile.data.model.GetCampaignsHistoryDto
-import com.ecosense.android.featProfile.data.model.GetStoriesHistoryDto
-import com.ecosense.android.featProfile.data.model.ProfileDto
-import com.ecosense.android.featProfile.data.model.RecentCampaignDto
+import com.ecosense.android.featProfile.data.model.*
 import kotlinx.coroutines.delay
 
 class FakeProfileApi : ProfileApi {
@@ -19,6 +16,7 @@ class FakeProfileApi : ProfileApi {
             recentStories = listOf(
                 StoryDto(
                     id = 1,
+                    userId = 1,
                     name = "John Doe",
                     avatarUrl = "https://i.pravatar.cc/300?img=$1",
                     caption = "Bagaimana caramu untuk mengajak masyarakat melestarikan lingkungan?",
@@ -47,6 +45,111 @@ class FakeProfileApi : ProfileApi {
                     ),
                 ), StoryDto(
                     id = 1,
+                    userId = 1,
+                    name = "John Doe",
+                    avatarUrl = "https://i.pravatar.cc/300?img=$1",
+                    caption = "Bagaimana caramu untuk mengajak masyarakat melestarikan lingkungan?",
+                    attachedPhotoUrl = "https://cdn.statically.io/og/theme=dark/Story%20no.%201.jpg",
+                    sharedCampaign = null,
+                    createdAt = System.currentTimeMillis(),
+                    supportersCount = 420,
+                    repliesCount = 69,
+                    isSupported = true,
+                    supportersAvatarsUrl = listOf(
+                        "https://i.pravatar.cc/300?img=2",
+                        "https://i.pravatar.cc/300?img=3",
+                        "https://i.pravatar.cc/300?img=4",
+                    ),
+                )
+            ),
+            recentCampaigns = listOf(
+                RecentCampaignDto(
+                    id = 1,
+                    posterUrl = "https://cdn.statically.io/og/theme=dark/food_waste_1.jpg",
+                    title = "No More Food Waste: Hassle-Free Compost",
+                    earnedPoints = 300,
+                    finishedAt = null,
+                    endAt = System.currentTimeMillis(),
+                    completionStatus = 1,
+                    categories = listOf(
+                        CategoryDto(name = "Air Pollution", colorHex = "#BADA55"),
+                        CategoryDto(name = "Food Waste", colorHex = "#FA6607"),
+                    ),
+                ),
+                RecentCampaignDto(
+                    id = 1,
+                    posterUrl = "https://cdn.statically.io/og/theme=dark/food_waste_1.jpg",
+                    title = "No More Food Waste: Hassle-Free Compost",
+                    earnedPoints = 300,
+                    finishedAt = 1665645721,
+                    endAt = System.currentTimeMillis(),
+                    completionStatus = 2,
+                    categories = listOf(
+                        CategoryDto(name = "Air Pollution", colorHex = "#BADA55"),
+                        CategoryDto(name = "Food Waste", colorHex = "#FA6607"),
+                    ),
+                ),
+                RecentCampaignDto(
+                    id = 1,
+                    posterUrl = "https://cdn.statically.io/og/theme=dark/food_waste_1.jpg",
+                    title = "No More Food Waste: Hassle-Free Compost",
+                    earnedPoints = 300,
+                    finishedAt = 1665645721,
+                    endAt = System.currentTimeMillis(),
+                    completionStatus = 3,
+                    categories = listOf(
+                        CategoryDto(name = "Air Pollution", colorHex = "#BADA55"),
+                        CategoryDto(name = "Food Waste", colorHex = "#FA6607"),
+                    ),
+                ),
+            ),
+        )
+    }
+
+    override suspend fun getOthersProfile(
+        bearerToken: String,
+        userId: Int,
+    ): OthersProfileDto {
+        delay(500)
+        return OthersProfileDto(
+            error = false,
+            message = "Profile fetched successfully",
+            userId = 1,
+            name = "John Doe",
+            avatarUrl = "https://i.pravatar.cc/300?img=$1",
+            recentStories = listOf(
+                StoryDto(
+                    id = 1,
+                    userId = 1,
+                    name = "John Doe",
+                    avatarUrl = "https://i.pravatar.cc/300?img=$1",
+                    caption = "Bagaimana caramu untuk mengajak masyarakat melestarikan lingkungan?",
+                    attachedPhotoUrl = "https://cdn.statically.io/og/theme=dark/Story%20no.%201.jpg",
+                    sharedCampaign = SharedCampaignDto(
+                        id = 1,
+                        posterUrl = "https://cdn.statically.io/og/theme=dark/shared_campaign_1.jpg",
+                        title = "Shared Campaign 1",
+                        endAt = System.currentTimeMillis(),
+                        categories = listOf(
+                            CategoryDto(name = "Air Pollution", colorHex = "#BADA55"),
+                            CategoryDto(name = "Food Waste", colorHex = "#FA6607"),
+                        ),
+                        participantsCount = 69420,
+                        isTrending = true,
+                        isNew = true,
+                    ),
+                    createdAt = System.currentTimeMillis(),
+                    supportersCount = 420,
+                    repliesCount = 69,
+                    isSupported = true,
+                    supportersAvatarsUrl = listOf(
+                        "https://i.pravatar.cc/300?img=2",
+                        "https://i.pravatar.cc/300?img=3",
+                        "https://i.pravatar.cc/300?img=4",
+                    ),
+                ), StoryDto(
+                    id = 1,
+                    userId = 1,
                     name = "John Doe",
                     avatarUrl = "https://i.pravatar.cc/300?img=$1",
                     caption = "Bagaimana caramu untuk mengajak masyarakat melestarikan lingkungan?",
@@ -109,6 +212,7 @@ class FakeProfileApi : ProfileApi {
 
     override suspend fun getStoriesHistory(
         bearerToken: String,
+        userId: Int?
     ): GetStoriesHistoryDto {
         return GetStoriesHistoryDto(
             error = false,
@@ -116,6 +220,7 @@ class FakeProfileApi : ProfileApi {
             stories = (1..100).map {
                 StoryDto(
                     id = it,
+                    userId = it,
                     name = "John Doe$it",
                     avatarUrl = "https://i.pravatar.cc/300?img=$it",
                     caption = "Bagaimana cara lestarikan lingkungan? ${"lorem ".repeat((it * 69) % 15)}",
@@ -149,6 +254,7 @@ class FakeProfileApi : ProfileApi {
 
     override suspend fun getCampaignsHistory(
         bearerToken: String,
+        userId: Int?
     ): GetCampaignsHistoryDto {
         return GetCampaignsHistoryDto(
             error = false,

@@ -1,7 +1,7 @@
 package com.ecosense.android.featProfile.presentation.profile.model
 
 import com.ecosense.android.core.domain.model.User
-import com.ecosense.android.featForums.presentation.model.StoryPresentation
+import com.ecosense.android.featProfile.presentation.model.RecentCampaignPresentation
 
 data class ProfileScreenState(
     val user: User,

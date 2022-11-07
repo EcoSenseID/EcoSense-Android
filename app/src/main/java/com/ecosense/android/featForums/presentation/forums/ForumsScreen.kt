@@ -141,6 +141,11 @@ fun ForumsScreen(
                         modifier = Modifier.clickable {
                             navigator.navigate(StoryDetailScreenDestination(viewModel.stories[i].id))
                         },
+                        onClickProfile = {
+                            navigator.navigate(OthersProfileScreenDestination(
+                                userId = viewModel.stories[i].userId,
+                            ))
+                        }
                     )
 
                     Divider()

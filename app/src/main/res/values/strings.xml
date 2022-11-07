@@ -232,4 +232,9 @@
     <string name="filter_view_http_ecosense_deeplinks">Open app</string>
     <string name="format_share_message">Hi, check this out!\nhttps://ecosense.id/deeplinks/storydetail/%1$d</string>
     <string name="intent_type_plain_text">text/plain</string>
+    <string name="stories">Stories</string>
+    <string name="stories_history">Stories History</string>
+    <string name="campaign_history">Campaign History</string>
+    <string name="this_user_has_not_joined_any_campaigns">This user has not joined any campaigns</string>
+    <string name="this_user_has_not_uploaded_anything">This user has not uploaded anything</string>
 </resources>

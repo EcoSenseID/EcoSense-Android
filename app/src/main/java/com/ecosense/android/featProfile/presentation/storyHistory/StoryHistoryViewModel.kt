@@ -27,6 +27,8 @@ class StoryHistoryViewModel @Inject constructor(
     private val forumsRepository: ForumsRepository,
 ) : ViewModel() {
 
+    private var mUserId by mutableStateOf<Int?>(null)
+
     private val _stories = mutableStateListOf<StoryPresentation>()
     val stories: List<StoryPresentation> = _stories
 
@@ -35,27 +37,6 @@ class StoryHistoryViewModel @Inject constructor(
 
     private val _eventFlow = Channel<UIEvent>()
     val eventFlow = _eventFlow.receiveAsFlow()
-
-    init {
-        viewModelScope.launch {
-            profileRepository.getStoriesHistory().onEach { result ->
-                when (result) {
-                    is Resource.Error -> {
-                        isLoading = false
-                        result.uiText?.let { _eventFlow.send(UIEvent.ShowSnackbar(it)) }
-                    }
-                    is Resource.Loading -> isLoading = true
-                    is Resource.Success -> {
-                        isLoading = false
-                        result.data?.let { storiesList ->
-                            _stories.clear()
-                            _stories.addAll(storiesList.map { it.toPresentation() })
-                        }
-                    }
-                }
-            }.launchIn(this)
-        }
-    }
 
     private var onClickSupportJob: Job? = null
     fun onClickSupport(storyId: Int) {
@@ -87,5 +68,35 @@ class StoryHistoryViewModel @Inject constructor(
                 }
             }.launchIn(this)
         }
+    }
+
+    private var refreshJob: Job? = null
+    fun refresh() {
+        refreshJob?.cancel()
+        refreshJob = viewModelScope.launch {
+            profileRepository.getStoriesHistory(
+                userId = mUserId,
+            ).onEach { result ->
+                when (result) {
+                    is Resource.Error -> {
+                        isLoading = false
+                        result.uiText?.let { _eventFlow.send(UIEvent.ShowSnackbar(it)) }
+                    }
+                    is Resource.Loading -> isLoading = true
+                    is Resource.Success -> {
+                        isLoading = false
+                        result.data?.let { storiesList ->
+                            _stories.clear()
+                            _stories.addAll(storiesList.map { it.toPresentation() })
+                        }
+                    }
+                }
+            }.launchIn(this)
+        }
+    }
+
+    fun setUserId(userId: Int?) {
+        mUserId = userId
+        refresh()
     }
 }

@@ -33,6 +33,7 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
 import coil.compose.AsyncImage
 import com.ecosense.android.BuildConfig
 import com.ecosense.android.R
@@ -43,6 +44,7 @@ import com.ecosense.android.core.presentation.modifier.brushForeground
 import com.ecosense.android.core.presentation.theme.DarkRed
 import com.ecosense.android.core.presentation.theme.Gradient
 import com.ecosense.android.core.presentation.theme.spacing
+import com.ecosense.android.core.util.OnLifecycleEvent
 import com.ecosense.android.destinations.ChangeEmailScreenDestination
 import com.ecosense.android.destinations.ChangePasswordScreenDestination
 import com.ecosense.android.destinations.EditProfileScreenDestination
@@ -59,6 +61,8 @@ fun SettingsScreen(
     navigator: DestinationsNavigator,
     viewModel: SettingsViewModel = hiltViewModel(),
 ) {
+    OnLifecycleEvent { if (it == Lifecycle.Event.ON_RESUME) viewModel.onRefreshUserState() }
+
     val scaffoldState = rememberScaffoldState()
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
@@ -75,8 +79,7 @@ fun SettingsScreen(
 
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
 
-            LogoutSheetContent(
-                onClickYes = { viewModel.onLogoutClick() },
+            LogoutSheetContent(onClickYes = { viewModel.onLogoutClick() },
                 onClickCancel = { scope.launch { sheetState.hide() } },
                 modifier = Modifier
                     .fillMaxWidth()

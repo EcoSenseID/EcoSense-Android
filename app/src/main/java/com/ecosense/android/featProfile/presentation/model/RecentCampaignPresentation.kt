@@ -1,4 +1,4 @@
-package com.ecosense.android.featProfile.presentation.profile.model
+package com.ecosense.android.featProfile.presentation.model
 
 import com.ecosense.android.core.presentation.constants.PatternConstants
 import com.ecosense.android.core.presentation.model.CategoryPresentation

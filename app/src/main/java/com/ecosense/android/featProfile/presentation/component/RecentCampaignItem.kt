@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -24,7 +25,7 @@ import com.ecosense.android.core.presentation.modifier.brushForeground
 import com.ecosense.android.core.presentation.theme.Gradient
 import com.ecosense.android.core.presentation.theme.spacing
 import com.ecosense.android.core.presentation.util.colorFromHex
-import com.ecosense.android.featProfile.presentation.profile.model.RecentCampaignPresentation
+import com.ecosense.android.featProfile.presentation.model.RecentCampaignPresentation
 
 @Composable
 fun RecentCampaignItem(
@@ -37,6 +38,7 @@ fun RecentCampaignItem(
     ) {
         AsyncImage(
             model = campaign().posterUrl,
+            fallback = painterResource(id = R.drawable.error_placeholder),
             contentDescription = null,
             contentScale = ContentScale.Crop,
             modifier = Modifier

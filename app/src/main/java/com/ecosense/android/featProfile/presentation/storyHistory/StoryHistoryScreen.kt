@@ -11,6 +11,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -24,16 +25,19 @@ import com.ecosense.android.core.presentation.theme.spacing
 import com.ecosense.android.destinations.CampaignDetailScreenDestination
 import com.ecosense.android.destinations.StoryDetailScreenDestination
 import com.ecosense.android.destinations.StorySupportersScreenDestination
-import com.ecosense.android.featProfile.presentation.profile.component.RecentStoryItem
+import com.ecosense.android.featProfile.presentation.component.RecentStoryItem
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
 @Composable
 @Destination
 fun StoryHistoryScreen(
+    userId: Int?,
     navigator: DestinationsNavigator,
     viewModel: StoryHistoryViewModel = hiltViewModel(),
 ) {
+    remember { viewModel.setUserId(userId = userId) }
+
     val scaffoldState = rememberScaffoldState()
 
     val context = LocalContext.current
@@ -61,7 +65,7 @@ fun StoryHistoryScreen(
                     }
 
                     Text(
-                        text = stringResource(R.string.my_story_history),
+                        text = stringResource(R.string.stories_history),
                         color = MaterialTheme.colors.primary,
                         style = MaterialTheme.typography.h6,
                         fontWeight = FontWeight.Bold,

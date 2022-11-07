@@ -9,6 +9,7 @@ import com.ecosense.android.core.util.Resource
 import com.ecosense.android.core.util.SimpleResource
 import com.ecosense.android.core.util.UIText
 import com.ecosense.android.featProfile.data.api.ProfileApi
+import com.ecosense.android.featProfile.domain.model.OthersProfile
 import com.ecosense.android.featProfile.domain.model.Profile
 import com.ecosense.android.featProfile.domain.model.RecentCampaign
 import com.ecosense.android.featProfile.domain.repository.ProfileRepository
@@ -31,6 +32,35 @@ class ProfileRepositoryImpl(
             val idToken = authApi.getIdToken(true)
             val bearerToken = "Bearer $idToken"
             val response = profileApi.getProfile(bearerToken = bearerToken)
+
+            when (response.error) {
+                true -> emit(Resource.Error(uiText = response.message?.let {
+                    UIText.DynamicString(it)
+                } ?: UIText.StringResource(R.string.em_unknown)))
+                else -> emit(Resource.Success(response.toDomain()))
+            }
+
+        } catch (e: Exception) {
+            logcat { e.asLog() }
+            when (e) {
+                is IOException -> UIText.StringResource(R.string.em_io_exception)
+                else -> UIText.StringResource(R.string.em_unknown)
+            }.let { emit(Resource.Error(it)) }
+        }
+    }
+
+    override fun getOthersProfile(
+        userId: Int,
+    ): Flow<Resource<OthersProfile>> = flow {
+        emit(Resource.Loading())
+
+        try {
+            val idToken = authApi.getIdToken(true)
+            val bearerToken = "Bearer $idToken"
+            val response = profileApi.getOthersProfile(
+                bearerToken = bearerToken,
+                userId = userId,
+            )
 
             when (response.error) {
                 true -> emit(Resource.Error(uiText = response.message?.let {
@@ -92,13 +122,15 @@ class ProfileRepositoryImpl(
         }
     }
 
-    override fun getStoriesHistory(): Flow<Resource<List<Story>>> = flow {
+    override fun getStoriesHistory(
+        userId: Int?,
+    ): Flow<Resource<List<Story>>> = flow {
         emit(Resource.Loading())
 
         try {
             val idToken = authApi.getIdToken(true)
             val bearerToken = "Bearer $idToken"
-            val response = profileApi.getStoriesHistory(bearerToken = bearerToken)
+            val response = profileApi.getStoriesHistory(bearerToken = bearerToken, userId = userId)
 
             when {
                 response.error == true -> emit(Resource.Error(uiText = response.message?.let {
@@ -121,13 +153,18 @@ class ProfileRepositoryImpl(
         }
     }
 
-    override fun getCampaignsHistory(): Flow<Resource<List<RecentCampaign>>> = flow {
+    override fun getCampaignsHistory(
+        userId: Int?,
+    ): Flow<Resource<List<RecentCampaign>>> = flow {
         emit(Resource.Loading())
 
         try {
             val idToken = authApi.getIdToken(true)
             val bearerToken = "Bearer $idToken"
-            val response = profileApi.getCampaignsHistory(bearerToken = bearerToken)
+            val response = profileApi.getCampaignsHistory(
+                bearerToken = bearerToken,
+                userId = userId,
+            )
 
             when {
                 response.error == true -> emit(Resource.Error(uiText = response.message?.let {

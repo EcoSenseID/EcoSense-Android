@@ -15,6 +15,7 @@ class FakeForumsApi : ForumsApi {
     private val storyDtos = (1..100).map {
         StoryDto(
             id = it,
+            userId = it,
             name = "John Doe$it",
             avatarUrl = "https://i.pravatar.cc/300?img=$it",
             caption = "Bagaimana cara lestarikan lingkungan? ${"lorem ".repeat((it * 69) % 15)}",
@@ -47,6 +48,7 @@ class FakeForumsApi : ForumsApi {
     private val replyDtos = (1..100).map {
         ReplyDto(
             id = it,
+            userId = it,
             name = "Ken Harrington$it",
             avatarUrl = "https://i.pravatar.cc/300?img=$it",
             caption = "Lorem ipsum dolor sit amet $it",
@@ -60,6 +62,7 @@ class FakeForumsApi : ForumsApi {
     private val supporterDtos = (1..100).map {
         SupporterDto(
             id = it,
+            userId = it,
             avatarUrl = "https://i.pravatar.cc/300?img=$it",
             name = "Bambang Yudho($it)",
         )
@@ -93,6 +96,7 @@ class FakeForumsApi : ForumsApi {
             createdAt = null,
             error = null,
             id = null,
+            userId = null,
             isSupported = null,
             message = null,
             name = null,

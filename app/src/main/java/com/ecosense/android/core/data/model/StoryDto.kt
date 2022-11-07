@@ -4,6 +4,7 @@ import com.ecosense.android.core.domain.model.Story
 
 data class StoryDto(
     val id: Int?,
+    val userId: Int?,
     val name: String?,
     val avatarUrl: String?,
     val caption: String?,
@@ -17,6 +18,7 @@ data class StoryDto(
 ) {
     fun toDomain(): Story = Story(
         id = this.id ?: 0,
+        userId = this.userId ?: 0,
         name = this.name ?: "",
         avatarUrl = this.avatarUrl ?: "",
         caption = this.caption ?: "",
