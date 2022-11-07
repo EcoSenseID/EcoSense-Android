@@ -6,6 +6,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -14,11 +15,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
+import coil.compose.AsyncImage
 import com.ecosense.android.R
+import com.ecosense.android.core.presentation.component.GradientButton
 import com.ecosense.android.core.presentation.theme.spacing
 import com.ecosense.android.core.presentation.util.UIEvent
 import com.ecosense.android.core.presentation.util.asString
 import com.ecosense.android.core.util.OnLifecycleEvent
+import com.ecosense.android.destinations.LoginScreenDestination
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.SwipeRefreshState
 import com.ramcosta.composedestinations.annotation.Destination
@@ -70,7 +74,43 @@ fun NotificationsScreen(
             }
         },
     ) { scaffoldPadding ->
-        SwipeRefresh(
+        if (viewModel.isLoggedIn.collectAsState().value != true) Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center,
+            modifier = Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colors.surface)
+                .padding(scaffoldPadding)
+                .padding(MaterialTheme.spacing.medium),
+        ) {
+            AsyncImage(
+                model = R.drawable.character_03,
+                contentDescription = null,
+                modifier = Modifier.width(160.dp),
+            )
+
+            Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
+
+            Text(
+                text = stringResource(id = R.string.em_please_login_first),
+                color = MaterialTheme.colors.onSurface,
+                style = MaterialTheme.typography.h6,
+                fontWeight = FontWeight.Bold,
+            )
+
+            Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
+
+            GradientButton(
+                onClick = { navigator.navigate(LoginScreenDestination) },
+                modifier = Modifier.fillMaxWidth(),
+            ) {
+                Text(
+                    text = stringResource(id = R.string.login),
+                    fontWeight = FontWeight.SemiBold,
+                    color = MaterialTheme.colors.onPrimary,
+                )
+            }
+        } else SwipeRefresh(
             state = SwipeRefreshState(isRefreshing = viewModel.isRefreshing),
             onRefresh = { viewModel.onRefreshNotifs() },
             modifier = Modifier
