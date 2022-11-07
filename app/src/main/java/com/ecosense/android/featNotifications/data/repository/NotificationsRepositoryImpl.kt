@@ -8,6 +8,7 @@ import com.ecosense.android.featNotifications.data.api.NotificationsApi
 import com.ecosense.android.featNotifications.domain.model.Notification
 import com.ecosense.android.featNotifications.domain.repository.NotificationsRepository
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flow
 import logcat.asLog
 import logcat.logcat
@@ -21,6 +22,11 @@ class NotificationsRepositoryImpl(
 
     override fun getNotifications(): Flow<Resource<List<Notification>>> = flow {
         emit(Resource.Loading())
+
+        if (authApi.isLoggedIn.firstOrNull() != true) {
+            emit(Resource.Error(UIText.StringResource(R.string.em_please_login_first)))
+            return@flow
+        }
 
         try {
             val idToken = authApi.getIdToken(true)
