@@ -95,6 +95,7 @@ fun StoryItem(
                     model = story().attachedPhotoUrl,
                     error = painterResource(id = R.drawable.error_placeholder),
                     contentDescription = null,
+                    contentScale = ContentScale.Crop,
                     modifier = Modifier
                         .fillMaxWidth()
                         .clip(RoundedCornerShape(16.dp)),
