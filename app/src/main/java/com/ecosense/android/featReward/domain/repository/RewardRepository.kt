@@ -17,8 +17,7 @@ interface RewardRepository {
     fun getMyRewardDetail(claimId: Int): Flow<Resource<MyRewardDetail>>
 
     fun setRedeemReward(
-        rewardId: Int,
-        rewardCategory: String
+        rewardId: Int
     ): Flow<SimpleResource>
 
     fun setRequestReward(

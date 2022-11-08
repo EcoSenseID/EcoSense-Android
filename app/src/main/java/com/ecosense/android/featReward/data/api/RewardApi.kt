@@ -36,8 +36,7 @@ interface RewardApi {
     @POST("redeemreward")
     suspend fun setRedeemReward(
         @Header("Authorization") bearerToken: String,
-        @Field("rewardId") rewardId: Int,
-        @Field("rewardCategory") rewardCategory: String
+        @Field("rewardId") rewardId: Int
     ): RedeemRewardDto
 
     @FormUrlEncoded

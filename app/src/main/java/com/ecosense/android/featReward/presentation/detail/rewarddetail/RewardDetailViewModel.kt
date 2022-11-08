@@ -68,10 +68,10 @@ class RewardDetailViewModel @Inject constructor(
     }
 
     private var onRedeemRewardJob: Job? = null
-    fun onRedeemRewardJob(rewardId: Int, rewardCategory: String) {
+    fun onRedeemRewardJob(rewardId: Int) {
         onRedeemRewardJob?.cancel()
         onRedeemRewardJob = viewModelScope.launch {
-            rewardRepository.setRedeemReward(rewardId = rewardId, rewardCategory = rewardCategory)
+            rewardRepository.setRedeemReward(rewardId = rewardId)
                 .onEach { result ->
                     when (result) {
                         is Resource.Error -> {

@@ -418,8 +418,7 @@ fun RewardsScreen(
                                                     }
                                                 } else {
                                                     viewModel.onRedeemRewardJob(
-                                                        rewardId = reward[i].id,
-                                                        rewardCategory = reward[i].category
+                                                        rewardId = reward[i].id
                                                     )
                                                 }
                                             },

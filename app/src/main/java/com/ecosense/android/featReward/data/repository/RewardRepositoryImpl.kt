@@ -260,7 +260,7 @@ class RewardRepositoryImpl(
         }
     }
 
-    override fun setRedeemReward(rewardId: Int, rewardCategory: String): Flow<SimpleResource> =
+    override fun setRedeemReward(rewardId: Int): Flow<SimpleResource> =
         flow {
             emit(Resource.Loading())
 
@@ -271,8 +271,7 @@ class RewardRepositoryImpl(
                 val bearerToken = "Bearer $idToken"
                 val response = rewardApi.setRedeemReward(
                     bearerToken = bearerToken,
-                    rewardId = rewardId,
-                    rewardCategory = rewardCategory
+                    rewardId = rewardId
                 )
 
                 when {
