@@ -2,26 +2,32 @@ package com.ecosense.android.featReward.domain.repository
 
 import com.ecosense.android.core.util.Resource
 import com.ecosense.android.core.util.SimpleResource
-import com.ecosense.android.featReward.domain.model.MyRewards
-import com.ecosense.android.featReward.domain.model.RewardDetail
-import com.ecosense.android.featReward.domain.model.RewardHomepage
-import com.ecosense.android.featReward.domain.model.Rewards
+import com.ecosense.android.featReward.domain.model.*
 import kotlinx.coroutines.flow.Flow
 
 interface RewardRepository {
     fun getRewardHomepage(): Flow<Resource<RewardHomepage>>
 
-    fun getRewards(rewardCategory: String): Flow<Resource<Rewards>>
+    fun getRewards(categoryId: Int): Flow<Resource<List<Rewards>>>
 
     fun getMyRewards(): Flow<Resource<List<MyRewards>>>
 
     fun getRewardDetail(rewardId: Int): Flow<Resource<RewardDetail>>
 
+    fun getMyRewardDetail(claimId: Int): Flow<Resource<MyRewardDetail>>
+
     fun setRedeemReward(
         rewardId: Int
     ): Flow<SimpleResource>
 
+    fun setRequestReward(
+        rewardId: Int,
+        email: String,
+        walletType: String,
+        walletNumber: String
+    ): Flow<SimpleResource>
+
     fun setUseReward(
-        rewardId: Int
+        claimId: Int
     ): Flow<SimpleResource>
 }

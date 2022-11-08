@@ -6,21 +6,23 @@ object Faker {
     fun getRewardHomepage(): RewardHomepage {
         return RewardHomepage(
             totalPoints = 300,
-            hotDealsRewards = getHotDealsRewards(),
+            walletRewards = getWalletRewards(),
             donationRewards = getDonationRewards()
         )
     }
 
-    private fun getHotDealsRewards(): List<HotDealsRewards> {
-        val result = mutableListOf<HotDealsRewards>()
+    private fun getWalletRewards(): List<WalletRewards> {
+        val result = mutableListOf<WalletRewards>()
 
         for (i in 1..5) {
-            HotDealsRewards(
-                partner = "Partner $i",
-                bannerUrl = "https://cdn.statically.io/og/theme=dark/HotDeals$i.jpg",
-                id = i,
-                title = "Hot Deals $i",
-                pointsNeeded = (50..200).random()
+            result.add(
+                WalletRewards(
+                    partner = "Partner $i",
+                    bannerUrl = "https://cdn.statically.io/og/theme=dark/E-Wallet$i.jpg",
+                    id = i,
+                    title = "E-Wallet $i",
+                    pointsNeeded = (50..200).random()
+                )
             )
         }
 
@@ -31,37 +33,35 @@ object Faker {
         val result = mutableListOf<DonationRewards>()
 
         for (i in 1..5) {
-            DonationRewards(
-                partner = "Partner $i",
-                bannerUrl = "https://cdn.statically.io/og/theme=dark/HotDeals$i.jpg",
-                id = i,
-                title = "Hot Deals $i",
-                pointsNeeded = (50..200).random()
+            result.add(
+                DonationRewards(
+                    partner = "Partner $i",
+                    bannerUrl = "https://cdn.statically.io/og/theme=dark/Donation$i.jpg",
+                    id = i,
+                    title = "Donation $i",
+                    pointsNeeded = (50..200).random()
+                )
             )
         }
 
         return result
     }
 
-    fun getRewards(rewardCategory: String): Rewards {
-        return Rewards(
-            category = rewardCategory,
-            categoryRewards = getCategoryRewards(rewardCategory)
-        )
-    }
-
-    private fun getCategoryRewards(rewardCategory: String): List<CategoryRewards> {
-        val result = mutableListOf<CategoryRewards>()
+    fun getRewards(rewardCategory: String): List<Rewards> {
+        val result = mutableListOf<Rewards>()
 
         for (i in 1..10) {
-            CategoryRewards(
-                partner = "Partner $i",
-                bannerUrl = "https://cdn.statically.io/og/theme=dark/${rewardCategory + i}.jpg",
-                numberOfRedeem = (1..3).random(),
-                id = i,
-                title = "$rewardCategory + i",
-                maxRedeem = 3,
-                pointsNeeded = (50..200).random()
+            result.add(
+                Rewards(
+                    partner = "Partner $i",
+                    bannerUrl = "https://cdn.statically.io/og/theme=dark/${rewardCategory + i}.jpg",
+                    numberOfRedeem = if (i < 3) 1 else if (i < 6) 2 else 3,
+                    id = i,
+                    title = "$rewardCategory $i",
+                    category = rewardCategory,
+                    maxRedeem = 3,
+                    pointsNeeded = (50..200).random()
+                )
             )
         }
 
@@ -72,12 +72,15 @@ object Faker {
         val result = mutableListOf<MyRewards>()
 
         for (i in 1..10) {
-            MyRewards(
-                partner = "Partner $i",
-                bannerUrl = "https://cdn.statically.io/og/theme=dark/MyRewards$i.jpg",
-                id = i,
-                title = "My Rewards $i",
-                category = if (i < 3) "Entertainment" else if (i < 6) "Food & Beverage" else "Environment"
+            result.add(
+                MyRewards(
+                    partner = "Partner $i",
+                    bannerUrl = "https://cdn.statically.io/og/theme=dark/MyRewards$i.jpg",
+                    claimId = i,
+                    claimStatus = if (i < 3) 1 else if (i < 6) 2 else 3,
+                    title = "My Rewards $i",
+                    category = if (i < 3) "E-Wallet" else if (i < 6) "Donation" else "Voucher"
+                )
             )
         }
 
@@ -85,20 +88,43 @@ object Faker {
     }
 
     fun getRewardDetail(rewardId: Int): RewardDetail {
-        val redeemState = (0..1).random()
-
         return RewardDetail(
             termsCondition = listOf(
                 "Lorem Ipsum is simply dummy text of the printing and  typesetting industry.",
                 "Lorem Ipsum is simply dummy text.",
                 "Lorem Ipsum is simply dummy text of the printing."
             ),
-            isRedeemed = redeemState != 0,
             bannerUrl = "https://cdn.statically.io/og/theme=dark/RewardDetail$rewardId.jpg",
             description = "Lorem Ipsum is simply dummy text of the printing and  typesetting industry. Lorem Ipsum has been the industry's standard dummy  text ever since the 1500s.",
             validity = "1662138000",
             title = "Reward No.$rewardId",
+            partner = "Partner $rewardId",
+            category = if (rewardId < 3) "E-Wallet" else if (rewardId < 6) "Donation" else "Voucher",
             pointsNeeded = (50..200).random(),
+            maxRedeem = 3,
+            numberOfRedeem = if (rewardId < 3) 1 else if (rewardId < 6) 2 else 3,
+            howToUse = listOf(
+                "Lorem Ipsum is simply dummy text of the printing.",
+                "Lorem Ipsum is simply dummy text of the printing and  typesetting industry.",
+                "Lorem Ipsum is simply dummy text."
+            )
+        )
+    }
+
+    fun getMyRewardDetail(rewardId: Int): MyRewardDetail {
+        return MyRewardDetail(
+            termsCondition = listOf(
+                "Lorem Ipsum is simply dummy text of the printing and  typesetting industry.",
+                "Lorem Ipsum is simply dummy text.",
+                "Lorem Ipsum is simply dummy text of the printing."
+            ),
+            bannerUrl = "https://cdn.statically.io/og/theme=dark/MyRewardDetail$rewardId.jpg",
+            description = "Lorem Ipsum is simply dummy text of the printing and  typesetting industry. Lorem Ipsum has been the industry's standard dummy  text ever since the 1500s.",
+            validity = "1662138000",
+            title = "My Reward No.$rewardId",
+            partner = "Partner $rewardId",
+            category = if (rewardId < 3) "E-Wallet" else if (rewardId < 6) "Donation" else "Voucher",
+            claimStatus = if (rewardId < 3) 1 else if (rewardId < 6) 2 else 3,
             howToUse = listOf(
                 "Lorem Ipsum is simply dummy text of the printing.",
                 "Lorem Ipsum is simply dummy text of the printing and  typesetting industry.",

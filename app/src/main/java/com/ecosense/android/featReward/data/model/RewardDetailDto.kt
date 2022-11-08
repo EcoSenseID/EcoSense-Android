@@ -4,24 +4,30 @@ import com.ecosense.android.featReward.domain.model.RewardDetail
 
 data class RewardDetailDto(
     val termsCondition: List<String>?,
-    val isRedeemed: Boolean?,
     val bannerUrl: String?,
     val description: String?,
     val validity: String?,
     val error: Boolean?,
     val message: String?,
     val title: String?,
+    val partner: String?,
+    val category: String?,
     val pointsNeeded: Int?,
+    val maxRedeem: Int?,
+    val numberOfRedeem: Int?,
     val howToUse: List<String>?
 ) {
     fun toRewardDetail() = RewardDetail(
         termsCondition = termsCondition ?: emptyList(),
-        isRedeemed = isRedeemed ?: false,
         bannerUrl = bannerUrl ?: "",
         description = description ?: "",
         validity = validity ?: "",
         title = title ?: "",
+        partner = partner ?: "",
+        category = category ?: "",
         pointsNeeded = pointsNeeded ?: 0,
+        maxRedeem = maxRedeem ?: 0,
+        numberOfRedeem = numberOfRedeem ?: 0,
         howToUse = howToUse ?: emptyList()
     )
 }

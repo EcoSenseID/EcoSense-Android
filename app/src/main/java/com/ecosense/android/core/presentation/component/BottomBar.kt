@@ -85,7 +85,7 @@ enum class BottomBarDestination(
         label = R.string.ecoworld,
     ),
     EcoReward(
-        direction = RewardsScreenDestination,
+        direction = RewardHomepageScreenDestination,
         iconResId = R.drawable.ic_ecoreward,
         label = R.string.ecoreward,
     ),

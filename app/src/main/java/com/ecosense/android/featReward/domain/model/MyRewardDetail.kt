@@ -1,6 +1,6 @@
 package com.ecosense.android.featReward.domain.model
 
-data class RewardDetail(
+data class MyRewardDetail(
     val termsCondition: List<String>,
     val bannerUrl: String,
     val description: String,
@@ -8,8 +8,6 @@ data class RewardDetail(
     val title: String,
     val partner: String,
     val category: String,
-    val pointsNeeded: Int,
-    val maxRedeem: Int,
-    val numberOfRedeem: Int,
+    val claimStatus: Int,
     val howToUse: List<String>
 )

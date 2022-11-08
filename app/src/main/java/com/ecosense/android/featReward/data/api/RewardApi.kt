@@ -12,7 +12,7 @@ interface RewardApi {
     @GET("rewards")
     suspend fun getRewards(
         @Header("Authorization") bearerToken: String,
-        @Query("rewardCategory") rewardCategory: String
+        @Query("categoryId") categoryId: Int
     ): RewardsDto
 
     @GET("myrewards")
@@ -26,6 +26,12 @@ interface RewardApi {
         @Query("rewardId") rewardId: Int
     ): RewardDetailDto
 
+    @GET("myrewarddetail")
+    suspend fun getMyRewardDetail(
+        @Header("Authorization") bearerToken: String,
+        @Query("claimId") claimId: Int
+    ): MyRewardDetailDto
+
     @FormUrlEncoded
     @POST("redeemreward")
     suspend fun setRedeemReward(
@@ -34,9 +40,19 @@ interface RewardApi {
     ): RedeemRewardDto
 
     @FormUrlEncoded
+    @POST("requestreward")
+    suspend fun setRequestReward(
+        @Header("Authorization") bearerToken: String,
+        @Field("rewardId") rewardId: Int,
+        @Field("email") email: String,
+        @Field("walletType") walletType: String,
+        @Field("walletNumber") walletNumber: String
+    ): RequestRewardDto
+
+    @FormUrlEncoded
     @POST("usereward")
     suspend fun setUseReward(
         @Header("Authorization") bearerToken: String,
-        @Field("rewardId") rewardId: Int
+        @Field("claimId") claimId: Int
     ): UseRewardDto
 }
