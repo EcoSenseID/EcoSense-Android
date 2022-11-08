@@ -79,7 +79,8 @@ fun SettingsScreen(
 
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
 
-            LogoutSheetContent(onClickYes = { viewModel.onLogoutClick() },
+            LogoutSheetContent(
+                onClickYes = { viewModel.onLogoutClick() },
                 onClickCancel = { scope.launch { sheetState.hide() } },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -418,7 +419,7 @@ fun SettingsScreen(
                                     .size(36.dp)
                                     .clip(CircleShape)
                                     .clickable {
-                                        val url = context.getString(R.string.url_ecosense_youtube)
+                                        val url = context.getString(R.string.url_ecosense_web)
                                         Intent(Intent.ACTION_VIEW)
                                             .apply { data = Uri.parse(url) }
                                             .let { context.startActivity(it) }
@@ -427,7 +428,31 @@ fun SettingsScreen(
                                     .padding(MaterialTheme.spacing.small),
                             ) {
                                 AsyncImage(
-                                    model = R.drawable.ic_youtube,
+                                    model = R.drawable.ic_web,
+                                    contentDescription = null,
+                                    colorFilter = ColorFilter.tint(MaterialTheme.colors.onSurface),
+                                    modifier = Modifier.fillMaxSize(),
+                                )
+                            }
+
+                            Spacer(modifier = Modifier.width(MaterialTheme.spacing.small))
+
+                            Box(
+                                contentAlignment = Alignment.Center,
+                                modifier = Modifier
+                                    .size(36.dp)
+                                    .clip(CircleShape)
+                                    .clickable {
+                                        val url = context.getString(R.string.url_ecosense_linkedin)
+                                        Intent(Intent.ACTION_VIEW)
+                                            .apply { data = Uri.parse(url) }
+                                            .let { context.startActivity(it) }
+                                    }
+                                    .background(MaterialTheme.colors.onSurface.copy(alpha = 0.1f))
+                                    .padding(MaterialTheme.spacing.small),
+                            ) {
+                                AsyncImage(
+                                    model = R.drawable.ic_linkedin,
                                     contentDescription = null,
                                     colorFilter = ColorFilter.tint(MaterialTheme.colors.onSurface),
                                     modifier = Modifier.fillMaxSize(),

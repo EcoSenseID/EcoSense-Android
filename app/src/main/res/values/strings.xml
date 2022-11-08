@@ -245,4 +245,6 @@
     <string name="yesterday">Yesterday</string>
     <string name="last_week">Last Week</string>
     <string name="older">Older</string>
+    <string name="url_ecosense_web">https://ecosense.id/</string>
+    <string name="url_ecosense_linkedin">https://www.linkedin.com/company/ecosense-indonesia</string>
 </resources>
