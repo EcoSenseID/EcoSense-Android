@@ -166,7 +166,7 @@ fun RewardDetailScreen(
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(500.dp)
+                        .height(550.dp)
                         .padding(MaterialTheme.spacing.medium)
                         .clip(shape = RoundedCornerShape(8.dp, 8.dp, 0.dp, 0.dp))
                 ) {
@@ -357,8 +357,7 @@ fun RewardDetailScreen(
                                     }
                                 } else {
                                     viewModel.onRedeemRewardJob(
-                                        rewardId = rewardId,
-                                        rewardCategory = reward.category
+                                        rewardId = rewardId
                                     )
                                 }
                             }
