@@ -20,7 +20,7 @@ data class ReplyDto(
         avatarUrl = this.avatarUrl ?: "",
         caption = this.caption ?: "",
         attachedPhotoUrl = this.attachedPhotoUrl,
-        createdAt = this.createdAt ?: 0,
+        createdAt = (this.createdAt ?: 0) * 1000,
         supportersCount = this.supportersCount ?: 0,
         isSupported = this.isSupported ?: false,
     )
