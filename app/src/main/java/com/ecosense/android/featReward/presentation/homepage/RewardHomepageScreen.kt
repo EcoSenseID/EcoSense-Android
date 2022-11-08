@@ -105,14 +105,14 @@ fun RewardHomepageScreen(
                 )
             }
             Row(modifier = Modifier.horizontalScroll(donationHorizontalScroll)) {
-                state.rewardHomepage.donationRewards.forEachIndexed { index, donation ->
+                state.rewardHomepage.donationRewards.forEach { donation ->
                     Column(
                         modifier = Modifier
                             .padding(MaterialTheme.spacing.medium)
                             .clickable(onClick = {
                                 navigator.navigate(
                                     RewardDetailScreenDestination(
-                                        index + 1,
+                                        donation.id,
                                         state.rewardHomepage.totalPoints
                                     )
                                 )
@@ -154,14 +154,14 @@ fun RewardHomepageScreen(
                 )
             }
             Row(modifier = Modifier.horizontalScroll(hotDealsHorizontalScroll)) {
-                state.rewardHomepage.walletRewards.forEachIndexed { index, hotDeals ->
+                state.rewardHomepage.walletRewards.forEach { eWallet ->
                     Column(
                         modifier = Modifier
                             .padding(MaterialTheme.spacing.medium)
                             .clickable(onClick = {
                                 navigator.navigate(
                                     RewardDetailScreenDestination(
-                                        index + 1,
+                                        eWallet.id,
                                         state.rewardHomepage.totalPoints
                                     )
                                 )
@@ -169,17 +169,17 @@ fun RewardHomepageScreen(
                     ) {
                         AsyncImage(
                             model = ImageRequest.Builder(LocalContext.current)
-                                .data(hotDeals.bannerUrl)
+                                .data(eWallet.bannerUrl)
                                 .crossfade(true)
                                 .scale(Scale.FILL)
                                 .build(),
-                            contentDescription = hotDeals.title,
+                            contentDescription = eWallet.title,
                             contentScale = ContentScale.Crop,
                             modifier = Modifier.size(100.dp)
                         )
-                        Text(text = hotDeals.title)
-                        Text(text = hotDeals.partner)
-                        Text(text = "${hotDeals.pointsNeeded} EcoPoints")
+                        Text(text = eWallet.title)
+                        Text(text = eWallet.partner)
+                        Text(text = "${eWallet.pointsNeeded} EcoPoints")
                     }
                 }
             }
