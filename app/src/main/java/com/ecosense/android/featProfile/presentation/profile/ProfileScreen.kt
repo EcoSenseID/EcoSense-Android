@@ -31,7 +31,6 @@ import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
-import androidx.navigation.NavGraph.Companion.findStartDestination
 import coil.compose.AsyncImage
 import com.ecosense.android.R
 import com.ecosense.android.core.presentation.component.GradientButton
@@ -236,12 +235,12 @@ fun ProfileScreen(
 
                         GradientButton(
                             onClick = {
-                                navigator.navigate(RewardHomepageScreenDestination){
+                                navigator.navigate(RewardHomepageScreenDestination) {
                                     popUpTo(DiscoverCampaignScreenDestination.route) {
                                         saveState = true
                                     }
                                 }
-                                      },
+                            },
                             height = 36.dp,
                             modifier = Modifier.weight(1f),
                         ) {
