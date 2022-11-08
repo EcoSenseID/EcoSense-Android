@@ -14,14 +14,16 @@ fun EmailTextField(
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     onValueChange: (String) -> Unit = {},
-    trailingIcon: @Composable (() -> Unit)? = null
+    trailingIcon: @Composable (() -> Unit)? = null,
+    label: @Composable (() -> Unit) = { Text(text = stringResource(id = R.string.email)) },
+    placeholder: @Composable (() -> Unit) = { Text(text = stringResource(id = R.string.email)) },
 ) {
     AuthTextField(
         value = value,
         enabled = enabled,
         onValueChange = onValueChange,
-        label = { Text(text = stringResource(id = R.string.email)) },
-        placeholder = { Text(text = stringResource(id = R.string.email)) },
+        label = label,
+        placeholder = placeholder,
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
         modifier = modifier,
         trailingIcon = trailingIcon

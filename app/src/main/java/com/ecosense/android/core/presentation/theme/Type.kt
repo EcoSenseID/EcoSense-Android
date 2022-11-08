@@ -52,8 +52,7 @@ val Typography = Typography(
     ),
     h6 = TextStyle(
         fontWeight = FontWeight.Medium,
-        fontSize = 20.sp,
-        letterSpacing = 0.15.sp,
+        fontSize = 17.sp,
         fontFamily = FontPlusJakartaSans,
     ),
     subtitle1 = TextStyle(

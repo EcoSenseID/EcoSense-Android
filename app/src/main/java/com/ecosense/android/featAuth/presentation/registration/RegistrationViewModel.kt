@@ -4,9 +4,11 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.ecosense.android.R
 import com.ecosense.android.core.domain.repository.AuthRepository
 import com.ecosense.android.core.presentation.util.UIEvent
 import com.ecosense.android.core.util.Resource
+import com.ecosense.android.core.util.UIText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
@@ -57,6 +59,11 @@ class RegistrationViewModel @Inject constructor(
     fun onRegisterClick() {
         onRegisterClickJob?.cancel()
         onRegisterClickJob = viewModelScope.launch {
+            if (!state.value.isAgreeTermsPrivacyPolicy) {
+                _eventFlow.send(UIEvent.ShowSnackbar(UIText.StringResource(R.string.em_agree_terms_privacy_policy)))
+                return@launch
+            }
+
             authRepository.registerWithEmail(
                 name = state.value.name,
                 email = state.value.email,
@@ -100,5 +107,11 @@ class RegistrationViewModel @Inject constructor(
                 }
             }.launchIn(this)
         }
+    }
+
+    fun onCheckedChangeTermsPrivacyPolicy() {
+        _state.value = state.value.copy(
+            isAgreeTermsPrivacyPolicy = !state.value.isAgreeTermsPrivacyPolicy,
+        )
     }
 }

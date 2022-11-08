@@ -152,6 +152,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-auth-ktx'
     implementation 'com.google.android.gms:play-services-auth:20.3.0'
     implementation 'com.google.firebase:firebase-storage'
+    implementation 'com.google.firebase:firebase-functions-ktx'
 
     // Coil
     def coil_version = "2.1.0"
@@ -168,6 +169,9 @@ dependencies {
 
     // Accompanist-SystemUIController
     implementation "com.google.accompanist:accompanist-systemuicontroller:0.17.0"
+
+    // Accompanist-SwipeRefresh
+    implementation "com.google.accompanist:accompanist-swiperefresh:0.19.0"
 
     // SplashScreen
     implementation 'androidx.core:core-splashscreen:1.0.0'

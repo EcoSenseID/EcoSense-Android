@@ -14,40 +14,39 @@ import com.ecosense.android.R
 
 @Composable
 fun ProfileTopBar(
+    isDropdownMenuVisible: Boolean,
     onExpandDropdownMenu: () -> Unit,
     isDropdownMenuExpanded: Boolean,
     onDropdownMenuDismissRequest: () -> Unit,
     dropdownMenuContent: @Composable ColumnScope.() -> Unit
 ) {
     TopAppBar(
-        backgroundColor = MaterialTheme.colors.surface,
+        backgroundColor = MaterialTheme.colors.background,
         elevation = 0.dp,
     ) {
         Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceEvenly,
+            horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.fillMaxSize(),
         ) {
             Spacer(modifier = Modifier.weight(1f))
 
             Text(
                 text = stringResource(R.string.my_profile),
+                color = MaterialTheme.colors.primary,
                 style = MaterialTheme.typography.h6,
                 fontWeight = FontWeight.Bold,
             )
 
             Row(
                 horizontalArrangement = Arrangement.End,
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier
-                    .weight(1f)
-                    .fillMaxHeight(),
+                modifier = Modifier.weight(1f),
             ) {
-                IconButton(onClick = onExpandDropdownMenu) {
+                if (isDropdownMenuVisible) IconButton(onClick = onExpandDropdownMenu) {
                     Icon(
                         imageVector = Icons.Default.MoreVert,
                         contentDescription = stringResource(R.string.cd_options_menu),
-                        tint = MaterialTheme.colors.onSurface,
+                        tint = MaterialTheme.colors.secondary,
                     )
                 }
             }

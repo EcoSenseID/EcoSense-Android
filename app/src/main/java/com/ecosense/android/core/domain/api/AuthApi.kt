@@ -39,5 +39,15 @@ interface AuthApi {
         newPhotoUri: Uri?,
     ): SimpleResource
 
+    suspend fun updatePassword(
+        oldPassword: String,
+        newPassword: String,
+    ): SimpleResource
+
+    suspend fun updateEmail(
+        password: String,
+        newEmail: String,
+    ): SimpleResource
+
     suspend fun sendEmailVerification(): SimpleResource
 }

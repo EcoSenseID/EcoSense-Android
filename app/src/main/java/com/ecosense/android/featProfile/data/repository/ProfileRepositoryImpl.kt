@@ -4,20 +4,19 @@ import android.net.Uri
 import com.ecosense.android.R
 import com.ecosense.android.core.domain.api.AuthApi
 import com.ecosense.android.core.domain.api.CloudStorageApi
+import com.ecosense.android.core.domain.model.Story
 import com.ecosense.android.core.util.Resource
 import com.ecosense.android.core.util.SimpleResource
 import com.ecosense.android.core.util.UIText
 import com.ecosense.android.featProfile.data.api.ProfileApi
-import com.ecosense.android.featProfile.data.model.ContributionsDto
-import com.ecosense.android.featProfile.domain.model.Contributions
+import com.ecosense.android.featProfile.domain.model.OthersProfile
+import com.ecosense.android.featProfile.domain.model.Profile
+import com.ecosense.android.featProfile.domain.model.RecentCampaign
 import com.ecosense.android.featProfile.domain.repository.ProfileRepository
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import logcat.asLog
 import logcat.logcat
-import retrofit2.HttpException
 import java.io.IOException
 
 class ProfileRepositoryImpl(
@@ -25,60 +24,62 @@ class ProfileRepositoryImpl(
     private val profileApi: ProfileApi,
     private val cloudStorageApi: CloudStorageApi,
 ) : ProfileRepository {
-    override fun getContributions(): Flow<Resource<Contributions>> = flow {
+
+    override fun getProfile(): Flow<Resource<Profile>> = flow {
         emit(Resource.Loading())
 
         try {
             val idToken = authApi.getIdToken(true)
             val bearerToken = "Bearer $idToken"
-            val response = profileApi.getContributions(bearerToken = bearerToken)
+            val response = profileApi.getProfile(bearerToken = bearerToken)
 
-            when {
-                response.error == true -> emit(Resource.Error(
-                    uiText = response.message?.let { UIText.DynamicString(it) }
-                        ?: UIText.StringResource(R.string.em_unknown))
-                )
-
-                response.experiences == null || response.completedCampaigns == null -> {
-                    emit(Resource.Error(UIText.StringResource(R.string.em_unknown)))
-                }
-
-                else -> emit(
-                    Resource.Success(
-                        Contributions(
-                            experiences = response.experiences.map { it.toExperience() },
-                            completedCampaigns = response.completedCampaigns.map { it.toCampaign() }
-                        )
-                    )
-                )
+            when (response.error) {
+                true -> emit(Resource.Error(uiText = response.message?.let {
+                    UIText.DynamicString(it)
+                } ?: UIText.StringResource(R.string.em_unknown)))
+                else -> emit(Resource.Success(response.toDomain()))
             }
 
         } catch (e: Exception) {
             logcat { e.asLog() }
             when (e) {
-                is HttpException -> {
-                    try {
-                        val response = Gson().fromJson<ContributionsDto>(
-                            e.response()?.errorBody()?.charStream(),
-                            object : TypeToken<ContributionsDto>() {}.type
-                        )
-                        UIText.DynamicString(response.message!!)
-                    } catch (e: Exception) {
-                        UIText.StringResource(R.string.em_unknown)
-                    }
-                }
-
                 is IOException -> UIText.StringResource(R.string.em_io_exception)
-
                 else -> UIText.StringResource(R.string.em_unknown)
+            }.let { emit(Resource.Error(it)) }
+        }
+    }
 
+    override fun getOthersProfile(
+        userId: Int,
+    ): Flow<Resource<OthersProfile>> = flow {
+        emit(Resource.Loading())
+
+        try {
+            val idToken = authApi.getIdToken(true)
+            val bearerToken = "Bearer $idToken"
+            val response = profileApi.getOthersProfile(
+                bearerToken = bearerToken,
+                userId = userId,
+            )
+
+            when (response.error) {
+                true -> emit(Resource.Error(uiText = response.message?.let {
+                    UIText.DynamicString(it)
+                } ?: UIText.StringResource(R.string.em_unknown)))
+                else -> emit(Resource.Success(response.toDomain()))
+            }
+
+        } catch (e: Exception) {
+            logcat { e.asLog() }
+            when (e) {
+                is IOException -> UIText.StringResource(R.string.em_io_exception)
+                else -> UIText.StringResource(R.string.em_unknown)
             }.let { emit(Resource.Error(it)) }
         }
     }
 
     override fun updateProfile(
-        newDisplayName: String?,
-        newPhotoUri: Uri?
+        newDisplayName: String?, newPhotoUri: Uri?
     ): Flow<SimpleResource> = flow {
         emit(Resource.Loading())
 
@@ -97,8 +98,7 @@ class ProfileRepositoryImpl(
         try {
             val uploadedPhotoUri: Uri? = newPhotoUri?.let { uri ->
                 cloudStorageApi.uploadProfilePicture(
-                    photoUri = uri,
-                    uid = authApi.getCurrentUser()?.uid ?: return@let null
+                    photoUri = uri, uid = authApi.getCurrentUser()?.uid ?: return@let null
                 )
             }
 
@@ -117,7 +117,73 @@ class ProfileRepositoryImpl(
         try {
             authApi.sendEmailVerification().also { emit(it) }
         } catch (e: Exception) {
+            logcat { e.asLog() }
             emit(Resource.Error(UIText.StringResource(R.string.em_unknown)))
+        }
+    }
+
+    override fun getStoriesHistory(
+        userId: Int?,
+    ): Flow<Resource<List<Story>>> = flow {
+        emit(Resource.Loading())
+
+        try {
+            val idToken = authApi.getIdToken(true)
+            val bearerToken = "Bearer $idToken"
+            val response = profileApi.getStoriesHistory(bearerToken = bearerToken, userId = userId)
+
+            when {
+                response.error == true -> emit(Resource.Error(uiText = response.message?.let {
+                    UIText.DynamicString(it)
+                } ?: UIText.StringResource(R.string.em_unknown)))
+
+                response.stories == null -> {
+                    emit(Resource.Error(UIText.StringResource(R.string.em_unknown)))
+                }
+
+                else -> emit(Resource.Success(response.stories.map { it.toDomain() }))
+            }
+
+        } catch (e: Exception) {
+            logcat { e.asLog() }
+            when (e) {
+                is IOException -> UIText.StringResource(R.string.em_io_exception)
+                else -> UIText.StringResource(R.string.em_unknown)
+            }.let { emit(Resource.Error(it)) }
+        }
+    }
+
+    override fun getCampaignsHistory(
+        userId: Int?,
+    ): Flow<Resource<List<RecentCampaign>>> = flow {
+        emit(Resource.Loading())
+
+        try {
+            val idToken = authApi.getIdToken(true)
+            val bearerToken = "Bearer $idToken"
+            val response = profileApi.getCampaignsHistory(
+                bearerToken = bearerToken,
+                userId = userId,
+            )
+
+            when {
+                response.error == true -> emit(Resource.Error(uiText = response.message?.let {
+                    UIText.DynamicString(it)
+                } ?: UIText.StringResource(R.string.em_unknown)))
+
+                response.campaigns == null -> {
+                    emit(Resource.Error(UIText.StringResource(R.string.em_unknown)))
+                }
+
+                else -> emit(Resource.Success(response.campaigns.map { it.toDomain() }))
+            }
+
+        } catch (e: Exception) {
+            logcat { e.asLog() }
+            when (e) {
+                is IOException -> UIText.StringResource(R.string.em_io_exception)
+                else -> UIText.StringResource(R.string.em_unknown)
+            }.let { emit(Resource.Error(it)) }
         }
     }
 }
