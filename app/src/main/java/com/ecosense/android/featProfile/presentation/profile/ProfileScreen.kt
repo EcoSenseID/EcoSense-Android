@@ -31,6 +31,7 @@ import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import coil.compose.AsyncImage
 import com.ecosense.android.R
 import com.ecosense.android.core.presentation.component.GradientButton
@@ -41,9 +42,9 @@ import com.ecosense.android.core.presentation.util.UIEvent
 import com.ecosense.android.core.presentation.util.asString
 import com.ecosense.android.core.util.OnLifecycleEvent
 import com.ecosense.android.destinations.*
+import com.ecosense.android.featProfile.presentation.component.RecentStoryItem
 import com.ecosense.android.featProfile.presentation.profile.component.ProfileTopBar
 import com.ecosense.android.featProfile.presentation.profile.component.RecentCampaignItem
-import com.ecosense.android.featProfile.presentation.component.RecentStoryItem
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlinx.coroutines.flow.collectLatest
@@ -234,7 +235,13 @@ fun ProfileScreen(
                         )
 
                         GradientButton(
-                            onClick = { navigator.navigate(RewardsScreenDestination) },
+                            onClick = {
+                                navigator.navigate(RewardHomepageScreenDestination){
+                                    popUpTo(DiscoverCampaignScreenDestination.route) {
+                                        saveState = true
+                                    }
+                                }
+                                      },
                             height = 36.dp,
                             modifier = Modifier.weight(1f),
                         ) {
