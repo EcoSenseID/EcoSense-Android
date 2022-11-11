@@ -1,10 +1,8 @@
 package com.ecosense.android.featReward.presentation.detail.rewarddetail
 
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
@@ -16,7 +14,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
@@ -28,13 +26,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
 import androidx.hilt.navigation.compose.hiltViewModel
+import coil.compose.AsyncImage
 import com.ecosense.android.R
 import com.ecosense.android.core.presentation.component.GradientButton
 import com.ecosense.android.core.presentation.component.RoundedEndsButton
-import com.ecosense.android.core.presentation.theme.DarkRed
-import com.ecosense.android.core.presentation.theme.MintGreen
-import com.ecosense.android.core.presentation.theme.White
-import com.ecosense.android.core.presentation.theme.spacing
+import com.ecosense.android.core.presentation.theme.*
 import com.ecosense.android.core.presentation.util.UIEvent
 import com.ecosense.android.core.presentation.util.asString
 import com.ecosense.android.featReward.presentation.component.RewardTopBar
@@ -366,25 +362,20 @@ fun RewardDetailScreen(
                             text = {
                                 Text(
                                     text = "Redeem Limit Reached",
-                                    color = MaterialTheme.colors.onPrimary
+                                    style = MaterialTheme.typography.body1,
+                                    color = White,
+                                    fontWeight = FontWeight.SemiBold
                                 )
                             },
-                            backgroundColor = Color.Gray,
-                            onClick = {}
+                            backgroundColor = SuperDarkGrey,
+                            onClick = {},
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = MaterialTheme.spacing.medium)
                         )
                     } else {
                         if (!state.isLoadingRedeemReward) {
-                            ExtendedFloatingActionButton(
-                                text = {
-                                    Text(
-                                        text = stringResource(
-                                            R.string.redeem_reward,
-                                            reward.pointsNeeded
-                                        ),
-                                        color = MaterialTheme.colors.onPrimary
-                                    )
-                                },
-                                backgroundColor = MaterialTheme.colors.primary,
+                            GradientButton(
                                 onClick = {
                                     if (reward.category == "e-wallet") {
                                         coroutineScope.launch {
@@ -397,18 +388,68 @@ fun RewardDetailScreen(
                                             rewardId = rewardId
                                         )
                                     }
+                                },
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(horizontal = MaterialTheme.spacing.medium)
+                            ) {
+                                Text(
+                                    text = "Redeem",
+                                    style = MaterialTheme.typography.body1,
+                                    color = White,
+                                    fontWeight = FontWeight.SemiBold
+                                )
+                                Spacer(modifier = Modifier.width(MaterialTheme.spacing.extraSmall))
+                                Box(
+                                    contentAlignment = Alignment.Center,
+                                    modifier = Modifier
+                                        .size(14.dp)
+                                        .clip(CircleShape)
+                                        .padding(1.dp)
+                                        .border(
+                                            width = 1.dp,
+                                            color = EcoPointsColor,
+                                            shape = CircleShape,
+                                        )
+                                        .padding(1.dp),
+                                ) {
+                                    AsyncImage(
+                                        model = R.drawable.ic_ecosense_logo_vector,
+                                        contentDescription = null,
+                                        colorFilter = ColorFilter.tint(EcoPointsColor),
+                                        modifier = Modifier.fillMaxSize(),
+                                    )
                                 }
-                            )
+                                Spacer(modifier = Modifier.width(2.dp))
+                                Text(
+                                    text = reward.pointsNeeded.toString(),
+                                    style = MaterialTheme.typography.body1,
+                                    fontWeight = FontWeight.SemiBold,
+                                    color = EcoPointsColor
+                                )
+                                Spacer(modifier = Modifier.width(MaterialTheme.spacing.extraSmall))
+                                Text(
+                                    text = stringResource(R.string.ecopoints),
+                                    style = MaterialTheme.typography.body1,
+                                    color = White,
+                                    fontWeight = FontWeight.SemiBold
+                                )
+                            }
                         } else {
                             ExtendedFloatingActionButton(
                                 text = {
                                     Text(
                                         text = "Redeeming Reward...",
-                                        color = MaterialTheme.colors.onPrimary
+                                        style = MaterialTheme.typography.body1,
+                                        color = White,
+                                        fontWeight = FontWeight.SemiBold
                                     )
                                 },
-                                backgroundColor = Color.Gray,
-                                onClick = {}
+                                backgroundColor = DarkGrey,
+                                onClick = {},
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(horizontal = MaterialTheme.spacing.medium)
                             )
                         }
                     }
