@@ -245,4 +245,7 @@
     <string name="yesterday">Yesterday</string>
     <string name="last_week">Last Week</string>
     <string name="older">Older</string>
+    <string name="ecoreward_tagline">Claim your EcoRewards and get the benefits!</string>
+    <string name="donation">Donation</string>
+    <string name="ewallet">E-Wallet</string>
 </resources>
