@@ -1,9 +1,11 @@
 package com.ecosense.android.featReward.presentation.list.rewards
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
@@ -16,7 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
@@ -33,8 +35,9 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import coil.size.Scale
 import com.ecosense.android.R
+import com.ecosense.android.core.presentation.component.GradientButton
 import com.ecosense.android.core.presentation.component.RoundedEndsButton
-import com.ecosense.android.core.presentation.theme.spacing
+import com.ecosense.android.core.presentation.theme.*
 import com.ecosense.android.core.presentation.util.UIEvent
 import com.ecosense.android.core.presentation.util.asString
 import com.ecosense.android.destinations.RewardDetailScreenDestination
@@ -349,7 +352,7 @@ fun RewardsScreen(
                                     vertical = MaterialTheme.spacing.small
                                 )
                                 .shadow(elevation = 2.dp, shape = RoundedCornerShape(8.dp))
-                                .clip(shape = RoundedCornerShape(8.dp))
+                                .clip(shape = RoundedCornerShape(20.dp))
                                 .clickable(onClick = {
                                     navigator.navigate(
                                         RewardDetailScreenDestination(
@@ -363,7 +366,7 @@ fun RewardsScreen(
                         ) {
                             Column(
                                 modifier = Modifier
-                                    .width(120.dp)
+                                    .width(150.dp)
                                     .height(160.dp)
                             ) {
                                 AsyncImage(
@@ -385,28 +388,35 @@ fun RewardsScreen(
                             ) {
                                 Text(
                                     text = reward[i].title,
-                                    style = MaterialTheme.typography.h5,
-                                    fontWeight = FontWeight.Bold
+                                    style = MaterialTheme.typography.subtitle1,
+                                    fontWeight = FontWeight.ExtraBold
                                 )
                                 Text(
                                     text = reward[i].partner,
+                                    color = SuperDarkGrey,
                                     style = MaterialTheme.typography.subtitle2
                                 )
+
+                                Spacer(modifier = Modifier.height(MaterialTheme.spacing.large))
+
                                 if (reward[i].numberOfRedeem >= reward[i].maxRedeem) {
                                     Button(
                                         onClick = {},
-                                        modifier = Modifier.fillMaxWidth(),
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .height(30.dp),
                                         shape = RoundedCornerShape(20.dp),
-                                        colors = ButtonDefaults.buttonColors(Color.Gray)
+                                        colors = ButtonDefaults.buttonColors(DarkGrey)
                                     ) {
                                         Text(
                                             text = "Redeem Limit Reached",
-                                            style = MaterialTheme.typography.caption
+                                            style = MaterialTheme.typography.overline,
+                                            fontWeight = FontWeight.Bold
                                         )
                                     }
                                 } else {
                                     if (!state.isLoadingRedeemReward) {
-                                        Button(
+                                        GradientButton(
                                             onClick = {
                                                 tempPointsNeeded = reward[i].pointsNeeded
                                                 if (reward[i].category == "e-wallet") {
@@ -422,25 +432,68 @@ fun RewardsScreen(
                                                     )
                                                 }
                                             },
-                                            modifier = Modifier.fillMaxWidth(),
-                                            shape = RoundedCornerShape(20.dp),
-                                            colors = ButtonDefaults.buttonColors(MaterialTheme.colors.primary)
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .height(30.dp),
+                                            shape = RoundedCornerShape(20.dp)
                                         ) {
                                             Text(
-                                                text = "Redeem ${reward[i].pointsNeeded} Eco Points",
-                                                style = MaterialTheme.typography.caption
+                                                text = "Redeem",
+                                                style = MaterialTheme.typography.overline,
+                                                fontWeight = FontWeight.Bold,
+                                                color = White,
+                                                modifier = Modifier.padding(start = MaterialTheme.spacing.extraSmall)
+                                            )
+                                            Spacer(modifier = Modifier.width(MaterialTheme.spacing.extraSmall))
+                                            Box(
+                                                contentAlignment = Alignment.Center,
+                                                modifier = Modifier
+                                                    .size(12.dp)
+                                                    .clip(CircleShape)
+                                                    .padding(1.dp)
+                                                    .border(
+                                                        width = 1.dp,
+                                                        color = EcoPointsColor,
+                                                        shape = CircleShape,
+                                                    )
+                                                    .padding(1.dp),
+                                            ) {
+                                                AsyncImage(
+                                                    model = R.drawable.ic_ecosense_logo_vector,
+                                                    contentDescription = null,
+                                                    colorFilter = ColorFilter.tint(EcoPointsColor),
+                                                    modifier = Modifier.fillMaxSize(),
+                                                )
+                                            }
+                                            Text(
+                                                text = reward[i].pointsNeeded.toString(),
+                                                style = MaterialTheme.typography.overline,
+                                                fontWeight = FontWeight.Bold,
+                                                color = EcoPointsColor
+                                            )
+                                            Spacer(modifier = Modifier.width(2.dp))
+                                            Text(
+                                                text = stringResource(R.string.ecopoints),
+                                                style = MaterialTheme.typography.overline,
+                                                fontWeight = FontWeight.Bold,
+                                                color = White,
+                                                modifier = Modifier.padding(end = MaterialTheme.spacing.extraSmall)
                                             )
                                         }
                                     } else {
                                         Button(
                                             onClick = {},
-                                            modifier = Modifier.fillMaxWidth(),
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .height(30.dp),
                                             shape = RoundedCornerShape(20.dp),
-                                            colors = ButtonDefaults.buttonColors(Color.Gray)
+                                            colors = ButtonDefaults.buttonColors(DarkGrey)
                                         ) {
                                             Text(
                                                 text = "Redeeming Reward...",
-                                                style = MaterialTheme.typography.caption
+                                                style = MaterialTheme.typography.overline,
+                                                fontWeight = FontWeight.Bold,
+                                                modifier = Modifier.padding(horizontal = MaterialTheme.spacing.extraSmall)
                                             )
                                         }
                                     }
