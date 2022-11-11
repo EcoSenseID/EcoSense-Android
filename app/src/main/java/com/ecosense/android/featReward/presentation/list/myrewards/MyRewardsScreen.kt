@@ -13,7 +13,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
@@ -24,9 +23,7 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import coil.size.Scale
 import com.ecosense.android.core.presentation.component.GradientButton
-import com.ecosense.android.core.presentation.theme.CustardYellow
-import com.ecosense.android.core.presentation.theme.DarkGrey
-import com.ecosense.android.core.presentation.theme.spacing
+import com.ecosense.android.core.presentation.theme.*
 import com.ecosense.android.core.presentation.util.UIEvent
 import com.ecosense.android.core.presentation.util.asString
 import com.ecosense.android.destinations.MyRewardDetailScreenDestination
@@ -161,6 +158,7 @@ fun MyRewardsScreen(
                                                 Text(
                                                     text = "Use Now",
                                                     style = MaterialTheme.typography.overline,
+                                                    color = White,
                                                     fontWeight = FontWeight.Bold,
                                                     modifier = Modifier.padding(horizontal = MaterialTheme.spacing.extraSmall)
                                                 )
@@ -177,6 +175,7 @@ fun MyRewardsScreen(
                                                 Text(
                                                     text = "Using Reward...",
                                                     style = MaterialTheme.typography.overline,
+                                                    color = White,
                                                     fontWeight = FontWeight.Bold,
                                                     modifier = Modifier.padding(horizontal = MaterialTheme.spacing.extraSmall)
                                                 )
@@ -195,6 +194,7 @@ fun MyRewardsScreen(
                                             Text(
                                                 text = "Requested",
                                                 style = MaterialTheme.typography.overline,
+                                                color = White,
                                                 fontWeight = FontWeight.Bold,
                                                 modifier = Modifier.padding(horizontal = MaterialTheme.spacing.extraSmall)
                                             )
@@ -207,11 +207,12 @@ fun MyRewardsScreen(
                                                 .fillMaxWidth()
                                                 .height(30.dp),
                                             shape = RoundedCornerShape(20.dp),
-                                            colors = ButtonDefaults.buttonColors(Color.Gray)
+                                            colors = ButtonDefaults.buttonColors(SuperDarkGrey)
                                         ) {
                                             Text(
                                                 text = "Completed",
                                                 style = MaterialTheme.typography.overline,
+                                                color = White,
                                                 fontWeight = FontWeight.Bold,
                                                 modifier = Modifier.padding(horizontal = MaterialTheme.spacing.extraSmall)
                                             )

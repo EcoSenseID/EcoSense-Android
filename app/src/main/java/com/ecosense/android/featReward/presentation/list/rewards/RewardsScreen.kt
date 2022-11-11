@@ -441,11 +441,12 @@ fun RewardsScreen(
                                             .fillMaxWidth()
                                             .height(30.dp),
                                         shape = RoundedCornerShape(20.dp),
-                                        colors = ButtonDefaults.buttonColors(DarkGrey)
+                                        colors = ButtonDefaults.buttonColors(SuperDarkGrey)
                                     ) {
                                         Text(
                                             text = "Redeem Limit Reached",
                                             style = MaterialTheme.typography.overline,
+                                            color = White,
                                             fontWeight = FontWeight.Bold
                                         )
                                     }
@@ -527,6 +528,7 @@ fun RewardsScreen(
                                             Text(
                                                 text = "Redeeming Reward...",
                                                 style = MaterialTheme.typography.overline,
+                                                color = White,
                                                 fontWeight = FontWeight.Bold,
                                                 modifier = Modifier.padding(horizontal = MaterialTheme.spacing.extraSmall)
                                             )
