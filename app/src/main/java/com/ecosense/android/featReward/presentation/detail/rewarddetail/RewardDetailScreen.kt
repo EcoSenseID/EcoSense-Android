@@ -1,5 +1,7 @@
 package com.ecosense.android.featReward.presentation.detail.rewarddetail
 
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -22,12 +24,16 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.toSize
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.ecosense.android.R
+import com.ecosense.android.core.presentation.component.GradientButton
 import com.ecosense.android.core.presentation.component.RoundedEndsButton
+import com.ecosense.android.core.presentation.theme.DarkRed
+import com.ecosense.android.core.presentation.theme.MintGreen
+import com.ecosense.android.core.presentation.theme.White
 import com.ecosense.android.core.presentation.theme.spacing
 import com.ecosense.android.core.presentation.util.UIEvent
 import com.ecosense.android.core.presentation.util.asString
@@ -107,7 +113,6 @@ fun RewardDetailScreen(
                         .fillMaxWidth()
                         .height(175.dp)
                         .padding(MaterialTheme.spacing.medium)
-                        .clip(shape = RoundedCornerShape(8.dp, 8.dp, 0.dp, 0.dp))
                 ) {
                     Column {
                         Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
@@ -166,32 +171,41 @@ fun RewardDetailScreen(
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(550.dp)
+                        .wrapContentHeight()
                         .padding(MaterialTheme.spacing.medium)
-                        .clip(shape = RoundedCornerShape(8.dp, 8.dp, 0.dp, 0.dp))
                 ) {
                     Column {
-                        Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
-
                         Row(
                             horizontalArrangement = Arrangement.Center,
                             modifier = Modifier
                                 .fillMaxWidth()
+                                .padding(MaterialTheme.spacing.medium)
+                                .clip(RoundedCornerShape(20.dp))
+                                .background(MintGreen)
                         ) {
-                            Text("Reward Form", style = MaterialTheme.typography.subtitle1)
+                            Text(
+                                text = "Reward Form",
+                                fontWeight = FontWeight.Bold,
+                                color = MaterialTheme.colors.primary,
+                                style = MaterialTheme.typography.h6,
+                                modifier = Modifier.padding(MaterialTheme.spacing.medium)
+                            )
                         }
+
+                        Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
+
                         Text(
                             text = "Email Address",
-                            fontSize = 18.sp,
-                            fontWeight = FontWeight.Bold,
+                            fontWeight = FontWeight.ExtraBold,
+                            style = MaterialTheme.typography.subtitle1,
                             modifier = Modifier
                                 .padding(bottom = MaterialTheme.spacing.small)
                         )
                         OutlinedTextField(
                             value = state.email,
                             onValueChange = { viewModel.onEmailValueChange(it) },
-                            label = { Text(text = "Enter your email address") },
-                            placeholder = { Text(text = "Enter your email address") },
+                            label = { Text(text = "Choose your type of e-wallet") },
+                            placeholder = { Text(text = "Choose your type of e-wallet") },
                             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
                             modifier = Modifier.fillMaxWidth()
                         )
@@ -200,8 +214,8 @@ fun RewardDetailScreen(
 
                         Text(
                             text = "Select the destination e-wallet",
-                            fontSize = 18.sp,
-                            fontWeight = FontWeight.Bold,
+                            fontWeight = FontWeight.ExtraBold,
+                            style = MaterialTheme.typography.subtitle1,
                             modifier = Modifier
                                 .padding(bottom = MaterialTheme.spacing.small)
                         )
@@ -242,8 +256,8 @@ fun RewardDetailScreen(
 
                         Text(
                             text = "E-Wallet Number",
-                            fontSize = 18.sp,
-                            fontWeight = FontWeight.Bold,
+                            fontWeight = FontWeight.ExtraBold,
+                            style = MaterialTheme.typography.subtitle1,
                             modifier = Modifier
                                 .padding(bottom = MaterialTheme.spacing.small)
                         )
@@ -266,7 +280,8 @@ fun RewardDetailScreen(
                             Text(
                                 "After you click the submit button, you can’t change your information. \n" +
                                         "So, make sure you enter the right information.",
-                                style = MaterialTheme.typography.caption
+                                style = MaterialTheme.typography.caption,
+                                textAlign = TextAlign.Center
                             )
                         }
 
@@ -277,32 +292,52 @@ fun RewardDetailScreen(
                             modifier = Modifier
                                 .fillMaxWidth()
                         ) {
-                            Column {
-                                RoundedEndsButton(
+                            Column(
+                                modifier = Modifier
+                                    .height(40.dp)
+                                    .width(150.dp)
+                            ) {
+                                OutlinedButton(
                                     enabled = !state.isLoadingRequestReward,
+                                    border = BorderStroke(1.dp, DarkRed),
+                                    shape = RoundedCornerShape(20.dp),
+                                    colors = ButtonDefaults.buttonColors(MaterialTheme.colors.surface),
                                     onClick = {
                                         coroutineScope.launch {
                                             if (sheetState.isExpanded) {
                                                 sheetState.collapse()
                                             }
                                         }
-                                    }
+                                    },
+                                    modifier = Modifier.fillMaxSize()
                                 ) {
                                     Text(
-                                        text = "Cancel"
+                                        text = "Cancel",
+                                        fontWeight = FontWeight.Medium,
+                                        color = DarkRed,
+                                        style = MaterialTheme.typography.button
                                     )
                                 }
                             }
 
-                            Column {
-                                RoundedEndsButton(
+                            Column(
+                                modifier = Modifier
+                                    .height(40.dp)
+                                    .width(150.dp)
+                            ) {
+                                GradientButton(
                                     enabled = !state.isLoadingRequestReward,
-                                    onClick = { viewModel.onRequestRewardJob(rewardId = rewardId) }
+                                    shape = RoundedCornerShape(20.dp),
+                                    onClick = { viewModel.onRequestRewardJob(rewardId = rewardId) },
+                                    modifier = Modifier.fillMaxSize()
                                 ) {
                                     Text(
                                         text =
                                         if (state.isLoadingRequestReward) "Submitting Request..."
-                                        else "Submit"
+                                        else "Submit",
+                                        fontWeight = FontWeight.Medium,
+                                        color = White,
+                                        style = MaterialTheme.typography.button
                                     )
                                 }
                             }
@@ -312,6 +347,7 @@ fun RewardDetailScreen(
             }
         },
         sheetPeekHeight = 24.dp,
+        sheetShape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp),
         topBar = {
             RewardTopBar(
                 onBackClick = {
@@ -324,55 +360,57 @@ fun RewardDetailScreen(
         floatingActionButtonPosition = FabPosition.Center,
         floatingActionButton = {
             if (!state.isLoadingRewardDetail) {
-                if (reward.numberOfRedeem >= reward.maxRedeem) {
-                    ExtendedFloatingActionButton(
-                        text = {
-                            Text(
-                                text = "Redeem Limit Reached",
-                                color = MaterialTheme.colors.onPrimary
-                            )
-                        },
-                        backgroundColor = Color.Gray,
-                        onClick = {}
-                    )
-                } else {
-                    if (!state.isLoadingRedeemReward) {
+                if (!sheetState.isExpanded) {
+                    if (reward.numberOfRedeem >= reward.maxRedeem) {
                         ExtendedFloatingActionButton(
                             text = {
                                 Text(
-                                    text = stringResource(
-                                        R.string.redeem_reward,
-                                        reward.pointsNeeded
-                                    ),
-                                    color = MaterialTheme.colors.onPrimary
-                                )
-                            },
-                            backgroundColor = MaterialTheme.colors.primary,
-                            onClick = {
-                                if (reward.category == "e-wallet") {
-                                    coroutineScope.launch {
-                                        if (sheetState.isCollapsed) {
-                                            sheetState.expand()
-                                        }
-                                    }
-                                } else {
-                                    viewModel.onRedeemRewardJob(
-                                        rewardId = rewardId
-                                    )
-                                }
-                            }
-                        )
-                    } else {
-                        ExtendedFloatingActionButton(
-                            text = {
-                                Text(
-                                    text = "Redeeming Reward...",
+                                    text = "Redeem Limit Reached",
                                     color = MaterialTheme.colors.onPrimary
                                 )
                             },
                             backgroundColor = Color.Gray,
                             onClick = {}
                         )
+                    } else {
+                        if (!state.isLoadingRedeemReward) {
+                            ExtendedFloatingActionButton(
+                                text = {
+                                    Text(
+                                        text = stringResource(
+                                            R.string.redeem_reward,
+                                            reward.pointsNeeded
+                                        ),
+                                        color = MaterialTheme.colors.onPrimary
+                                    )
+                                },
+                                backgroundColor = MaterialTheme.colors.primary,
+                                onClick = {
+                                    if (reward.category == "e-wallet") {
+                                        coroutineScope.launch {
+                                            if (sheetState.isCollapsed) {
+                                                sheetState.expand()
+                                            }
+                                        }
+                                    } else {
+                                        viewModel.onRedeemRewardJob(
+                                            rewardId = rewardId
+                                        )
+                                    }
+                                }
+                            )
+                        } else {
+                            ExtendedFloatingActionButton(
+                                text = {
+                                    Text(
+                                        text = "Redeeming Reward...",
+                                        color = MaterialTheme.colors.onPrimary
+                                    )
+                                },
+                                backgroundColor = Color.Gray,
+                                onClick = {}
+                            )
+                        }
                     }
                 }
             }
