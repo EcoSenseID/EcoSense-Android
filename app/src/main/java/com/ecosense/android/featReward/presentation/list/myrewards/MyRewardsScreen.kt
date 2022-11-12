@@ -16,12 +16,14 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import coil.size.Scale
+import com.ecosense.android.R
 import com.ecosense.android.core.presentation.component.GradientButton
 import com.ecosense.android.core.presentation.theme.*
 import com.ecosense.android.core.presentation.util.UIEvent
@@ -156,7 +158,7 @@ fun MyRewardsScreen(
                                                 shape = RoundedCornerShape(20.dp)
                                             ) {
                                                 Text(
-                                                    text = "Use Now",
+                                                    text = stringResource(R.string.use_reward),
                                                     style = MaterialTheme.typography.overline,
                                                     color = White,
                                                     fontWeight = FontWeight.Bold,
@@ -173,7 +175,7 @@ fun MyRewardsScreen(
                                                 colors = ButtonDefaults.buttonColors(DarkGrey)
                                             ) {
                                                 Text(
-                                                    text = "Using Reward...",
+                                                    text = stringResource(R.string.using_reward),
                                                     style = MaterialTheme.typography.overline,
                                                     color = White,
                                                     fontWeight = FontWeight.Bold,
@@ -192,7 +194,7 @@ fun MyRewardsScreen(
                                             colors = ButtonDefaults.buttonColors(CustardYellow)
                                         ) {
                                             Text(
-                                                text = "Requested",
+                                                text = stringResource(R.string.requested),
                                                 style = MaterialTheme.typography.overline,
                                                 color = White,
                                                 fontWeight = FontWeight.Bold,
@@ -210,7 +212,7 @@ fun MyRewardsScreen(
                                             colors = ButtonDefaults.buttonColors(SuperDarkGrey)
                                         ) {
                                             Text(
-                                                text = "Completed",
+                                                text = stringResource(R.string.completed),
                                                 style = MaterialTheme.typography.overline,
                                                 color = White,
                                                 fontWeight = FontWeight.Bold,

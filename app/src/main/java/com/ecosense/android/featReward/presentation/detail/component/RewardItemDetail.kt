@@ -148,11 +148,12 @@ fun RewardItemDetail(
                             horizontalArrangement = Arrangement.Center
                         ) {
                             Text(
-                                text = "Powered by ",
+                                text = stringResource(R.string.powered_by),
                                 textAlign = TextAlign.Justify,
                                 style = MaterialTheme.typography.overline,
                                 color = MaterialTheme.colors.primary
                             )
+                            Spacer(modifier = Modifier.width(2.dp))
                             Text(
                                 text = partner,
                                 textAlign = TextAlign.Justify,
@@ -172,7 +173,7 @@ fun RewardItemDetail(
                     Column {
                         Row {
                             Text(
-                                text = "Valid until",
+                                text = stringResource(R.string.valid_until),
                                 fontSize = 16.sp,
                                 fontWeight = FontWeight.ExtraBold,
                                 style = TextStyle(textDecoration = TextDecoration.Underline),
@@ -199,7 +200,7 @@ fun RewardItemDetail(
                     Column {
                         Row {
                             Text(
-                                text = "Description",
+                                text = stringResource(R.string.description),
                                 fontSize = 16.sp,
                                 fontWeight = FontWeight.ExtraBold,
                                 style = TextStyle(textDecoration = TextDecoration.Underline),
@@ -226,7 +227,7 @@ fun RewardItemDetail(
                     Column {
                         Row {
                             Text(
-                                text = "Terms & Conditions",
+                                text = stringResource(R.string.terms_conditions),
                                 fontSize = 16.sp,
                                 fontWeight = FontWeight.ExtraBold,
                                 style = TextStyle(textDecoration = TextDecoration.Underline),
@@ -268,7 +269,7 @@ fun RewardItemDetail(
                     Column {
                         Row {
                             Text(
-                                text = "How to Use",
+                                text = stringResource(R.string.how_to_use),
                                 fontSize = 16.sp,
                                 fontWeight = FontWeight.ExtraBold,
                                 style = TextStyle(textDecoration = TextDecoration.Underline),

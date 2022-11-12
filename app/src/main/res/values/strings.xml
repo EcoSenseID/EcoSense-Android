@@ -157,7 +157,6 @@
     <string name="ecoworld">EcoWorld</string>
     <string name="ecoreward">EcoReward</string>
     <string name="notifications">Notifications</string>
-    <string name="redeem_reward">Redeem %s EcoPoints</string>
     <string name="redeem_reward_success">Successfully redeemed the reward! You can use it on My EcoReward page.</string>
     <string name="request_reward_success">Successfully requested the reward! This process will be done manually, please be patient.</string>
     <string name="use_reward_success">Reward used successfully!</string>
@@ -248,4 +247,31 @@
     <string name="ecoreward_tagline">Claim your EcoRewards and get the benefits!</string>
     <string name="donation">Donation</string>
     <string name="ewallet">E-Wallet</string>
+    <string name="redeem">Redeem</string>
+    <string name="powered_by">Powered by</string>
+    <string name="valid_until">Valid until</string>
+    <string name="description">Description</string>
+    <string name="terms_conditions">Terms &amp; Conditions</string>
+    <string name="how_to_use">How to Use</string>
+    <string name="use_reward">Use Reward</string>
+    <string name="using_reward">Using Reward…</string>
+    <string name="requested">Requested</string>
+    <string name="reward_form">Reward Form</string>
+    <string name="email_address">Email Address</string>
+    <string name="enter_email_address">Enter your email address</string>
+    <string name="select_destination_ewallet">Select the destination e-wallet</string>
+    <string name="choose_ewallet">Choose your type of e-wallet</string>
+    <string name="ewallet_number">E-Wallet Number</string>
+    <string name="enter_ewallet_number">Enter the associated e-wallet number</string>
+    <string name="ewallet_form_caution">After you click the submit button, you can’t change your information.\nSo, make sure you enter the right information.</string>
+    <string name="redeem_limit_reached">Redeem Limit Reached</string>
+    <string name="redeeming_reward">Redeeming Reward…</string>
+    <string name="not_enough_ecopoints_title">You don\'t have enough</string>
+    <string name="not_enough_ecopoints_description">You don’t quite have enough EcoPoints yet.\nLet’s join another campaign!</string>
+    <string name="okay">Okay</string>
+    <string name="reward_form_submitted">Reward form submitted successfully.</string>
+    <string name="reward_form_submitted_description">Your reward form is submitted.\nWe will make the transfer within a</string>
+    <string name="max_1x24">maximum of 1x24 hours</string>
+
+    <!--    stringResource(R.string.max_1x24)  -->
 </resources>
