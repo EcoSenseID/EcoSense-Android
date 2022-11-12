@@ -6,6 +6,7 @@ data class RewardDetailScreenState(
     val email: String,
     val walletType: String,
     val walletNumber: String,
+    val sheetConditional: Int,
     val rewardDetail: RewardDetail,
     val isLoadingRewardDetail: Boolean,
     val isLoadingRedeemReward: Boolean,
@@ -16,6 +17,7 @@ data class RewardDetailScreenState(
             email = "",
             walletType = "",
             walletNumber = "",
+            sheetConditional = 1,
             rewardDetail = RewardDetail(
                 termsCondition = emptyList(),
                 bannerUrl = "",

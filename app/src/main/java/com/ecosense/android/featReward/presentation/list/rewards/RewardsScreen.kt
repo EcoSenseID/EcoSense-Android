@@ -11,6 +11,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.runtime.*
@@ -37,7 +38,6 @@ import coil.request.ImageRequest
 import coil.size.Scale
 import com.ecosense.android.R
 import com.ecosense.android.core.presentation.component.GradientButton
-import com.ecosense.android.core.presentation.component.RoundedEndsButton
 import com.ecosense.android.core.presentation.theme.*
 import com.ecosense.android.core.presentation.util.UIEvent
 import com.ecosense.android.core.presentation.util.asString
@@ -70,9 +70,9 @@ fun RewardsScreen(
 
     val coroutineScope = rememberCoroutineScope()
 
-    var requestIndex = 0
+    var requestIndex by remember { mutableStateOf(0) }
 
-    var tempPointsNeeded = 0
+    var tempPointsNeeded: Int
 
     var expanded by remember { mutableStateOf(false) }
     val sortByList = listOf(
@@ -114,197 +114,358 @@ fun RewardsScreen(
     BottomSheetScaffold(
         sheetContent =
         {
-            if (totalPoints < tempPointsNeeded) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(175.dp)
-                        .padding(MaterialTheme.spacing.medium)
-                ) {
-                    Column {
-                        Row(
-                            horizontalArrangement = Arrangement.Center,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                        ) {
+            when (state.sheetConditional) {
+                1 -> {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .wrapContentHeight()
+                            .padding(MaterialTheme.spacing.medium)
+                    ) {
+                        Column {
+                            Row(
+                                horizontalArrangement = Arrangement.Center,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(MaterialTheme.spacing.medium)
+                                    .clip(RoundedCornerShape(20.dp))
+                                    .background(MintGreen)
+                            ) {
+                                Text(
+                                    text = stringResource(R.string.reward_form),
+                                    fontWeight = FontWeight.Bold,
+                                    color = MaterialTheme.colors.primary,
+                                    style = MaterialTheme.typography.h6,
+                                    modifier = Modifier.padding(MaterialTheme.spacing.medium)
+                                )
+                            }
+
+                            Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
+
                             Text(
-                                text = "You don't have enough EcoPoints",
+                                text = stringResource(R.string.email_address),
+                                fontWeight = FontWeight.ExtraBold,
                                 style = MaterialTheme.typography.subtitle1,
-                                fontWeight = FontWeight.Bold
+                                modifier = Modifier
+                                    .padding(bottom = MaterialTheme.spacing.small)
                             )
-                        }
+                            OutlinedTextField(
+                                value = state.email,
+                                onValueChange = { viewModel.onEmailValueChange(it) },
+                                label = { Text(text = stringResource(R.string.enter_email_address)) },
+                                placeholder = { Text(text = stringResource(R.string.enter_email_address)) },
+                                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+                                modifier = Modifier.fillMaxWidth()
+                            )
 
-                        Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
+                            Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
 
-                        Row(
-                            horizontalArrangement = Arrangement.Center,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                        ) {
                             Text(
-                                text = "You don’t quite have enough EcoPoints yet. Let’s join another campaign!",
-                                style = MaterialTheme.typography.body2,
-                                fontWeight = FontWeight.Bold
+                                text = stringResource(R.string.select_destination_ewallet),
+                                fontWeight = FontWeight.ExtraBold,
+                                style = MaterialTheme.typography.subtitle1,
+                                modifier = Modifier
+                                    .padding(bottom = MaterialTheme.spacing.small)
                             )
-                        }
-
-                        Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
-
-                        Row(
-                            horizontalArrangement = Arrangement.SpaceEvenly,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                        ) {
-                            RoundedEndsButton(
-                                enabled = !state.isLoadingRequestReward,
-                                onClick = {
-                                    coroutineScope.launch {
-                                        if (sheetState.isExpanded) {
-                                            sheetState.collapse()
+                            Row {
+                                OutlinedTextField(
+                                    value = state.walletType,
+                                    onValueChange = { viewModel.onWalletTypeValueChange(it) },
+                                    enabled = false,
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .clickable { expanded = !expanded }
+                                        .onGloballyPositioned { coordinates ->
+                                            textFieldSize = coordinates.size.toSize()
+                                        },
+                                    label = { Text(stringResource(R.string.choose_ewallet)) },
+                                    trailingIcon = {
+                                        Icon(icon, stringResource(R.string.show_hide_dropdown))
+                                    }
+                                )
+                                DropdownMenu(
+                                    expanded = expanded,
+                                    onDismissRequest = { expanded = false },
+                                    modifier = Modifier
+                                        .width(with(LocalDensity.current) { textFieldSize.width.toDp() })
+                                ) {
+                                    sortByList.forEach { label ->
+                                        DropdownMenuItem(onClick = {
+                                            viewModel.onWalletTypeValueChange(label)
+                                            expanded = false
+                                        }) {
+                                            Text(text = label)
                                         }
                                     }
                                 }
+                            }
+
+                            Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
+
+                            Text(
+                                text = stringResource(R.string.ewallet_number),
+                                fontWeight = FontWeight.ExtraBold,
+                                style = MaterialTheme.typography.subtitle1,
+                                modifier = Modifier
+                                    .padding(bottom = MaterialTheme.spacing.small)
+                            )
+                            OutlinedTextField(
+                                value = state.walletNumber,
+                                onValueChange = { viewModel.onWalletNumberValueChange(it) },
+                                label = { Text(text = stringResource(R.string.enter_ewallet_number)) },
+                                placeholder = { Text(text = stringResource(R.string.enter_ewallet_number)) },
+                                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
+                                modifier = Modifier.fillMaxWidth()
+                            )
+
+                            Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
+
+                            Row(
+                                horizontalArrangement = Arrangement.Center,
+                                modifier = Modifier
+                                    .fillMaxWidth()
                             ) {
                                 Text(
-                                    text = "Okay"
+                                    text = stringResource(R.string.ewallet_form_caution),
+                                    style = MaterialTheme.typography.caption,
+                                    textAlign = TextAlign.Center
                                 )
+                            }
+
+                            Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
+
+                            Row(
+                                horizontalArrangement = Arrangement.SpaceEvenly,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                            ) {
+                                Column(
+                                    modifier = Modifier
+                                        .height(40.dp)
+                                        .width(150.dp)
+                                ) {
+                                    if (!state.isLoadingRequestReward) {
+                                        OutlinedButton(
+                                            enabled = !state.isLoadingRequestReward,
+                                            border = BorderStroke(width = 1.dp, color = DarkRed),
+                                            shape = RoundedCornerShape(10.dp),
+                                            colors = ButtonDefaults.buttonColors(MaterialTheme.colors.surface),
+                                            onClick = {
+                                                coroutineScope.launch {
+                                                    if (sheetState.isExpanded) {
+                                                        sheetState.collapse()
+                                                    }
+                                                }
+                                            },
+                                            modifier = Modifier.fillMaxSize()
+                                        ) {
+                                            Text(
+                                                text = stringResource(R.string.cancel),
+                                                fontWeight = FontWeight.Medium,
+                                                color = DarkRed,
+                                                style = MaterialTheme.typography.button
+                                            )
+                                        }
+                                    } else {
+                                        Button(
+                                            onClick = {},
+                                            modifier = Modifier.fillMaxSize(),
+                                            shape = RoundedCornerShape(10.dp),
+                                            colors = ButtonDefaults.buttonColors(DarkGrey)
+                                        ) {
+                                            Text(
+                                                text = stringResource(R.string.cancel),
+                                                style = MaterialTheme.typography.button,
+                                                color = White,
+                                                fontWeight = FontWeight.Medium
+                                            )
+                                        }
+                                    }
+                                }
+
+                                Column(
+                                    modifier = Modifier
+                                        .height(40.dp)
+                                        .width(150.dp)
+                                ) {
+                                    if (!state.isLoadingRequestReward) {
+                                        GradientButton(
+                                            enabled = !state.isLoadingRequestReward,
+                                            shape = RoundedCornerShape(10.dp),
+                                            onClick = {
+                                                viewModel.onRequestRewardJob(
+                                                    rewardId = requestIndex,
+                                                    categoryId = categoryId
+                                                )
+                                            },
+                                            modifier = Modifier.fillMaxSize()
+                                        ) {
+                                            Text(
+                                                text = stringResource(R.string.submit),
+                                                fontWeight = FontWeight.Medium,
+                                                color = White,
+                                                style = MaterialTheme.typography.button
+                                            )
+                                        }
+                                    } else {
+                                        Button(
+                                            onClick = {},
+                                            modifier = Modifier.fillMaxSize(),
+                                            shape = RoundedCornerShape(10.dp),
+                                            colors = ButtonDefaults.buttonColors(DarkGrey)
+                                        ) {
+                                            Text(
+                                                text = stringResource(R.string.submitting),
+                                                textAlign = TextAlign.Center,
+                                                style = MaterialTheme.typography.button,
+                                                color = White,
+                                                fontWeight = FontWeight.Medium
+                                            )
+                                        }
+                                    }
+                                }
                             }
                         }
                     }
                 }
-            } else {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .wrapContentHeight()
-                        .padding(MaterialTheme.spacing.medium)
-                ) {
-                    Column {
-                        Row(
-                            horizontalArrangement = Arrangement.Center,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(MaterialTheme.spacing.medium)
-                                .clip(RoundedCornerShape(20.dp))
-                                .background(MintGreen)
-                        ) {
-                            Text(
-                                text = "Reward Form",
-                                fontWeight = FontWeight.Bold,
-                                color = MaterialTheme.colors.primary,
-                                style = MaterialTheme.typography.h6,
-                                modifier = Modifier.padding(MaterialTheme.spacing.medium)
-                            )
-                        }
-
-                        Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
-
-                        Text(
-                            text = "Email Address",
-                            fontWeight = FontWeight.ExtraBold,
-                            style = MaterialTheme.typography.subtitle1,
-                            modifier = Modifier
-                                .padding(bottom = MaterialTheme.spacing.small)
-                        )
-                        OutlinedTextField(
-                            value = state.email,
-                            onValueChange = { viewModel.onEmailValueChange(it) },
-                            label = { Text(text = "Choose your type of e-wallet") },
-                            placeholder = { Text(text = "Choose your type of e-wallet") },
-                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
-                            modifier = Modifier.fillMaxWidth()
-                        )
-
-                        Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
-
-                        Text(
-                            text = "Select the destination e-wallet",
-                            fontWeight = FontWeight.ExtraBold,
-                            style = MaterialTheme.typography.subtitle1,
-                            modifier = Modifier
-                                .padding(bottom = MaterialTheme.spacing.small)
-                        )
-                        Row {
-                            OutlinedTextField(
-                                value = state.walletType,
-                                onValueChange = { viewModel.onWalletTypeValueChange(it) },
-                                enabled = false,
+                2 -> {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .wrapContentHeight()
+                            .padding(MaterialTheme.spacing.large)
+                    ) {
+                        Column {
+                            Row(
+                                horizontalArrangement = Arrangement.Center,
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .clickable { expanded = !expanded }
-                                    .onGloballyPositioned { coordinates ->
-                                        textFieldSize = coordinates.size.toSize()
-                                    },
-                                label = { Text("Choose your type of e-wallet") },
-                                trailingIcon = {
-                                    Icon(icon, stringResource(R.string.show_hide_dropdown))
-                                }
-                            )
-                            DropdownMenu(
-                                expanded = expanded,
-                                onDismissRequest = { expanded = false },
-                                modifier = Modifier
-                                    .width(with(LocalDensity.current) { textFieldSize.width.toDp() })
                             ) {
-                                sortByList.forEach { label ->
-                                    DropdownMenuItem(onClick = {
-                                        viewModel.onWalletTypeValueChange(label)
-                                        expanded = false
-                                    }) {
-                                        Text(text = label)
+                                Text(
+                                    text = stringResource(R.string.not_enough_ecopoints_title),
+                                    style = MaterialTheme.typography.subtitle1,
+                                    fontWeight = FontWeight.Bold
+                                )
+                                Spacer(modifier = Modifier.width(2.dp))
+                                Text(
+                                    text = stringResource(R.string.ecopoints),
+                                    style = MaterialTheme.typography.subtitle1,
+                                    fontWeight = FontWeight.Bold,
+                                    color = MaterialTheme.colors.secondary
+                                )
+                            }
+
+                            Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
+
+                            Row(
+                                horizontalArrangement = Arrangement.Center,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                            ) {
+                                Text(
+                                    text = stringResource(R.string.not_enough_ecopoints_description),
+                                    textAlign = TextAlign.Center,
+                                    style = MaterialTheme.typography.body2
+                                )
+                            }
+
+                            Spacer(modifier = Modifier.height(MaterialTheme.spacing.large))
+
+                            Row(
+                                horizontalArrangement = Arrangement.Center,
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                Column(
+                                    modifier = Modifier
+                                        .height(40.dp)
+                                        .width(150.dp)
+                                ) {
+                                    GradientButton(
+                                        shape = RoundedCornerShape(10.dp),
+                                        onClick = {
+                                            coroutineScope.launch {
+                                                if (sheetState.isExpanded) {
+                                                    sheetState.collapse()
+                                                }
+                                            }
+                                        },
+                                        modifier = Modifier.fillMaxSize()
+                                    ) {
+                                        Text(
+                                            text = stringResource(R.string.okay),
+                                            fontWeight = FontWeight.Medium,
+                                            color = White,
+                                            style = MaterialTheme.typography.button
+                                        )
                                     }
                                 }
                             }
                         }
-
-                        Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
-
-                        Text(
-                            text = "E-Wallet Number",
-                            fontWeight = FontWeight.ExtraBold,
-                            style = MaterialTheme.typography.subtitle1,
-                            modifier = Modifier
-                                .padding(bottom = MaterialTheme.spacing.small)
-                        )
-                        OutlinedTextField(
-                            value = state.walletNumber,
-                            onValueChange = { viewModel.onWalletNumberValueChange(it) },
-                            label = { Text(text = "Enter the associated e-wallet number") },
-                            placeholder = { Text(text = "Enter the associated e-wallet number") },
-                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
-                            modifier = Modifier.fillMaxWidth()
-                        )
-
-                        Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
-
-                        Row(
-                            horizontalArrangement = Arrangement.Center,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                        ) {
-                            Text(
-                                "After you click the submit button, you can’t change your information. \n" +
-                                        "So, make sure you enter the right information.",
-                                style = MaterialTheme.typography.caption,
-                                textAlign = TextAlign.Center
-                            )
-                        }
-
-                        Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
-
-                        Row(
-                            horizontalArrangement = Arrangement.SpaceEvenly,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                        ) {
-                            Column(
+                    }
+                }
+                3 -> {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .wrapContentHeight()
+                            .padding(MaterialTheme.spacing.medium)
+                    ) {
+                        Column {
+                            Row(
+                                horizontalArrangement = Arrangement.Center,
                                 modifier = Modifier
-                                    .height(40.dp)
-                                    .width(150.dp)
+                                    .fillMaxWidth()
+                            ) {
+                                Box(
+                                    contentAlignment = Alignment.Center,
+                                    modifier = Modifier
+                                        .size(50.dp)
+                                        .background(brush = GradientLighter, shape = CircleShape)
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Default.Done,
+                                        contentDescription = stringResource(R.string.reward_form_submitted),
+                                        tint = White,
+                                        modifier = Modifier.size(30.dp)
+                                    )
+                                }
+                            }
+
+                            Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
+
+                            Row(
+                                horizontalArrangement = Arrangement.Center,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                            ) {
+                                Text(
+                                    text = stringResource(R.string.reward_form_submitted_description),
+                                    textAlign = TextAlign.Center,
+                                    style = MaterialTheme.typography.body1
+                                )
+                            }
+
+                            Row(
+                                horizontalArrangement = Arrangement.Center,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                            ) {
+                                Text(
+                                    text = stringResource(R.string.max_1x24),
+                                    textAlign = TextAlign.Center,
+                                    style = MaterialTheme.typography.body1,
+                                    fontWeight = FontWeight.Bold
+                                )
+                            }
+
+                            Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
+
+                            Row(
+                                horizontalArrangement = Arrangement.Center,
+                                modifier = Modifier.fillMaxWidth()
                             ) {
                                 OutlinedButton(
-                                    enabled = !state.isLoadingRequestReward,
-                                    border = BorderStroke(1.dp, DarkRed),
+                                    border = BorderStroke(1.dp, MaterialTheme.colors.secondary),
                                     shape = RoundedCornerShape(20.dp),
                                     colors = ButtonDefaults.buttonColors(MaterialTheme.colors.surface),
                                     onClick = {
@@ -314,34 +475,12 @@ fun RewardsScreen(
                                             }
                                         }
                                     },
-                                    modifier = Modifier.fillMaxSize()
+                                    modifier = Modifier.fillMaxWidth()
                                 ) {
                                     Text(
-                                        text = "Cancel",
+                                        text = stringResource(R.string.okay),
                                         fontWeight = FontWeight.Medium,
-                                        color = DarkRed,
-                                        style = MaterialTheme.typography.button
-                                    )
-                                }
-                            }
-
-                            Column(
-                                modifier = Modifier
-                                    .height(40.dp)
-                                    .width(150.dp)
-                            ) {
-                                GradientButton(
-                                    enabled = !state.isLoadingRequestReward,
-                                    shape = RoundedCornerShape(20.dp),
-                                    onClick = { viewModel.onRequestRewardJob(rewardId = requestIndex) },
-                                    modifier = Modifier.fillMaxSize()
-                                ) {
-                                    Text(
-                                        text =
-                                        if (state.isLoadingRequestReward) "Submitting Request..."
-                                        else "Submit",
-                                        fontWeight = FontWeight.Medium,
-                                        color = White,
+                                        color = MaterialTheme.colors.secondary,
                                         style = MaterialTheme.typography.button
                                     )
                                 }
@@ -444,7 +583,7 @@ fun RewardsScreen(
                                         colors = ButtonDefaults.buttonColors(SuperDarkGrey)
                                     ) {
                                         Text(
-                                            text = "Redeem Limit Reached",
+                                            text = stringResource(R.string.redeem_limit_reached),
                                             style = MaterialTheme.typography.overline,
                                             color = White,
                                             fontWeight = FontWeight.Bold
@@ -455,11 +594,14 @@ fun RewardsScreen(
                                         GradientButton(
                                             onClick = {
                                                 tempPointsNeeded = reward[i].pointsNeeded
+                                                if (totalPoints < tempPointsNeeded) {
+                                                    viewModel.onSheetConditionalValueChange(2)
+                                                }
                                                 if (reward[i].category == "e-wallet") {
                                                     coroutineScope.launch {
                                                         if (sheetState.isCollapsed) {
-                                                            sheetState.expand()
                                                             requestIndex = reward[i].id
+                                                            sheetState.expand()
                                                         }
                                                     }
                                                 } else {
@@ -474,7 +616,7 @@ fun RewardsScreen(
                                             shape = RoundedCornerShape(20.dp)
                                         ) {
                                             Text(
-                                                text = "Redeem",
+                                                text = stringResource(R.string.redeem),
                                                 style = MaterialTheme.typography.overline,
                                                 fontWeight = FontWeight.Bold,
                                                 color = White,
@@ -526,7 +668,7 @@ fun RewardsScreen(
                                             colors = ButtonDefaults.buttonColors(DarkGrey)
                                         ) {
                                             Text(
-                                                text = "Redeeming Reward...",
+                                                text = stringResource(R.string.redeeming_reward),
                                                 style = MaterialTheme.typography.overline,
                                                 color = White,
                                                 fontWeight = FontWeight.Bold,

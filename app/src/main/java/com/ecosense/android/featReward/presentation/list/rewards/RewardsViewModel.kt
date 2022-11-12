@@ -40,6 +40,10 @@ class RewardsViewModel @Inject constructor(
         _state.value = state.value.copy(walletNumber = value)
     }
 
+    fun onSheetConditionalValueChange(value: Int) {
+        _state.value = state.value.copy(sheetConditional = value)
+    }
+
     private var getRewardsJob: Job? = null
     fun getRewards(categoryId: Int) {
         getRewardsJob?.cancel()
@@ -92,7 +96,8 @@ class RewardsViewModel @Inject constructor(
 
     private var onRequestRewardJob: Job? = null
     fun onRequestRewardJob(
-        rewardId: Int
+        rewardId: Int,
+        categoryId: Int
     ) {
         onRequestRewardJob?.cancel()
         onRequestRewardJob = viewModelScope.launch {
@@ -112,7 +117,8 @@ class RewardsViewModel @Inject constructor(
                     }
                     is Resource.Success -> {
                         _state.value = state.value.copy(isLoadingRequestReward = false)
-                        _eventFlow.send(UIEvent.ShowSnackbar(UIText.StringResource(R.string.request_reward_success)))
+                        getRewards(categoryId = categoryId)
+                        onSheetConditionalValueChange(3)
                     }
                 }
             }.launchIn(this)
