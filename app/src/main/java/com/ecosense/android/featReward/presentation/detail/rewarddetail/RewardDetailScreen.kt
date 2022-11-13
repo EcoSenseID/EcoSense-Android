@@ -33,6 +33,7 @@ import com.ecosense.android.core.presentation.component.GradientButton
 import com.ecosense.android.core.presentation.theme.*
 import com.ecosense.android.core.presentation.util.UIEvent
 import com.ecosense.android.core.presentation.util.asString
+import com.ecosense.android.featReward.data.util.ecopointsFormatter
 import com.ecosense.android.featReward.presentation.component.RewardTopBar
 import com.ecosense.android.featReward.presentation.detail.component.RewardItemDetail
 import com.ramcosta.composedestinations.annotation.Destination
@@ -148,6 +149,7 @@ fun RewardDetailScreen(
                                 label = { Text(text = stringResource(R.string.enter_email_address)) },
                                 placeholder = { Text(text = stringResource(R.string.enter_email_address)) },
                                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+                                maxLines = 1,
                                 modifier = Modifier.fillMaxWidth()
                             )
 
@@ -208,6 +210,7 @@ fun RewardDetailScreen(
                                 label = { Text(text = stringResource(R.string.enter_ewallet_number)) },
                                 placeholder = { Text(text = stringResource(R.string.enter_ewallet_number)) },
                                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
+                                maxLines = 1,
                                 modifier = Modifier.fillMaxWidth()
                             )
 
@@ -558,7 +561,7 @@ fun RewardDetailScreen(
                                 }
                                 Spacer(modifier = Modifier.width(2.dp))
                                 Text(
-                                    text = reward.pointsNeeded.toString(),
+                                    text = ecopointsFormatter(reward.pointsNeeded),
                                     style = MaterialTheme.typography.body1,
                                     fontWeight = FontWeight.SemiBold,
                                     color = EcoPointsColor
