@@ -1,7 +1,6 @@
 package com.ecosense.android.di
 
 import android.content.Context
-import com.ecosense.android.BuildConfig
 import com.ecosense.android.core.data.api.FirebaseAuthApi
 import com.ecosense.android.core.data.api.FirebaseStorageApi
 import com.ecosense.android.core.data.repository.AuthRepositoryImpl
@@ -32,7 +31,7 @@ object CoreModule {
     ): AuthApi {
         val firebaseAuth = try {
             FirebaseAuth.getInstance().apply { useAppLanguage() }
-        } catch (e:Exception) {
+        } catch (e: Exception) {
             FirebaseApp.initializeApp(appContext)
             FirebaseAuth.getInstance().apply { useAppLanguage() }
         }
@@ -59,10 +58,9 @@ object CoreModule {
             .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
             .build()
 
-        return Retrofit.Builder()
-//            .baseUrl("https://ecosense-bangkit.uc.r.appspot.com/") TODO: use prod base url
-            .baseUrl("https://devapi-dot-ecosense-bangkit.uc.r.appspot.com/")
-            .apply { if (BuildConfig.DEBUG) client(interceptedClient) }
+        return Retrofit.Builder().baseUrl("https://ecosense-bangkit.uc.r.appspot.com/")
+//            .baseUrl("https://devapi-dot-ecosense-bangkit.uc.r.appspot.com/")
+//            .apply { if (BuildConfig.DEBUG) client(interceptedClient) }
             .addConverterFactory(GsonConverterFactory.create()).build()
     }
 }
