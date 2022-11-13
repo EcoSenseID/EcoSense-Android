@@ -247,4 +247,5 @@
     <string name="older">Older</string>
     <string name="url_ecosense_web">https://ecosense.id/</string>
     <string name="url_ecosense_linkedin">https://www.linkedin.com/company/ecosense-indonesia</string>
+    <string name="em_empty_notifications">It\'s empty. You have no notifications yet</string>
 </resources>

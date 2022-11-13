@@ -1,6 +1,7 @@
 package com.ecosense.android.di
 
 import android.content.Context
+import com.ecosense.android.BuildConfig
 import com.ecosense.android.core.data.api.FirebaseAuthApi
 import com.ecosense.android.core.data.api.FirebaseStorageApi
 import com.ecosense.android.core.data.repository.AuthRepositoryImpl
@@ -20,10 +21,10 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
 
-
 @Module
 @InstallIn(SingletonComponent::class)
 object CoreModule {
+
     @Provides
     @Singleton
     fun provideAuthApi(

@@ -52,6 +52,7 @@ class ForumsViewModel @Inject constructor(
         onError = { message: UIText? ->
             feedState = feedState.copy(errorMessage = message)
             if (isRefreshingFeed) isRefreshingFeed = false
+            onLoadNextStoriesFeed()
         },
         onSuccess = { items: List<Story>?, newKey: Int ->
             val newStories = items?.map { it.toPresentation() } ?: emptyList()
