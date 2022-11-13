@@ -11,9 +11,7 @@ import com.ecosense.android.featReward.domain.repository.RewardRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -22,6 +20,8 @@ class RewardHomepageViewModel @Inject constructor(
     private val authRepository: AuthRepository,
     private val rewardRepository: RewardRepository
 ) : ViewModel() {
+    val isLoggedIn: StateFlow<Boolean?> = authRepository.isLoggedIn
+        .stateIn(viewModelScope, SharingStarted.Eagerly, null)
 
     private val _state = mutableStateOf(RewardHomepageScreenState.defaultValue)
     val state: State<RewardHomepageScreenState> = _state

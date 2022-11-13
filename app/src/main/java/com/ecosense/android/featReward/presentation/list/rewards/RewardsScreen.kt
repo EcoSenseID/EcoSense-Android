@@ -575,109 +575,113 @@ fun RewardsScreen(
                                     style = MaterialTheme.typography.subtitle2
                                 )
 
-                                Spacer(modifier = Modifier.height(MaterialTheme.spacing.large))
+                                if (viewModel.isLoggedIn.collectAsState().value == true) {
+                                    Spacer(modifier = Modifier.height(MaterialTheme.spacing.large))
 
-                                if (reward[i].numberOfRedeem >= reward[i].maxRedeem) {
-                                    Button(
-                                        onClick = {},
-                                        modifier = Modifier
-                                            .fillMaxWidth()
-                                            .height(30.dp),
-                                        shape = RoundedCornerShape(20.dp),
-                                        colors = ButtonDefaults.buttonColors(SuperDarkGrey)
-                                    ) {
-                                        Text(
-                                            text = stringResource(R.string.redeem_limit_reached),
-                                            style = MaterialTheme.typography.overline,
-                                            color = White,
-                                            fontWeight = FontWeight.Bold
-                                        )
-                                    }
-                                } else {
-                                    if (!state.isLoadingRedeemReward) {
-                                        GradientButton(
-                                            onClick = {
-                                                tempPointsNeeded = reward[i].pointsNeeded
-                                                if (totalPoints < tempPointsNeeded) {
-                                                    viewModel.onSheetConditionalValueChange(2)
-                                                }
-                                                if (reward[i].category == "e-wallet") {
-                                                    coroutineScope.launch {
-                                                        if (sheetState.isCollapsed) {
-                                                            requestIndex = reward[i].id
-                                                            sheetState.expand()
-                                                        }
-                                                    }
-                                                } else {
-                                                    viewModel.onRedeemRewardJob(
-                                                        rewardId = reward[i].id
-                                                    )
-                                                }
-                                            },
-                                            modifier = Modifier
-                                                .fillMaxWidth()
-                                                .height(30.dp),
-                                            shape = RoundedCornerShape(20.dp)
-                                        ) {
-                                            Text(
-                                                text = stringResource(R.string.redeem),
-                                                fontSize = 10.sp,
-                                                fontWeight = FontWeight.Bold,
-                                                color = White,
-                                                modifier = Modifier.padding(start = MaterialTheme.spacing.extraSmall)
-                                            )
-                                            Spacer(modifier = Modifier.width(MaterialTheme.spacing.extraSmall))
-                                            Box(
-                                                contentAlignment = Alignment.Center,
-                                                modifier = Modifier
-                                                    .size(12.dp)
-                                                    .clip(CircleShape)
-                                                    .padding(1.dp)
-                                                    .border(
-                                                        width = 1.dp,
-                                                        color = EcoPointsColor,
-                                                        shape = CircleShape,
-                                                    )
-                                                    .padding(1.dp),
-                                            ) {
-                                                AsyncImage(
-                                                    model = R.drawable.ic_ecosense_logo_vector,
-                                                    contentDescription = null,
-                                                    colorFilter = ColorFilter.tint(EcoPointsColor),
-                                                    modifier = Modifier.fillMaxSize(),
-                                                )
-                                            }
-                                            Text(
-                                                text = ecopointsFormatter(reward[i].pointsNeeded),
-                                                fontSize = 10.sp,
-                                                fontWeight = FontWeight.Bold,
-                                                color = EcoPointsColor
-                                            )
-                                            Spacer(modifier = Modifier.width(2.dp))
-                                            Text(
-                                                text = stringResource(R.string.ecopoints),
-                                                fontSize = 10.sp,
-                                                fontWeight = FontWeight.Bold,
-                                                color = White,
-                                                modifier = Modifier.padding(end = MaterialTheme.spacing.extraSmall)
-                                            )
-                                        }
-                                    } else {
+                                    if (reward[i].numberOfRedeem >= reward[i].maxRedeem) {
                                         Button(
                                             onClick = {},
                                             modifier = Modifier
                                                 .fillMaxWidth()
                                                 .height(30.dp),
                                             shape = RoundedCornerShape(20.dp),
-                                            colors = ButtonDefaults.buttonColors(DarkGrey)
+                                            colors = ButtonDefaults.buttonColors(SuperDarkGrey)
                                         ) {
                                             Text(
-                                                text = stringResource(R.string.redeeming_reward),
-                                                fontSize = 10.sp,
+                                                text = stringResource(R.string.redeem_limit_reached),
+                                                style = MaterialTheme.typography.overline,
                                                 color = White,
-                                                fontWeight = FontWeight.Bold,
-                                                modifier = Modifier.padding(horizontal = MaterialTheme.spacing.extraSmall)
+                                                fontWeight = FontWeight.Bold
                                             )
+                                        }
+                                    } else {
+                                        if (!state.isLoadingRedeemReward) {
+                                            GradientButton(
+                                                onClick = {
+                                                    tempPointsNeeded = reward[i].pointsNeeded
+                                                    if (totalPoints < tempPointsNeeded) {
+                                                        viewModel.onSheetConditionalValueChange(2)
+                                                    }
+                                                    if (reward[i].category == "e-wallet") {
+                                                        coroutineScope.launch {
+                                                            if (sheetState.isCollapsed) {
+                                                                requestIndex = reward[i].id
+                                                                sheetState.expand()
+                                                            }
+                                                        }
+                                                    } else {
+                                                        viewModel.onRedeemRewardJob(
+                                                            rewardId = reward[i].id
+                                                        )
+                                                    }
+                                                },
+                                                modifier = Modifier
+                                                    .fillMaxWidth()
+                                                    .height(30.dp),
+                                                shape = RoundedCornerShape(20.dp)
+                                            ) {
+                                                Text(
+                                                    text = stringResource(R.string.redeem),
+                                                    fontSize = 10.sp,
+                                                    fontWeight = FontWeight.Bold,
+                                                    color = White,
+                                                    modifier = Modifier.padding(start = MaterialTheme.spacing.extraSmall)
+                                                )
+                                                Spacer(modifier = Modifier.width(MaterialTheme.spacing.extraSmall))
+                                                Box(
+                                                    contentAlignment = Alignment.Center,
+                                                    modifier = Modifier
+                                                        .size(12.dp)
+                                                        .clip(CircleShape)
+                                                        .padding(1.dp)
+                                                        .border(
+                                                            width = 1.dp,
+                                                            color = EcoPointsColor,
+                                                            shape = CircleShape,
+                                                        )
+                                                        .padding(1.dp),
+                                                ) {
+                                                    AsyncImage(
+                                                        model = R.drawable.ic_ecosense_logo_vector,
+                                                        contentDescription = null,
+                                                        colorFilter = ColorFilter.tint(
+                                                            EcoPointsColor
+                                                        ),
+                                                        modifier = Modifier.fillMaxSize(),
+                                                    )
+                                                }
+                                                Text(
+                                                    text = ecopointsFormatter(reward[i].pointsNeeded),
+                                                    fontSize = 10.sp,
+                                                    fontWeight = FontWeight.Bold,
+                                                    color = EcoPointsColor
+                                                )
+                                                Spacer(modifier = Modifier.width(2.dp))
+                                                Text(
+                                                    text = stringResource(R.string.ecopoints),
+                                                    fontSize = 10.sp,
+                                                    fontWeight = FontWeight.Bold,
+                                                    color = White,
+                                                    modifier = Modifier.padding(end = MaterialTheme.spacing.extraSmall)
+                                                )
+                                            }
+                                        } else {
+                                            Button(
+                                                onClick = {},
+                                                modifier = Modifier
+                                                    .fillMaxWidth()
+                                                    .height(30.dp),
+                                                shape = RoundedCornerShape(20.dp),
+                                                colors = ButtonDefaults.buttonColors(DarkGrey)
+                                            ) {
+                                                Text(
+                                                    text = stringResource(R.string.redeeming_reward),
+                                                    fontSize = 10.sp,
+                                                    color = White,
+                                                    fontWeight = FontWeight.Bold,
+                                                    modifier = Modifier.padding(horizontal = MaterialTheme.spacing.extraSmall)
+                                                )
+                                            }
                                         }
                                     }
                                 }

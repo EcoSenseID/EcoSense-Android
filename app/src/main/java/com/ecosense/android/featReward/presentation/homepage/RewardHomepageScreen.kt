@@ -9,6 +9,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowForwardIos
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -31,6 +32,7 @@ import com.ecosense.android.core.presentation.theme.GradientForButtons
 import com.ecosense.android.core.presentation.theme.spacing
 import com.ecosense.android.core.presentation.util.UIEvent
 import com.ecosense.android.core.presentation.util.asString
+import com.ecosense.android.destinations.LoginScreenDestination
 import com.ecosense.android.destinations.MyRewardsScreenDestination
 import com.ecosense.android.destinations.RewardDetailScreenDestination
 import com.ecosense.android.destinations.RewardsScreenDestination
@@ -85,17 +87,21 @@ fun RewardHomepageScreen(
             ) {
                 Column(modifier = Modifier.padding(MaterialTheme.spacing.medium)) {
                     Text(
-                        text = if (state.isLoadingRewardHomepage) stringResource(R.string.dash)
+                        text =
+                        if (viewModel.isLoggedIn.collectAsState().value != true) stringResource(R.string.login_first)
                         else {
-                            if (!state.user.displayName.isNullOrBlank()) state.user.displayName
-                            else stringResource(R.string.ecosense_user)
+                            if (state.isLoadingRewardHomepage) stringResource(R.string.dash)
+                            else {
+                                if (!state.user.displayName.isNullOrBlank()) state.user.displayName
+                                else stringResource(R.string.ecosense_user)
+                            }
                         },
                         color = MaterialTheme.colors.onPrimary,
                         fontWeight = FontWeight.ExtraBold,
                         style = MaterialTheme.typography.h5
                     )
 
-                    Spacer(modifier = Modifier.height(MaterialTheme.spacing.extraSmall))
+                    Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
 
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Box(
@@ -119,64 +125,93 @@ fun RewardHomepageScreen(
                             )
                         }
 
+                        if (viewModel.isLoggedIn.collectAsState().value == true) {
+                            Spacer(modifier = Modifier.width(MaterialTheme.spacing.extraSmall))
+
+                            Text(
+                                text = if (state.isLoadingRewardHomepage) stringResource(R.string.dash) else ecopointsFormatter(
+                                    state.rewardHomepage.totalPoints
+                                ),
+                                color = EcoPointsColor,
+                                fontWeight = FontWeight.ExtraBold,
+                                style = MaterialTheme.typography.body1
+                            )
+                        }
+
                         Spacer(modifier = Modifier.width(MaterialTheme.spacing.extraSmall))
 
                         Text(
-                            text = if (state.isLoadingRewardHomepage) stringResource(R.string.dash) else ecopointsFormatter(
-                                state.rewardHomepage.totalPoints
-                            ),
-                            color = EcoPointsColor,
-                            fontWeight = FontWeight.ExtraBold,
-                            style = MaterialTheme.typography.body1
-                        )
-
-                        Spacer(modifier = Modifier.width(MaterialTheme.spacing.extraSmall))
-
-                        Text(
-                            text = stringResource(R.string.ecopoints),
+                            text =
+                            if (viewModel.isLoggedIn.collectAsState().value != true) stringResource(
+                                R.string.not_logged_ecopoints
+                            )
+                            else stringResource(R.string.ecopoints),
                             color = MaterialTheme.colors.onPrimary,
                             style = MaterialTheme.typography.body1
                         )
                     }
 
-                    Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
+                    Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
 
-                    Button(
-                        onClick = {
-                            if (!state.isLoadingRewardHomepage) {
-                                navigator.navigate(
-                                    MyRewardsScreenDestination()
+                    if (viewModel.isLoggedIn.collectAsState().value != true) {
+                        Button(
+                            onClick = {
+                                if (!state.isLoadingRewardHomepage) {
+                                    navigator.navigate(
+                                        LoginScreenDestination()
+                                    )
+                                }
+                            },
+                            shape = RoundedCornerShape(20.dp),
+                            colors = ButtonDefaults.buttonColors(MaterialTheme.colors.background),
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            Text(
+                                text = stringResource(R.string.login),
+                                textAlign = TextAlign.Center,
+                                color = MaterialTheme.colors.primary,
+                                fontWeight = FontWeight.SemiBold,
+                                style = MaterialTheme.typography.button
+                            )
+                        }
+                    } else {
+                        Button(
+                            onClick = {
+                                if (!state.isLoadingRewardHomepage) {
+                                    navigator.navigate(
+                                        MyRewardsScreenDestination()
+                                    )
+                                }
+                            },
+                            shape = RoundedCornerShape(20.dp),
+                            colors = ButtonDefaults.buttonColors(MaterialTheme.colors.background),
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            AsyncImage(
+                                model = R.drawable.ic_price_tag,
+                                contentDescription = null,
+                                colorFilter = ColorFilter.tint(MaterialTheme.colors.primary),
+                                modifier = Modifier.size(16.dp)
+                            )
+
+                            Spacer(modifier = Modifier.width(MaterialTheme.spacing.small))
+
+                            Text(
+                                text = stringResource(R.string.my_ecorewards),
+                                color = MaterialTheme.colors.primary,
+                                fontWeight = FontWeight.SemiBold,
+                                style = MaterialTheme.typography.button
+                            )
+                            Column(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalAlignment = Alignment.End
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.ArrowForwardIos,
+                                    contentDescription = null,
+                                    tint = MaterialTheme.colors.primary
                                 )
                             }
-                        },
-                        shape = RoundedCornerShape(20.dp),
-                        colors = ButtonDefaults.buttonColors(MaterialTheme.colors.background),
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        AsyncImage(
-                            model = R.drawable.ic_price_tag,
-                            contentDescription = null,
-                            colorFilter = ColorFilter.tint(MaterialTheme.colors.primary),
-                            modifier = Modifier.size(16.dp)
-                        )
-
-                        Spacer(modifier = Modifier.width(MaterialTheme.spacing.small))
-
-                        Text(
-                            text = "My EcoRewards",
-                            color = MaterialTheme.colors.primary,
-                            fontWeight = FontWeight.SemiBold,
-                            style = MaterialTheme.typography.button
-                        )
-                        Column(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalAlignment = Alignment.End
-                        ) {
-                            Icon(
-                                imageVector = Icons.Default.ArrowForwardIos,
-                                contentDescription = null,
-                                tint = MaterialTheme.colors.primary
-                            )
                         }
                     }
                 }

@@ -33,6 +33,7 @@ import com.ecosense.android.core.presentation.component.GradientButton
 import com.ecosense.android.core.presentation.theme.*
 import com.ecosense.android.core.presentation.util.UIEvent
 import com.ecosense.android.core.presentation.util.asString
+import com.ecosense.android.destinations.LoginScreenDestination
 import com.ecosense.android.featReward.data.util.ecopointsFormatter
 import com.ecosense.android.featReward.presentation.component.RewardTopBar
 import com.ecosense.android.featReward.presentation.detail.component.RewardItemDetail
@@ -496,100 +497,120 @@ fun RewardDetailScreen(
         floatingActionButton = {
             if (!state.isLoadingRewardDetail) {
                 if (!sheetState.isExpanded) {
-                    if (reward.numberOfRedeem >= reward.maxRedeem) {
-                        ExtendedFloatingActionButton(
-                            text = {
-                                Text(
-                                    text = stringResource(R.string.redeem_limit_reached),
-                                    style = MaterialTheme.typography.body1,
-                                    color = White,
-                                    fontWeight = FontWeight.SemiBold
+                    if (viewModel.isLoggedIn.collectAsState().value != true) {
+                        GradientButton(
+                            onClick = {
+                                navigator.navigate(
+                                    LoginScreenDestination()
                                 )
                             },
-                            backgroundColor = SuperDarkGrey,
-                            onClick = {},
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(horizontal = MaterialTheme.spacing.medium)
-                        )
+                        ) {
+                            Text(
+                                text = stringResource(R.string.login_first_to_redeem),
+                                style = MaterialTheme.typography.body1,
+                                color = White,
+                                fontWeight = FontWeight.SemiBold
+                            )
+                        }
                     } else {
-                        if (!state.isLoadingRedeemReward) {
-                            GradientButton(
-                                onClick = {
-                                    if (reward.category == "e-wallet") {
-                                        coroutineScope.launch {
-                                            if (sheetState.isCollapsed) {
-                                                sheetState.expand()
-                                            }
-                                        }
-                                    } else {
-                                        viewModel.onRedeemRewardJob(
-                                            rewardId = rewardId
-                                        )
-                                    }
-                                },
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(horizontal = MaterialTheme.spacing.medium)
-                            ) {
-                                Text(
-                                    text = stringResource(R.string.redeem),
-                                    style = MaterialTheme.typography.body1,
-                                    color = White,
-                                    fontWeight = FontWeight.SemiBold
-                                )
-                                Spacer(modifier = Modifier.width(MaterialTheme.spacing.extraSmall))
-                                Box(
-                                    contentAlignment = Alignment.Center,
-                                    modifier = Modifier
-                                        .size(14.dp)
-                                        .clip(CircleShape)
-                                        .padding(1.dp)
-                                        .border(
-                                            width = 1.dp,
-                                            color = EcoPointsColor,
-                                            shape = CircleShape,
-                                        )
-                                        .padding(1.dp),
-                                ) {
-                                    AsyncImage(
-                                        model = R.drawable.ic_ecosense_logo_vector,
-                                        contentDescription = null,
-                                        colorFilter = ColorFilter.tint(EcoPointsColor),
-                                        modifier = Modifier.fillMaxSize(),
-                                    )
-                                }
-                                Spacer(modifier = Modifier.width(2.dp))
-                                Text(
-                                    text = ecopointsFormatter(reward.pointsNeeded),
-                                    style = MaterialTheme.typography.body1,
-                                    fontWeight = FontWeight.SemiBold,
-                                    color = EcoPointsColor
-                                )
-                                Spacer(modifier = Modifier.width(MaterialTheme.spacing.extraSmall))
-                                Text(
-                                    text = stringResource(R.string.ecopoints),
-                                    style = MaterialTheme.typography.body1,
-                                    color = White,
-                                    fontWeight = FontWeight.SemiBold
-                                )
-                            }
-                        } else {
+                        if (reward.numberOfRedeem >= reward.maxRedeem) {
                             ExtendedFloatingActionButton(
                                 text = {
                                     Text(
-                                        text = stringResource(R.string.redeeming_reward),
+                                        text = stringResource(R.string.redeem_limit_reached),
                                         style = MaterialTheme.typography.body1,
                                         color = White,
                                         fontWeight = FontWeight.SemiBold
                                     )
                                 },
-                                backgroundColor = DarkGrey,
+                                backgroundColor = SuperDarkGrey,
                                 onClick = {},
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .padding(horizontal = MaterialTheme.spacing.medium)
                             )
+                        } else {
+                            if (!state.isLoadingRedeemReward) {
+                                GradientButton(
+                                    onClick = {
+                                        if (reward.category == "e-wallet") {
+                                            coroutineScope.launch {
+                                                if (sheetState.isCollapsed) {
+                                                    sheetState.expand()
+                                                }
+                                            }
+                                        } else {
+                                            viewModel.onRedeemRewardJob(
+                                                rewardId = rewardId
+                                            )
+                                        }
+                                    },
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(horizontal = MaterialTheme.spacing.medium)
+                                ) {
+                                    Text(
+                                        text = stringResource(R.string.redeem),
+                                        style = MaterialTheme.typography.body1,
+                                        color = White,
+                                        fontWeight = FontWeight.SemiBold
+                                    )
+                                    Spacer(modifier = Modifier.width(MaterialTheme.spacing.extraSmall))
+                                    Box(
+                                        contentAlignment = Alignment.Center,
+                                        modifier = Modifier
+                                            .size(14.dp)
+                                            .clip(CircleShape)
+                                            .padding(1.dp)
+                                            .border(
+                                                width = 1.dp,
+                                                color = EcoPointsColor,
+                                                shape = CircleShape,
+                                            )
+                                            .padding(1.dp),
+                                    ) {
+                                        AsyncImage(
+                                            model = R.drawable.ic_ecosense_logo_vector,
+                                            contentDescription = null,
+                                            colorFilter = ColorFilter.tint(EcoPointsColor),
+                                            modifier = Modifier.fillMaxSize(),
+                                        )
+                                    }
+                                    Spacer(modifier = Modifier.width(2.dp))
+                                    Text(
+                                        text = ecopointsFormatter(reward.pointsNeeded),
+                                        style = MaterialTheme.typography.body1,
+                                        fontWeight = FontWeight.SemiBold,
+                                        color = EcoPointsColor
+                                    )
+                                    Spacer(modifier = Modifier.width(MaterialTheme.spacing.extraSmall))
+                                    Text(
+                                        text = stringResource(R.string.ecopoints),
+                                        style = MaterialTheme.typography.body1,
+                                        color = White,
+                                        fontWeight = FontWeight.SemiBold
+                                    )
+                                }
+                            } else {
+                                ExtendedFloatingActionButton(
+                                    text = {
+                                        Text(
+                                            text = stringResource(R.string.redeeming_reward),
+                                            style = MaterialTheme.typography.body1,
+                                            color = White,
+                                            fontWeight = FontWeight.SemiBold
+                                        )
+                                    },
+                                    backgroundColor = DarkGrey,
+                                    onClick = {},
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(horizontal = MaterialTheme.spacing.medium)
+                                )
+                            }
                         }
                     }
                 }

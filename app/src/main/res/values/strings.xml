@@ -275,6 +275,10 @@
     <string name="em_wallet_type_blank">E-wallet type can not be blank</string>
     <string name="em_wallet_number_blank">E-wallet number can not be blank</string>
     <string name="em_invalid_wallet_number">E-wallet number is invalid. Please try using another e-wallet number</string>
+    <string name="login_first">Login First</string>
+    <string name="login_first_to_redeem">Login First to Redeem</string>
+    <string name="my_ecorewards">My EcoRewards</string>
+    <string name="not_logged_ecopoints">To know how much your Eco Points</string>
 
-    <!--    stringResource(R.string.max_1x24)  -->
+    <!--    stringResource(R.string.my_ecorewards)  -->
 </resources>
