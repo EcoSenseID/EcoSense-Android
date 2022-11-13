@@ -31,6 +31,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.toSize
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
@@ -42,6 +43,7 @@ import com.ecosense.android.core.presentation.theme.*
 import com.ecosense.android.core.presentation.util.UIEvent
 import com.ecosense.android.core.presentation.util.asString
 import com.ecosense.android.destinations.RewardDetailScreenDestination
+import com.ecosense.android.featReward.data.util.ecopointsFormatter
 import com.ecosense.android.featReward.presentation.component.RewardTopBar
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -155,6 +157,7 @@ fun RewardsScreen(
                                 label = { Text(text = stringResource(R.string.enter_email_address)) },
                                 placeholder = { Text(text = stringResource(R.string.enter_email_address)) },
                                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+                                maxLines = 1,
                                 modifier = Modifier.fillMaxWidth()
                             )
 
@@ -215,6 +218,7 @@ fun RewardsScreen(
                                 label = { Text(text = stringResource(R.string.enter_ewallet_number)) },
                                 placeholder = { Text(text = stringResource(R.string.enter_ewallet_number)) },
                                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
+                                maxLines = 1,
                                 modifier = Modifier.fillMaxWidth()
                             )
 
@@ -617,7 +621,7 @@ fun RewardsScreen(
                                         ) {
                                             Text(
                                                 text = stringResource(R.string.redeem),
-                                                style = MaterialTheme.typography.overline,
+                                                fontSize = 10.sp,
                                                 fontWeight = FontWeight.Bold,
                                                 color = White,
                                                 modifier = Modifier.padding(start = MaterialTheme.spacing.extraSmall)
@@ -644,15 +648,15 @@ fun RewardsScreen(
                                                 )
                                             }
                                             Text(
-                                                text = reward[i].pointsNeeded.toString(),
-                                                style = MaterialTheme.typography.overline,
+                                                text = ecopointsFormatter(reward[i].pointsNeeded),
+                                                fontSize = 10.sp,
                                                 fontWeight = FontWeight.Bold,
                                                 color = EcoPointsColor
                                             )
                                             Spacer(modifier = Modifier.width(2.dp))
                                             Text(
                                                 text = stringResource(R.string.ecopoints),
-                                                style = MaterialTheme.typography.overline,
+                                                fontSize = 10.sp,
                                                 fontWeight = FontWeight.Bold,
                                                 color = White,
                                                 modifier = Modifier.padding(end = MaterialTheme.spacing.extraSmall)
@@ -669,7 +673,7 @@ fun RewardsScreen(
                                         ) {
                                             Text(
                                                 text = stringResource(R.string.redeeming_reward),
-                                                style = MaterialTheme.typography.overline,
+                                                fontSize = 10.sp,
                                                 color = White,
                                                 fontWeight = FontWeight.Bold,
                                                 modifier = Modifier.padding(horizontal = MaterialTheme.spacing.extraSmall)
