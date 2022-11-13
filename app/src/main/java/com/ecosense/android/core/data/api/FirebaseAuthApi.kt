@@ -21,9 +21,9 @@ import logcat.logcat
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
-class FirebaseAuthApi : AuthApi {
-
-    private val firebaseAuth = FirebaseAuth.getInstance().apply { useAppLanguage() }
+class FirebaseAuthApi(
+    private val firebaseAuth: FirebaseAuth,
+) : AuthApi {
 
     override val isLoggedIn: Flow<Boolean>
         get() = callbackFlow {
