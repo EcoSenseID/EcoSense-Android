@@ -34,6 +34,9 @@ class NotificationsViewModel @Inject constructor(
     var isRefreshing by mutableStateOf(false)
         private set
 
+    val isAllNotifsEmpty
+        get() = todaysNotifs.isEmpty() && yesterdaysNotifs.isEmpty() && lastWeeksNotifs.isEmpty() && olderNotifs.isEmpty()
+
     private val _todaysNotifs = mutableStateListOf<NotificationPresentation>()
     val todaysNotifs: List<NotificationPresentation> = _todaysNotifs
 
@@ -62,6 +65,7 @@ class NotificationsViewModel @Inject constructor(
                     is Resource.Error -> {
                         isRefreshing = false
                         result.uiText?.let { _eventFlow.send(UIEvent.ShowSnackbar(it)) }
+                        onRefreshNotifs()
                     }
                     is Resource.Loading -> isRefreshing = true
                     is Resource.Success -> {

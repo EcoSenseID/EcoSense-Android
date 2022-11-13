@@ -5,8 +5,8 @@
     <string name="password">Password</string>
     <string name="login">Login</string>
     <string name="or">Or</string>
-    <string name="email">Email</string>
-    <string name="log_out">Log Out</string>
+    <string name="email" translatable="false">Email</string>
+    <string name="log_out" translatable="false">Log Out</string>
     <string name="hide_password">Hide password</string>
     <string name="show_password">Show password</string>
     <string name="forgot_password_q">Forgot password?</string>
@@ -17,7 +17,7 @@
     <string name="em_email_blank">Email can not be blank</string>
     <string name="em_password_blank">Password can not be blank</string>
     <string name="em_password_not_match">Passwords don\'t match</string>
-    <string name="web_client_id">700975405784-turn28oap23hefqq9aij0j74e36skkus.apps.googleusercontent.com</string>
+    <string name="web_client_id" translatable="false">700975405784-turn28oap23hefqq9aij0j74e36skkus.apps.googleusercontent.com</string>
     <string name="em_unknown">Something went wrong. Please try again in a moment</string>
     <string name="send_instruction">Send instruction</string>
     <string name="repeat_password">Repeat password</string>
@@ -48,12 +48,12 @@
     <string name="em_io_exception">Couldn\'t reach server. Please check your internet connection.</string>
     <string name="cd_profile_picture">Profile picture</string>
     <string name="cd_options_menu">Options menu</string>
-    <string name="ecosense_user">EcoSense User</string>
+    <string name="ecosense_user">EcoFriend</string>
     <string name="experiences">Experiences</string>
     <string name="history">History</string>
     <string name="choose_category">Choose a Category</string>
-    <string name="on_going_task">On going task</string>
-    <string name="tasks_to_go">Tasks To Go</string>
+    <string name="on_going_task" translatable="false">On going task</string>
+    <string name="tasks_to_go" translatable="false">Tasks To Go</string>
     <string name="browse_categories">Browse categories</string>
     <string name="view_all">View all</string>
     <string name="all_campaign">All Campaign</string>
@@ -61,42 +61,42 @@
     <string name="add_caption">Add Caption</string>
     <string name="new_campaign">New Campaign</string>
     <string name="trending_campaign">Trending Campaign</string>
-    <string name="trending_label">Trending</string>
+    <string name="trending_label" translatable="false">Trending</string>
     <string name="new_label">New</string>
-    <string name="change_maker">%s changemakers participated</string>
+    <string name="change_maker" translatable="false">%s changemakers participated</string>
     <string name="cat_water_pollution">Water Pollution</string>
     <string name="cat_air_pollution">Air Pollution</string>
-    <string name="cat_food_waste">Food Waste</string>
+    <string name="cat_food_waste" translatable="false">Food Waste</string>
     <string name="cat_plastic_free">Plastic Free</string>
     <string name="cat_energy_efficiency">Energy Efficiency</string>
-    <string name="until_date">Until %s</string>
+    <string name="until_date" translatable="false">Until %s</string>
     <string name="show_all_campaign">Show All Campaign</string>
-    <string name="join_campaign">Join Campaign</string>
-    <string name="poster_of_campaign">Poster of %s campaign.</string>
-    <string name="participant_count">Participant Count</string>
-    <string name="initiator">Initiator</string>
-    <string name="initiated_by">Initiated by </string>
-    <string name="start_date">Start Date</string>
-    <string name="end_date">End Date</string>
+    <string name="join_campaign" translatable="false">Join Campaign</string>
+    <string name="poster_of_campaign" translatable="false">Poster of %s campaign.</string>
+    <string name="participant_count" translatable="false">Participant Count</string>
+    <string name="initiator" translatable="false">Initiator</string>
+    <string name="initiated_by" translatable="false">Initiated by </string>
+    <string name="start_date" translatable="false">Start Date</string>
+    <string name="end_date" translatable="false">End Date</string>
     <string name="impact">Impact</string>
-    <string name="tasks">Tasks</string>
-    <string name="completed">Completed</string>
-    <string name="proof_completion">Proof of %s task completion.</string>
-    <string name="unsubmitted_proof">Unsubmitted proof of %s task completion.</string>
-    <string name="finished_on">Finished on %s</string>
+    <string name="tasks" translatable="false">Tasks</string>
+    <string name="completed" translatable="false">Completed</string>
+    <string name="proof_completion" translatable="false">Proof of %s task completion.</string>
+    <string name="unsubmitted_proof" translatable="false">Unsubmitted proof of %s task completion.</string>
+    <string name="finished_on" translatable="false">Finished on %s</string>
     <string name="open_camera">Open Camera</string>
     <string name="open_gallery">Open Gallery</string>
-    <string name="submit">Submit</string>
-    <string name="submitting">Submitting…</string>
-    <string name="sort_by">Sort by</string>
-    <string name="show_hide_dropdown">Show or hide the drop down</string>
+    <string name="submit" translatable="false">Submit</string>
+    <string name="submitting" translatable="false">Submitting…</string>
+    <string name="sort_by" translatable="false">Sort by</string>
+    <string name="show_hide_dropdown" translatable="false">Show or hide the drop down</string>
     <string name="back">Back</string>
-    <string name="days_left">%s days left</string>
-    <string name="close_search_bar">Close Search Bar</string>
-    <string name="open_search_bar">Open Search Bar</string>
-    <string name="showing_search_result">Showing search results for \"%s\"</string>
+    <string name="days_left" translatable="false">%s days left</string>
+    <string name="close_search_bar" translatable="false">Close Search Bar</string>
+    <string name="open_search_bar" translatable="false">Open Search Bar</string>
+    <string name="showing_search_result" translatable="false">Showing search results for \"%s\"</string>
     <string name="edit_profile">Edit Profile</string>
-    <string name="level">Level</string>
+    <string name="level" translatable="false">Level</string>
     <string name="name">Name</string>
     <string name="save">Save</string>
     <string name="change_profile_picture">Change Profile Picture</string>
@@ -108,12 +108,12 @@
     <string name="em_too_many_request">You have already requested email verification</string>
     <string name="email_is_verified">Email is verified</string>
     <string name="email_is_unverified">Email is unverified</string>
-    <string name="content_type_image">image/*</string>
+    <string name="content_type_image" translatable="false">image/*</string>
     <string name="permission_request_message">Hi! I\'m the plant disease recognizer robot. Please give me permission to your camera so I can look at your plants!</string>
     <string name="permission_request_rationale">Camera permission is needed for plant disease recognition feature. Please give me access to it</string>
     <string name="permission_request_denied_permanently">Beep boop! Camera permission was permanently denied. If you change your mind, please enable it manually in the app settings</string>
     <string name="upload_permission_request_denied_permanently">Looks like your camera permission was permanently denied. To use camera, please enable the camera permission manually in the app settings</string>
-    <string name="grant_permission">Grant permission</string>
+    <string name="grant_permission" translatable="false">Grant permission</string>
     <string name="open_app_settings">Open app settings</string>
     <string name="recognising">I\'m trying to recognise this one…</string>
     <string name="recognition_tip">Tip: move the camera close enough to the plant and make sure it is well lit</string>
@@ -133,20 +133,20 @@
     <string name="symptoms">Symptoms</string>
     <string name="preventive_measures">Preventive Measures</string>
     <string name="treatments">Treatments</string>
-    <string name="dash">-</string>
+    <string name="dash" translatable="false">-</string>
     <string name="my_profile">My Profile</string>
-    <string name="ecobot">EcoBot</string>
+    <string name="ecobot" translatable="false">EcoBot</string>
     <string name="search_for_campaign">Search for Campaign</string>
-    <string name="joining_campaign">Joining Campaign…</string>
-    <string name="upload_proof_success">Hurray! Task submitted successfully. Keep it up!</string>
-    <string name="join_campaign_success">Successfully joined the campaign. Next, let\'s change the world!</string>
-    <string name="complete_campaign_success">Congratulations, you\'ve completed this campaign! Go to the Profile page to check your experience points.</string>
-    <string name="task_number">Task %s</string>
-    <string name="task_completion_mark">Task Completion Mark</string>
+    <string name="joining_campaign" translatable="false">Joining Campaign…</string>
+    <string name="upload_proof_success" translatable="false">Hurray! Task submitted successfully. Keep it up!</string>
+    <string name="join_campaign_success" translatable="false">Successfully joined the campaign. Next, let\'s change the world!</string>
+    <string name="complete_campaign_success" translatable="false">Congratulations, you\'ve completed this campaign! Go to the Profile page to check your experience points.</string>
+    <string name="task_number" translatable="false">Task %s</string>
+    <string name="task_completion_mark" translatable="false">Task Completion Mark</string>
     <string name="cancel">Cancel</string>
     <string name="attach_proof_photo">Attach Proof Photo</string>
     <string name="choose_image_from">Choose Image From…</string>
-    <string name="whoops">Whoops!</string>
+    <string name="whoops" translatable="false">Whoops!</string>
     <string name="cd_support">Support</string>
     <string name="cd_reply">Reply</string>
     <string name="cd_share">Share</string>
@@ -154,13 +154,13 @@
     <string name="attachment">Attachment</string>
     <string name="share">Share</string>
     <string name="em_comments">Couldn\'t load comments</string>
-    <string name="ecoworld">EcoWorld</string>
-    <string name="ecoreward">EcoReward</string>
+    <string name="ecoworld" translatable="false">EcoWorld</string>
+    <string name="ecoreward" translatable="false">EcoReward</string>
     <string name="notifications">Notifications</string>
-    <string name="redeem_reward">Redeem %s EcoPoints</string>
-    <string name="redeem_reward_success">Successfully redeemed the reward! You can use it on My EcoReward page.</string>
-    <string name="request_reward_success">Successfully requested the reward! This process will be done manually, please be patient.</string>
-    <string name="use_reward_success">Reward used successfully!</string>
+    <string name="redeem_reward" translatable="false">Redeem %s EcoPoints</string>
+    <string name="redeem_reward_success" translatable="false">Successfully redeemed the reward! You can use it on My EcoReward page.</string>
+    <string name="request_reward_success" translatable="false">Successfully requested the reward! This process will be done manually, please be patient.</string>
+    <string name="use_reward_success" translatable="false">Reward used successfully!</string>
     <string name="cd_add_story">Create new story</string>
     <string name="supported_by">Supported by</string>
     <string name="close">Close</string>
@@ -196,7 +196,7 @@
     <string name="completed_at">Completed at:</string>
     <string name="em_empty_campaign_history">You haven\'t joined any campaigns.\nLet\'s join one!</string>
     <string name="em_empty_story_history">You haven\'t uploaded anything.\nLet\'s make one!</string>
-    <string name="ecopoints">EcoPoints</string>
+    <string name="ecopoints" translatable="false">EcoPoints</string>
     <string name="campaign_finshed_at">Campaign finished at</string>
     <string name="campaign_will_end_at">Campaign will end at</string>
     <string name="completion_is_being_verified">Completion is being verified</string>
@@ -206,8 +206,8 @@
     <string name="version">Version</string>
     <string name="change_password">Change Password</string>
     <string name="find_us">Find Us:</string>
-    <string name="url_ecosense_instagram">https://www.instagram.com/ecosense.id/</string>
-    <string name="url_ecosense_youtube">https://www.youtube.com/channel/UCs-0Jjdv7gEA-bDgqLneSsA/</string>
+    <string name="url_ecosense_instagram" translatable="false">https://www.instagram.com/ecosense.id/</string>
+    <string name="url_ecosense_youtube" translatable="false">https://www.youtube.com/channel/UCs-0Jjdv7gEA-bDgqLneSsA/</string>
     <string name="cd_change_profile_picture">Change profile picture</string>
     <string name="em_recent_login_required">Unable to reauthenticate</string>
     <string name="em_new_password_blank">New password can not be blank!</string>
@@ -235,7 +235,7 @@
     <string name="attached_photo">Attached photo</string>
     <string name="filter_view_http_ecosense_deeplinks">Open app</string>
     <string name="format_share_message">Hi, check this out!\nhttps://ecosense.id/deeplinks/storydetail/%1$d</string>
-    <string name="intent_type_plain_text">text/plain</string>
+    <string name="intent_type_plain_text" translatable="false">text/plain</string>
     <string name="stories">Stories</string>
     <string name="stories_history">Stories History</string>
     <string name="campaign_history">Campaign History</string>
@@ -245,6 +245,7 @@
     <string name="yesterday">Yesterday</string>
     <string name="last_week">Last Week</string>
     <string name="older">Older</string>
-    <string name="url_ecosense_web">https://ecosense.id/</string>
-    <string name="url_ecosense_linkedin">https://www.linkedin.com/company/ecosense-indonesia</string>
+    <string name="url_ecosense_web" translatable="false">https://ecosense.id/</string>
+    <string name="url_ecosense_linkedin" translatable="false">https://www.linkedin.com/company/ecosense-indonesia</string>
+    <string name="em_empty_notifications">It\'s empty. You have no notifications yet</string>
 </resources>

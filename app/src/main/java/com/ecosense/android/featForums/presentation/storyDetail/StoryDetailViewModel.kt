@@ -72,6 +72,7 @@ class StoryDetailViewModel @Inject constructor(
         onError = { message: UIText? ->
             repliesState = repliesState.copy(errorMessage = message)
             if (isRefreshing) isRefreshing = false
+            onLoadNextRepliesFeed()
         },
         onSuccess = { items: List<Reply>?, newKey: Int ->
             val newReplies = items?.map { it.toPresentation() } ?: emptyList()
@@ -238,6 +239,7 @@ class StoryDetailViewModel @Inject constructor(
                     is Resource.Error -> {
                         isLoadingStoryDetail = false
                         result.uiText?.let { _eventFlow.send(UIEvent.ShowSnackbar(it)) }
+                        onLoadStoryDetail()
                     }
                     is Resource.Loading -> isLoadingStoryDetail = true
                     is Resource.Success -> {
