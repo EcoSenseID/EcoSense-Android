@@ -34,6 +34,7 @@ import com.ecosense.android.core.presentation.util.asString
 import com.ecosense.android.destinations.MyRewardsScreenDestination
 import com.ecosense.android.destinations.RewardDetailScreenDestination
 import com.ecosense.android.destinations.RewardsScreenDestination
+import com.ecosense.android.featReward.data.util.ecopointsFormatter
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlinx.coroutines.flow.collectLatest
@@ -121,7 +122,9 @@ fun RewardHomepageScreen(
                         Spacer(modifier = Modifier.width(MaterialTheme.spacing.extraSmall))
 
                         Text(
-                            text = if (state.isLoadingRewardHomepage) stringResource(R.string.dash) else state.rewardHomepage.totalPoints.toString(),
+                            text = if (state.isLoadingRewardHomepage) stringResource(R.string.dash) else ecopointsFormatter(
+                                state.rewardHomepage.totalPoints
+                            ),
                             color = EcoPointsColor,
                             fontWeight = FontWeight.ExtraBold,
                             style = MaterialTheme.typography.body1
@@ -200,9 +203,9 @@ fun RewardHomepageScreen(
                     fontWeight = FontWeight.ExtraBold,
                     style = MaterialTheme.typography.h6
                 )
-                Column(
-                    modifier = Modifier.clickable(onClick = {
-                        if (!state.isLoadingRewardHomepage) {
+                if (!state.isLoadingRewardHomepage) {
+                    Column(
+                        modifier = Modifier.clickable(onClick = {
                             navigator.navigate(
                                 RewardsScreenDestination(
                                     "Donation",
@@ -210,22 +213,23 @@ fun RewardHomepageScreen(
                                     state.rewardHomepage.totalPoints
                                 )
                             )
+                        })
+                    ) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Text(
+                                text = stringResource(R.string.see_all),
+                                color = MaterialTheme.colors.primary,
+                                fontWeight = FontWeight.Medium,
+                                style = MaterialTheme.typography.subtitle1
+                            )
+                            Spacer(modifier = Modifier.width(MaterialTheme.spacing.extraSmall))
+                            Icon(
+                                imageVector = Icons.Default.ArrowForwardIos,
+                                contentDescription = null,
+                                tint = MaterialTheme.colors.primary,
+                                modifier = Modifier.height(14.dp)
+                            )
                         }
-                    })
-                ) {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Text(
-                            text = stringResource(R.string.see_all),
-                            color = MaterialTheme.colors.primary,
-                            fontWeight = FontWeight.Medium,
-                            style = MaterialTheme.typography.subtitle1
-                        )
-                        Icon(
-                            imageVector = Icons.Default.ArrowForwardIos,
-                            contentDescription = null,
-                            tint = MaterialTheme.colors.primary,
-                            modifier = Modifier.height(18.dp)
-                        )
                     }
                 }
             }
@@ -341,7 +345,7 @@ fun RewardHomepageScreen(
                                         Spacer(modifier = Modifier.width(MaterialTheme.spacing.extraSmall))
 
                                         Text(
-                                            text = donation.pointsNeeded.toString(),
+                                            text = ecopointsFormatter(donation.pointsNeeded),
                                             color = MaterialTheme.colors.primary,
                                             fontWeight = FontWeight.ExtraBold,
                                             style = MaterialTheme.typography.caption
@@ -373,9 +377,9 @@ fun RewardHomepageScreen(
                     fontWeight = FontWeight.ExtraBold,
                     style = MaterialTheme.typography.h6
                 )
-                Column(
-                    modifier = Modifier.clickable(onClick = {
-                        if (!state.isLoadingRewardHomepage) {
+                if (!state.isLoadingRewardHomepage) {
+                    Column(
+                        modifier = Modifier.clickable(onClick = {
                             navigator.navigate(
                                 RewardsScreenDestination(
                                     "E-Wallet",
@@ -383,22 +387,23 @@ fun RewardHomepageScreen(
                                     state.rewardHomepage.totalPoints
                                 )
                             )
+                        })
+                    ) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Text(
+                                text = stringResource(R.string.see_all),
+                                color = MaterialTheme.colors.primary,
+                                fontWeight = FontWeight.Medium,
+                                style = MaterialTheme.typography.subtitle1
+                            )
+                            Spacer(modifier = Modifier.width(MaterialTheme.spacing.extraSmall))
+                            Icon(
+                                imageVector = Icons.Default.ArrowForwardIos,
+                                contentDescription = null,
+                                tint = MaterialTheme.colors.primary,
+                                modifier = Modifier.height(14.dp)
+                            )
                         }
-                    })
-                ) {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Text(
-                            text = stringResource(R.string.see_all),
-                            color = MaterialTheme.colors.primary,
-                            fontWeight = FontWeight.Medium,
-                            style = MaterialTheme.typography.subtitle1
-                        )
-                        Icon(
-                            imageVector = Icons.Default.ArrowForwardIos,
-                            contentDescription = null,
-                            tint = MaterialTheme.colors.primary,
-                            modifier = Modifier.height(18.dp)
-                        )
                     }
                 }
             }
@@ -514,7 +519,7 @@ fun RewardHomepageScreen(
                                         Spacer(modifier = Modifier.width(MaterialTheme.spacing.extraSmall))
 
                                         Text(
-                                            text = eWallet.pointsNeeded.toString(),
+                                            text = ecopointsFormatter(eWallet.pointsNeeded),
                                             color = MaterialTheme.colors.primary,
                                             fontWeight = FontWeight.ExtraBold,
                                             style = MaterialTheme.typography.caption
