@@ -18,8 +18,10 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import coil.compose.AsyncImage
 import com.ecosense.android.R
 import com.ecosense.android.core.presentation.theme.spacing
 import com.ecosense.android.destinations.CampaignDetailScreenDestination
@@ -76,6 +78,27 @@ fun StoryHistoryScreen(
             }
         },
     ) { scaffoldPadding ->
+
+        if (!viewModel.isLoading && viewModel.stories.isEmpty()) Column(
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(MaterialTheme.spacing.medium),
+        ) {
+            AsyncImage(
+                model = R.drawable.character_06,
+                contentDescription = null,
+                modifier = Modifier.width(120.dp),
+            )
+
+            Text(
+                text = stringResource(R.string.this_user_has_not_uploaded_anything),
+                fontWeight = FontWeight.Bold,
+                textAlign = TextAlign.Center,
+            )
+        }
+
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()

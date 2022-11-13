@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
@@ -110,6 +111,24 @@ fun NotificationsScreen(
                     color = MaterialTheme.colors.onPrimary,
                 )
             }
+        } else if (viewModel.isAllNotifsEmpty) Column(
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(MaterialTheme.spacing.medium),
+        ) {
+            AsyncImage(
+                model = R.drawable.character_06,
+                contentDescription = null,
+                modifier = Modifier.width(120.dp),
+            )
+
+            Text(
+                text = stringResource(R.string.em_empty_notifications),
+                fontWeight = FontWeight.Bold,
+                textAlign = TextAlign.Center,
+            )
         } else SwipeRefresh(
             state = SwipeRefreshState(isRefreshing = viewModel.isRefreshing),
             onRefresh = { viewModel.onRefreshNotifs() },

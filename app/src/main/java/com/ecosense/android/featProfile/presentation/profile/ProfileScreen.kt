@@ -234,7 +234,13 @@ fun ProfileScreen(
                         )
 
                         GradientButton(
-                            onClick = { navigator.navigate(RewardHomepageScreenDestination) },
+                            onClick = {
+                                navigator.navigate(RewardHomepageScreenDestination) {
+                                    popUpTo(DiscoverCampaignScreenDestination.route) {
+                                        saveState = true
+                                    }
+                                }
+                            },
                             height = 36.dp,
                             modifier = Modifier.weight(1f),
                         ) {
