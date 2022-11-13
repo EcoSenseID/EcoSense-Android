@@ -15,14 +15,18 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import coil.size.Scale
 import com.ecosense.android.R
+import com.ecosense.android.core.presentation.theme.MintGreen
+import com.ecosense.android.core.presentation.theme.SuperDarkGrey
 import com.ecosense.android.core.presentation.theme.spacing
 import com.ecosense.android.featDiscoverCampaign.data.util.dateFormatter
 import com.ecosense.android.featReward.domain.model.MyRewardDetail
@@ -68,15 +72,7 @@ fun RewardItemDetail(
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(200.dp)
-                .padding(
-                    horizontal = MaterialTheme.spacing.medium,
-                    vertical = MaterialTheme.spacing.small
-                )
-                .shadow(elevation = 2.dp, shape = RoundedCornerShape(8.dp))
-                .clip(shape = RoundedCornerShape(8.dp))
+            modifier = Modifier.fillMaxWidth()
         ) {
             AsyncImage(
                 model = ImageRequest.Builder(context)
@@ -97,13 +93,12 @@ fun RewardItemDetail(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(
-                    top = MaterialTheme.spacing.small,
                     bottom = MaterialTheme.spacing.medium,
                     start = MaterialTheme.spacing.medium,
                     end = MaterialTheme.spacing.medium
                 )
-                .shadow(elevation = 2.dp, shape = RoundedCornerShape(8.dp))
-                .clip(shape = RoundedCornerShape(8.dp))
+                .shadow(elevation = 2.dp, shape = RoundedCornerShape(20.dp))
+                .clip(shape = RoundedCornerShape(20.dp))
                 .background(MaterialTheme.colors.surface)
                 .padding(MaterialTheme.spacing.small)
         ) {
@@ -113,28 +108,52 @@ fun RewardItemDetail(
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(MaterialTheme.spacing.small),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Center
+                        .padding(MaterialTheme.spacing.small)
                 ) {
-                    Column {
-                        Row {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clip(RoundedCornerShape(20.dp))
+                            .background(MintGreen),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center
+                    ) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(
+                                    top = MaterialTheme.spacing.small,
+                                    start = MaterialTheme.spacing.medium,
+                                    end = MaterialTheme.spacing.medium
+                                ),
+                            horizontalArrangement = Arrangement.Center
+                        ) {
                             Text(
                                 text = title,
-                                style = MaterialTheme.typography.h5,
+                                style = MaterialTheme.typography.h6,
                                 fontWeight = FontWeight.Bold,
                                 color = MaterialTheme.colors.primary,
                                 modifier = Modifier
                                     .padding(bottom = MaterialTheme.spacing.small)
                             )
                         }
-                        Row {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(
+                                    bottom = MaterialTheme.spacing.small,
+                                    start = MaterialTheme.spacing.medium,
+                                    end = MaterialTheme.spacing.medium
+                                ),
+                            horizontalArrangement = Arrangement.Center
+                        ) {
                             Text(
-                                text = "Powered by ",
+                                text = stringResource(R.string.powered_by),
                                 textAlign = TextAlign.Justify,
                                 style = MaterialTheme.typography.overline,
                                 color = MaterialTheme.colors.primary
                             )
+                            Spacer(modifier = Modifier.width(2.dp))
                             Text(
                                 text = partner,
                                 textAlign = TextAlign.Justify,
@@ -154,9 +173,10 @@ fun RewardItemDetail(
                     Column {
                         Row {
                             Text(
-                                text = "Valid until",
-                                fontSize = 18.sp,
-                                fontWeight = FontWeight.Bold,
+                                text = stringResource(R.string.valid_until),
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.ExtraBold,
+                                style = TextStyle(textDecoration = TextDecoration.Underline),
                                 modifier = Modifier
                                     .padding(bottom = MaterialTheme.spacing.small)
                             )
@@ -164,8 +184,8 @@ fun RewardItemDetail(
                         Row {
                             Text(
                                 text = dateFormatter(validity),
-                                textAlign = TextAlign.Justify,
-                                style = MaterialTheme.typography.caption,
+                                fontWeight = FontWeight.ExtraBold,
+                                style = MaterialTheme.typography.body2,
                                 color = MaterialTheme.colors.primary
                             )
                         }
@@ -180,9 +200,10 @@ fun RewardItemDetail(
                     Column {
                         Row {
                             Text(
-                                text = "Description",
-                                fontSize = 18.sp,
-                                fontWeight = FontWeight.Bold,
+                                text = stringResource(R.string.description),
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.ExtraBold,
+                                style = TextStyle(textDecoration = TextDecoration.Underline),
                                 modifier = Modifier
                                     .padding(bottom = MaterialTheme.spacing.small)
                             )
@@ -191,7 +212,8 @@ fun RewardItemDetail(
                             Text(
                                 text = description,
                                 textAlign = TextAlign.Justify,
-                                style = MaterialTheme.typography.caption
+                                style = MaterialTheme.typography.caption,
+                                color = SuperDarkGrey
                             )
                         }
                     }
@@ -205,19 +227,34 @@ fun RewardItemDetail(
                     Column {
                         Row {
                             Text(
-                                text = "Terms & Conditions",
-                                fontSize = 18.sp,
-                                fontWeight = FontWeight.Bold,
+                                text = stringResource(R.string.terms_conditions),
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.ExtraBold,
+                                style = TextStyle(textDecoration = TextDecoration.Underline),
                                 modifier = Modifier
                                     .padding(bottom = MaterialTheme.spacing.small)
                             )
                         }
                         termsCondition.forEachIndexed { index, term ->
                             Row {
+                                Column(
+                                    modifier = Modifier.width(18.dp),
+                                    horizontalAlignment = Alignment.End
+                                ) {
+                                    Text(
+                                        text = "${index + 1}.",
+                                        style = MaterialTheme.typography.caption,
+                                        color = SuperDarkGrey
+                                    )
+                                }
+
+                                Spacer(modifier = Modifier.width(MaterialTheme.spacing.extraSmall))
+
                                 Text(
-                                    text = "${index + 1}. $term",
+                                    text = term,
                                     textAlign = TextAlign.Justify,
-                                    style = MaterialTheme.typography.caption
+                                    style = MaterialTheme.typography.caption,
+                                    color = SuperDarkGrey
                                 )
                             }
                         }
@@ -232,19 +269,34 @@ fun RewardItemDetail(
                     Column {
                         Row {
                             Text(
-                                text = "How to Use",
-                                fontSize = 18.sp,
-                                fontWeight = FontWeight.Bold,
+                                text = stringResource(R.string.how_to_use),
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.ExtraBold,
+                                style = TextStyle(textDecoration = TextDecoration.Underline),
                                 modifier = Modifier
                                     .padding(bottom = MaterialTheme.spacing.small)
                             )
                         }
                         howToUse.forEachIndexed { index, step ->
                             Row {
+                                Column(
+                                    modifier = Modifier.width(18.dp),
+                                    horizontalAlignment = Alignment.End
+                                ) {
+                                    Text(
+                                        text = "${index + 1}.",
+                                        style = MaterialTheme.typography.caption,
+                                        color = SuperDarkGrey
+                                    )
+                                }
+
+                                Spacer(modifier = Modifier.width(MaterialTheme.spacing.extraSmall))
+
                                 Text(
-                                    text = "${index + 1}. $step",
+                                    text = step,
                                     textAlign = TextAlign.Justify,
-                                    style = MaterialTheme.typography.caption
+                                    style = MaterialTheme.typography.caption,
+                                    color = SuperDarkGrey
                                 )
                             }
                         }

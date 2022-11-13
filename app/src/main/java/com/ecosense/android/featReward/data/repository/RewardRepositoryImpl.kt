@@ -1,6 +1,8 @@
 package com.ecosense.android.featReward.data.repository
 
 import android.content.Context
+import android.util.Patterns
+import androidx.core.util.PatternsCompat
 import com.ecosense.android.R
 import com.ecosense.android.core.domain.api.AuthApi
 import com.ecosense.android.core.util.Resource
@@ -313,6 +315,29 @@ class RewardRepositoryImpl(
         emit(Resource.Loading())
 
 //        emit(Resource.Error(UIText.DynamicString("Request Reward API not yet implemented"))) // uncomment if API ready to use
+
+        when {
+            email.isBlank() -> {
+                emit(Resource.Error(UIText.StringResource(R.string.em_email_blank)))
+                return@flow
+            }
+            !PatternsCompat.EMAIL_ADDRESS.matcher(email).matches() -> {
+                emit(Resource.Error(UIText.StringResource(R.string.em_invalid_email)))
+                return@flow
+            }
+            walletType.isBlank() -> {
+                emit(Resource.Error(UIText.StringResource(R.string.em_wallet_type_blank)))
+                return@flow
+            }
+            walletNumber.isBlank() -> {
+                emit(Resource.Error(UIText.StringResource(R.string.em_wallet_number_blank)))
+                return@flow
+            }
+            !Patterns.PHONE.matcher(walletNumber).matches() -> {
+                emit(Resource.Error(UIText.StringResource(R.string.em_invalid_wallet_number)))
+                return@flow
+            }
+        }
 
         try {
             val idToken = authApi.getIdToken(true)

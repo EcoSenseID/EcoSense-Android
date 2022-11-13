@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ecosense.android.R
+import com.ecosense.android.core.domain.repository.AuthRepository
 import com.ecosense.android.core.presentation.util.UIEvent
 import com.ecosense.android.core.util.Resource
 import com.ecosense.android.core.util.UIText
@@ -12,16 +13,18 @@ import com.ecosense.android.featReward.domain.repository.RewardRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class RewardsViewModel @Inject constructor(
+    private val authRepository: AuthRepository,
     private val rewardRepository: RewardRepository
 ) : ViewModel() {
+    val isLoggedIn: StateFlow<Boolean?> = authRepository.isLoggedIn
+        .stateIn(viewModelScope, SharingStarted.Eagerly, null)
+
     private val _state = mutableStateOf(RewardsScreenState.defaultValue)
     val state: State<RewardsScreenState> = _state
 
@@ -38,6 +41,10 @@ class RewardsViewModel @Inject constructor(
 
     fun onWalletNumberValueChange(value: String) {
         _state.value = state.value.copy(walletNumber = value)
+    }
+
+    fun onSheetConditionalValueChange(value: Int) {
+        _state.value = state.value.copy(sheetConditional = value)
     }
 
     private var getRewardsJob: Job? = null
@@ -92,7 +99,8 @@ class RewardsViewModel @Inject constructor(
 
     private var onRequestRewardJob: Job? = null
     fun onRequestRewardJob(
-        rewardId: Int
+        rewardId: Int,
+        categoryId: Int
     ) {
         onRequestRewardJob?.cancel()
         onRequestRewardJob = viewModelScope.launch {
@@ -112,7 +120,8 @@ class RewardsViewModel @Inject constructor(
                     }
                     is Resource.Success -> {
                         _state.value = state.value.copy(isLoadingRequestReward = false)
-                        _eventFlow.send(UIEvent.ShowSnackbar(UIText.StringResource(R.string.request_reward_success)))
+                        getRewards(categoryId = categoryId)
+                        onSheetConditionalValueChange(3)
                     }
                 }
             }.launchIn(this)
