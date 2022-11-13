@@ -272,6 +272,9 @@
     <string name="reward_form_submitted">Reward form submitted successfully.</string>
     <string name="reward_form_submitted_description">Your reward form is submitted.\nWe will make the transfer within a</string>
     <string name="max_1x24">maximum of 1x24 hours</string>
+    <string name="em_wallet_type_blank">E-wallet type can not be blank</string>
+    <string name="em_wallet_number_blank">E-wallet number can not be blank</string>
+    <string name="em_invalid_wallet_number">E-wallet number is invalid. Please try using another e-wallet number</string>
 
     <!--    stringResource(R.string.max_1x24)  -->
 </resources>
