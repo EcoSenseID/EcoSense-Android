@@ -53,20 +53,19 @@
     <string name="history">History</string>
     <string name="choose_category">Choose a Category</string>
     <string name="on_going_task" translatable="false">On going task</string>
-    <string name="tasks_to_go" translatable="false">Tasks To Go</string>
+    <string name="missions_to_go" translatable="false">Missions To Go</string>
     <string name="browse_categories">Browse categories</string>
     <string name="view_all">View all</string>
-    <string name="all_campaign">All Campaign</string>
+    <string name="all_campaigns">All Campaigns</string>
     <string name="all">All</string>
-    <string name="add_caption">Add Caption</string>
+    <string name="write_your_experience">Write your experience</string>
     <string name="new_campaign">New Campaign</string>
     <string name="trending_campaign">Trending Campaign</string>
     <string name="trending_label" translatable="false">Trending</string>
     <string name="new_label">New</string>
-    <string name="change_maker" translatable="false">%s changemakers participated</string>
     <string name="cat_water_pollution">Water Pollution</string>
     <string name="cat_air_pollution">Air Pollution</string>
-    <string name="cat_food_waste" translatable="false">Food Waste</string>
+    <string name="cat_waste_free">Waste Free</string>
     <string name="cat_plastic_free">Plastic Free</string>
     <string name="cat_energy_efficiency">Energy Efficiency</string>
     <string name="until_date" translatable="false">Until %s</string>
@@ -78,8 +77,7 @@
     <string name="initiated_by" translatable="false">Initiated by </string>
     <string name="start_date" translatable="false">Start Date</string>
     <string name="end_date" translatable="false">End Date</string>
-    <string name="impact">Impact</string>
-    <string name="tasks" translatable="false">Tasks</string>
+    <string name="missions" translatable="false">Missions:</string>
     <string name="completed" translatable="false">Completed</string>
     <string name="proof_completion" translatable="false">Proof of %s task completion.</string>
     <string name="unsubmitted_proof" translatable="false">Unsubmitted proof of %s task completion.</string>
@@ -141,8 +139,8 @@
     <string name="upload_proof_success" translatable="false">Hurray! Task submitted successfully. Keep it up!</string>
     <string name="join_campaign_success" translatable="false">Successfully joined the campaign. Next, let\'s change the world!</string>
     <string name="complete_campaign_success" translatable="false">Congratulations, you\'ve completed this campaign! Go to the Profile page to check your experience points.</string>
-    <string name="task_number" translatable="false">Task %s</string>
-    <string name="task_completion_mark" translatable="false">Task Completion Mark</string>
+    <string name="mission_number" translatable="false">Mission %s</string>
+    <string name="mission_completion_mark" translatable="false">Mission Completion Mark</string>
     <string name="cancel">Cancel</string>
     <string name="attach_proof_photo">Attach Proof Photo</string>
     <string name="choose_image_from">Choose Image From…</string>
@@ -283,4 +281,11 @@
     <string name="url_ecosense_web" translatable="false">https://ecosense.id/</string>
     <string name="url_ecosense_linkedin" translatable="false">https://www.linkedin.com/company/ecosense-indonesia</string>
     <string name="em_empty_notifications">It\'s empty. You have no notifications yet</string>
+    <string name="category_campaign" translatable="false">Category Campaign</string>
+    <string name="detail_campaign" translatable="false">Detail Campaign</string>
+    <string name="dashboard_current_progress" translatable="false">Your current progress for joined campaign:</string>
+    <string name="about_this_campaign" translatable="false">About This Campaign:</string>
+    <string name="share_campaign" translatable="false">Share campaign</string>
+    <string name="campaign_will_end_in" translatable="false">Campaign will end in</string>
+    <string name="login_to_see_missions" translatable="false">Login to see your missions</string>
 </resources>

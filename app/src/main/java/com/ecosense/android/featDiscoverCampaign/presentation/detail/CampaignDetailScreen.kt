@@ -1,5 +1,6 @@
 package com.ecosense.android.featDiscoverCampaign.presentation.detail
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -8,40 +9,40 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
-import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.outlined.Person
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.graphics.toColorInt
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import coil.size.Scale
 import com.ecosense.android.R
-import com.ecosense.android.core.presentation.theme.spacing
+import com.ecosense.android.core.presentation.component.GradientButton
+import com.ecosense.android.core.presentation.theme.*
 import com.ecosense.android.core.presentation.util.UIEvent
 import com.ecosense.android.core.presentation.util.asString
 import com.ecosense.android.featDiscoverCampaign.data.util.dateFormatter
+import com.ecosense.android.featDiscoverCampaign.data.util.unixCountdown
 import com.ecosense.android.featDiscoverCampaign.presentation.component.DiscoverTopBar
 import com.ecosense.android.featDiscoverCampaign.presentation.detail.component.UploadTaskProof
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable
@@ -61,6 +62,18 @@ fun CampaignDetailScreen(
 
     val context = LocalContext.current
     val focusManager = LocalFocusManager.current
+
+    // call the function every second to update the countdown
+    var countdown by remember { mutableStateOf("") }
+
+    if (!state.isLoadingCampaignDetail) {
+        LaunchedEffect(Unit) {
+            while (true) {
+                countdown = unixCountdown(campaign.endDate)
+                delay(1000)
+            }
+        }
+    }
 
     LaunchedEffect(key1 = true) {
         viewModel.eventFlow.collectLatest { event ->
@@ -84,7 +97,8 @@ fun CampaignDetailScreen(
             DiscoverTopBar(
                 onBackClick = {
                     navigator.popBackStack()
-                }
+                },
+                screenName = stringResource(R.string.detail_campaign)
             )
         },
         scaffoldState = scaffoldState,
@@ -92,28 +106,34 @@ fun CampaignDetailScreen(
         floatingActionButton = {
             if (!campaign.joined && !state.isLoadingCampaignDetail) {
                 if (!state.isLoadingJoinCampaign) {
-                    ExtendedFloatingActionButton(
-                        text = {
-                            Text(
-                                text = stringResource(R.string.join_campaign),
-                                color = MaterialTheme.colors.onPrimary
-                            )
-                        },
-                        backgroundColor = MaterialTheme.colors.primary,
-                        onClick = {
-                            viewModel.onJoinCampaign(campaignId = id)
-                        }
-                    )
+                    GradientButton(
+                        onClick = { viewModel.onJoinCampaign(campaignId = id) },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = MaterialTheme.spacing.medium)
+                    ) {
+                        Text(
+                            text = stringResource(R.string.join_campaign),
+                            style = MaterialTheme.typography.body1,
+                            color = White,
+                            fontWeight = FontWeight.SemiBold
+                        )
+                    }
                 } else {
                     ExtendedFloatingActionButton(
                         text = {
                             Text(
                                 text = stringResource(R.string.joining_campaign),
-                                color = MaterialTheme.colors.onPrimary
+                                style = MaterialTheme.typography.body1,
+                                color = White,
+                                fontWeight = FontWeight.SemiBold
                             )
                         },
-                        backgroundColor = Color.Gray,
-                        onClick = {}
+                        backgroundColor = DarkGrey,
+                        onClick = {},
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = MaterialTheme.spacing.medium)
                     )
                 }
             }
@@ -140,12 +160,9 @@ fun CampaignDetailScreen(
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(
-                            horizontal = MaterialTheme.spacing.medium,
-                            vertical = MaterialTheme.spacing.small
-                        )
-                        .shadow(elevation = 2.dp, shape = RoundedCornerShape(8.dp))
-                        .clip(shape = RoundedCornerShape(8.dp))
+                        .padding(MaterialTheme.spacing.medium)
+                        .shadow(elevation = 2.dp, shape = RoundedCornerShape(20.dp))
+                        .clip(shape = RoundedCornerShape(20.dp))
                 ) {
                     Column(
                         modifier = Modifier
@@ -182,18 +199,22 @@ fun CampaignDetailScreen(
                                 horizontalAlignment = Alignment.Start
                             ) {
                                 Row(verticalAlignment = Alignment.CenterVertically) {
-                                    Icon(
-                                        imageVector = Icons.Filled.Person,
+                                    AsyncImage(
+                                        model = R.drawable.ic_group_participant,
                                         contentDescription = stringResource(R.string.participant_count),
-                                        tint = MaterialTheme.colors.onPrimary
+                                        colorFilter = ColorFilter.tint(MaterialTheme.colors.onPrimary),
+                                        modifier = Modifier.size(16.dp)
                                     )
-                                    Spacer(modifier = Modifier.width(2.dp))
+
+                                    Spacer(modifier = Modifier.width(MaterialTheme.spacing.extraSmall))
+
                                     Text(
                                         text = campaign.participantsCount.toString(),
                                         style = MaterialTheme.typography.body2,
                                         color = MaterialTheme.colors.onPrimary
                                     )
                                 }
+                                Spacer(modifier = Modifier.height(MaterialTheme.spacing.extraSmall))
                                 Row {
                                     Row(
                                         modifier = Modifier
@@ -204,25 +225,22 @@ fun CampaignDetailScreen(
                                             Text(
                                                 text = campaignCategory,
                                                 style = MaterialTheme.typography.overline,
-                                                color = Color.White,
+                                                color = White,
                                                 modifier = Modifier
-                                                    .clip(shape = RoundedCornerShape(10.dp))
+                                                    .clip(shape = RoundedCornerShape(20.dp))
                                                     .background(
                                                         when (campaignCategory) {
                                                             stringResource(R.string.cat_water_pollution) -> {
-                                                                Color("#206A5D".toColorInt())
+                                                                DarkBlue
                                                             }
                                                             stringResource(R.string.cat_air_pollution) -> {
-                                                                Color("#81B214".toColorInt())
+                                                                LightBlue
                                                             }
-                                                            stringResource(R.string.cat_food_waste) -> {
-                                                                Color("#F58634".toColorInt())
+                                                            stringResource(R.string.cat_waste_free) -> {
+                                                                CustardYellow
                                                             }
                                                             stringResource(R.string.cat_plastic_free) -> {
-                                                                Color("#E25DD7".toColorInt())
-                                                            }
-                                                            stringResource(R.string.cat_energy_efficiency) -> {
-                                                                Color("#DB3069".toColorInt())
+                                                                DarkRed
                                                             }
                                                             else -> {
                                                                 MaterialTheme.colors.primary
@@ -238,11 +256,12 @@ fun CampaignDetailScreen(
                                         }
                                     }
                                 }
+                                Spacer(modifier = Modifier.height(MaterialTheme.spacing.extraSmall))
                                 Row {
                                     Text(
                                         text = campaign.title,
                                         style = MaterialTheme.typography.h5,
-                                        fontWeight = FontWeight.Bold,
+                                        fontWeight = FontWeight.ExtraBold,
                                         color = MaterialTheme.colors.onPrimary
                                     )
                                 }
@@ -255,14 +274,9 @@ fun CampaignDetailScreen(
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(
-                            top = MaterialTheme.spacing.small,
-                            bottom = MaterialTheme.spacing.medium,
-                            start = MaterialTheme.spacing.medium,
-                            end = MaterialTheme.spacing.medium
-                        )
-                        .shadow(elevation = 2.dp, shape = RoundedCornerShape(8.dp))
-                        .clip(shape = RoundedCornerShape(8.dp))
+                        .padding(horizontal = MaterialTheme.spacing.medium)
+                        .shadow(elevation = 2.dp, shape = RoundedCornerShape(20.dp))
+                        .clip(shape = RoundedCornerShape(20.dp))
                         .background(MaterialTheme.colors.surface)
                         .padding(MaterialTheme.spacing.small)
                 ) {
@@ -276,14 +290,16 @@ fun CampaignDetailScreen(
                             ) {
                                 Row(
                                     modifier = Modifier
+                                        .fillMaxWidth()
                                         .padding(MaterialTheme.spacing.small),
-                                    horizontalArrangement = Arrangement.Start,
+                                    horizontalArrangement = Arrangement.Center,
                                     verticalAlignment = Alignment.CenterVertically
                                 ) {
-                                    Icon(
-                                        imageVector = Icons.Outlined.Person,
+                                    AsyncImage(
+                                        model = R.drawable.ic_initiator,
                                         contentDescription = stringResource(R.string.initiator),
-                                        tint = MaterialTheme.colors.onSurface
+                                        colorFilter = ColorFilter.tint(MaterialTheme.colors.onSurface),
+                                        modifier = Modifier.size(16.dp)
                                     )
                                     Spacer(modifier = Modifier.width(2.dp))
                                     Text(
@@ -301,56 +317,45 @@ fun CampaignDetailScreen(
 
                                 Row(
                                     modifier = Modifier
+                                        .fillMaxWidth()
                                         .padding(MaterialTheme.spacing.small)
-                                        .fillMaxWidth(),
-                                    horizontalArrangement = Arrangement.SpaceEvenly,
-                                    verticalAlignment = Alignment.CenterVertically
                                 ) {
                                     Column(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .clip(RoundedCornerShape(20.dp))
+                                            .shadow(
+                                                elevation = 2.dp,
+                                                shape = RoundedCornerShape(10.dp)
+                                            ),
                                         horizontalAlignment = Alignment.CenterHorizontally
                                     ) {
-                                        Row {
-                                            Text(
-                                                text = dateFormatter(campaign.startDate),
-                                                style = MaterialTheme.typography.subtitle1,
-                                                fontWeight = FontWeight.Bold,
-                                                color = MaterialTheme.colors.primary
-                                            )
-                                        }
-                                        Row {
-                                            Text(
-                                                text = stringResource(R.string.start_date),
-                                                style = MaterialTheme.typography.body2,
-                                                color = MaterialTheme.colors.primary
-                                            )
-                                        }
-                                    }
-
-                                    Column {
-                                        Divider(
-                                            color = MaterialTheme.colors.primary,
+                                        Row(
+                                            horizontalArrangement = Arrangement.Center,
                                             modifier = Modifier
-                                                .height(40.dp)
-                                                .width(1.dp)
-                                        )
-                                    }
-
-                                    Column(
-                                        horizontalAlignment = Alignment.CenterHorizontally
-                                    ) {
-                                        Row {
+                                                .fillMaxWidth()
+                                                .background(MaterialTheme.colors.primary)
+                                        ) {
                                             Text(
-                                                text = dateFormatter(campaign.endDate),
-                                                style = MaterialTheme.typography.subtitle1,
+                                                text = stringResource(R.string.campaign_will_end_in),
                                                 fontWeight = FontWeight.Bold,
-                                                color = MaterialTheme.colors.primary
+                                                color = MaterialTheme.colors.onPrimary,
+                                                style = MaterialTheme.typography.caption,
+                                                modifier = Modifier.padding(MaterialTheme.spacing.extraSmall)
                                             )
                                         }
-                                        Row {
+                                        Row(
+                                            horizontalArrangement = Arrangement.Center,
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .background(MintGreen)
+                                        ) {
                                             Text(
-                                                text = stringResource(R.string.end_date),
-                                                style = MaterialTheme.typography.body2,
-                                                color = MaterialTheme.colors.primary
+                                                text = countdown,
+                                                fontWeight = FontWeight.Bold,
+                                                color = MaterialTheme.colors.primary,
+                                                style = MaterialTheme.typography.h6,
+                                                modifier = Modifier.padding(MaterialTheme.spacing.small)
                                             )
                                         }
                                     }
@@ -365,9 +370,10 @@ fun CampaignDetailScreen(
                                     Column {
                                         Row {
                                             Text(
-                                                text = stringResource(R.string.impact),
-                                                fontSize = 18.sp,
-                                                fontWeight = FontWeight.Bold,
+                                                text = stringResource(R.string.about_this_campaign),
+                                                fontSize = 16.sp,
+                                                fontWeight = FontWeight.ExtraBold,
+                                                style = TextStyle(textDecoration = TextDecoration.Underline),
                                                 modifier = Modifier
                                                     .padding(bottom = MaterialTheme.spacing.small)
                                             )
@@ -391,14 +397,15 @@ fun CampaignDetailScreen(
                                     Column {
                                         Row {
                                             Text(
-                                                text = stringResource(R.string.tasks),
-                                                fontSize = 18.sp,
-                                                fontWeight = FontWeight.Bold,
+                                                text = stringResource(R.string.missions),
+                                                fontSize = 16.sp,
+                                                fontWeight = FontWeight.ExtraBold,
+                                                style = TextStyle(textDecoration = TextDecoration.Underline),
                                                 modifier = Modifier
-                                                    .padding(bottom = MaterialTheme.spacing.medium)
+                                                    .padding(bottom = MaterialTheme.spacing.small)
                                             )
                                         }
-                                        Row(modifier = Modifier.padding(horizontal = MaterialTheme.spacing.medium)) {
+                                        Row {
                                             Column(modifier = Modifier.fillMaxWidth()) {
                                                 campaign.campaignTasks.forEachIndexed { index, task ->
                                                     if (campaign.joined) {
@@ -412,21 +419,23 @@ fun CampaignDetailScreen(
                                                                 imageVector = Icons.Filled.CheckCircle,
                                                                 tint =
                                                                 if (task.completed)
-                                                                    MaterialTheme.colors.primary
+                                                                    MaterialTheme.colors.secondary
                                                                 else
                                                                     Color.Gray,
-                                                                contentDescription = stringResource(R.string.task_completion_mark),
-                                                                modifier = Modifier.padding(
-                                                                    end = MaterialTheme.spacing.medium
-                                                                )
+                                                                contentDescription = stringResource(
+                                                                    R.string.mission_completion_mark
+                                                                ),
+                                                                modifier = Modifier.padding(end = MaterialTheme.spacing.small)
                                                             )
                                                             Text(
-                                                                text = stringResource(R.string.task_number, index + 1),
-                                                                fontSize = 18.sp,
+                                                                text = stringResource(
+                                                                    R.string.mission_number,
+                                                                    index + 1
+                                                                ),
+                                                                style = MaterialTheme.typography.body1,
                                                                 fontWeight = FontWeight.Bold,
-                                                                color = MaterialTheme.colors.primary,
-                                                                modifier = Modifier
-                                                                    .padding(top = 3.dp)
+                                                                color = MaterialTheme.colors.secondary,
+                                                                modifier = Modifier.padding(top = MaterialTheme.spacing.extraSmall)
                                                             )
                                                         }
                                                         Row(
@@ -437,7 +446,7 @@ fun CampaignDetailScreen(
                                                             Text(
                                                                 text = task.name,
                                                                 textAlign = TextAlign.Start,
-                                                                style = MaterialTheme.typography.body1
+                                                                style = MaterialTheme.typography.caption
                                                             )
                                                         }
 
@@ -463,7 +472,7 @@ fun CampaignDetailScreen(
                                                                         .fillMaxSize()
                                                                         .clip(
                                                                             shape = RoundedCornerShape(
-                                                                                8.dp
+                                                                                20.dp
                                                                             )
                                                                         )
                                                                 )
@@ -476,7 +485,7 @@ fun CampaignDetailScreen(
                                                                 if (task.proofCaption != "") {
                                                                     Text(
                                                                         text = "\"${task.proofCaption}\"",
-                                                                        fontStyle = FontStyle.Italic,
+                                                                        fontWeight = FontWeight.Bold,
                                                                         style = MaterialTheme.typography.caption
                                                                     )
                                                                 }
@@ -510,26 +519,27 @@ fun CampaignDetailScreen(
                                                         Row(
                                                             verticalAlignment = Alignment.Top,
                                                             modifier = Modifier.padding(
-                                                                bottom = MaterialTheme.spacing.small
+                                                                MaterialTheme.spacing.extraSmall
                                                             )
                                                         ) {
                                                             Column {
                                                                 Text(
-                                                                    text = "${index + 1}",
-                                                                    fontSize = 18.sp,
+                                                                    text = "${index + 1}.",
+                                                                    style = MaterialTheme.typography.caption,
                                                                     fontWeight = FontWeight.Bold,
-                                                                    color = MaterialTheme.colors.primary,
-                                                                    modifier = Modifier
-                                                                        .padding(end = MaterialTheme.spacing.medium)
+                                                                    color = MaterialTheme.colors.secondary
                                                                 )
                                                             }
+                                                            Spacer(
+                                                                modifier = Modifier.width(
+                                                                    MaterialTheme.spacing.small
+                                                                )
+                                                            )
                                                             Column {
                                                                 Text(
                                                                     text = task.name,
                                                                     textAlign = TextAlign.Start,
-                                                                    style = MaterialTheme.typography.body1,
-                                                                    modifier = Modifier
-                                                                        .padding(top = 3.dp)
+                                                                    style = MaterialTheme.typography.caption
                                                                 )
                                                             }
                                                         }
@@ -540,7 +550,7 @@ fun CampaignDetailScreen(
                                                         )
                                                     ) {
                                                         Divider(
-                                                            color = Color.Gray,
+                                                            color = DarkGrey,
                                                             thickness = 1.dp,
                                                         )
                                                     }
@@ -550,6 +560,47 @@ fun CampaignDetailScreen(
                                     }
                                 }
                             }
+                        }
+                    }
+                }
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(
+                            top = MaterialTheme.spacing.medium,
+                            bottom = 96.dp,
+                            start = MaterialTheme.spacing.large,
+                            end = MaterialTheme.spacing.large
+                        ),
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    OutlinedButton(
+                        border = BorderStroke(1.dp, MaterialTheme.colors.primary),
+                        shape = RoundedCornerShape(20.dp),
+                        colors = ButtonDefaults.buttonColors(MaterialTheme.colors.surface),
+                        onClick = {
+                            // TODO: share campaign
+                        },
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.Center
+                        ) {
+                            AsyncImage(
+                                model = R.drawable.ic_share_campaign,
+                                contentDescription = stringResource(R.string.participant_count),
+                                colorFilter = ColorFilter.tint(MaterialTheme.colors.primary),
+                                modifier = Modifier.size(16.dp)
+                            )
+                            Spacer(modifier = Modifier.width(MaterialTheme.spacing.small))
+                            Text(
+                                text = stringResource(R.string.share_campaign),
+                                fontWeight = FontWeight.SemiBold,
+                                color = MaterialTheme.colors.primary,
+                                style = MaterialTheme.typography.button
+                            )
                         }
                     }
                 }

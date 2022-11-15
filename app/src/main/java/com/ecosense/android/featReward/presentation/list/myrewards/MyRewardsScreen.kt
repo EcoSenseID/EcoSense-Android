@@ -73,7 +73,7 @@ fun MyRewardsScreen(
                 onBackClick = {
                     navigator.popBackStack()
                 },
-                screenName = "My EcoRewards"
+                screenName = stringResource(R.string.my_ecorewards)
             )
         },
         scaffoldState = scaffoldState

@@ -51,9 +51,9 @@
     <string name="choose_category">Pilih Kategori</string>
     <string name="view_all">Lihat semua</string>
     <string name="browse_categories">Telusuri kategori</string>
-    <string name="all_campaign">Semua Kampanye</string>
+    <string name="all_campaigns">Semua Kampanye</string>
     <string name="all">Semua</string>
-    <string name="add_caption">Tambahkan Keterangan</string>
+    <string name="write_your_experience">Tuliskan pengalamanmu</string>
     <string name="new_campaign">Kampanye Baru</string>
     <string name="trending_campaign">Kampanye Trending</string>
     <string name="new_label">Baru</string>
@@ -62,7 +62,6 @@
     <string name="cat_plastic_free">Bebas Plastik</string>
     <string name="cat_energy_efficiency">Efisiensi Energi</string>
     <string name="show_all_campaign">Tampilkan Semua Kampanye</string>
-    <string name="impact">Dampak</string>
     <string name="open_camera">Buka Kamera</string>
     <string name="open_gallery">Buka Galeri</string>
     <string name="back">Kembali</string>
@@ -196,4 +195,5 @@
     <string name="older">Lebih lama</string>
     <string name="em_empty_notifications">Kamu belum dapat notifikasi</string>
     <string name="login">Masuk</string>
+    <string name="cat_waste_free">Bebas Limbah</string>
 </resources>

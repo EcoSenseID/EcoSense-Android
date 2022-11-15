@@ -14,17 +14,20 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.toColorInt
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import coil.size.Scale
 import com.ecosense.android.R
+import com.ecosense.android.core.presentation.theme.White
 import com.ecosense.android.core.presentation.theme.spacing
 import com.ecosense.android.destinations.BrowseCampaignScreenDestination
 import com.ecosense.android.featDiscoverCampaign.domain.model.Category
@@ -58,40 +61,60 @@ fun BrowseCategory(
                         .padding(
                             horizontal = MaterialTheme.spacing.medium
                         )
-                        .width(125.dp)
-                        .fillMaxHeight()
+                        .width(120.dp)
+                        .height(150.dp)
                 ) {
                     Column(
                         horizontalAlignment = Alignment.Start,
                         modifier = modifier
-                            .shadow(elevation = 2.dp, shape = RoundedCornerShape(8.dp))
-                            .clip(shape = RoundedCornerShape(8.dp))
+                            .shadow(elevation = 2.dp, shape = RoundedCornerShape(20.dp))
+                            .clip(shape = RoundedCornerShape(20.dp))
                             .clickable(onClick = {
                                 navigator.navigate(
                                     BrowseCampaignScreenDestination(
                                         search = null,
-                                        categoryId = null
+                                        categoryId = null,
+                                        categoryName = "All Campaigns"
                                     )
                                 )
                             })
                             .background(MaterialTheme.colors.surface)
                             .fillMaxSize()
                     ) {
-                        Row(
-                            modifier = modifier
-                                .fillMaxSize()
-                                .background(MaterialTheme.colors.primary),
-                            horizontalArrangement = Arrangement.Center,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Text(
-                                text = stringResource(R.string.all),
-                                style = MaterialTheme.typography.h5,
-                                fontWeight = FontWeight.Bold,
-                                color = MaterialTheme.colors.onPrimary,
-                                modifier = modifier
-                                    .wrapContentSize()
+                        Box(modifier = modifier.fillMaxSize()) {
+                            AsyncImage(
+                                model = ImageRequest.Builder(LocalContext.current)
+                                    .data(R.drawable.all_campaign)
+                                    .crossfade(true)
+                                    .scale(Scale.FILL)
+                                    .build(),
+                                contentDescription = stringResource(R.string.all_campaigns),
+                                contentScale = ContentScale.Crop,
+                                modifier = modifier.fillMaxSize()
                             )
+                            Row(
+                                modifier = modifier
+                                    .fillMaxSize()
+                                    .background(
+                                        Brush.verticalGradient(
+                                            colors = listOf(
+                                                Color.Transparent,
+                                                MaterialTheme.colors.secondary
+                                            )
+                                        )
+                                    ),
+                                horizontalArrangement = Arrangement.Center,
+                                verticalAlignment = Alignment.Bottom
+                            ) {
+                                Text(
+                                    text = stringResource(R.string.all_campaigns),
+                                    textAlign = TextAlign.Center,
+                                    style = MaterialTheme.typography.caption,
+                                    fontWeight = FontWeight.Bold,
+                                    color = White,
+                                    modifier = modifier.padding(MaterialTheme.spacing.medium)
+                                )
+                            }
                         }
                     }
                 }
@@ -100,27 +123,30 @@ fun BrowseCategory(
                 Row(
                     modifier = modifier
                         .fillMaxWidth()
-                        .fillMaxHeight()
+                        .height(150.dp)
                 ) {
                     categories.forEach { category ->
                         Column(
                             horizontalAlignment = Alignment.CenterHorizontally,
                             modifier = modifier
                                 .padding(end = MaterialTheme.spacing.medium)
-                                .shadow(elevation = 2.dp, shape = RoundedCornerShape(8.dp))
-                                .clip(shape = RoundedCornerShape(8.dp))
+                                .shadow(elevation = 2.dp, shape = RoundedCornerShape(20.dp))
+                                .clip(shape = RoundedCornerShape(20.dp))
                                 .clickable(onClick = {
                                     navigator.navigate(
                                         BrowseCampaignScreenDestination(
                                             search = null,
-                                            categoryId = category.id
+                                            categoryId = category.id,
+                                            categoryName = category.name
                                         )
                                     )
                                 })
                                 .background(MaterialTheme.colors.surface)
                                 .fillMaxSize()
                         ) {
-                            Row(modifier = Modifier.width(125.dp)) {
+                            Row(
+                                modifier = Modifier.width(120.dp)
+                            ) {
                                 Box(modifier = modifier.fillMaxSize()) {
                                     AsyncImage(
                                         model = ImageRequest.Builder(LocalContext.current)
@@ -133,18 +159,26 @@ fun BrowseCategory(
                                         modifier = modifier.fillMaxSize()
                                     )
                                     Row(
-                                        modifier = modifier.fillMaxSize(),
+                                        modifier = modifier
+                                            .fillMaxSize()
+                                            .background(
+                                                Brush.verticalGradient(
+                                                    colors = listOf(
+                                                        Color.Transparent,
+                                                        Color(category.colorHex.toColorInt())
+                                                    )
+                                                )
+                                            ),
                                         horizontalArrangement = Arrangement.Center,
-                                        verticalAlignment = Alignment.CenterVertically
+                                        verticalAlignment = Alignment.Bottom
                                     ) {
                                         Text(
                                             text = category.name,
+                                            textAlign = TextAlign.Center,
                                             style = MaterialTheme.typography.caption,
                                             fontWeight = FontWeight.Bold,
-                                            color = Color.White,
-                                            modifier = modifier
-                                                .background(Color(category.colorHex.toColorInt()))
-                                                .padding(MaterialTheme.spacing.small)
+                                            color = White,
+                                            modifier = modifier.padding(MaterialTheme.spacing.medium)
                                         )
                                     }
                                 }

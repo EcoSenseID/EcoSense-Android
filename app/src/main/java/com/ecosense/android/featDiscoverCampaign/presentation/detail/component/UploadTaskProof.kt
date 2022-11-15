@@ -1,24 +1,30 @@
 package com.ecosense.android.featDiscoverCampaign.presentation.detail.component
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.AttachFile
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.OutlinedButton
+import androidx.compose.material.OutlinedTextField
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import coil.size.Scale
 import com.ecosense.android.R
+import com.ecosense.android.core.presentation.component.GradientButton
 import com.ecosense.android.core.presentation.theme.spacing
 import com.ecosense.android.featDiscoverCampaign.domain.model.CampaignTask
 import com.ecosense.android.featDiscoverCampaign.presentation.detail.CampaignDetailViewModel
@@ -42,25 +48,33 @@ fun UploadTaskProof(viewModel: CampaignDetailViewModel, task: CampaignTask, camp
             bottom = MaterialTheme.spacing.small
         )
     ) {
-        Button(
+        OutlinedButton(
+            border = BorderStroke(1.dp, MaterialTheme.colors.primary),
+            shape = RoundedCornerShape(20.dp),
             onClick = {
                 openPickImageDialog.value = true
             },
-            enabled = !state.isLoadingUploadProof,
-            modifier = Modifier
-                .fillMaxWidth()
-                .clip(
-                    shape = RoundedCornerShape(
-                        8.dp
-                    )
-                )
+            modifier = Modifier.fillMaxWidth()
         ) {
-            Icon(
-                imageVector = Icons.Outlined.AttachFile,
-                contentDescription = stringResource(R.string.attach_proof_photo)
-            )
-            Spacer(Modifier.width(MaterialTheme.spacing.extraSmall))
-            Text(stringResource(R.string.attach_proof_photo))
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center
+            ) {
+                AsyncImage(
+                    model = R.drawable.ic_attachment,
+                    contentDescription = stringResource(R.string.attach_proof_photo),
+                    colorFilter = ColorFilter.tint(MaterialTheme.colors.primary),
+                    modifier = Modifier.size(16.dp)
+                )
+                Spacer(modifier = Modifier.width(MaterialTheme.spacing.small))
+                Text(
+                    text = stringResource(R.string.attach_proof_photo),
+                    fontWeight = FontWeight.SemiBold,
+                    color = MaterialTheme.colors.primary,
+                    style = MaterialTheme.typography.button
+                )
+            }
         }
     }
 
@@ -69,7 +83,6 @@ fun UploadTaskProof(viewModel: CampaignDetailViewModel, task: CampaignTask, camp
             modifier = Modifier
                 .fillMaxWidth()
                 .wrapContentHeight()
-                .padding(bottom = MaterialTheme.spacing.small)
         ) {
             AsyncImage(
                 model = ImageRequest.Builder(
@@ -88,7 +101,7 @@ fun UploadTaskProof(viewModel: CampaignDetailViewModel, task: CampaignTask, camp
                     .fillMaxSize()
                     .clip(
                         shape = RoundedCornerShape(
-                            8.dp
+                            20.dp
                         )
                     )
             )
@@ -107,9 +120,10 @@ fun UploadTaskProof(viewModel: CampaignDetailViewModel, task: CampaignTask, camp
                     it
             },
             enabled = !state.isLoadingUploadProof,
+            shape = RoundedCornerShape(20.dp),
             label = {
                 Text(
-                    stringResource(R.string.add_caption)
+                    stringResource(R.string.write_your_experience)
                 )
             },
             modifier = Modifier.fillMaxSize(),
@@ -121,7 +135,7 @@ fun UploadTaskProof(viewModel: CampaignDetailViewModel, task: CampaignTask, camp
             bottom = MaterialTheme.spacing.small
         )
     ) {
-        Button(
+        GradientButton(
             onClick = {
                 viewModel.onUploadCompletionProof(
                     caption = inputValue.value.text,
@@ -134,14 +148,25 @@ fun UploadTaskProof(viewModel: CampaignDetailViewModel, task: CampaignTask, camp
                 .fillMaxWidth()
                 .clip(
                     shape = RoundedCornerShape(
-                        8.dp
+                        20.dp
                     )
                 )
         ) {
             if (!state.isLoadingUploadProof)
-                Text(stringResource(R.string.submit))
+                Text(
+                    text = stringResource(R.string.submit),
+                    fontWeight = FontWeight.SemiBold,
+                    color = MaterialTheme.colors.onPrimary,
+                    style = MaterialTheme.typography.button
+                )
             else
-                Text(stringResource(R.string.submitting))
+                Text(
+                    text = stringResource(R.string.submitting),
+                    fontWeight = FontWeight.SemiBold,
+                    color = MaterialTheme.colors.onPrimary,
+                    style = MaterialTheme.typography.button
+                )
+
         }
     }
 }

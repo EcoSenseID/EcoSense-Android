@@ -4,6 +4,7 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.ecosense.android.core.domain.repository.AuthRepository
 import com.ecosense.android.core.presentation.util.UIEvent
 import com.ecosense.android.core.util.Resource
 import com.ecosense.android.featDiscoverCampaign.domain.model.Dashboard
@@ -11,16 +12,17 @@ import com.ecosense.android.featDiscoverCampaign.domain.repository.DiscoverCampa
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class DiscoverCampaignViewModel @Inject constructor(
+    private val authRepository: AuthRepository,
     private val discoverCampaignRepository: DiscoverCampaignRepository
 ) : ViewModel() {
+    val isLoggedIn: StateFlow<Boolean?> = authRepository.isLoggedIn
+        .stateIn(viewModelScope, SharingStarted.Eagerly, null)
 
     private val _state = mutableStateOf(DiscoverCampaignScreenState.defaultValue)
     val state: State<DiscoverCampaignScreenState> = _state
