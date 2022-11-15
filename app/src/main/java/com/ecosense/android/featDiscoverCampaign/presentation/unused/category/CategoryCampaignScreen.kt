@@ -1,4 +1,4 @@
-package com.ecosense.android.featDiscoverCampaign.presentation.category
+package com.ecosense.android.featDiscoverCampaign.presentation.unused.category
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -75,7 +75,8 @@ fun CategoryCampaignScreen(
             DiscoverTopBar(
                 onBackClick = {
                     navigator.popBackStack()
-                }
+                },
+                screenName = stringResource(R.string.category_campaign)
             )
         },
         scaffoldState = scaffoldState
@@ -122,7 +123,8 @@ fun CategoryCampaignScreen(
                                     navigator.navigate(
                                         BrowseCampaignScreenDestination(
                                             search = null,
-                                            categoryId = null
+                                            categoryId = null,
+                                            categoryName = "All"
                                         )
                                     )
                                 })
@@ -138,7 +140,7 @@ fun CategoryCampaignScreen(
                                 horizontalAlignment = Alignment.CenterHorizontally
                             ) {
                                 Text(
-                                    text = stringResource(R.string.all_campaign),
+                                    text = stringResource(R.string.all_campaigns),
                                     style = MaterialTheme.typography.h5,
                                     fontWeight = FontWeight.Bold,
                                     color = MaterialTheme.colors.onPrimary,
@@ -166,7 +168,8 @@ fun CategoryCampaignScreen(
                                         navigator.navigate(
                                             BrowseCampaignScreenDestination(
                                                 search = null,
-                                                categoryId = category.id
+                                                categoryId = category.id,
+                                                categoryName = category.name
                                             )
                                         )
                                     })
