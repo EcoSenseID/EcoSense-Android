@@ -1,8 +1,10 @@
 package com.ecosense.android.featDiscoverCampaign.data.util
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
+import com.ecosense.android.R
 import java.text.SimpleDateFormat
 import java.time.Duration
 import java.time.Instant
@@ -23,10 +25,21 @@ fun dateFormatter(date: String): String {
     }
 }
 
+@SuppressLint("SimpleDateFormat")
+fun dateTimeFormatter(date: String): String {
+    return if (date == "") {
+        ""
+    } else {
+        val sdf = SimpleDateFormat("MMMM d, yyyy 'at' HH:mm")
+        val netDate = Date(date.toLong() * 1000)
+        sdf.format(netDate)
+    }
+}
+
 @RequiresApi(Build.VERSION_CODES.O)
-fun countDays(date: String) : String {
+fun countDays(endDate: String): String {
     val start = LocalDateTime.now()
-    val end = Instant.ofEpochSecond(date.toLong())
+    val end = Instant.ofEpochSecond(endDate.toLong())
         .atZone(ZoneId.systemDefault())
         .toLocalDateTime()
 
@@ -36,11 +49,11 @@ fun countDays(date: String) : String {
     return result.toInt().toString()
 }
 
-fun unixCountdown(date: String): String {
+fun unixCountdown(endDate: String, context: Context): String {
     val currentTime = System.currentTimeMillis() / 1000
 
     val start = currentTime.toDouble()
-    val end = date.toDouble()
+    val end = endDate.toDouble()
 
     // get total seconds between the times
     var delta = end - start
@@ -60,5 +73,29 @@ fun unixCountdown(date: String): String {
     // what's left is seconds
     val seconds = floor(delta % 60)  // in theory the modulus is not required
 
-    return "${days.toInt()} Days ${hours.toInt()} Hrs ${minutes.toInt()} Mins ${seconds.toInt()} Secs"
+    return context.resources.getString(
+        R.string.placeholder_countdown,
+        days.toInt(),
+        hours.toInt(),
+        minutes.toInt(),
+        seconds.toInt()
+    )
+}
+
+fun campaignEndedStatus(endDate: String): Boolean {
+    val currentTime = System.currentTimeMillis() / 1000
+
+    val current = currentTime.toDouble()
+    val end = endDate.toDouble()
+
+    return end <= current
+}
+
+fun campaignNotStartedStatus(startDate: String): Boolean {
+    val currentTime = System.currentTimeMillis() / 1000
+
+    val current = currentTime.toDouble()
+    val start = startDate.toDouble()
+
+    return start >= current
 }

@@ -28,7 +28,8 @@ import coil.size.Scale
 import com.ecosense.android.R
 import com.ecosense.android.core.domain.model.Campaign
 import com.ecosense.android.core.presentation.theme.*
-import com.ecosense.android.featDiscoverCampaign.data.util.dateFormatter
+import com.ecosense.android.featDiscoverCampaign.data.util.campaignEndedStatus
+import com.ecosense.android.featDiscoverCampaign.data.util.dateTimeFormatter
 
 @Composable
 fun CampaignItem(
@@ -231,23 +232,42 @@ fun ShowItem(
                 Spacer(modifier = Modifier.width(2.dp))
 
                 Text(
-                    text = "participated",
+                    text = stringResource(R.string.participated),
                     style = MaterialTheme.typography.caption
                 )
             }
 
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.large))
 
+            // TODO: uncomment after api update
+//            if (campaignNotStartedStatus(campaign.startDate)) {
+//                Text(
+//                    text = stringResource(R.string.campaign_will_start_at),
+//                    style = MaterialTheme.typography.caption
+//                )
+//                Text(
+//                    text = dateTimeFormatter(campaign.startDate),
+//                    style = MaterialTheme.typography.caption,
+//                    fontWeight = FontWeight.Bold
+//                )
+//            } else {
+            if (campaignEndedStatus(campaign.endDate)) {
+                Text(
+                    text = stringResource(R.string.campaign_finished_at),
+                    style = MaterialTheme.typography.caption
+                )
+            } else {
+                Text(
+                    text = stringResource(R.string.campaign_will_end_at),
+                    style = MaterialTheme.typography.caption
+                )
+            }
             Text(
-                text = "Campaign will end on:",
-                style = MaterialTheme.typography.caption
-            )
-
-            Text(
-                text = dateFormatter(campaign.endDate),
+                text = dateTimeFormatter(campaign.endDate),
                 style = MaterialTheme.typography.caption,
                 fontWeight = FontWeight.Bold
             )
+//            }
         }
     }
 }

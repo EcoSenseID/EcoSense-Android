@@ -132,7 +132,7 @@ fun RecentCampaignItem(
                 }
 
                 CampaignCompletionStatus.FINISHED -> {
-                    Text(text = stringResource(R.string.campaign_finshed_at))
+                    Text(text = stringResource(R.string.campaign_finished_at))
                     Text(
                         text = campaign().finishedAt,
                         fontWeight = FontWeight.Bold,
