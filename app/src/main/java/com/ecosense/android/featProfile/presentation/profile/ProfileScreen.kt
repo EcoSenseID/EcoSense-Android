@@ -43,7 +43,7 @@ import com.ecosense.android.core.util.OnLifecycleEvent
 import com.ecosense.android.destinations.*
 import com.ecosense.android.featProfile.presentation.component.RecentStoryItem
 import com.ecosense.android.featProfile.presentation.profile.component.ProfileTopBar
-import com.ecosense.android.featProfile.presentation.profile.component.RecentCampaignItem
+import com.ecosense.android.featProfile.presentation.component.RecentCampaignItem
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlinx.coroutines.flow.collectLatest

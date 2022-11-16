@@ -19,7 +19,7 @@ import coil.compose.AsyncImage
 import com.ecosense.android.R
 import com.ecosense.android.core.presentation.theme.spacing
 import com.ecosense.android.destinations.CampaignDetailScreenDestination
-import com.ecosense.android.featProfile.presentation.profile.component.RecentCampaignItem
+import com.ecosense.android.featProfile.presentation.component.RecentCampaignItem
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 

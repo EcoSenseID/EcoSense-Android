@@ -196,4 +196,5 @@
     <string name="older">Lebih lama</string>
     <string name="em_empty_notifications">Kamu belum dapat notifikasi</string>
     <string name="login">Masuk</string>
+    <string name="campaign_ended_at">Kampanye berakhir pada</string>
 </resources>
