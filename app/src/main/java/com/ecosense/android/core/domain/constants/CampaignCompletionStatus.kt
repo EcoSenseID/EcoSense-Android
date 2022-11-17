@@ -5,4 +5,6 @@ object CampaignCompletionStatus {
     const val UNFINISHED: Int = 1
     const val BEING_VERIFIED: Int = 2
     const val FINISHED: Int = 3
+    const val REJECTED: Int = 4
+    const val ENDED: Int = 5
 }
