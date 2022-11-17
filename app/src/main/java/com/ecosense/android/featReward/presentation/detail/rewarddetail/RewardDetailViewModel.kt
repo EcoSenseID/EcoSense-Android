@@ -4,11 +4,9 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.ecosense.android.R
 import com.ecosense.android.core.domain.repository.AuthRepository
 import com.ecosense.android.core.presentation.util.UIEvent
 import com.ecosense.android.core.util.Resource
-import com.ecosense.android.core.util.UIText
 import com.ecosense.android.featReward.domain.repository.RewardRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
@@ -90,8 +88,9 @@ class RewardDetailViewModel @Inject constructor(
                         }
                         is Resource.Success -> {
                             _state.value = state.value.copy(isLoadingRedeemReward = false)
-                            _eventFlow.send(UIEvent.ShowSnackbar(UIText.StringResource(R.string.redeem_reward_success)))
+//                            _eventFlow.send(UIEvent.ShowSnackbar(UIText.StringResource(R.string.redeem_reward_success)))
                             getRewardDetail(rewardId = rewardId)
+                            onSheetConditionalValueChange(5)
                         }
                     }
                 }.launchIn(this)

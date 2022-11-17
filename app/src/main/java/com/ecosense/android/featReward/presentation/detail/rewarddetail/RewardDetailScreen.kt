@@ -480,6 +480,212 @@ fun RewardDetailScreen(
                         }
                     }
                 }
+                4 -> {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .wrapContentHeight()
+                            .padding(MaterialTheme.spacing.medium)
+                    ) {
+                        Column {
+                            Row(
+                                horizontalArrangement = Arrangement.Center,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                            ) {
+                                Text(
+                                    text = stringResource(R.string.donation_caution),
+                                    style = MaterialTheme.typography.body1,
+                                    textAlign = TextAlign.Center
+                                )
+                            }
+
+                            Row(
+                                horizontalArrangement = Arrangement.Center,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                            ) {
+                                Text(
+                                    text = stringResource(R.string.ecopoints),
+                                    style = MaterialTheme.typography.body1,
+                                    fontWeight = FontWeight.Bold,
+                                    textAlign = TextAlign.Center,
+                                    color = MaterialTheme.colors.secondary
+                                )
+                                Text(
+                                    text = stringResource(R.string.question_mark),
+                                    style = MaterialTheme.typography.body1,
+                                    textAlign = TextAlign.Center
+                                )
+                            }
+
+                            Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
+
+                            Row(
+                                horizontalArrangement = Arrangement.SpaceEvenly,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                            ) {
+                                Column(
+                                    modifier = Modifier
+                                        .height(40.dp)
+                                        .width(150.dp)
+                                ) {
+                                    if (!state.isLoadingRequestReward) {
+                                        OutlinedButton(
+                                            enabled = !state.isLoadingRequestReward,
+                                            border = BorderStroke(width = 1.dp, color = DarkRed),
+                                            shape = RoundedCornerShape(10.dp),
+                                            colors = ButtonDefaults.buttonColors(MaterialTheme.colors.surface),
+                                            onClick = {
+                                                coroutineScope.launch {
+                                                    if (sheetState.isExpanded) {
+                                                        sheetState.collapse()
+                                                    }
+                                                }
+                                            },
+                                            modifier = Modifier.fillMaxSize()
+                                        ) {
+                                            Text(
+                                                text = stringResource(R.string.cancel),
+                                                fontWeight = FontWeight.Medium,
+                                                color = DarkRed,
+                                                style = MaterialTheme.typography.button
+                                            )
+                                        }
+                                    } else {
+                                        Button(
+                                            onClick = {},
+                                            modifier = Modifier.fillMaxSize(),
+                                            shape = RoundedCornerShape(10.dp),
+                                            colors = ButtonDefaults.buttonColors(DarkGrey)
+                                        ) {
+                                            Text(
+                                                text = stringResource(R.string.cancel),
+                                                style = MaterialTheme.typography.button,
+                                                color = White,
+                                                fontWeight = FontWeight.Medium
+                                            )
+                                        }
+                                    }
+                                }
+
+                                Column(
+                                    modifier = Modifier
+                                        .height(40.dp)
+                                        .width(150.dp)
+                                ) {
+                                    if (!state.isLoadingRequestReward) {
+                                        GradientButton(
+                                            enabled = !state.isLoadingRequestReward,
+                                            shape = RoundedCornerShape(10.dp),
+                                            onClick = {
+                                                viewModel.onRedeemRewardJob(
+                                                    rewardId = rewardId
+                                                )
+                                            },
+                                            modifier = Modifier.fillMaxSize()
+                                        ) {
+                                            Text(
+                                                text = stringResource(R.string.yes_exclamation),
+                                                fontWeight = FontWeight.Medium,
+                                                color = White,
+                                                style = MaterialTheme.typography.button
+                                            )
+                                        }
+                                    } else {
+                                        Button(
+                                            onClick = {},
+                                            modifier = Modifier.fillMaxSize(),
+                                            shape = RoundedCornerShape(10.dp),
+                                            colors = ButtonDefaults.buttonColors(DarkGrey)
+                                        ) {
+                                            Text(
+                                                text = stringResource(R.string.sending),
+                                                textAlign = TextAlign.Center,
+                                                style = MaterialTheme.typography.button,
+                                                color = White,
+                                                fontWeight = FontWeight.Medium
+                                            )
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                5 -> {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .wrapContentHeight()
+                            .padding(MaterialTheme.spacing.medium)
+                    ) {
+                        Column {
+                            Row(
+                                horizontalArrangement = Arrangement.Center,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                            ) {
+                                Box(
+                                    contentAlignment = Alignment.Center,
+                                    modifier = Modifier
+                                        .size(50.dp)
+                                        .background(brush = GradientLighter, shape = CircleShape)
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Default.Done,
+                                        contentDescription = stringResource(R.string.donation_sent),
+                                        tint = White,
+                                        modifier = Modifier.size(30.dp)
+                                    )
+                                }
+                            }
+
+                            Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
+
+                            Row(
+                                horizontalArrangement = Arrangement.Center,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                            ) {
+                                Text(
+                                    text = stringResource(R.string.donation_sent_description),
+                                    textAlign = TextAlign.Center,
+                                    style = MaterialTheme.typography.body1
+                                )
+                            }
+
+                            Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
+
+                            Row(
+                                horizontalArrangement = Arrangement.Center,
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                OutlinedButton(
+                                    border = BorderStroke(1.dp, MaterialTheme.colors.secondary),
+                                    shape = RoundedCornerShape(20.dp),
+                                    colors = ButtonDefaults.buttonColors(MaterialTheme.colors.surface),
+                                    onClick = {
+                                        coroutineScope.launch {
+                                            if (sheetState.isExpanded) {
+                                                sheetState.collapse()
+                                            }
+                                        }
+                                    },
+                                    modifier = Modifier.fillMaxWidth()
+                                ) {
+                                    Text(
+                                        text = stringResource(R.string.okay),
+                                        fontWeight = FontWeight.Medium,
+                                        color = MaterialTheme.colors.secondary,
+                                        style = MaterialTheme.typography.button
+                                    )
+                                }
+                            }
+                        }
+                    }
+                }
             }
         },
         sheetPeekHeight = 24.dp,
@@ -536,16 +742,27 @@ fun RewardDetailScreen(
                             if (!state.isLoadingRedeemReward) {
                                 GradientButton(
                                     onClick = {
-                                        if (reward.category == "e-wallet") {
-                                            coroutineScope.launch {
-                                                if (sheetState.isCollapsed) {
-                                                    sheetState.expand()
+                                        when (reward.category) {
+                                            "e-wallet" -> {
+                                                coroutineScope.launch {
+                                                    if (sheetState.isCollapsed) {
+                                                        sheetState.expand()
+                                                    }
                                                 }
                                             }
-                                        } else {
-                                            viewModel.onRedeemRewardJob(
-                                                rewardId = rewardId
-                                            )
+                                            "donation" -> {
+                                                viewModel.onSheetConditionalValueChange(4)
+                                                coroutineScope.launch {
+                                                    if (sheetState.isCollapsed) {
+                                                        sheetState.expand()
+                                                    }
+                                                }
+                                            }
+                                            else -> {
+                                                viewModel.onRedeemRewardJob(
+                                                    rewardId = rewardId
+                                                )
+                                            }
                                         }
                                     },
                                     modifier = Modifier
