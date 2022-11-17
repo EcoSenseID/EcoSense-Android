@@ -1,7 +1,8 @@
 package com.ecosense.android.featDiscoverCampaign.data.model
 
+import com.ecosense.android.featDiscoverCampaign.domain.model.BrowseCategory
 import com.ecosense.android.featDiscoverCampaign.domain.model.CampaignDetail
-import com.ecosense.android.featDiscoverCampaign.domain.model.CampaignTask
+import com.ecosense.android.featDiscoverCampaign.domain.model.CampaignMission
 
 data class CampaignDetailDto(
     val error: Boolean?,
@@ -17,11 +18,13 @@ data class CampaignDetailDto(
     val endDate: String?,
     val description: String?,
     val joined: Boolean?,
-    val tasks: List<CampaignTasksDto>?
+    val completionStatus: Int?,
+    val earnedPoints: Int?,
+    val missions: List<MissionsItem>?,
+    val categories: List<CampaignCategoriesItem>?
 ) {
     fun toCampaignDetails() = CampaignDetail(
         participantsCount = participantsCount ?: 0,
-        category = category ?: emptyList(),
         title = title ?: "",
         posterUrl = posterUrl ?: "",
         isTrending = isTrending ?: false,
@@ -31,25 +34,40 @@ data class CampaignDetailDto(
         endDate = endDate ?: "",
         description = description ?: "",
         joined = joined ?: false,
-        campaignTasks = tasks?.map{ it.toCampaignTasks() } ?: emptyList()
+        completionStatus = completionStatus ?: 0,
+        earnedPoints = earnedPoints ?: 0,
+        missions = missions?.map { it.toCampaignMission() } ?: emptyList(),
+        categories = categories?.map { it.toBrowseCategory() } ?: emptyList()
     )
 }
 
-data class CampaignTasksDto(
-    val id: Int?,
+data class MissionsItem(
     val name: String?,
-    val completed: Boolean?,
-    val proofPhotoUrl: String?,
+    val description: String?,
+    val id: Int?,
+    val completionStatus: Int?,
     val proofCaption: String?,
-    val completedTimeStamp: String?
+    val completedTimeStamp: String?,
+    val proofPhotoUrl: String?
 ) {
-    fun toCampaignTasks() = CampaignTask(
-        id = id ?: 0,
+    fun toCampaignMission() = CampaignMission(
         name = name ?: "",
-        completed = completed ?: false,
-        proofPhotoUrl = proofPhotoUrl ?: "",
+        description = description ?: "",
+        id = id ?: 0,
+        completionStatus = completionStatus ?: 0,
         proofCaption = proofCaption ?: "",
-        completedTimeStamp = completedTimeStamp ?: ""
+        completedTimeStamp = completedTimeStamp ?: "",
+        proofPhotoUrl = proofPhotoUrl ?: ""
+    )
+}
+
+data class CampaignCategoriesItem(
+    val name: String?,
+    val colorHex: String?
+) {
+    fun toBrowseCategory() = BrowseCategory(
+        name = name ?: "",
+        colorHex = colorHex ?: ""
     )
 }
 

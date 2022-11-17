@@ -1,54 +1,58 @@
 package com.ecosense.android.featDiscoverCampaign.data.model
 
-import com.ecosense.android.core.domain.model.Campaign
-import com.ecosense.android.featDiscoverCampaign.domain.model.DashboardTask
+import com.ecosense.android.featDiscoverCampaign.domain.model.Category
+import com.ecosense.android.featDiscoverCampaign.domain.model.DashboardCampaign
+import com.ecosense.android.featDiscoverCampaign.domain.model.UncompletedMission
 
 data class DashboardDto(
+    val campaigns: List<DashboardCampaignsItem>?,
+    val categories: List<DashboardCategoriesItem>?,
     val error: Boolean?,
-    val message: String?,
-    val tasks: List<DashboardTasksItem>?,
-    val completedCampaigns: List<CompletedCampaignsItem>?
+    val message: String?
 )
 
-data class DashboardTasksItem(
-    val id: Int?,
-    val campaignId: Int?,
+data class DashboardCategoriesItem(
+    val photoUrl: String?,
     val name: String?,
-    val campaignName: String?,
-    val campaignEndDate: String?,
-    val tasksLeft: Int?,
-    val completed: Boolean?
-) {
-    fun toDashboardTask() = DashboardTask(
-        id = id ?: 0,
-        campaignId = campaignId ?: 0,
-        name = name ?: "",
-        campaignName = campaignName ?: "",
-        campaignEndDate = campaignEndDate ?: "",
-        tasksLeft = tasksLeft ?: 0,
-        completed = completed ?: false
-    )
-}
-
-data class CompletedCampaignsItem(
     val id: Int?,
-    val posterUrl: String?,
-    val title: String?,
-    val endDate: String?,
-    val category: List<String>?,
-    val participantsCount: Int?,
-    val isTrending: Boolean?,
-    val isNew: Boolean?
+    val colorHex: String?
 ) {
-    fun toCampaign() = Campaign(
+    fun toCategories() = Category(
         id = id ?: 0,
-        posterUrl = posterUrl ?: "",
-        title = title ?: "",
-        endDate = endDate ?: "",
-        category = category ?: emptyList(),
-        participantsCount = participantsCount ?: 0,
-        isTrending = isTrending ?: false,
-        isNew = isNew ?: false,
+        photoUrl = photoUrl ?: "",
+        name = name ?: "",
+        colorHex = colorHex ?: ""
     )
 }
 
+data class DashboardCampaignsItem(
+    val missionCompleted: Int?,
+    val endDate: String?,
+    val name: String?,
+    val uncompletedMissions: List<UncompletedMissionsItem>?,
+    val id: Int?,
+    val completionStatus: Int?,
+    val missionLeft: Int?
+) {
+    fun toDashboardCampaign() = DashboardCampaign(
+        missionCompleted = missionCompleted ?: 0,
+        endDate = endDate ?: "",
+        name = name ?: "",
+        uncompletedMissions = uncompletedMissions?.map { it.toUncompletedMission() } ?: emptyList(),
+        id = id ?: 0,
+        completionStatus = completionStatus ?: 0,
+        missionLeft = missionLeft ?: 0
+    )
+}
+
+data class UncompletedMissionsItem(
+    val name: String?,
+    val id: Int?,
+    val completionStatus: Int?
+) {
+    fun toUncompletedMission() = UncompletedMission(
+        name = name ?: "",
+        id = id ?: 0,
+        completionStatus = completionStatus ?: 0
+    )
+}
