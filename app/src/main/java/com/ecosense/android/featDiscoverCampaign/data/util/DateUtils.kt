@@ -19,18 +19,18 @@ fun dateFormatter(date: String): String {
     return if (date == "") {
         ""
     } else {
-        val sdf = SimpleDateFormat("dd MMMM yyyy")
+        val sdf = SimpleDateFormat("d MMMM yyyy")
         val netDate = Date(date.toLong() * 1000)
         sdf.format(netDate)
     }
 }
 
 @SuppressLint("SimpleDateFormat")
-fun dateTimeFormatter(date: String): String {
+fun dateTimeFormatter(date: String, context: Context): String {
     return if (date == "") {
         ""
     } else {
-        val sdf = SimpleDateFormat("MMMM d, yyyy 'at' HH:mm")
+        val sdf = SimpleDateFormat(context.resources.getString(R.string.campaign_list_date_format))
         val netDate = Date(date.toLong() * 1000)
         sdf.format(netDate)
     }
