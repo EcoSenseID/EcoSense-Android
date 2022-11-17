@@ -1,5 +1,7 @@
 package com.ecosense.android.featAuth.presentation.registration
 
+import android.content.Intent
+import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -141,17 +143,14 @@ fun RegistrationScreen(
                 Text(text = stringResource(R.string.i_agree_to_the).plus(" "))
 
                 Text(
-                    text = stringResource(R.string.terms),
-                    color = MaterialTheme.colors.secondary,
-                    modifier = Modifier.clickable { },
-                )
-
-                Text(text = " ${stringResource(R.string.and)} ")
-
-                Text(
                     text = stringResource(R.string.privacy_policy),
                     color = MaterialTheme.colors.secondary,
-                    modifier = Modifier.clickable { },
+                    modifier = Modifier.clickable {
+                        val url = context.getString(R.string.url_ecosense_privacy_policy)
+                        Intent(Intent.ACTION_VIEW)
+                            .apply { data = Uri.parse(url) }
+                            .let { context.startActivity(it) }
+                    },
                 )
             }
 

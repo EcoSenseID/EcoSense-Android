@@ -284,4 +284,5 @@
     <string name="url_ecosense_linkedin" translatable="false">https://www.linkedin.com/company/ecosense-indonesia</string>
     <string name="em_empty_notifications">It\'s empty. You have no notifications yet</string>
     <string name="campaign_ended_at">Campaign ended at</string>
+    <string name="url_ecosense_privacy_policy" translatable="false">https://ecosense.id/privacy-policy</string>
 </resources>
