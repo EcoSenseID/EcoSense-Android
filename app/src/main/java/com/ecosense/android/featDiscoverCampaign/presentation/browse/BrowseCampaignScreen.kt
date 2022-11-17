@@ -51,7 +51,10 @@ fun BrowseCampaignScreen(
     val sortByList = listOf(
         stringResource(R.string.show_all_campaign),
         stringResource(R.string.new_campaign),
-        stringResource(R.string.trending_campaign)
+        stringResource(R.string.trending_campaign),
+        stringResource(R.string.on_going_campaign),
+        stringResource(R.string.coming_soon_campaign),
+        stringResource(R.string.finished_campaign)
     )
     var selectedSort by remember { mutableStateOf("") }
 
