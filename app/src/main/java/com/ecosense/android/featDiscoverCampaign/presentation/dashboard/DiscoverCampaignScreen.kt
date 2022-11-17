@@ -85,7 +85,7 @@ fun DiscoverCampaignScreen(
                     BrowseCampaignScreenDestination(
                         search = it,
                         categoryId = null,
-                        categoryName = "Search Campaign"
+                        categoryName = context.resources.getString(R.string.search_for_campaign)
                     )
                 )
             })

@@ -243,7 +243,7 @@ fun RewardHomepageScreen(
                         modifier = Modifier.clickable(onClick = {
                             navigator.navigate(
                                 RewardsScreenDestination(
-                                    "Donation",
+                                    context.resources.getString(R.string.donation),
                                     2,
                                     state.rewardHomepage.totalPoints
                                 )
@@ -417,7 +417,7 @@ fun RewardHomepageScreen(
                         modifier = Modifier.clickable(onClick = {
                             navigator.navigate(
                                 RewardsScreenDestination(
-                                    "E-Wallet",
+                                    context.resources.getString(R.string.ewallet),
                                     1,
                                     state.rewardHomepage.totalPoints
                                 )
