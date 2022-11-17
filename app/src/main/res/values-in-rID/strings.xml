@@ -48,9 +48,9 @@
     <string name="ecosense_user">EcoFriend</string>
     <string name="experiences">Pengalaman</string>
     <string name="history">Riwayat</string>
-    <string name="choose_category">Pilih Kategori</string>
+    <string name="choose_category">Pilih kategori</string>
     <string name="view_all">Lihat semua</string>
-    <string name="browse_categories">Telusuri kategori</string>
+    <string name="browse_categories">Jelajahi Kategori</string>
     <string name="all_campaigns">Semua Kampanye</string>
     <string name="all">Semua</string>
     <string name="write_your_experience">Tuliskan pengalamanmu</string>
@@ -119,7 +119,7 @@
     <string name="cd_back">Kembali</string>
     <string name="story">Cerita</string>
     <string name="cd_attach_photo">Lampirkan foto</string>
-    <string name="post">Pos</string>
+    <string name="post">Unggah</string>
     <string name="reply_to_this_story">Balas cerita ini</string>
     <string name="create_a_story">Buat sebuah cerita</string>
     <string name="username_just_finished_a_campaign">%1$s baru saja menyelesaikan sebuah kampanye!</string>
@@ -148,7 +148,7 @@
     <string name="completed_at">Terselesaikan pada:</string>
     <string name="em_empty_campaign_history">Kamu belum pernah mengikuti kampanye apa pun. Yuk segera ikut!</string>
     <string name="em_empty_story_history">Kamu belum pernah mengunggah apa pun. Yuk segera buat!</string>
-    <string name="campaign_finished_at">Kampanye diselesaikan pada</string>
+    <string name="campaign_finished_at">Kampanye telah selesai pada</string>
     <string name="campaign_will_end_at">Kampanye akan selesai pada</string>
     <string name="completion_is_being_verified">Ketuntasan sedang diverifikasi</string>
     <string name="settings">Pengaturan</string>
@@ -177,7 +177,7 @@
     <string name="application_language">Bahasa Aplikasi</string>
     <string name="language">Bahasa</string>
     <string name="em_caption_blank">Caption tidak boleh kosong!</string>
-    <string name="posting">Mengepos…</string>
+    <string name="posting">Mengunggah…</string>
     <string name="my_story_history">Riwayat Cerita Saya</string>
     <string name="em_please_login_first">Silakan masuk untuk melanjutkan</string>
     <string name="login_to_join_this_conversation">Masuk untuk bergabung ke percakapan ini</string>
@@ -197,85 +197,107 @@
     <string name="login">Masuk</string>
     <string name="cat_waste_free">Bebas Limbah</string>
     <string name="log_out">Keluar</string>
-    <string name="missions_to_go">Misi Untuk Dilakukan</string>
-    <string name="until_date" translatable="false">Sampai %s</string>
+    <string name="missions_to_go">Misi Tersisa</string>
+    <string name="until_date">Sampai %s</string>
     <string name="join_campaign">Ikuti Kampanye</string>
-    <string name="poster_of_campaign" translatable="false">Poster dari kampanye %s.</string>
+    <string name="poster_of_campaign">Poster dari kampanye %s.</string>
     <string name="participant_count">Jumlah Partisipan</string>
-    <string name="initiator">Pemrakarsa</string>
-    <string name="initiated_by">Diprakarsai oleh</string>
+    <string name="initiator">Inisiator</string>
+    <string name="initiated_by">Diinisiasi oleh</string>
     <string name="start_date">Tanggal Mulai</string>
     <string name="end_date">Tanggal Selesai</string>
-    <string name="missions" translatable="false">Misi:</string>
+    <string name="missions">Misi:</string>
     <string name="completed">Terselesaikan</string>
     <string name="proof_completion">Bukti dari penyelesaian misi %s.</string>
     <string name="unsubmitted_proof">Bukti dari penyelesaian misi %s yang belum dikirim.</string>
-    <string name="finished_on" translatable="false">Selesai pada %s</string>
-    <string name="submit" translatable="false">Kirim</string>
-    <string name="submitting" translatable="false">Mengirim</string>
-    <string name="sort_by" translatable="false">Sortir berdasar</string>
-    <string name="show_hide_dropdown" translatable="false">Tampilkan atau sembunyikan drop down</string>
-    <string name="days_left" translatable="false">%s hari tersisa</string>
-    <string name="close_search_bar" translatable="false">Buka Bilah Pencarian</string>
-    <string name="open_search_bar" translatable="false">Tutup Bilah Pencarian</string>
-    <string name="showing_search_result" translatable="false">Menampilkan hasil pencarian untuk \"%s\"</string>
+    <string name="submitted_on">Dikirimkan pada %s</string>
+    <string name="submit">Kirim</string>
+    <string name="submitting">Mengirimkan…</string>
+    <string name="sort_by">Sortir berdasar</string>
+    <string name="show_hide_dropdown">Tampilkan atau sembunyikan drop down</string>
+    <string name="days_left">%s hari tersisa</string>
+    <string name="close_search_bar">Buka Bilah Pencarian</string>
+    <string name="open_search_bar">Tutup Bilah Pencarian</string>
+    <string name="showing_search_result">Menampilkan hasil pencarian untuk \"%s\"</string>
     <string name="grant_permission">Berikan ijin</string>
     <string name="joining_campaign">Mengikuti Kampanye…</string>
-    <string name="upload_proof_success" translatable="false">Hore! Tugas berhasil dikirim. Semangat dan lanjutkan!</string>
-    <string name="join_campaign_success" translatable="false">Berhasil bergabung dengan kampanye. Selanjutnya, mari ubah dunia!</string>
-    <string name="complete_campaign_success" translatable="false">Selamat, Anda telah menyelesaikan kampanye ini! Buka halaman EcoReward untuk memeriksa EcoPoints Anda.</string>
+    <string name="upload_proof_success">Hore! Tugas berhasil dikirim. Semangat dan lanjutkan!</string>
+    <string name="join_campaign_success">Berhasil bergabung dengan kampanye. Selanjutnya, mari ubah dunia!</string>
+    <string name="submit_campaign_success">Pengiriman kampanye berhasil! Hasil kampanye kamu sedang dalam verifikasi sekarang.\nkamu akan menerima notifikasi setelah proses verifikasi selesai.</string>
     <string name="mission_number">Misi %s</string>
     <string name="mission_completion_mark">Tanda Penyelesaian Kampanye</string>
     <string name="whoops">Ups!</string>
     <string name="redeem_reward">Tukarkan %s EcoPoints</string>
     <string name="coming_soon">Segera hadir!</string>
-    <string name="redeem_reward_success" translatable="false">Berhasil menukarkan hadiah! Anda dapat menggunakannya di halaman EcoRewards Saya.</string>
+    <string name="redeem_reward_success">Berhasil menukarkan hadiah! kamu dapat menggunakannya di halaman EcoRewards Saya.</string>
     <string name="use_reward_success">Hadiah berhasil digunakan!</string>
     <string name="request_reward_success">Berhasil melakukan permintaan hadiah! Proses ini akan dilakukan secara manual, harap bersabar.</string>
-    <string name="ecoreward_tagline" translatable="false">Klaim EcoRewards Anda dan dapatkan manfaatnya!</string>
+    <string name="ecoreward_tagline">Klaim EcoRewards kamu dan dapatkan manfaatnya!</string>
     <string name="donation">Donasi</string>
     <string name="redeem">Tukar</string>
-    <string name="powered_by" translatable="false">Dipersembahkan oleh</string>
+    <string name="powered_by">Dipersembahkan oleh</string>
     <string name="valid_until">Berlaku hingga</string>
-    <string name="description" translatable="false">Deskripsi</string>
-    <string name="how_to_use" translatable="false">Cara Menggunakan</string>
+    <string name="description">Deskripsi</string>
+    <string name="how_to_use">Cara Penggunaan</string>
     <string name="terms_conditions">Syarat &amp; Ketentuan</string>
     <string name="use_reward">Gunakan Hadiah</string>
     <string name="using_reward">Menggunakan Hadiah</string>
     <string name="requested">Diminta</string>
     <string name="reward_form">Formulir Hadiah</string>
-    <string name="email_address" translatable="false">Alamat Email</string>
-    <string name="enter_email_address">Masukkan alamat email Anda</string>
+    <string name="email_address">Alamat Email</string>
+    <string name="enter_email_address">Masukkan alamat email</string>
     <string name="select_destination_ewallet">Pilih e-wallet tujuan</string>
-    <string name="choose_ewallet">Pilih jenis e-wallet Anda</string>
+    <string name="choose_ewallet">Pilih jenis e-wallet</string>
     <string name="ewallet_number">Nomor E-Wallet</string>
     <string name="enter_ewallet_number">Masukkan nomor e-wallet terkait</string>
-    <string name="ewallet_form_caution">Setelah Anda mengklik tombol kirim, Anda tidak dapat mengubah informasi Anda.\nJadi, pastikan Anda memasukkan informasi yang benar.</string>
-    <string name="redeem_limit_reached" translatable="false">Batas Penukaran Tercapai</string>
-    <string name="redeeming_reward" translatable="false">Menukarkan Hadiah…</string>
-    <string name="not_enough_ecopoints_title" translatable="false">Anda tidak punya cukup</string>
+    <string name="ewallet_form_caution">Setelah kamu mengklik tombol kirim, kamu tidak dapat mengubah informasi kamu.\nJadi, pastikan kamu memasukkan informasi yang benar.</string>
+    <string name="redeem_limit_reached">Batas Penukaran Tercapai</string>
+    <string name="redeeming_reward">Menukarkan Hadiah…</string>
+    <string name="not_enough_ecopoints_title">Kamu tidak punya cukup</string>
     <string name="okay">Oke</string>
-    <string name="not_enough_ecopoints_description" translatable="false">Anda belum memiliki cukup EcoPoints.\nMari bergabung dengan kampanye lain!</string>
-    <string name="reward_form_submitted" translatable="false">Formulir hadiah berhasil dikirim.</string>
-    <string name="reward_form_submitted_description" translatable="false">Formulir hadiah Anda telah dikirimkan.\nKami akan melakukan transfer dalam waktu</string>
-    <string name="max_1x24" translatable="false">maksimal 1x24 jam</string>
-    <string name="em_wallet_type_blank" translatable="false">Jenis e-wallet wajib diisi</string>
+    <string name="not_enough_ecopoints_description">Kamu belum memiliki cukup EcoPoints.\nAyo ikuti kampanye lain!</string>
+    <string name="reward_form_submitted">Formulir hadiah berhasil dikirim.</string>
+    <string name="reward_form_submitted_description">Formulir hadiah kamu telah dikirimkan.\nKami akan melakukan transfer dalam waktu</string>
+    <string name="max_1x24">maksimal 1x24 jam</string>
+    <string name="em_wallet_type_blank">Jenis e-wallet wajib diisi</string>
     <string name="em_wallet_number_blank">Nomor e-wallet wajib diisi</string>
-    <string name="em_invalid_wallet_number" translatable="false">Nomor e-wallet tidak valid. Silakan coba menggunakan nomor e-wallet lain</string>
+    <string name="em_invalid_wallet_number">Nomor e-wallet tidak valid. Silakan coba menggunakan nomor e-wallet lain</string>
     <string name="login_first">Masuk Terlebih Dahulu</string>
     <string name="login_first_to_redeem">Masuk Terlebih Dahulu untuk Melakukan Penukaran</string>
     <string name="my_ecorewards">EcoRewards Saya</string>
-    <string name="not_logged_ecopoints" translatable="false">Untuk mengetahui berapa EcoPoints Anda</string>
+    <string name="not_logged_ecopoints">Untuk mengetahui berapa EcoPoints kamu</string>
     <string name="category_campaign">Kategori Kampanye</string>
-    <string name="detail_campaign" translatable="false">Detail Kampanye</string>
-    <string name="dashboard_current_progress" translatable="false">Progres Anda saat ini untuk kampanye yang telah diikuti:</string>
-    <string name="about_this_campaign" translatable="false">Tentang Kampanye Ini:</string>
-    <string name="share_campaign" translatable="false">Bagikan kampanye</string>
-    <string name="campaign_will_end_in" translatable="false">Kampanye akan berakhir dalam</string>
-    <string name="campaign_will_start_in" translatable="false">Kampanye akan dimulai dalam</string>
-    <string name="login_to_see_missions" translatable="false">Masuk untuk melihat misi Anda</string>
-    <string name="participated" translatable="false">berpartisipasi</string>
-    <string name="campaign_ended" translatable="false">Kampanye berakhir</string>
-    <string name="campaign_will_start_at" translatable="false">Kampanye akan dimulai pada</string>
-    <string name="placeholder_countdown">%1$d Hari %2$d Jam %3$d Mnt %4$d Dtk</string>
+    <string name="detail_campaign">Detail Kampanye</string>
+    <string name="dashboard_current_progress">Progres kamu saat ini untuk kampanye yang diikuti:</string>
+    <string name="about_this_campaign">Tentang Kampanye Ini:</string>
+    <string name="share_campaign">Bagikan kampanye</string>
+    <string name="campaign_will_end_in">Kampanye akan berakhir dalam</string>
+    <string name="campaign_will_start_in">Kampanye akan dimulai dalam</string>
+    <string name="login_to_see_missions">Masuk untuk melihat misi kamu</string>
+    <string name="participated">berpartisipasi</string>
+    <string name="campaign_ended">Kampanye berakhir</string>
+    <string name="campaign_will_start_at">Kampanye akan dimulai pada</string>
+    <string name="placeholder_countdown">%1$d Hari %2$d Jam %3$d Men %4$d Det</string>
+    <string name="share_campaign_caption">Kamu semua harus bergabung dengan kampanye ini! Sangat seru!</string>
+    <string name="in_verification">Dalam Verifikasi</string>
+    <string name="finish_campaign">Selesaikan Kampanye</string>
+    <string name="finishing_campaign">Menyelesaikan Kampanye…</string>
+    <string name="resubmit">Kirim Ulang</string>
+    <string name="share_accomplishment">Bagikan pencapaianmu</string>
+    <string name="rejected">Ditolak</string>
+    <string name="rejected_description">Kamu dapat menjalankan kembali misi yang gagal. Setelah selesai, kamu dapat mengirim ulang.</string>
+    <string name="congrats_campaign_finished">Selamat! kamu telah menyelesaikan kampanye ini!</string>
+    <string name="youve_got">Kamu memperoleh</string>
+    <string name="share_campaign_accomplishment_caption">Saya telah menyelesaikan kampanye ini! Ayo, sekarang giliranmu!</string>
+    <string name="no_active_campaign">Kamu belum mengikuti kampanye yang aktif saat ini</string>
+    <string name="lets_join_one">Yuk ikuti salah satunya!</string>
+    <string name="no_missions_left">Hore! kamu telah mengirimkan semua misi pada kampanye ini.</string>
+    <string name="campaign_list_date_format">d MMMM yyyy \'pada\' HH:mm</string>
+    <string name="yes_exclamation">Ya!</string>
+    <string name="donation_caution">Apakah kamu yakin ingin mendonasikan</string>
+    <string name="donation_sent_description">Terima kasih! Donasi kamu telah terkirim.</string>
+    <string name="donation_sent">Donasi berhasil dikirim.</string>
+    <string name="on_going_campaign">Kampanye yang Sedang Berlangsung</string>
+    <string name="coming_soon_campaign">Kampanye yang Akan Datang</string>
+    <string name="finished_campaign">Kampanye yang Telah Selesai</string>
 </resources>

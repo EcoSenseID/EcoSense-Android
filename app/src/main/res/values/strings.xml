@@ -60,6 +60,9 @@
     <string name="write_your_experience">Write your experience</string>
     <string name="new_campaign">New Campaign</string>
     <string name="trending_campaign">Trending Campaign</string>
+    <string name="on_going_campaign">On Going Campaign</string>
+    <string name="coming_soon_campaign">Coming Soon Campaign</string>
+    <string name="finished_campaign">Finished Campaign</string>
     <string name="trending_label" translatable="false">Trending</string>
     <string name="new_label">New</string>
     <string name="cat_water_pollution">Water Pollution</string>
@@ -80,7 +83,7 @@
     <string name="completed">Completed</string>
     <string name="proof_completion">Proof of %s mission completion.</string>
     <string name="unsubmitted_proof">Unsubmitted proof of %s mission completion.</string>
-    <string name="finished_on">Finished on %s</string>
+    <string name="submitted_on">Submitted on %s</string>
     <string name="open_camera">Open Camera</string>
     <string name="open_gallery">Open Gallery</string>
     <string name="submit">Submit</string>
@@ -137,7 +140,7 @@
     <string name="joining_campaign">Joining Campaign…</string>
     <string name="upload_proof_success">Hurray! Task submitted successfully. Keep it up!</string>
     <string name="join_campaign_success">Successfully joined the campaign. Next, let\'s change the world!</string>
-    <string name="complete_campaign_success">Congratulations, you\'ve completed this campaign! Go to the EcoReward page to check your EcoPoints.</string>
+    <string name="submit_campaign_success">Campaign submission successful! Your campaign results are under verification now.\nYou will receive a notification once the verification process is complete.</string>
     <string name="mission_number">Mission %s</string>
     <string name="mission_completion_mark">Mission Completion Mark</string>
     <string name="cancel">Cancel</string>
@@ -222,6 +225,7 @@
     <string name="changing_email">Changing email…</string>
     <string name="confirm_logout">Are you sure you want to log out?</string>
     <string name="yes">Yes</string>
+    <string name="yes_exclamation">Yes!</string>
     <string name="application_language">Application Language</string>
     <string name="language">Language</string>
     <string name="em_caption_blank">Caption can not be blank!</string>
@@ -262,13 +266,16 @@
     <string name="ewallet_number">E-Wallet Number</string>
     <string name="enter_ewallet_number">Enter the associated e-wallet number</string>
     <string name="ewallet_form_caution">After you click the submit button, you can’t change your information.\nSo, make sure you enter the right information.</string>
+    <string name="donation_caution">Are you sure want to donate your</string>
     <string name="redeem_limit_reached">Redeem Limit Reached</string>
     <string name="redeeming_reward">Redeeming Reward…</string>
     <string name="not_enough_ecopoints_title">You don\'t have enough</string>
     <string name="not_enough_ecopoints_description">You don’t quite have enough EcoPoints yet.\nLet’s join another campaign!</string>
     <string name="okay">Okay</string>
     <string name="reward_form_submitted">Reward form submitted successfully.</string>
+    <string name="donation_sent">Donation sent successfully.</string>
     <string name="reward_form_submitted_description">Your reward form is submitted.\nWe will make the transfer within a</string>
+    <string name="donation_sent_description">Thank you! Your donation has been sent.</string>
     <string name="max_1x24">maximum of 1x24 hours</string>
     <string name="em_wallet_type_blank">E-wallet type can not be blank</string>
     <string name="em_wallet_number_blank">E-wallet number can not be blank</string>
@@ -293,4 +300,20 @@
     <string name="coming_soon">Coming soon!</string>
     <string name="campaign_will_start_at">Campaign will start at</string>
     <string name="placeholder_countdown">%1$d Days %2$d Hrs %3$d Mins %4$d Secs</string>
+    <string name="share_campaign_caption">You all should join this campaign! So exciting!</string>
+    <string name="share_campaign_accomplishment_caption">I\'ve finished this campaign! Come on, now it\'s your turn!</string>
+    <string name="in_verification">In Verification</string>
+    <string name="finish_campaign">Finish Campaign</string>
+    <string name="finishing_campaign">Finishing Campaign…</string>
+    <string name="resubmit">Resubmit</string>
+    <string name="share_accomplishment">Share your accomplishment</string>
+    <string name="rejected">Rejected</string>
+    <string name="rejected_description">You can retake the failed mission. Once you’ve done, you can resubmit.</string>
+    <string name="congrats_campaign_finished">Congratulation! You have finished this campaign!</string>
+    <string name="youve_got">You\'ve got</string>
+    <string name="no_active_campaign">You haven\'t joined any active campaigns yet</string>
+    <string name="lets_join_one">Let\'s join one!</string>
+    <string name="no_missions_left">Hurray! You have submitted all the missions in this campaign.</string>
+    <string name="campaign_list_date_format">MMMM d, yyyy \'at\' HH:mm</string>
+    <string name="question_mark" translatable="false">\?</string>
 </resources>
