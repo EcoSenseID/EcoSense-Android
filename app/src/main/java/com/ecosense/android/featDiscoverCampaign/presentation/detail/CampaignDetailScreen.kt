@@ -1,18 +1,18 @@
 package com.ecosense.android.featDiscoverCampaign.presentation.detail
 
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.background
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -27,22 +27,28 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.graphics.toColorInt
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import coil.size.Scale
 import com.ecosense.android.R
+import com.ecosense.android.core.domain.constants.CampaignCompletionStatus
 import com.ecosense.android.core.presentation.component.GradientButton
+import com.ecosense.android.core.presentation.model.CategoryPresentation
+import com.ecosense.android.core.presentation.model.SharedCampaignPresentation
 import com.ecosense.android.core.presentation.theme.*
 import com.ecosense.android.core.presentation.util.UIEvent
 import com.ecosense.android.core.presentation.util.asString
 import com.ecosense.android.destinations.LoginScreenDestination
+import com.ecosense.android.destinations.StoryComposerScreenDestination
 import com.ecosense.android.featDiscoverCampaign.data.util.campaignEndedStatus
 import com.ecosense.android.featDiscoverCampaign.data.util.campaignNotStartedStatus
 import com.ecosense.android.featDiscoverCampaign.data.util.dateFormatter
 import com.ecosense.android.featDiscoverCampaign.data.util.unixCountdown
 import com.ecosense.android.featDiscoverCampaign.presentation.component.DiscoverTopBar
 import com.ecosense.android.featDiscoverCampaign.presentation.detail.component.UploadTaskProof
+import com.ecosense.android.featReward.data.util.ecopointsFormatter
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlinx.coroutines.delay
@@ -121,92 +127,229 @@ fun CampaignDetailScreen(
         floatingActionButtonPosition = FabPosition.Center,
         floatingActionButton = {
             if (!state.isLoadingCampaignDetail) {
-                if (campaignEndedStatus(campaign.endDate)) {
-                    campaignEnded = true
-                    ExtendedFloatingActionButton(
-                        text = {
-                            Text(
-                                text = stringResource(R.string.campaign_ended),
-                                style = MaterialTheme.typography.body1,
-                                color = White,
-                                fontWeight = FontWeight.SemiBold
-                            )
+                if (viewModel.isLoggedIn.collectAsState().value != true) {
+                    GradientButton(
+                        onClick = {
+                            if (!state.isLoadingCampaignDetail) {
+                                navigator.navigate(
+                                    LoginScreenDestination()
+                                )
+                            }
                         },
-                        backgroundColor = SuperDarkGrey,
-                        onClick = {},
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(horizontal = MaterialTheme.spacing.medium)
-                    )
-                } else if (campaignNotStarted) {
-                    ExtendedFloatingActionButton(
-                        text = {
-                            Text(
-                                text = stringResource(R.string.coming_soon),
-                                style = MaterialTheme.typography.body1,
-                                color = White,
-                                fontWeight = FontWeight.SemiBold
-                            )
-                        },
-                        backgroundColor = SuperDarkGrey,
-                        onClick = {},
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = MaterialTheme.spacing.medium)
-                    )
+                    ) {
+                        Text(
+                            text = stringResource(R.string.login),
+                            style = MaterialTheme.typography.body1,
+                            color = White,
+                            fontWeight = FontWeight.SemiBold
+                        )
+                    }
                 } else {
-                    if (viewModel.isLoggedIn.collectAsState().value != true) {
-                        GradientButton(
-                            onClick = {
-                                if (!state.isLoadingCampaignDetail) {
-                                    navigator.navigate(
-                                        LoginScreenDestination()
-                                    )
-                                }
+                    if (campaignNotStarted) {
+                        ExtendedFloatingActionButton(
+                            text = {
+                                Text(
+                                    text = stringResource(R.string.coming_soon),
+                                    style = MaterialTheme.typography.body1,
+                                    color = White,
+                                    fontWeight = FontWeight.SemiBold
+                                )
                             },
+                            backgroundColor = SuperDarkGrey,
+                            onClick = {},
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(horizontal = MaterialTheme.spacing.medium)
-                        ) {
-                            Text(
-                                text = stringResource(R.string.login),
-                                style = MaterialTheme.typography.body1,
-                                color = White,
-                                fontWeight = FontWeight.SemiBold
-                            )
-                        }
+                        )
                     } else {
-                        if (!campaign.joined) {
-                            if (!state.isLoadingJoinCampaign) {
-                                GradientButton(
-                                    onClick = { viewModel.onJoinCampaign(campaignId = id) },
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .padding(horizontal = MaterialTheme.spacing.medium)
-                                ) {
+                        if (campaignEndedStatus(campaign.endDate)) {
+                            campaignEnded = true
+                            ExtendedFloatingActionButton(
+                                text = {
                                     Text(
-                                        text = stringResource(R.string.join_campaign),
+                                        text = stringResource(R.string.campaign_ended),
                                         style = MaterialTheme.typography.body1,
                                         color = White,
                                         fontWeight = FontWeight.SemiBold
                                     )
+                                },
+                                backgroundColor = SuperDarkGrey,
+                                onClick = {},
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(horizontal = MaterialTheme.spacing.medium)
+                            )
+                        } else {
+                            when (campaign.completionStatus) {
+                                CampaignCompletionStatus.BEING_VERIFIED -> {
+                                    ExtendedFloatingActionButton(
+                                        text = {
+                                            Text(
+                                                text = stringResource(R.string.in_verification),
+                                                style = MaterialTheme.typography.body1,
+                                                color = White,
+                                                fontWeight = FontWeight.SemiBold
+                                            )
+                                        },
+                                        backgroundColor = CustardYellow,
+                                        onClick = {},
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .padding(horizontal = MaterialTheme.spacing.medium)
+                                    )
                                 }
-                            } else {
-                                ExtendedFloatingActionButton(
-                                    text = {
+
+                                CampaignCompletionStatus.FINISHED -> {
+                                    GradientButton(
+                                        onClick = {
+                                            navigator.navigate(
+                                                StoryComposerScreenDestination(
+                                                    caption = context.resources.getString(R.string.share_campaign_accomplishment_caption),
+                                                    campaign = SharedCampaignPresentation(
+                                                        id = id,
+                                                        posterUrl = campaign.posterUrl,
+                                                        title = campaign.title,
+                                                        endAt = campaign.endDate,
+                                                        categories = campaign.categories.map {
+                                                            CategoryPresentation(
+                                                                name = it.name,
+                                                                colorHex = it.colorHex
+                                                            )
+                                                        },
+                                                        participantsCount = campaign.participantsCount,
+                                                        isTrending = campaign.isTrending,
+                                                        isNew = campaign.isNew
+                                                    )
+                                                )
+                                            )
+                                        },
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .padding(horizontal = MaterialTheme.spacing.medium)
+                                    ) {
                                         Text(
-                                            text = stringResource(R.string.joining_campaign),
+                                            text = stringResource(R.string.share_accomplishment),
                                             style = MaterialTheme.typography.body1,
                                             color = White,
                                             fontWeight = FontWeight.SemiBold
                                         )
-                                    },
-                                    backgroundColor = DarkGrey,
-                                    onClick = {},
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .padding(horizontal = MaterialTheme.spacing.medium)
-                                )
+                                    }
+                                }
+
+                                CampaignCompletionStatus.REJECTED -> {
+                                    if (state.allMissionIsReadyToSend) {
+                                        if (!state.isLoadingCompleteCampaign) {
+                                            ExtendedFloatingActionButton(
+                                                text = {
+                                                    Text(
+                                                        text = stringResource(R.string.resubmit),
+                                                        style = MaterialTheme.typography.body1,
+                                                        color = White,
+                                                        fontWeight = FontWeight.SemiBold
+                                                    )
+                                                },
+                                                backgroundColor = DarkBlue,
+                                                onClick = { viewModel.onCompleteCampaign(campaignId = id) },
+                                                modifier = Modifier
+                                                    .fillMaxWidth()
+                                                    .padding(horizontal = MaterialTheme.spacing.medium)
+                                            )
+                                        } else {
+                                            ExtendedFloatingActionButton(
+                                                text = {
+                                                    Text(
+                                                        text = stringResource(R.string.submitting),
+                                                        style = MaterialTheme.typography.body1,
+                                                        color = White,
+                                                        fontWeight = FontWeight.SemiBold
+                                                    )
+                                                },
+                                                backgroundColor = DarkGrey,
+                                                onClick = {},
+                                                modifier = Modifier
+                                                    .fillMaxWidth()
+                                                    .padding(horizontal = MaterialTheme.spacing.medium)
+                                            )
+                                        }
+                                    }
+                                }
+
+                                else -> {
+                                    if (!campaign.joined) {
+                                        if (!state.isLoadingJoinCampaign) {
+                                            GradientButton(
+                                                onClick = { viewModel.onJoinCampaign(campaignId = id) },
+                                                modifier = Modifier
+                                                    .fillMaxWidth()
+                                                    .padding(horizontal = MaterialTheme.spacing.medium)
+                                            ) {
+                                                Text(
+                                                    text = stringResource(R.string.join_campaign),
+                                                    style = MaterialTheme.typography.body1,
+                                                    color = White,
+                                                    fontWeight = FontWeight.SemiBold
+                                                )
+                                            }
+                                        } else {
+                                            ExtendedFloatingActionButton(
+                                                text = {
+                                                    Text(
+                                                        text = stringResource(R.string.joining_campaign),
+                                                        style = MaterialTheme.typography.body1,
+                                                        color = White,
+                                                        fontWeight = FontWeight.SemiBold
+                                                    )
+                                                },
+                                                backgroundColor = DarkGrey,
+                                                onClick = {},
+                                                modifier = Modifier
+                                                    .fillMaxWidth()
+                                                    .padding(horizontal = MaterialTheme.spacing.medium)
+                                            )
+                                        }
+                                    } else {
+                                        if (state.allMissionIsReadyToSend) {
+                                            if (!state.isLoadingCompleteCampaign) {
+                                                GradientButton(
+                                                    onClick = {
+                                                        viewModel.onCompleteCampaign(
+                                                            campaignId = id
+                                                        )
+                                                    },
+                                                    modifier = Modifier
+                                                        .fillMaxWidth()
+                                                        .padding(horizontal = MaterialTheme.spacing.medium)
+                                                ) {
+                                                    Text(
+                                                        text = stringResource(R.string.finish_campaign),
+                                                        style = MaterialTheme.typography.body1,
+                                                        color = White,
+                                                        fontWeight = FontWeight.SemiBold
+                                                    )
+                                                }
+                                            } else {
+                                                ExtendedFloatingActionButton(
+                                                    text = {
+                                                        Text(
+                                                            text = stringResource(R.string.finishing_campaign),
+                                                            style = MaterialTheme.typography.body1,
+                                                            color = White,
+                                                            fontWeight = FontWeight.SemiBold
+                                                        )
+                                                    },
+                                                    backgroundColor = DarkGrey,
+                                                    onClick = {},
+                                                    modifier = Modifier
+                                                        .fillMaxWidth()
+                                                        .padding(horizontal = MaterialTheme.spacing.medium)
+                                                )
+                                            }
+                                        }
+                                    }
+                                }
                             }
                         }
                     }
@@ -296,32 +439,14 @@ fun CampaignDetailScreen(
                                             .fillMaxWidth()
                                             .padding(top = MaterialTheme.spacing.extraSmall)
                                     ) {
-                                        for (campaignCategory in campaign.category) {
+                                        for (campaignCategory in campaign.categories) {
                                             Text(
-                                                text = campaignCategory,
+                                                text = campaignCategory.name,
                                                 style = MaterialTheme.typography.overline,
                                                 color = White,
                                                 modifier = Modifier
                                                     .clip(shape = RoundedCornerShape(20.dp))
-                                                    .background(
-                                                        when (campaignCategory) {
-                                                            stringResource(R.string.cat_water_pollution) -> {
-                                                                DarkBlue
-                                                            }
-                                                            stringResource(R.string.cat_air_pollution) -> {
-                                                                LightBlue
-                                                            }
-                                                            stringResource(R.string.cat_waste_free) -> {
-                                                                CustardYellow
-                                                            }
-                                                            stringResource(R.string.cat_plastic_free) -> {
-                                                                DarkRed
-                                                            }
-                                                            else -> {
-                                                                MaterialTheme.colors.primary
-                                                            }
-                                                        }
-                                                    )
+                                                    .background(Color(campaignCategory.colorHex.toColorInt()))
                                                     .padding(
                                                         horizontal = MaterialTheme.spacing.small,
                                                         vertical = 2.dp
@@ -390,8 +515,7 @@ fun CampaignDetailScreen(
                                     )
                                 }
 
-
-                                if (!campaignEnded) {
+                                if (!campaignEndedStatus(campaign.endDate)) {
                                     Row(
                                         modifier = Modifier
                                             .fillMaxWidth()
@@ -502,7 +626,7 @@ fun CampaignDetailScreen(
                                         }
                                         Row {
                                             Column(modifier = Modifier.fillMaxWidth()) {
-                                                campaign.campaignTasks.forEachIndexed { index, task ->
+                                                campaign.missions.forEachIndexed { index, mission ->
                                                     if (campaign.joined) {
                                                         Row(
                                                             modifier = Modifier.padding(
@@ -510,18 +634,31 @@ fun CampaignDetailScreen(
                                                             ),
                                                             verticalAlignment = Alignment.CenterVertically
                                                         ) {
-                                                            Icon(
-                                                                imageVector = Icons.Filled.CheckCircle,
-                                                                tint =
-                                                                if (task.completed)
-                                                                    MaterialTheme.colors.secondary
-                                                                else
-                                                                    Color.Gray,
-                                                                contentDescription = stringResource(
-                                                                    R.string.mission_completion_mark
-                                                                ),
-                                                                modifier = Modifier.padding(end = MaterialTheme.spacing.small)
-                                                            )
+                                                            if (mission.completionStatus == CampaignCompletionStatus.REJECTED) {
+                                                                Icon(
+                                                                    imageVector = Icons.Filled.AddCircle,
+                                                                    tint = DarkRed,
+                                                                    contentDescription = stringResource(
+                                                                        R.string.mission_completion_mark
+                                                                    ),
+                                                                    modifier = Modifier
+                                                                        .padding(end = MaterialTheme.spacing.small)
+                                                                        .rotate(45f)
+                                                                )
+                                                            } else {
+                                                                Icon(
+                                                                    imageVector = Icons.Filled.CheckCircle,
+                                                                    tint =
+                                                                    if (mission.completionStatus == CampaignCompletionStatus.FINISHED || mission.completionStatus == CampaignCompletionStatus.BEING_VERIFIED)
+                                                                        MaterialTheme.colors.secondary
+                                                                    else
+                                                                        DarkerGrey,
+                                                                    contentDescription = stringResource(
+                                                                        R.string.mission_completion_mark
+                                                                    ),
+                                                                    modifier = Modifier.padding(end = MaterialTheme.spacing.small)
+                                                                )
+                                                            }
                                                             Text(
                                                                 text = stringResource(
                                                                     R.string.mission_number,
@@ -529,7 +666,12 @@ fun CampaignDetailScreen(
                                                                 ),
                                                                 style = MaterialTheme.typography.body1,
                                                                 fontWeight = FontWeight.Bold,
-                                                                color = MaterialTheme.colors.secondary,
+                                                                color =
+                                                                when (mission.completionStatus) {
+                                                                    CampaignCompletionStatus.FINISHED, CampaignCompletionStatus.BEING_VERIFIED -> MaterialTheme.colors.secondary
+                                                                    CampaignCompletionStatus.REJECTED -> DarkRed
+                                                                    else -> DarkerGrey
+                                                                },
                                                                 modifier = Modifier.padding(top = MaterialTheme.spacing.extraSmall)
                                                             )
                                                         }
@@ -539,13 +681,13 @@ fun CampaignDetailScreen(
                                                             )
                                                         ) {
                                                             Text(
-                                                                text = task.name,
+                                                                text = mission.name,
                                                                 textAlign = TextAlign.Start,
                                                                 style = MaterialTheme.typography.caption
                                                             )
                                                         }
 
-                                                        if (task.completed) {
+                                                        if (mission.completionStatus == CampaignCompletionStatus.FINISHED || mission.completionStatus == CampaignCompletionStatus.BEING_VERIFIED || mission.completionStatus == CampaignCompletionStatus.REJECTED) {
                                                             Row(
                                                                 modifier = Modifier
                                                                     .fillMaxWidth()
@@ -553,14 +695,16 @@ fun CampaignDetailScreen(
                                                                     .padding(bottom = MaterialTheme.spacing.small)
                                                             ) {
                                                                 AsyncImage(
-                                                                    model = ImageRequest.Builder(context)
-                                                                        .data(task.proofPhotoUrl)
+                                                                    model = ImageRequest.Builder(
+                                                                        context
+                                                                    )
+                                                                        .data(mission.proofPhotoUrl)
                                                                         .crossfade(true)
                                                                         .scale(Scale.FILL)
                                                                         .build(),
                                                                     contentDescription = stringResource(
                                                                         R.string.proof_completion,
-                                                                        task.name
+                                                                        mission.name
                                                                     ),
                                                                     contentScale = ContentScale.FillWidth,
                                                                     modifier = Modifier
@@ -577,9 +721,9 @@ fun CampaignDetailScreen(
                                                                     bottom = MaterialTheme.spacing.small
                                                                 )
                                                             ) {
-                                                                if (task.proofCaption != "") {
+                                                                if (mission.proofCaption != "") {
                                                                     Text(
-                                                                        text = "\"${task.proofCaption}\"",
+                                                                        text = "\"${mission.proofCaption}\"",
                                                                         fontWeight = FontWeight.Bold,
                                                                         style = MaterialTheme.typography.caption
                                                                     )
@@ -588,11 +732,18 @@ fun CampaignDetailScreen(
                                                             Row {
                                                                 Text(
                                                                     text = stringResource(
-                                                                        R.string.finished_on,
-                                                                        dateFormatter(task.completedTimeStamp)
+                                                                        R.string.submitted_on,
+                                                                        dateFormatter(mission.completedTimeStamp)
                                                                     ),
                                                                     style = MaterialTheme.typography.overline,
                                                                     color = MaterialTheme.colors.primary
+                                                                )
+                                                            }
+                                                            if (mission.completionStatus == CampaignCompletionStatus.REJECTED) {
+                                                                UploadTaskProof(
+                                                                    viewModel = viewModel,
+                                                                    mission = mission,
+                                                                    campaignId = id
                                                                 )
                                                             }
                                                         } else {
@@ -600,13 +751,13 @@ fun CampaignDetailScreen(
                                                                 if (index == 0) {
                                                                     UploadTaskProof(
                                                                         viewModel = viewModel,
-                                                                        task = task,
+                                                                        mission = mission,
                                                                         campaignId = id
                                                                     )
-                                                                } else if (index != 0 && campaign.campaignTasks[index - 1].completed) {
+                                                                } else if (index != 0 && (campaign.missions[index - 1].completionStatus == CampaignCompletionStatus.FINISHED || campaign.missions[index - 1].completionStatus == CampaignCompletionStatus.BEING_VERIFIED)) {
                                                                     UploadTaskProof(
                                                                         viewModel = viewModel,
-                                                                        task = task,
+                                                                        mission = mission,
                                                                         campaignId = id
                                                                     )
                                                                 }
@@ -634,7 +785,7 @@ fun CampaignDetailScreen(
                                                             )
                                                             Column {
                                                                 Text(
-                                                                    text = task.name,
+                                                                    text = mission.name,
                                                                     textAlign = TextAlign.Start,
                                                                     style = MaterialTheme.typography.caption
                                                                 )
@@ -665,38 +816,155 @@ fun CampaignDetailScreen(
                         .fillMaxWidth()
                         .padding(
                             top = MaterialTheme.spacing.medium,
-                            bottom = 96.dp,
+                            bottom =
+                            if (campaign.completionStatus == CampaignCompletionStatus.REJECTED)
+                                MaterialTheme.spacing.medium
+                            else
+                                96.dp,
                             start = MaterialTheme.spacing.large,
                             end = MaterialTheme.spacing.large
                         ),
                     horizontalArrangement = Arrangement.Center
                 ) {
-                    OutlinedButton(
-                        border = BorderStroke(1.dp, MaterialTheme.colors.primary),
-                        shape = RoundedCornerShape(20.dp),
-                        colors = ButtonDefaults.buttonColors(MaterialTheme.colors.surface),
-                        onClick = {
-                            // TODO: share campaign
-                        },
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Row(
+                    if (campaign.completionStatus == CampaignCompletionStatus.FINISHED) {
+                        Column(
                             modifier = Modifier.fillMaxWidth(),
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.Center
+                            horizontalAlignment = Alignment.CenterHorizontally
                         ) {
-                            AsyncImage(
-                                model = R.drawable.ic_share_campaign,
-                                contentDescription = stringResource(R.string.participant_count),
-                                colorFilter = ColorFilter.tint(MaterialTheme.colors.primary),
-                                modifier = Modifier.size(16.dp)
-                            )
-                            Spacer(modifier = Modifier.width(MaterialTheme.spacing.small))
                             Text(
-                                text = stringResource(R.string.share_campaign),
-                                fontWeight = FontWeight.SemiBold,
-                                color = MaterialTheme.colors.primary,
-                                style = MaterialTheme.typography.button
+                                text = stringResource(R.string.congrats_campaign_finished),
+                                textAlign = TextAlign.Center,
+                                fontWeight = FontWeight.Bold,
+                                style = MaterialTheme.typography.body1
+                            )
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.Center
+                            ) {
+                                Text(
+                                    text = stringResource(R.string.youve_got),
+                                    style = MaterialTheme.typography.body1,
+                                    fontWeight = FontWeight.Bold
+                                )
+                                Spacer(modifier = Modifier.width(MaterialTheme.spacing.extraSmall))
+                                Box(
+                                    contentAlignment = Alignment.Center,
+                                    modifier = Modifier
+                                        .size(14.dp)
+                                        .clip(CircleShape)
+                                        .padding(1.dp)
+                                        .border(
+                                            width = 1.dp,
+                                            color = MaterialTheme.colors.primary,
+                                            shape = CircleShape,
+                                        )
+                                        .padding(1.dp),
+                                ) {
+                                    AsyncImage(
+                                        model = R.drawable.ic_ecosense_logo_vector,
+                                        contentDescription = null,
+                                        colorFilter = ColorFilter.tint(MaterialTheme.colors.primary),
+                                        modifier = Modifier.fillMaxSize(),
+                                    )
+                                }
+                                Spacer(modifier = Modifier.width(2.dp))
+                                Text(
+                                    text = ecopointsFormatter(campaign.earnedPoints),
+                                    style = MaterialTheme.typography.body1,
+                                    fontWeight = FontWeight.Bold,
+                                    color = MaterialTheme.colors.primary
+                                )
+                                Spacer(modifier = Modifier.width(MaterialTheme.spacing.extraSmall))
+                                Text(
+                                    text = stringResource(R.string.ecopoints),
+                                    style = MaterialTheme.typography.body1,
+                                    fontWeight = FontWeight.Bold
+                                )
+                            }
+                        }
+                    } else {
+                        OutlinedButton(
+                            border = BorderStroke(1.dp, MaterialTheme.colors.primary),
+                            shape = RoundedCornerShape(20.dp),
+                            colors = ButtonDefaults.buttonColors(MaterialTheme.colors.surface),
+                            onClick = {
+                                navigator.navigate(
+                                    StoryComposerScreenDestination(
+                                        caption = context.resources.getString(R.string.share_campaign_caption),
+                                        campaign = SharedCampaignPresentation(
+                                            id = id,
+                                            posterUrl = campaign.posterUrl,
+                                            title = campaign.title,
+                                            endAt = campaign.endDate,
+                                            categories = campaign.categories.map {
+                                                CategoryPresentation(
+                                                    name = it.name,
+                                                    colorHex = it.colorHex
+                                                )
+                                            },
+                                            participantsCount = campaign.participantsCount,
+                                            isTrending = campaign.isTrending,
+                                            isNew = campaign.isNew
+                                        )
+                                    )
+                                )
+                            },
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.Center
+                            ) {
+                                AsyncImage(
+                                    model = R.drawable.ic_share_campaign,
+                                    contentDescription = stringResource(R.string.share_campaign),
+                                    colorFilter = ColorFilter.tint(MaterialTheme.colors.primary),
+                                    modifier = Modifier.size(16.dp)
+                                )
+                                Spacer(modifier = Modifier.width(MaterialTheme.spacing.small))
+                                Text(
+                                    text = stringResource(R.string.share_campaign),
+                                    fontWeight = FontWeight.SemiBold,
+                                    color = MaterialTheme.colors.primary,
+                                    style = MaterialTheme.typography.button
+                                )
+                            }
+                        }
+                    }
+                }
+
+                if (campaign.completionStatus == CampaignCompletionStatus.REJECTED && !state.allMissionIsReadyToSend) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(
+                                top = MaterialTheme.spacing.medium,
+                                bottom = 96.dp,
+                                start = MaterialTheme.spacing.medium,
+                                end = MaterialTheme.spacing.large
+                            ),
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth(),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Text(
+                                text = stringResource(R.string.rejected),
+                                textAlign = TextAlign.Center,
+                                fontWeight = FontWeight.Bold,
+                                color = DarkRed,
+                                style = MaterialTheme.typography.body1
+                            )
+                            Text(
+                                text = stringResource(R.string.rejected_description),
+                                textAlign = TextAlign.Center,
+                                fontWeight = FontWeight.Bold,
+                                color = DarkRed,
+                                style = MaterialTheme.typography.caption
                             )
                         }
                     }

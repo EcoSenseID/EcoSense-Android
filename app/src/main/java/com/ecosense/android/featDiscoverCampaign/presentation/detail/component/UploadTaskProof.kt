@@ -3,10 +3,7 @@ package com.ecosense.android.featDiscoverCampaign.presentation.detail.component
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.OutlinedButton
-import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -25,12 +22,14 @@ import coil.request.ImageRequest
 import coil.size.Scale
 import com.ecosense.android.R
 import com.ecosense.android.core.presentation.component.GradientButton
+import com.ecosense.android.core.presentation.theme.DarkGrey
+import com.ecosense.android.core.presentation.theme.White
 import com.ecosense.android.core.presentation.theme.spacing
-import com.ecosense.android.featDiscoverCampaign.domain.model.CampaignTask
+import com.ecosense.android.featDiscoverCampaign.domain.model.CampaignMission
 import com.ecosense.android.featDiscoverCampaign.presentation.detail.CampaignDetailViewModel
 
 @Composable
-fun UploadTaskProof(viewModel: CampaignDetailViewModel, task: CampaignTask, campaignId: Int) {
+fun UploadTaskProof(viewModel: CampaignDetailViewModel, mission: CampaignMission, campaignId: Int) {
     val state = viewModel.state.value
     val openPickImageDialog = remember { mutableStateOf(false) }
 
@@ -95,7 +94,7 @@ fun UploadTaskProof(viewModel: CampaignDetailViewModel, task: CampaignTask, camp
                 contentScale = ContentScale.FillWidth,
                 contentDescription = stringResource(
                     R.string.unsubmitted_proof,
-                    task.name
+                    mission.name
                 ),
                 modifier = Modifier
                     .fillMaxSize()
@@ -135,38 +134,45 @@ fun UploadTaskProof(viewModel: CampaignDetailViewModel, task: CampaignTask, camp
             bottom = MaterialTheme.spacing.small
         )
     ) {
-        GradientButton(
-            onClick = {
-                viewModel.onUploadCompletionProof(
-                    caption = inputValue.value.text,
-                    taskId = task.id,
-                    campaignId = campaignId
-                )
-            },
-            enabled = !state.isLoadingUploadProof,
-            modifier = Modifier
-                .fillMaxWidth()
-                .clip(
-                    shape = RoundedCornerShape(
-                        20.dp
+        if (!state.isLoadingUploadProof)
+            GradientButton(
+                onClick = {
+                    viewModel.onUploadCompletionProof(
+                        caption = inputValue.value.text,
+                        missionId = mission.id,
+                        campaignId = campaignId
                     )
-                )
-        ) {
-            if (!state.isLoadingUploadProof)
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clip(
+                        shape = RoundedCornerShape(
+                            20.dp
+                        )
+                    )
+            ) {
                 Text(
                     text = stringResource(R.string.submit),
                     fontWeight = FontWeight.SemiBold,
-                    color = MaterialTheme.colors.onPrimary,
+                    color = White,
                     style = MaterialTheme.typography.button
                 )
-            else
+            }
+        else {
+            Button(
+                onClick = {},
+                modifier = Modifier
+                    .fillMaxWidth(),
+                shape = RoundedCornerShape(20.dp),
+                colors = ButtonDefaults.buttonColors(DarkGrey)
+            ) {
                 Text(
                     text = stringResource(R.string.submitting),
                     fontWeight = FontWeight.SemiBold,
-                    color = MaterialTheme.colors.onPrimary,
+                    color = White,
                     style = MaterialTheme.typography.button
                 )
-
+            }
         }
     }
 }

@@ -5,10 +5,12 @@ import com.ecosense.android.featDiscoverCampaign.domain.model.CampaignDetail
 
 data class CampaignDetailScreenState(
     val campaignDetail: CampaignDetail,
+    val allMissionIsReadyToSend: Boolean,
     val proofPhotoUrl: String?,
     val isLoadingCampaignDetail: Boolean,
     val isLoadingUploadProof: Boolean,
     val isLoadingJoinCampaign: Boolean,
+    val isLoadingCompleteCampaign: Boolean,
     val tempJpegUri: Uri?,
 ) {
     companion object {
@@ -20,17 +22,21 @@ data class CampaignDetailScreenState(
                 description = "",
                 startDate = "",
                 endDate = "",
-                category = emptyList(),
                 participantsCount = 0,
                 isTrending = false,
                 isNew = false,
                 joined = false,
-                campaignTasks = emptyList()
+                completionStatus = 0,
+                earnedPoints = 0,
+                missions = emptyList(),
+                categories = emptyList()
             ),
+            allMissionIsReadyToSend = false,
             proofPhotoUrl = null,
             isLoadingCampaignDetail = false,
             isLoadingUploadProof = false,
             isLoadingJoinCampaign = false,
+            isLoadingCompleteCampaign = false,
             tempJpegUri = null
         )
     }
