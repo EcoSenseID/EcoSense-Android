@@ -32,11 +32,10 @@ class DiscoverCampaignViewModel @Inject constructor(
 
     init {
         getDashboard()
-        getCategories()
     }
 
     private var getDashboardJob: Job? = null
-    private fun getDashboard() {
+    fun getDashboard() {
         getDashboardJob?.cancel()
         getDashboardJob = viewModelScope.launch {
             discoverCampaignRepository.getDashboard().onEach { result ->
@@ -55,33 +54,6 @@ class DiscoverCampaignViewModel @Inject constructor(
                         _state.value = state.value.copy(
                             dashboard = result.data ?: Dashboard.defaultValue,
                             isLoadingDashboard = false
-                        )
-                    }
-                }
-            }.launchIn(this)
-        }
-    }
-
-    private var getCategoriesJob: Job? = null
-    private fun getCategories() {
-        getCategoriesJob?.cancel()
-        getCategoriesJob = viewModelScope.launch {
-            discoverCampaignRepository.getCategories().onEach { result ->
-                when (result) {
-                    is Resource.Error -> {
-                        _state.value = state.value.copy(isLoadingCategories = false)
-                        result.uiText?.let { _eventFlow.send(UIEvent.ShowSnackbar(it)) }
-                    }
-                    is Resource.Loading -> {
-                        _state.value = state.value.copy(
-                            categories = result.data ?: emptyList(),
-                            isLoadingCategories = true
-                        )
-                    }
-                    is Resource.Success -> {
-                        _state.value = state.value.copy(
-                            categories = result.data ?: emptyList(),
-                            isLoadingCategories = false
                         )
                     }
                 }

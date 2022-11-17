@@ -42,6 +42,8 @@ fun BrowseCategory(
 ) {
     val horizontalScrollState = rememberScrollState()
 
+    val context = LocalContext.current
+
     if (isLoading) {
         Row(
             modifier = Modifier.fillMaxSize(),
@@ -62,7 +64,7 @@ fun BrowseCategory(
                             horizontal = MaterialTheme.spacing.medium
                         )
                         .width(120.dp)
-                        .height(150.dp)
+                        .height(145.dp)
                 ) {
                     Column(
                         horizontalAlignment = Alignment.Start,
@@ -74,7 +76,7 @@ fun BrowseCategory(
                                     BrowseCampaignScreenDestination(
                                         search = null,
                                         categoryId = null,
-                                        categoryName = "All Campaigns"
+                                        categoryName = context.resources.getString(R.string.all_campaigns)
                                     )
                                 )
                             })
@@ -123,7 +125,7 @@ fun BrowseCategory(
                 Row(
                     modifier = modifier
                         .fillMaxWidth()
-                        .height(150.dp)
+                        .height(145.dp)
                 ) {
                     categories.forEach { category ->
                         Column(
