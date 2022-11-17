@@ -16,19 +16,25 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.core.graphics.toColorInt
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import coil.size.Scale
 import com.ecosense.android.R
 import com.ecosense.android.core.domain.model.Campaign
-import com.ecosense.android.core.presentation.theme.*
+import com.ecosense.android.core.presentation.theme.ElectricOrange
+import com.ecosense.android.core.presentation.theme.ElectricYellow
+import com.ecosense.android.core.presentation.theme.White
+import com.ecosense.android.core.presentation.theme.spacing
 import com.ecosense.android.featDiscoverCampaign.data.util.campaignEndedStatus
+import com.ecosense.android.featDiscoverCampaign.data.util.campaignNotStartedStatus
 import com.ecosense.android.featDiscoverCampaign.data.util.dateTimeFormatter
 
 @Composable
@@ -56,6 +62,27 @@ fun CampaignItem(
                 onClick = onClick
             )
         }
+    } else if (sort == stringResource(R.string.on_going_campaign)) {
+        if (!campaignEndedStatus(campaign.endDate) && !campaignNotStartedStatus(campaign.startDate)) {
+            ShowItem(
+                campaign = campaign,
+                onClick = onClick
+            )
+        }
+    } else if (sort == stringResource(R.string.coming_soon_campaign)) {
+        if (campaignNotStartedStatus(campaign.startDate)) {
+            ShowItem(
+                campaign = campaign,
+                onClick = onClick
+            )
+        }
+    } else if (sort == stringResource(R.string.finished_campaign)) {
+        if (campaignEndedStatus(campaign.endDate)) {
+            ShowItem(
+                campaign = campaign,
+                onClick = onClick
+            )
+        }
     }
 }
 
@@ -65,6 +92,8 @@ fun ShowItem(
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val context = LocalContext.current
+
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
@@ -174,33 +203,15 @@ fun ShowItem(
                     .fillMaxWidth()
                     .padding(vertical = MaterialTheme.spacing.extraSmall)
             ) {
-                items(campaign.category.size) { i ->
+                items(campaign.categories.size) { i ->
                     Text(
-                        text = campaign.category[i],
+                        text = campaign.categories[i].name,
                         style = MaterialTheme.typography.overline,
                         fontWeight = FontWeight.Medium,
                         color = White,
                         modifier = Modifier
                             .clip(shape = RoundedCornerShape(20.dp))
-                            .background(
-                                when (campaign.category[i]) {
-                                    stringResource(R.string.cat_water_pollution) -> {
-                                        DarkBlue
-                                    }
-                                    stringResource(R.string.cat_air_pollution) -> {
-                                        LightBlue
-                                    }
-                                    stringResource(R.string.cat_waste_free) -> {
-                                        CustardYellow
-                                    }
-                                    stringResource(R.string.cat_plastic_free) -> {
-                                        DarkRed
-                                    }
-                                    else -> {
-                                        MaterialTheme.colors.primary
-                                    }
-                                }
-                            )
+                            .background(Color(campaign.categories[i].colorHex.toColorInt()))
                             .padding(horizontal = MaterialTheme.spacing.small, vertical = 2.dp)
                     )
                 }
@@ -239,35 +250,34 @@ fun ShowItem(
 
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.large))
 
-            // TODO: uncomment after api update
-//            if (campaignNotStartedStatus(campaign.startDate)) {
-//                Text(
-//                    text = stringResource(R.string.campaign_will_start_at),
-//                    style = MaterialTheme.typography.caption
-//                )
-//                Text(
-//                    text = dateTimeFormatter(campaign.startDate),
-//                    style = MaterialTheme.typography.caption,
-//                    fontWeight = FontWeight.Bold
-//                )
-//            } else {
-            if (campaignEndedStatus(campaign.endDate)) {
+            if (campaignNotStartedStatus(campaign.startDate)) {
                 Text(
-                    text = stringResource(R.string.campaign_finished_at),
+                    text = stringResource(R.string.campaign_will_start_at),
                     style = MaterialTheme.typography.caption
+                )
+                Text(
+                    text = dateTimeFormatter(campaign.startDate, context),
+                    style = MaterialTheme.typography.caption,
+                    fontWeight = FontWeight.Bold
                 )
             } else {
+                if (campaignEndedStatus(campaign.endDate)) {
+                    Text(
+                        text = stringResource(R.string.campaign_finished_at),
+                        style = MaterialTheme.typography.caption
+                    )
+                } else {
+                    Text(
+                        text = stringResource(R.string.campaign_will_end_at),
+                        style = MaterialTheme.typography.caption
+                    )
+                }
                 Text(
-                    text = stringResource(R.string.campaign_will_end_at),
-                    style = MaterialTheme.typography.caption
+                    text = dateTimeFormatter(campaign.endDate, context),
+                    style = MaterialTheme.typography.caption,
+                    fontWeight = FontWeight.Bold
                 )
             }
-            Text(
-                text = dateTimeFormatter(campaign.endDate),
-                style = MaterialTheme.typography.caption,
-                fontWeight = FontWeight.Bold
-            )
-//            }
         }
     }
 }
