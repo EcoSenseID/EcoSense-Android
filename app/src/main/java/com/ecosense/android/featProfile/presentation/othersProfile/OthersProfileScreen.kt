@@ -41,7 +41,7 @@ import com.ecosense.android.core.presentation.util.asString
 import com.ecosense.android.core.util.OnLifecycleEvent
 import com.ecosense.android.destinations.*
 import com.ecosense.android.featProfile.presentation.component.RecentStoryItem
-import com.ecosense.android.featProfile.presentation.profile.component.RecentCampaignItem
+import com.ecosense.android.featProfile.presentation.component.RecentCampaignItem
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.SwipeRefreshState
 import com.ramcosta.composedestinations.annotation.Destination

@@ -1,4 +1,4 @@
-package com.ecosense.android.featProfile.presentation.profile.component
+package com.ecosense.android.featProfile.presentation.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -80,7 +80,7 @@ fun RecentCampaignItem(
 
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
 
-            if (campaign().completionStatus == CampaignCompletionStatus.FINISHED) {
+            if (campaign().completionStatus == CampaignCompletionStatus.COMPLETED) {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier.fillMaxWidth(),
@@ -127,14 +127,23 @@ fun RecentCampaignItem(
                     )
                 }
 
-                CampaignCompletionStatus.BEING_VERIFIED -> {
+                CampaignCompletionStatus.IN_VERIFICATION -> {
                     Text(text = stringResource(R.string.completion_is_being_verified))
                 }
 
                 CampaignCompletionStatus.FINISHED -> {
                     Text(text = stringResource(R.string.campaign_finished_at))
+                    
                     Text(
                         text = campaign().finishedAt,
+                        fontWeight = FontWeight.Bold,
+                    )
+                }
+
+                CampaignCompletionStatus.INCOMPLETE -> {
+                    Text(text = stringResource(R.string.campaign_ended_at))
+                    Text(
+                        text = campaign().endAt,
                         fontWeight = FontWeight.Bold,
                     )
                 }
