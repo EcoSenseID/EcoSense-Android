@@ -19,6 +19,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.ecosense.android.R
+import com.ecosense.android.core.presentation.theme.DarkGreen
 import com.ecosense.android.core.presentation.theme.DarkGrey
 import com.ecosense.android.core.presentation.theme.spacing
 import com.ecosense.android.destinations.CampaignDetailScreenDestination
@@ -206,6 +207,7 @@ fun UncompletedMission(
                     .height(225.dp)
                     .padding(MaterialTheme.spacing.medium)
                     .shadow(elevation = 2.dp, shape = RoundedCornerShape(20.dp))
+                    .background(DarkGrey)
                     .clip(shape = RoundedCornerShape(20.dp))
                     .padding(MaterialTheme.spacing.medium),
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -225,6 +227,7 @@ fun UncompletedMission(
                     .height(225.dp)
                     .padding(MaterialTheme.spacing.medium)
                     .shadow(elevation = 2.dp, shape = RoundedCornerShape(20.dp))
+                    .background(DarkGrey)
                     .clip(shape = RoundedCornerShape(20.dp))
                     .padding(MaterialTheme.spacing.medium),
                 horizontalAlignment = Alignment.CenterHorizontally,
