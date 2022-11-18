@@ -870,7 +870,7 @@ fun CampaignDetailScreen(
                                 }
                                 Spacer(modifier = Modifier.width(2.dp))
                                 Text(
-                                    text = ecopointsFormatter(campaign.earnedPoints),
+                                    text = campaign.earnedPoints,
                                     style = MaterialTheme.typography.body1,
                                     fontWeight = FontWeight.Bold,
                                     color = MaterialTheme.colors.primary

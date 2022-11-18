@@ -27,7 +27,7 @@ data class CampaignDetailScreenState(
                 isNew = false,
                 joined = false,
                 completionStatus = 0,
-                earnedPoints = 0,
+                earnedPoints = "",
                 missions = emptyList(),
                 categories = emptyList()
             ),
