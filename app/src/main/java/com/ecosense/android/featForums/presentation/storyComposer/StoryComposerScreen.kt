@@ -152,7 +152,7 @@ fun StoryComposerScreen(
                             ),
                     ) {
                         TextField(
-                            value = viewModel.state.caption ?: "",
+                            value = viewModel.state.caption,
                             onValueChange = { viewModel.onChangeCaption(it) },
                             enabled = !viewModel.state.isUploading,
                             placeholder = { Text(text = stringResource(R.string.whats_happening)) },

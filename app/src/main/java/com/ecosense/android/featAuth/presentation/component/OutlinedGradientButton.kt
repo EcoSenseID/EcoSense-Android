@@ -15,7 +15,6 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.ecosense.android.core.presentation.theme.Gradient
-import com.ecosense.android.core.presentation.theme.GradientForButtons
 
 @Composable
 fun OutlinedGradientButton(

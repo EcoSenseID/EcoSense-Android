@@ -2,7 +2,6 @@ package com.ecosense.android.featProfile.presentation.othersProfile
 
 import com.ecosense.android.core.domain.model.Story
 import com.ecosense.android.featProfile.domain.model.OthersProfile
-import com.ecosense.android.featProfile.domain.model.RecentCampaign
 import com.ecosense.android.featProfile.presentation.model.RecentCampaignPresentation
 import com.ecosense.android.featProfile.presentation.model.toPresentation
 

@@ -1,7 +1,6 @@
 package com.ecosense.android.featForums.presentation.forums.model
 
 import com.ecosense.android.core.util.UIText
-import com.ecosense.android.featForums.presentation.model.StoryPresentation
 
 data class StoriesFeedState(
     val isLoading: Boolean,

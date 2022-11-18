@@ -56,7 +56,7 @@ fun ReplyComposer(
             modifier = Modifier.weight(1f),
         ) {
             TextField(
-                value = state().caption ?: "",
+                value = state().caption,
                 onValueChange = onChangeCaption,
                 enabled = !state().isUploading,
                 placeholder = { Text(text = stringResource(R.string.reply_to_this_story)) },
