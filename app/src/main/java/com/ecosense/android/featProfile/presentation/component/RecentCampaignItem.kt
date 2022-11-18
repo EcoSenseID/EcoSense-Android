@@ -80,7 +80,7 @@ fun RecentCampaignItem(
 
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
 
-            if (campaign().completionStatus == CampaignCompletionStatus.COMPLETED) {
+            if (campaign().completionStatus == CampaignCompletionStatus.FINISHED) {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier.fillMaxWidth(),
@@ -127,7 +127,7 @@ fun RecentCampaignItem(
                     )
                 }
 
-                CampaignCompletionStatus.IN_VERIFICATION -> {
+                CampaignCompletionStatus.BEING_VERIFIED -> {
                     Text(text = stringResource(R.string.completion_is_being_verified))
                 }
 
@@ -140,7 +140,7 @@ fun RecentCampaignItem(
                     )
                 }
 
-                CampaignCompletionStatus.INCOMPLETE -> {
+                CampaignCompletionStatus.ENDED -> {
                     Text(text = stringResource(R.string.campaign_ended_at))
                     Text(
                         text = campaign().endAt,
