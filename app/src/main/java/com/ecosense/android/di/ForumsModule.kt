@@ -2,7 +2,6 @@ package com.ecosense.android.di
 
 import android.content.Context
 import com.ecosense.android.core.domain.api.AuthApi
-import com.ecosense.android.featForums.data.api.FakeForumsApi
 import com.ecosense.android.featForums.data.api.ForumsApi
 import com.ecosense.android.featForums.data.repository.ForumsRepositoryImpl
 import com.ecosense.android.featForums.domain.repository.ForumsRepository

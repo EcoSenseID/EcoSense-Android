@@ -43,6 +43,7 @@ fun ReplyComposer(
                 model = state().avatarUrl,
                 contentDescription = null,
                 placeholder = painterResource(id = R.drawable.ic_ecosense_logo),
+                error = painterResource(id = R.drawable.ic_ecosense_logo),
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .padding(MaterialTheme.spacing.medium)
@@ -56,7 +57,7 @@ fun ReplyComposer(
             modifier = Modifier.weight(1f),
         ) {
             TextField(
-                value = state().caption ?: "",
+                value = state().caption,
                 onValueChange = onChangeCaption,
                 enabled = !state().isUploading,
                 placeholder = { Text(text = stringResource(R.string.reply_to_this_story)) },

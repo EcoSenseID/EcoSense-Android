@@ -155,10 +155,10 @@ class CampaignDetailViewModel @Inject constructor(
 
     private fun checkAllMissionIsReadyToSend() {
         val countCompletedMission = state.value.campaignDetail.missions.filter {
-            it.completionStatus == CampaignCompletionStatus.FINISHED
+            it.completionStatus == CampaignCompletionStatus.COMPLETED
         }.size
         val countVerifiedMission = state.value.campaignDetail.missions.filter {
-            it.completionStatus == CampaignCompletionStatus.BEING_VERIFIED
+            it.completionStatus == CampaignCompletionStatus.IN_VERIFICATION
         }.size
         val countReadyToSendMission = countCompletedMission + countVerifiedMission
 

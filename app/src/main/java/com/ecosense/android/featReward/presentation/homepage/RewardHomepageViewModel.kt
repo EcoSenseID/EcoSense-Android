@@ -17,11 +17,10 @@ import javax.inject.Inject
 
 @HiltViewModel
 class RewardHomepageViewModel @Inject constructor(
-    private val authRepository: AuthRepository,
-    private val rewardRepository: RewardRepository
+    private val authRepository: AuthRepository, private val rewardRepository: RewardRepository
 ) : ViewModel() {
-    val isLoggedIn: StateFlow<Boolean?> = authRepository.isLoggedIn
-        .stateIn(viewModelScope, SharingStarted.Eagerly, null)
+    val isLoggedIn: StateFlow<Boolean?> =
+        authRepository.isLoggedIn.stateIn(viewModelScope, SharingStarted.Eagerly, null)
 
     private val _state = mutableStateOf(RewardHomepageScreenState.defaultValue)
     val state: State<RewardHomepageScreenState> = _state
@@ -35,7 +34,7 @@ class RewardHomepageViewModel @Inject constructor(
     }
 
     private var getProfileJob: Job? = null
-    private fun getProfile() {
+    fun getProfile() {
         getProfileJob?.cancel()
         getProfileJob = viewModelScope.launch {
             val user = authRepository.getCurrentUser()
@@ -44,7 +43,7 @@ class RewardHomepageViewModel @Inject constructor(
     }
 
     private var getHomepageJob: Job? = null
-    private fun getHomepage() {
+    fun getHomepage() {
         getHomepageJob?.cancel()
         getHomepageJob = viewModelScope.launch {
             rewardRepository.getRewardHomepage().onEach { result ->

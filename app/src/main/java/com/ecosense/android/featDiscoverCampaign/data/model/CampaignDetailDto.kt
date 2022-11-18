@@ -19,7 +19,7 @@ data class CampaignDetailDto(
     val description: String?,
     val joined: Boolean?,
     val completionStatus: Int?,
-    val earnedPoints: Int?,
+    val earnedPoints: String?,
     val missions: List<MissionsItem>?,
     val categories: List<CampaignCategoriesItem>?
 ) {
@@ -35,7 +35,7 @@ data class CampaignDetailDto(
         description = description ?: "",
         joined = joined ?: false,
         completionStatus = completionStatus ?: 0,
-        earnedPoints = earnedPoints ?: 0,
+        earnedPoints = earnedPoints ?: "",
         missions = missions?.map { it.toCampaignMission() } ?: emptyList(),
         categories = categories?.map { it.toBrowseCategory() } ?: emptyList()
     )

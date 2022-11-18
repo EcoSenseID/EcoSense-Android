@@ -12,7 +12,7 @@ data class CampaignDetail(
     val description: String,
     val joined: Boolean,
     val completionStatus: Int,
-    val earnedPoints: Int,
+    val earnedPoints: String,
     val missions: List<CampaignMission>,
     val categories: List<BrowseCategory>
 )

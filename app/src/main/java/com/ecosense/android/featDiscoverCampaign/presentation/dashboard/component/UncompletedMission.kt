@@ -18,8 +18,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 import com.ecosense.android.R
 import com.ecosense.android.core.presentation.theme.DarkGrey
+import com.ecosense.android.core.presentation.theme.MintGreen
 import com.ecosense.android.core.presentation.theme.spacing
 import com.ecosense.android.destinations.CampaignDetailScreenDestination
 import com.ecosense.android.featDiscoverCampaign.data.util.countDays
@@ -206,17 +208,46 @@ fun UncompletedMission(
                     .height(225.dp)
                     .padding(MaterialTheme.spacing.medium)
                     .shadow(elevation = 2.dp, shape = RoundedCornerShape(20.dp))
-                    .clip(shape = RoundedCornerShape(20.dp))
-                    .padding(MaterialTheme.spacing.medium),
+                    .background(color = MintGreen)
+                    .clip(shape = RoundedCornerShape(20.dp)),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
-                Text(
-                    text = stringResource(R.string.no_missions_left),
-                    textAlign = TextAlign.Center,
-                    style = MaterialTheme.typography.body1,
-                    fontWeight = FontWeight.Bold
-                )
+                Row(
+                    modifier = Modifier.fillMaxSize(),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Spacer(modifier = Modifier.width(MaterialTheme.spacing.small))
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .weight(1f),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center
+                    ) {
+                        Text(
+                            text = stringResource(R.string.no_missions_left),
+                            textAlign = TextAlign.Center,
+                            color = MaterialTheme.colors.primary,
+                            style = MaterialTheme.typography.body1,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+                    Spacer(modifier = Modifier.width(MaterialTheme.spacing.medium))
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .weight(1f),
+                        horizontalAlignment = Alignment.End,
+                        verticalArrangement = Arrangement.Bottom
+                    ) {
+                        AsyncImage(
+                            model = R.drawable.character_07,
+                            contentDescription = stringResource(R.string.ecobot),
+                            modifier = Modifier.fillMaxWidth()
+                        )
+                    }
+                }
             }
         } else {
             Column(
@@ -225,17 +256,46 @@ fun UncompletedMission(
                     .height(225.dp)
                     .padding(MaterialTheme.spacing.medium)
                     .shadow(elevation = 2.dp, shape = RoundedCornerShape(20.dp))
-                    .clip(shape = RoundedCornerShape(20.dp))
-                    .padding(MaterialTheme.spacing.medium),
+                    .background(color = MintGreen)
+                    .clip(shape = RoundedCornerShape(20.dp)),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
-                Text(
-                    text = stringResource(R.string.no_missions_left),
-                    textAlign = TextAlign.Center,
-                    style = MaterialTheme.typography.body1,
-                    fontWeight = FontWeight.Bold
-                )
+                Row(
+                    modifier = Modifier.fillMaxSize(),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Spacer(modifier = Modifier.width(MaterialTheme.spacing.small))
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .weight(1f),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center
+                    ) {
+                        Text(
+                            text = stringResource(R.string.no_missions_left),
+                            textAlign = TextAlign.Center,
+                            color = MaterialTheme.colors.primary,
+                            style = MaterialTheme.typography.body1,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+                    Spacer(modifier = Modifier.width(MaterialTheme.spacing.medium))
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .weight(1f),
+                        horizontalAlignment = Alignment.End,
+                        verticalArrangement = Arrangement.Bottom
+                    ) {
+                        AsyncImage(
+                            model = R.drawable.character_07,
+                            contentDescription = stringResource(R.string.ecobot),
+                            modifier = Modifier.fillMaxWidth()
+                        )
+                    }
+                }
             }
         }
     }

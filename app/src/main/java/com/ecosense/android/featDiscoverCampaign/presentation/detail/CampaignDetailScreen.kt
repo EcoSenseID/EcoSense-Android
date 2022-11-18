@@ -184,7 +184,7 @@ fun CampaignDetailScreen(
                             )
                         } else {
                             when (campaign.completionStatus) {
-                                CampaignCompletionStatus.BEING_VERIFIED -> {
+                                CampaignCompletionStatus.IN_VERIFICATION -> {
                                     ExtendedFloatingActionButton(
                                         text = {
                                             Text(
@@ -202,7 +202,7 @@ fun CampaignDetailScreen(
                                     )
                                 }
 
-                                CampaignCompletionStatus.FINISHED -> {
+                                CampaignCompletionStatus.COMPLETED -> {
                                     GradientButton(
                                         onClick = {
                                             navigator.navigate(
@@ -649,7 +649,7 @@ fun CampaignDetailScreen(
                                                                 Icon(
                                                                     imageVector = Icons.Filled.CheckCircle,
                                                                     tint =
-                                                                    if (mission.completionStatus == CampaignCompletionStatus.FINISHED || mission.completionStatus == CampaignCompletionStatus.BEING_VERIFIED)
+                                                                    if (mission.completionStatus == CampaignCompletionStatus.COMPLETED || mission.completionStatus == CampaignCompletionStatus.IN_VERIFICATION)
                                                                         MaterialTheme.colors.secondary
                                                                     else
                                                                         DarkerGrey,
@@ -668,7 +668,7 @@ fun CampaignDetailScreen(
                                                                 fontWeight = FontWeight.Bold,
                                                                 color =
                                                                 when (mission.completionStatus) {
-                                                                    CampaignCompletionStatus.FINISHED, CampaignCompletionStatus.BEING_VERIFIED -> MaterialTheme.colors.secondary
+                                                                    CampaignCompletionStatus.COMPLETED, CampaignCompletionStatus.IN_VERIFICATION -> MaterialTheme.colors.secondary
                                                                     CampaignCompletionStatus.REJECTED -> DarkRed
                                                                     else -> DarkerGrey
                                                                 },
@@ -687,7 +687,7 @@ fun CampaignDetailScreen(
                                                             )
                                                         }
 
-                                                        if (mission.completionStatus == CampaignCompletionStatus.FINISHED || mission.completionStatus == CampaignCompletionStatus.BEING_VERIFIED || mission.completionStatus == CampaignCompletionStatus.REJECTED) {
+                                                        if (mission.completionStatus == CampaignCompletionStatus.COMPLETED || mission.completionStatus == CampaignCompletionStatus.IN_VERIFICATION || mission.completionStatus == CampaignCompletionStatus.REJECTED) {
                                                             Row(
                                                                 modifier = Modifier
                                                                     .fillMaxWidth()
@@ -754,7 +754,7 @@ fun CampaignDetailScreen(
                                                                         mission = mission,
                                                                         campaignId = id
                                                                     )
-                                                                } else if (index != 0 && (campaign.missions[index - 1].completionStatus == CampaignCompletionStatus.FINISHED || campaign.missions[index - 1].completionStatus == CampaignCompletionStatus.BEING_VERIFIED)) {
+                                                                } else if (index != 0 && (campaign.missions[index - 1].completionStatus == CampaignCompletionStatus.COMPLETED || campaign.missions[index - 1].completionStatus == CampaignCompletionStatus.IN_VERIFICATION)) {
                                                                     UploadTaskProof(
                                                                         viewModel = viewModel,
                                                                         mission = mission,
@@ -826,7 +826,7 @@ fun CampaignDetailScreen(
                         ),
                     horizontalArrangement = Arrangement.Center
                 ) {
-                    if (campaign.completionStatus == CampaignCompletionStatus.FINISHED) {
+                    if (campaign.completionStatus == CampaignCompletionStatus.COMPLETED) {
                         Column(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalAlignment = Alignment.CenterHorizontally
@@ -870,7 +870,7 @@ fun CampaignDetailScreen(
                                 }
                                 Spacer(modifier = Modifier.width(2.dp))
                                 Text(
-                                    text = ecopointsFormatter(campaign.earnedPoints),
+                                    text = campaign.earnedPoints,
                                     style = MaterialTheme.typography.body1,
                                     fontWeight = FontWeight.Bold,
                                     color = MaterialTheme.colors.primary
