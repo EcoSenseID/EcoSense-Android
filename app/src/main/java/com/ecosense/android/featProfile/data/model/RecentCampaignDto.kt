@@ -18,8 +18,8 @@ data class RecentCampaignDto(
         posterUrl = this.posterUrl ?: "",
         title = this.title ?: "",
         earnedPoints = this.earnedPoints ?: 0,
-        finishedAt = this.finishedAt ?: 0,
-        endAt = this.endAt ?: 0,
+        finishedAt = (this.finishedAt ?: 0) * 1000,
+        endAt = (this.endAt ?: 0) * 1000,
         completionStatus = this.completionStatus ?: 0,
         categories = this.categories?.map { it.toDomain() } ?: emptyList(),
     )

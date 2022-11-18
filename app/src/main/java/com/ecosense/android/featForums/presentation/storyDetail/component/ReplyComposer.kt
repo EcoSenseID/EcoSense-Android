@@ -43,6 +43,7 @@ fun ReplyComposer(
                 model = state().avatarUrl,
                 contentDescription = null,
                 placeholder = painterResource(id = R.drawable.ic_ecosense_logo),
+                error = painterResource(id = R.drawable.ic_ecosense_logo),
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .padding(MaterialTheme.spacing.medium)

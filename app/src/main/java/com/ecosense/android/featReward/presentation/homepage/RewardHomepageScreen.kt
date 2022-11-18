@@ -23,6 +23,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import coil.size.Scale
@@ -32,6 +33,7 @@ import com.ecosense.android.core.presentation.theme.GradientForButtons
 import com.ecosense.android.core.presentation.theme.spacing
 import com.ecosense.android.core.presentation.util.UIEvent
 import com.ecosense.android.core.presentation.util.asString
+import com.ecosense.android.core.util.OnLifecycleEvent
 import com.ecosense.android.destinations.LoginScreenDestination
 import com.ecosense.android.destinations.MyRewardsScreenDestination
 import com.ecosense.android.destinations.RewardDetailScreenDestination
@@ -55,6 +57,13 @@ fun RewardHomepageScreen(
 
     val context = LocalContext.current
     val focusManager = LocalFocusManager.current
+
+    OnLifecycleEvent {
+        if (it == Lifecycle.Event.ON_RESUME) {
+            viewModel.getHomepage()
+            viewModel.getProfile()
+        }
+    }
 
     LaunchedEffect(key1 = true) {
         viewModel.eventFlow.collectLatest { event ->
@@ -87,8 +96,9 @@ fun RewardHomepageScreen(
             ) {
                 Column(modifier = Modifier.padding(MaterialTheme.spacing.medium)) {
                     Text(
-                        text =
-                        if (viewModel.isLoggedIn.collectAsState().value != true) stringResource(R.string.login_first)
+                        text = if (viewModel.isLoggedIn.collectAsState().value != true) stringResource(
+                            R.string.login_first
+                        )
                         else {
                             if (state.isLoadingRewardHomepage) stringResource(R.string.dash)
                             else {
@@ -141,8 +151,7 @@ fun RewardHomepageScreen(
                         Spacer(modifier = Modifier.width(MaterialTheme.spacing.extraSmall))
 
                         Text(
-                            text =
-                            if (viewModel.isLoggedIn.collectAsState().value != true) stringResource(
+                            text = if (viewModel.isLoggedIn.collectAsState().value != true) stringResource(
                                 R.string.not_logged_ecopoints
                             )
                             else stringResource(R.string.ecopoints),
@@ -284,8 +293,7 @@ fun RewardHomepageScreen(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     CircularProgressIndicator(
-                        modifier = Modifier.wrapContentSize(),
-                        strokeWidth = 3.dp
+                        modifier = Modifier.wrapContentSize(), strokeWidth = 3.dp
                     )
                 }
             } else {
@@ -311,8 +319,7 @@ fun RewardHomepageScreen(
                                 .clickable(onClick = {
                                     navigator.navigate(
                                         RewardDetailScreenDestination(
-                                            donation.id,
-                                            state.rewardHomepage.totalPoints
+                                            donation.id, state.rewardHomepage.totalPoints
                                         )
                                     )
                                 })
@@ -324,9 +331,7 @@ fun RewardHomepageScreen(
                             ) {
                                 AsyncImage(
                                     model = ImageRequest.Builder(LocalContext.current)
-                                        .data(donation.bannerUrl)
-                                        .crossfade(true)
-                                        .scale(Scale.FILL)
+                                        .data(donation.bannerUrl).crossfade(true).scale(Scale.FILL)
                                         .build(),
                                     contentDescription = donation.title,
                                     contentScale = ContentScale.Crop,
@@ -458,8 +463,7 @@ fun RewardHomepageScreen(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     CircularProgressIndicator(
-                        modifier = Modifier.wrapContentSize(),
-                        strokeWidth = 3.dp
+                        modifier = Modifier.wrapContentSize(), strokeWidth = 3.dp
                     )
                 }
             } else {
@@ -485,8 +489,7 @@ fun RewardHomepageScreen(
                                 .clickable(onClick = {
                                     navigator.navigate(
                                         RewardDetailScreenDestination(
-                                            eWallet.id,
-                                            state.rewardHomepage.totalPoints
+                                            eWallet.id, state.rewardHomepage.totalPoints
                                         )
                                     )
                                 })
@@ -498,9 +501,7 @@ fun RewardHomepageScreen(
                             ) {
                                 AsyncImage(
                                     model = ImageRequest.Builder(LocalContext.current)
-                                        .data(eWallet.bannerUrl)
-                                        .crossfade(true)
-                                        .scale(Scale.FILL)
+                                        .data(eWallet.bannerUrl).crossfade(true).scale(Scale.FILL)
                                         .build(),
                                     contentDescription = eWallet.title,
                                     contentScale = ContentScale.Crop,

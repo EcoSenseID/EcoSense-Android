@@ -75,7 +75,7 @@ fun NotificationsScreen(
             }
         },
     ) { scaffoldPadding ->
-        if (!viewModel.isRefreshing && viewModel.isLoggedIn.collectAsState().value != true) Column(
+        if (viewModel.isLoggedIn.collectAsState().value != true) Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
             modifier = Modifier

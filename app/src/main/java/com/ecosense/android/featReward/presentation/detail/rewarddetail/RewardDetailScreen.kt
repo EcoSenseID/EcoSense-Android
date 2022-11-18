@@ -531,9 +531,9 @@ fun RewardDetailScreen(
                                         .height(40.dp)
                                         .width(150.dp)
                                 ) {
-                                    if (!state.isLoadingRequestReward) {
+                                    if (!state.isLoadingRedeemReward) {
                                         OutlinedButton(
-                                            enabled = !state.isLoadingRequestReward,
+                                            enabled = !state.isLoadingRedeemReward,
                                             border = BorderStroke(width = 1.dp, color = DarkRed),
                                             shape = RoundedCornerShape(10.dp),
                                             colors = ButtonDefaults.buttonColors(MaterialTheme.colors.surface),
@@ -575,9 +575,9 @@ fun RewardDetailScreen(
                                         .height(40.dp)
                                         .width(150.dp)
                                 ) {
-                                    if (!state.isLoadingRequestReward) {
+                                    if (!state.isLoadingRedeemReward) {
                                         GradientButton(
-                                            enabled = !state.isLoadingRequestReward,
+                                            enabled = !state.isLoadingRedeemReward,
                                             shape = RoundedCornerShape(10.dp),
                                             onClick = {
                                                 viewModel.onRedeemRewardJob(
@@ -739,7 +739,7 @@ fun RewardDetailScreen(
                                     .padding(horizontal = MaterialTheme.spacing.medium)
                             )
                         } else {
-                            if (!state.isLoadingRedeemReward) {
+                            if (!state.isLoadingRedeemReward && !state.isLoadingRequestReward) {
                                 GradientButton(
                                     onClick = {
                                         when (reward.category) {

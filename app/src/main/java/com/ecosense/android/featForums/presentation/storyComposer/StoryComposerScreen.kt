@@ -134,6 +134,7 @@ fun StoryComposerScreen(
                         model = viewModel.state.avatarUrl,
                         contentDescription = null,
                         placeholder = painterResource(id = R.drawable.ic_ecosense_logo),
+                        error = painterResource(id = R.drawable.ic_ecosense_logo),
                         contentScale = ContentScale.Crop,
                         modifier = Modifier
                             .size(48.dp)
