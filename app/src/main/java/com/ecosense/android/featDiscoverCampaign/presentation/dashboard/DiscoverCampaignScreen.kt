@@ -293,7 +293,7 @@ fun DiscoverCampaignScreen(
                         LazyRow(modifier = Modifier.fillMaxWidth()) {
                             items(dashboard.campaigns.size) { i ->
                                 Column(modifier = Modifier.fillMaxWidth()) {
-                                    if (dashboard.campaigns[i].completionStatus != CampaignCompletionStatus.ENDED) {
+                                    if (dashboard.campaigns[i].completionStatus != CampaignCompletionStatus.TIMEOUT) {
                                         Row(
                                             modifier = Modifier
                                                 .width(350.dp)
