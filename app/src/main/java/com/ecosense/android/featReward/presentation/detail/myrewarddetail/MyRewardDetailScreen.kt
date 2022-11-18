@@ -19,7 +19,7 @@ import com.ecosense.android.core.presentation.component.GradientButton
 import com.ecosense.android.core.presentation.theme.*
 import com.ecosense.android.core.presentation.util.UIEvent
 import com.ecosense.android.core.presentation.util.asString
-import com.ecosense.android.featDiscoverCampaign.presentation.component.DiscoverTopBar
+import com.ecosense.android.featReward.presentation.component.RewardTopBar
 import com.ecosense.android.featReward.presentation.detail.component.RewardItemDetail
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -61,10 +61,11 @@ fun MyRewardDetailScreen(
 
     Scaffold(
         topBar = {
-            DiscoverTopBar(
+            RewardTopBar(
                 onBackClick = {
                     navigator.popBackStack()
-                }
+                },
+                screenName = stringResource(R.string.my_ecorewards)
             )
         },
         scaffoldState = scaffoldState,

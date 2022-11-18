@@ -35,7 +35,7 @@ interface DiscoverApi {
         @Header("Authorization") bearerToken: String,
         @Part photo: MultipartBody.Part?,
         @Part("caption") caption: RequestBody?,
-        @Part("taskId") taskId: Int
+        @Part("missionId") missionId: Int
     ): CompletionProofDto
 
     @FormUrlEncoded

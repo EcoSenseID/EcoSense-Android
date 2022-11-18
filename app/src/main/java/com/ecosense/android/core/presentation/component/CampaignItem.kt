@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -28,8 +29,13 @@ import coil.request.ImageRequest
 import coil.size.Scale
 import com.ecosense.android.R
 import com.ecosense.android.core.domain.model.Campaign
+import com.ecosense.android.core.presentation.theme.ElectricOrange
+import com.ecosense.android.core.presentation.theme.ElectricYellow
+import com.ecosense.android.core.presentation.theme.White
 import com.ecosense.android.core.presentation.theme.spacing
-import com.ecosense.android.featDiscoverCampaign.data.util.dateFormatter
+import com.ecosense.android.featDiscoverCampaign.data.util.campaignEndedStatus
+import com.ecosense.android.featDiscoverCampaign.data.util.campaignNotStartedStatus
+import com.ecosense.android.featDiscoverCampaign.data.util.dateTimeFormatter
 
 @Composable
 fun CampaignItem(
@@ -56,6 +62,27 @@ fun CampaignItem(
                 onClick = onClick
             )
         }
+    } else if (sort == stringResource(R.string.on_going_campaign)) {
+        if (!campaignEndedStatus(campaign.endDate) && !campaignNotStartedStatus(campaign.startDate)) {
+            ShowItem(
+                campaign = campaign,
+                onClick = onClick
+            )
+        }
+    } else if (sort == stringResource(R.string.coming_soon_campaign)) {
+        if (campaignNotStartedStatus(campaign.startDate)) {
+            ShowItem(
+                campaign = campaign,
+                onClick = onClick
+            )
+        }
+    } else if (sort == stringResource(R.string.finished_campaign)) {
+        if (campaignEndedStatus(campaign.endDate)) {
+            ShowItem(
+                campaign = campaign,
+                onClick = onClick
+            )
+        }
     }
 }
 
@@ -65,6 +92,8 @@ fun ShowItem(
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val context = LocalContext.current
+
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
@@ -73,16 +102,16 @@ fun ShowItem(
                 end = MaterialTheme.spacing.medium,
                 bottom = MaterialTheme.spacing.medium
             )
-            .shadow(elevation = 2.dp, shape = RoundedCornerShape(8.dp))
-            .clip(shape = RoundedCornerShape(8.dp))
+            .shadow(elevation = 2.dp, shape = RoundedCornerShape(20.dp))
+            .clip(shape = RoundedCornerShape(20.dp))
             .clickable(onClick = onClick)
             .background(MaterialTheme.colors.surface)
             .fillMaxWidth()
     ) {
         Column(
             modifier = Modifier
-                .width(120.dp)
-                .height(160.dp)
+                .width(100.dp)
+                .height(165.dp)
         ) {
             Box(modifier = Modifier.fillMaxSize()) {
                 AsyncImage(
@@ -107,8 +136,11 @@ fun ShowItem(
                             verticalAlignment = Alignment.CenterVertically,
                             modifier = Modifier
                                 .clip(shape = RoundedCornerShape(10.dp))
-                                .background(Color("#FCAF77".toColorInt()))
-                                .padding(horizontal = MaterialTheme.spacing.extraSmall, vertical = 1.dp)
+                                .background(ElectricOrange)
+                                .padding(
+                                    horizontal = MaterialTheme.spacing.extraSmall,
+                                    vertical = 1.dp
+                                )
                         ) {
                             Icon(
                                 imageVector = Icons.Filled.Whatshot,
@@ -130,8 +162,11 @@ fun ShowItem(
                             verticalAlignment = Alignment.CenterVertically,
                             modifier = Modifier
                                 .clip(shape = RoundedCornerShape(10.dp))
-                                .background(Color("#FFCC29".toColorInt()))
-                                .padding(horizontal = MaterialTheme.spacing.extraSmall, vertical = 1.dp)
+                                .background(ElectricYellow)
+                                .padding(
+                                    horizontal = MaterialTheme.spacing.extraSmall,
+                                    vertical = 1.dp
+                                )
                         ) {
                             Icon(
                                 imageVector = Icons.Filled.NewReleases,
@@ -153,63 +188,96 @@ fun ShowItem(
 
         Spacer(modifier = Modifier.width(MaterialTheme.spacing.medium))
 
-        Column(modifier = Modifier.fillMaxWidth()) {
-            Text(
-                text = stringResource(R.string.until_date, dateFormatter(campaign.endDate)),
-                style = MaterialTheme.typography.caption,
-                modifier = Modifier.padding(bottom = MaterialTheme.spacing.medium)
-            )
+        Column(modifier = Modifier.fillMaxSize()) {
             Text(
                 text = campaign.title,
                 style = MaterialTheme.typography.h6,
-                fontWeight = FontWeight.Bold,
+                fontWeight = FontWeight.ExtraBold,
                 color = MaterialTheme.colors.primary
             )
+
+            Spacer(modifier = Modifier.height(2.dp))
 
             LazyRow(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = MaterialTheme.spacing.extraSmall)
             ) {
-                items(campaign.category.size) { i ->
+                items(campaign.categories.size) { i ->
                     Text(
-                        text = campaign.category[i],
+                        text = campaign.categories[i].name,
                         style = MaterialTheme.typography.overline,
-                        color = Color.White,
+                        fontWeight = FontWeight.Medium,
+                        color = White,
                         modifier = Modifier
-                            .clip(shape = RoundedCornerShape(10.dp))
-                            .background(
-                                when (campaign.category[i]) {
-                                    stringResource(R.string.cat_water_pollution) -> {
-                                        Color("#206A5D".toColorInt())
-                                    }
-                                    stringResource(R.string.cat_air_pollution) -> {
-                                        Color("#81B214".toColorInt())
-                                    }
-                                    stringResource(R.string.cat_food_waste)  -> {
-                                        Color("#F58634".toColorInt())
-                                    }
-                                    stringResource(R.string.cat_plastic_free) -> {
-                                        Color("#E25DD7".toColorInt())
-                                    }
-                                    stringResource(R.string.cat_energy_efficiency) -> {
-                                        Color("#DB3069".toColorInt())
-                                    }
-                                    else -> {
-                                        MaterialTheme.colors.primary
-                                    }
-                                }
-                            )
+                            .clip(shape = RoundedCornerShape(20.dp))
+                            .background(Color(campaign.categories[i].colorHex.toColorInt()))
                             .padding(horizontal = MaterialTheme.spacing.small, vertical = 2.dp)
                     )
-                    Spacer(modifier = Modifier.width(MaterialTheme.spacing.extraSmall))
                 }
             }
 
-            Text(
-                text = stringResource(R.string.change_maker, campaign.participantsCount),
-                style = MaterialTheme.typography.caption
-            )
+            Spacer(modifier = Modifier.height(2.dp))
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Start,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                AsyncImage(
+                    model = R.drawable.ic_group_participant,
+                    contentDescription = stringResource(R.string.participant_count),
+                    colorFilter = ColorFilter.tint(MaterialTheme.colors.onSurface),
+                    modifier = Modifier.size(12.dp)
+                )
+
+                Spacer(modifier = Modifier.width(MaterialTheme.spacing.extraSmall))
+
+                Text(
+                    text = campaign.participantsCount.toString(),
+                    style = MaterialTheme.typography.caption,
+                    fontWeight = FontWeight.ExtraBold,
+                    color = MaterialTheme.colors.secondary
+                )
+
+                Spacer(modifier = Modifier.width(2.dp))
+
+                Text(
+                    text = stringResource(R.string.participated),
+                    style = MaterialTheme.typography.caption
+                )
+            }
+
+            Spacer(modifier = Modifier.height(MaterialTheme.spacing.large))
+
+            if (campaignNotStartedStatus(campaign.startDate)) {
+                Text(
+                    text = stringResource(R.string.campaign_will_start_at),
+                    style = MaterialTheme.typography.caption
+                )
+                Text(
+                    text = dateTimeFormatter(campaign.startDate, context),
+                    style = MaterialTheme.typography.caption,
+                    fontWeight = FontWeight.Bold
+                )
+            } else {
+                if (campaignEndedStatus(campaign.endDate)) {
+                    Text(
+                        text = stringResource(R.string.campaign_finished_at),
+                        style = MaterialTheme.typography.caption
+                    )
+                } else {
+                    Text(
+                        text = stringResource(R.string.campaign_will_end_at),
+                        style = MaterialTheme.typography.caption
+                    )
+                }
+                Text(
+                    text = dateTimeFormatter(campaign.endDate, context),
+                    style = MaterialTheme.typography.caption,
+                    fontWeight = FontWeight.Bold
+                )
+            }
         }
     }
 }

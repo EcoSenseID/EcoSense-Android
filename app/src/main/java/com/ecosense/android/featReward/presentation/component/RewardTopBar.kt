@@ -25,7 +25,7 @@ fun RewardTopBar(
         Row(
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier.fillMaxSize()
         ) {
             Row(modifier = Modifier.weight(1f)) {
                 IconButton(onClick = onBackClick) {

@@ -188,16 +188,16 @@ class DiscoverCampaignRepositoryImpl(
                         ?: UIText.StringResource(R.string.em_unknown))
                 )
 
-                response.tasks == null ||
-                        response.completedCampaigns == null -> {
+                response.campaigns == null ||
+                        response.categories == null -> {
                     emit(Resource.Error(UIText.StringResource(R.string.em_unknown)))
                 }
 
                 else -> emit(
                     Resource.Success(
                         Dashboard(
-                            tasks = response.tasks.map { it.toDashboardTask() },
-                            completedCampaigns = response.completedCampaigns.map { it.toCampaign() }
+                            campaigns = response.campaigns.map { it.toDashboardCampaign() },
+                            categories = response.categories.map { it.toCategories() }
                         )
                     )
                 )
@@ -229,7 +229,7 @@ class DiscoverCampaignRepositoryImpl(
     override fun setCompletionProof(
         photo: String?,
         caption: String?,
-        taskId: Int
+        missionId: Int
     ): Flow<SimpleResource> = flow {
         emit(Resource.Loading())
 
@@ -259,7 +259,7 @@ class DiscoverCampaignRepositoryImpl(
                 bearerToken = bearerToken,
                 photo = photoMultipart,
                 caption = captionRB,
-                taskId = taskId
+                missionId = missionId
             )
 
             when {

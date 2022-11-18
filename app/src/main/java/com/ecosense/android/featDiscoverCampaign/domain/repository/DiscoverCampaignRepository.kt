@@ -21,7 +21,7 @@ interface DiscoverCampaignRepository {
     fun setCompletionProof(
         photo: String?,
         caption: String?,
-        taskId: Int
+        missionId: Int
     ): Flow<SimpleResource>
 
     fun setJoinCampaign(

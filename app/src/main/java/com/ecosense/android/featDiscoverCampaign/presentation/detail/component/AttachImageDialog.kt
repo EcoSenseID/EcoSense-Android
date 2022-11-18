@@ -62,7 +62,7 @@ fun AttachImageDialog(viewModel: CampaignDetailViewModel, openPickImageDialog: (
 
     Dialog(onDismissRequest = { openPickImageDialog(false) }) {
         Surface(
-            shape = RoundedCornerShape(8.dp),
+            shape = RoundedCornerShape(20.dp),
             color = MaterialTheme.colors.surface
         ) {
             Box(
@@ -107,7 +107,7 @@ fun AttachImageDialog(viewModel: CampaignDetailViewModel, openPickImageDialog: (
                                 .fillMaxWidth()
                                 .clip(
                                     shape = RoundedCornerShape(
-                                        8.dp
+                                        20.dp
                                     )
                                 )
                         ) {
@@ -142,7 +142,7 @@ fun AttachImageDialog(viewModel: CampaignDetailViewModel, openPickImageDialog: (
                                 .fillMaxWidth()
                                 .clip(
                                     shape = RoundedCornerShape(
-                                        8.dp
+                                        20.dp
                                     )
                                 )
                         ) {
@@ -192,7 +192,7 @@ fun AttachImageDialog(viewModel: CampaignDetailViewModel, openPickImageDialog: (
                                     Text(stringResource(R.string.cancel))
                                 }
                             },
-                            shape = RoundedCornerShape(8.dp)
+                            shape = RoundedCornerShape(20.dp)
                         )
                     }
                 }

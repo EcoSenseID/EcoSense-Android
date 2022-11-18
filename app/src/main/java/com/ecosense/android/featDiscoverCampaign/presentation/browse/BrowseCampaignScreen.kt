@@ -3,6 +3,7 @@ package com.ecosense.android.featDiscoverCampaign.presentation.browse
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
@@ -37,6 +38,7 @@ fun BrowseCampaignScreen(
     navigator: DestinationsNavigator,
     search: String?,
     categoryId: Int?,
+    categoryName: String,
     viewModel: BrowseCampaignViewModel = hiltViewModel()
 ) {
     remember { viewModel.setCampaignsParams(q = search, categoryId = categoryId) }
@@ -49,7 +51,10 @@ fun BrowseCampaignScreen(
     val sortByList = listOf(
         stringResource(R.string.show_all_campaign),
         stringResource(R.string.new_campaign),
-        stringResource(R.string.trending_campaign)
+        stringResource(R.string.trending_campaign),
+        stringResource(R.string.on_going_campaign),
+        stringResource(R.string.coming_soon_campaign),
+        stringResource(R.string.finished_campaign)
     )
     var selectedSort by remember { mutableStateOf("") }
 
@@ -85,7 +90,8 @@ fun BrowseCampaignScreen(
             DiscoverTopBar(
                 onBackClick = {
                     navigator.popBackStack()
-                }
+                },
+                screenName = categoryName
             )
         },
         scaffoldState = scaffoldState
@@ -112,6 +118,7 @@ fun BrowseCampaignScreen(
                         value = selectedSort,
                         onValueChange = { selectedSort = it },
                         enabled = false,
+                        shape = RoundedCornerShape(20.dp),
                         modifier = Modifier
                             .fillMaxWidth()
                             .clickable { expanded = !expanded }

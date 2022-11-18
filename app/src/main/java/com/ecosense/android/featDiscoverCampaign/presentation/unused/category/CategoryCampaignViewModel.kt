@@ -1,4 +1,4 @@
-package com.ecosense.android.featDiscoverCampaign.presentation.category
+package com.ecosense.android.featDiscoverCampaign.presentation.unused.category
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf

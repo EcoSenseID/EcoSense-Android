@@ -1,16 +1,18 @@
 package com.ecosense.android.featDiscoverCampaign.domain.model
 
 data class CampaignDetail(
-    val posterUrl: String,
-    val initiator: String,
-    val title: String,
-    val description: String,
-    val startDate: String,
-    val endDate: String,
-    val category: List<String>,
     val participantsCount: Int,
+    val title: String,
+    val posterUrl: String,
     val isTrending: Boolean,
     val isNew: Boolean,
+    val initiator: String,
+    val startDate: String,
+    val endDate: String,
+    val description: String,
     val joined: Boolean,
-    val campaignTasks: List<CampaignTask>
+    val completionStatus: Int,
+    val earnedPoints: Int,
+    val missions: List<CampaignMission>,
+    val categories: List<BrowseCategory>
 )

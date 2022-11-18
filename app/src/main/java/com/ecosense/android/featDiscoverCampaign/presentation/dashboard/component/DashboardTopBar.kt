@@ -81,7 +81,11 @@ fun DashboardTopBar(
                     expanded = false
                     searchInput = TextFieldValue("")
                 }, modifier = modifier.weight(1f)) {
-                    Icon(Icons.Default.Close, stringResource(R.string.close_search_bar))
+                    Icon(
+                        Icons.Default.Close,
+                        stringResource(R.string.close_search_bar),
+                        tint = MaterialTheme.colors.secondary
+                    )
                 }
             }
         }
@@ -97,19 +101,20 @@ fun DashboardTopBar(
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier
                         .weight(1f)
-                        .fillMaxHeight(),
+                        .fillMaxHeight()
                 ) {
                     IconButton(onClick = { expanded = true }) {
                         Icon(
                             imageVector = Icons.Default.Search,
                             contentDescription = stringResource(R.string.open_search_bar),
-                            tint = MaterialTheme.colors.onSurface,
+                            tint = MaterialTheme.colors.secondary
                         )
                     }
                 }
 
                 Text(
                     text = stringResource(R.string.campaign),
+                    color = MaterialTheme.colors.primary,
                     style = MaterialTheme.typography.h6,
                     fontWeight = FontWeight.Bold
                 )
