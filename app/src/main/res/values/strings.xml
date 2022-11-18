@@ -280,5 +280,7 @@
     <string name="campaign_list_date_format">MMMM d, yyyy \'at\' HH:mm</string>
     <string name="question_mark" translatable="false">\?</string>
     <string name="campaign_ended_at">Campaign ended at</string>
+    <string name="my_ecorewards_empty">You have never used your EcoPoints</string>
+    <string name="my_ecorewards_empty_description">Go get your rewards!</string>
     <string name="url_ecosense_privacy_policy" translatable="false">https://ecosense.id/privacy-policy</string>
 </resources>

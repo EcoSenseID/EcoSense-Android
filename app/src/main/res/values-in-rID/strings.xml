@@ -266,4 +266,6 @@
     <string name="coming_soon_campaign">Kampanye yang Akan Datang</string>
     <string name="finished_campaign">Kampanye yang Telah Selesai</string>
     <string name="campaign_ended_at">Kampanye berakhir pada</string>
+    <string name="my_ecorewards_empty">Kamu belum pernah memakai EcoPoints-mu</string>
+    <string name="my_ecorewards_empty_description">Ayo dapatkan reward-mu!</string>
 </resources>

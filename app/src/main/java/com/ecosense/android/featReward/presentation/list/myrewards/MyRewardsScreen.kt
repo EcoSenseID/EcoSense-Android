@@ -18,6 +18,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
@@ -92,90 +93,138 @@ fun MyRewardsScreen(
                         )
                     }
                 }
-                LazyColumn(modifier = Modifier.fillMaxWidth()) {
-                    items(state.myRewards.size) { i ->
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            modifier = Modifier
-                                .padding(
-                                    horizontal = MaterialTheme.spacing.medium,
-                                    vertical = MaterialTheme.spacing.small
-                                )
-                                .shadow(elevation = 2.dp, shape = RoundedCornerShape(8.dp))
-                                .clip(shape = RoundedCornerShape(8.dp))
-                                .clickable(onClick = {
-                                    navigator.navigate(
-                                        MyRewardDetailScreenDestination(claimId = myReward[i].claimId)
+                if (myReward.isEmpty()) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(MaterialTheme.spacing.medium),
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        AsyncImage(
+                            model = R.drawable.character_04,
+                            contentDescription = stringResource(R.string.ecobot),
+                            modifier = Modifier.width(175.dp)
+                        )
+                        Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
+                        Text(
+                            text = stringResource(R.string.my_ecorewards_empty),
+                            textAlign = TextAlign.Center,
+                            style = MaterialTheme.typography.body1,
+                            fontWeight = FontWeight.Bold
+                        )
+                        Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
+                        Text(
+                            text = stringResource(R.string.my_ecorewards_empty_description),
+                            textAlign = TextAlign.Center,
+                            style = MaterialTheme.typography.body1,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+                } else {
+                    LazyColumn(modifier = Modifier.fillMaxWidth()) {
+                        items(state.myRewards.size) { i ->
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                modifier = Modifier
+                                    .padding(
+                                        horizontal = MaterialTheme.spacing.medium,
+                                        vertical = MaterialTheme.spacing.small
                                     )
-                                })
-                                .background(MaterialTheme.colors.surface)
-                                .fillMaxWidth()
-                        ) {
-                            Column(
-                                modifier = Modifier
-                                    .width(150.dp)
-                                    .height(160.dp)
-                            ) {
-                                AsyncImage(
-                                    model = ImageRequest.Builder(LocalContext.current)
-                                        .data(myReward[i].bannerUrl)
-                                        .crossfade(true)
-                                        .scale(Scale.FILL)
-                                        .build(),
-                                    contentDescription = myReward[i].title,
-                                    contentScale = ContentScale.Crop,
-                                    modifier = Modifier.fillMaxSize()
-                                )
-                            }
-
-                            Column(
-                                modifier = Modifier
+                                    .shadow(elevation = 2.dp, shape = RoundedCornerShape(8.dp))
+                                    .clip(shape = RoundedCornerShape(8.dp))
+                                    .clickable(onClick = {
+                                        navigator.navigate(
+                                            MyRewardDetailScreenDestination(claimId = myReward[i].claimId)
+                                        )
+                                    })
+                                    .background(MaterialTheme.colors.surface)
                                     .fillMaxWidth()
-                                    .padding(horizontal = MaterialTheme.spacing.medium)
                             ) {
-                                Text(
-                                    text = myReward[i].title,
-                                    style = MaterialTheme.typography.subtitle1,
-                                    fontWeight = FontWeight.Bold
-                                )
-                                Text(
-                                    text = myReward[i].partner,
-                                    style = MaterialTheme.typography.subtitle2
-                                )
+                                Column(
+                                    modifier = Modifier
+                                        .width(150.dp)
+                                        .height(160.dp)
+                                ) {
+                                    AsyncImage(
+                                        model = ImageRequest.Builder(LocalContext.current)
+                                            .data(myReward[i].bannerUrl)
+                                            .crossfade(true)
+                                            .scale(Scale.FILL)
+                                            .build(),
+                                        contentDescription = myReward[i].title,
+                                        contentScale = ContentScale.Crop,
+                                        modifier = Modifier.fillMaxSize()
+                                    )
+                                }
 
-                                Spacer(modifier = Modifier.height(MaterialTheme.spacing.large))
+                                Column(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(horizontal = MaterialTheme.spacing.medium)
+                                ) {
+                                    Text(
+                                        text = myReward[i].title,
+                                        style = MaterialTheme.typography.subtitle1,
+                                        fontWeight = FontWeight.Bold
+                                    )
+                                    Text(
+                                        text = myReward[i].partner,
+                                        style = MaterialTheme.typography.subtitle2
+                                    )
 
-                                when (myReward[i].claimStatus) {
-                                    1 -> {
-                                        if (!state.isLoadingUseReward) {
-                                            GradientButton(
-                                                onClick = {
-                                                    viewModel.onUseRewardJob(claimId = myReward[i].claimId)
-                                                },
-                                                modifier = Modifier
-                                                    .fillMaxWidth()
-                                                    .height(30.dp),
-                                                shape = RoundedCornerShape(20.dp)
-                                            ) {
-                                                Text(
-                                                    text = stringResource(R.string.use_reward),
-                                                    style = MaterialTheme.typography.overline,
-                                                    color = White,
-                                                    fontWeight = FontWeight.Bold,
-                                                    modifier = Modifier.padding(horizontal = MaterialTheme.spacing.extraSmall)
-                                                )
+                                    Spacer(modifier = Modifier.height(MaterialTheme.spacing.large))
+
+                                    when (myReward[i].claimStatus) {
+                                        1 -> {
+                                            if (!state.isLoadingUseReward) {
+                                                GradientButton(
+                                                    onClick = {
+                                                        viewModel.onUseRewardJob(claimId = myReward[i].claimId)
+                                                    },
+                                                    modifier = Modifier
+                                                        .fillMaxWidth()
+                                                        .height(30.dp),
+                                                    shape = RoundedCornerShape(20.dp)
+                                                ) {
+                                                    Text(
+                                                        text = stringResource(R.string.use_reward),
+                                                        style = MaterialTheme.typography.overline,
+                                                        color = White,
+                                                        fontWeight = FontWeight.Bold,
+                                                        modifier = Modifier.padding(horizontal = MaterialTheme.spacing.extraSmall)
+                                                    )
+                                                }
+                                            } else {
+                                                Button(
+                                                    onClick = {},
+                                                    modifier = Modifier
+                                                        .fillMaxWidth()
+                                                        .height(30.dp),
+                                                    shape = RoundedCornerShape(20.dp),
+                                                    colors = ButtonDefaults.buttonColors(DarkGrey)
+                                                ) {
+                                                    Text(
+                                                        text = stringResource(R.string.using_reward),
+                                                        style = MaterialTheme.typography.overline,
+                                                        color = White,
+                                                        fontWeight = FontWeight.Bold,
+                                                        modifier = Modifier.padding(horizontal = MaterialTheme.spacing.extraSmall)
+                                                    )
+                                                }
                                             }
-                                        } else {
+                                        }
+                                        2 -> {
                                             Button(
                                                 onClick = {},
                                                 modifier = Modifier
                                                     .fillMaxWidth()
                                                     .height(30.dp),
                                                 shape = RoundedCornerShape(20.dp),
-                                                colors = ButtonDefaults.buttonColors(DarkGrey)
+                                                colors = ButtonDefaults.buttonColors(CustardYellow)
                                             ) {
                                                 Text(
-                                                    text = stringResource(R.string.using_reward),
+                                                    text = stringResource(R.string.requested),
                                                     style = MaterialTheme.typography.overline,
                                                     color = White,
                                                     fontWeight = FontWeight.Bold,
@@ -183,41 +232,23 @@ fun MyRewardsScreen(
                                                 )
                                             }
                                         }
-                                    }
-                                    2 -> {
-                                        Button(
-                                            onClick = {},
-                                            modifier = Modifier
-                                                .fillMaxWidth()
-                                                .height(30.dp),
-                                            shape = RoundedCornerShape(20.dp),
-                                            colors = ButtonDefaults.buttonColors(CustardYellow)
-                                        ) {
-                                            Text(
-                                                text = stringResource(R.string.requested),
-                                                style = MaterialTheme.typography.overline,
-                                                color = White,
-                                                fontWeight = FontWeight.Bold,
-                                                modifier = Modifier.padding(horizontal = MaterialTheme.spacing.extraSmall)
-                                            )
-                                        }
-                                    }
-                                    3 -> {
-                                        Button(
-                                            onClick = {},
-                                            modifier = Modifier
-                                                .fillMaxWidth()
-                                                .height(30.dp),
-                                            shape = RoundedCornerShape(20.dp),
-                                            colors = ButtonDefaults.buttonColors(SuperDarkGrey)
-                                        ) {
-                                            Text(
-                                                text = stringResource(R.string.completed),
-                                                style = MaterialTheme.typography.overline,
-                                                color = White,
-                                                fontWeight = FontWeight.Bold,
-                                                modifier = Modifier.padding(horizontal = MaterialTheme.spacing.extraSmall)
-                                            )
+                                        3 -> {
+                                            Button(
+                                                onClick = {},
+                                                modifier = Modifier
+                                                    .fillMaxWidth()
+                                                    .height(30.dp),
+                                                shape = RoundedCornerShape(20.dp),
+                                                colors = ButtonDefaults.buttonColors(SuperDarkGrey)
+                                            ) {
+                                                Text(
+                                                    text = stringResource(R.string.completed),
+                                                    style = MaterialTheme.typography.overline,
+                                                    color = White,
+                                                    fontWeight = FontWeight.Bold,
+                                                    modifier = Modifier.padding(horizontal = MaterialTheme.spacing.extraSmall)
+                                                )
+                                            }
                                         }
                                     }
                                 }
