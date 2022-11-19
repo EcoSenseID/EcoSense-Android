@@ -3,25 +3,26 @@ package com.ecosense.android.featDiscoverCampaign.data.model
 import com.ecosense.android.featDiscoverCampaign.domain.model.BrowseCategory
 import com.ecosense.android.featDiscoverCampaign.domain.model.CampaignDetail
 import com.ecosense.android.featDiscoverCampaign.domain.model.CampaignMission
+import com.google.gson.annotations.SerializedName
 
 data class CampaignDetailDto(
-    val error: Boolean?,
-    val message: String?,
-    val participantsCount: Int?,
-    val category: List<String>?,
-    val title: String?,
-    val posterUrl: String?,
-    val isTrending: Boolean?,
-    val isNew: Boolean?,
-    val initiator: String?,
-    val startDate: String?,
-    val endDate: String?,
-    val description: String?,
-    val joined: Boolean?,
-    val completionStatus: Int?,
-    val earnedPoints: String?,
-    val missions: List<MissionsItem>?,
-    val categories: List<CampaignCategoriesItem>?
+    @SerializedName("error") val error: Boolean?,
+    @SerializedName("message") val message: String?,
+    @SerializedName("participantsCount") val participantsCount: Int?,
+    @SerializedName("category") val category: List<String>?,
+    @SerializedName("title") val title: String?,
+    @SerializedName("posterUrl") val posterUrl: String?,
+    @SerializedName("isTrending") val isTrending: Boolean?,
+    @SerializedName("isNew") val isNew: Boolean?,
+    @SerializedName("initiator") val initiator: String?,
+    @SerializedName("startDate") val startDate: String?,
+    @SerializedName("endDate") val endDate: String?,
+    @SerializedName("description") val description: String?,
+    @SerializedName("joined") val joined: Boolean?,
+    @SerializedName("completionStatus") val completionStatus: Int?,
+    @SerializedName("earnedPoints") val earnedPoints: String?,
+    @SerializedName("missions") val missions: List<MissionsItem>?,
+    @SerializedName("categories") val categories: List<CampaignCategoriesItem>?
 ) {
     fun toCampaignDetails() = CampaignDetail(
         participantsCount = participantsCount ?: 0,
@@ -42,13 +43,13 @@ data class CampaignDetailDto(
 }
 
 data class MissionsItem(
-    val name: String?,
-    val description: String?,
-    val id: Int?,
-    val completionStatus: Int?,
-    val proofCaption: String?,
-    val completedTimeStamp: String?,
-    val proofPhotoUrl: String?
+    @SerializedName("name") val name: String?,
+    @SerializedName("description") val description: String?,
+    @SerializedName("id") val id: Int?,
+    @SerializedName("completionStatus") val completionStatus: Int?,
+    @SerializedName("proofCaption") val proofCaption: String?,
+    @SerializedName("completedTimeStamp") val completedTimeStamp: String?,
+    @SerializedName("proofPhotoUrl") val proofPhotoUrl: String?
 ) {
     fun toCampaignMission() = CampaignMission(
         name = name ?: "",
@@ -62,8 +63,8 @@ data class MissionsItem(
 }
 
 data class CampaignCategoriesItem(
-    val name: String?,
-    val colorHex: String?
+    @SerializedName("name") val name: String?,
+    @SerializedName("colorHex") val colorHex: String?
 ) {
     fun toBrowseCategory() = BrowseCategory(
         name = name ?: "",

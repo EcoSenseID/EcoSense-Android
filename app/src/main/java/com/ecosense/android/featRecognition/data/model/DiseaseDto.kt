@@ -2,13 +2,14 @@ package com.ecosense.android.featRecognition.data.model
 
 import com.ecosense.android.core.util.UIText
 import com.ecosense.android.featRecognition.domain.model.Disease
+import com.google.gson.annotations.SerializedName
 
 data class DiseaseDto(
-    val label: String?,
-    val preventiveMeasures: String?,
-    val readableName: String?,
-    val symptoms: String?,
-    val treatments: String?,
+    @SerializedName("label") val label: String?,
+    @SerializedName("preventiveMeasures") val preventiveMeasures: String?,
+    @SerializedName("readableName") val readableName: String?,
+    @SerializedName("symptoms") val symptoms: String?,
+    @SerializedName("treatments") val treatments: String?,
 ) {
     fun toDisease() = Disease(
         label = this.label ?: "",

@@ -1,7 +1,9 @@
 package com.ecosense.android.featRecognition.data.model
 
+import com.google.gson.annotations.SerializedName
+
 data class SaveRecognisableDto(
-    val error: Boolean?,
-    val message: String?,
-    val recognisableId: Int?
+    @SerializedName("error") val error: Boolean?,
+    @SerializedName("message") val message: String?,
+    @SerializedName("recognisableId") val recognisableId: Int?
 )

@@ -1,17 +1,18 @@
 package com.ecosense.android.featForums.data.model
 
 import com.ecosense.android.featForums.domain.model.Reply
+import com.google.gson.annotations.SerializedName
 
 data class ReplyDto(
-    val id: Int?,
-    val userId: Int?,
-    val name: String?,
-    val avatarUrl: String?,
-    val caption: String?,
-    val attachedPhotoUrl: String?,
-    val createdAt: Long?,
-    val supportersCount: Int?,
-    val isSupported: Boolean?,
+    @SerializedName("id") val id: Int?,
+    @SerializedName("userId") val userId: Int?,
+    @SerializedName("name") val name: String?,
+    @SerializedName("avatarUrl") val avatarUrl: String?,
+    @SerializedName("caption") val caption: String?,
+    @SerializedName("attachedPhotoUrl") val attachedPhotoUrl: String?,
+    @SerializedName("createdAt") val createdAt: Long?,
+    @SerializedName("supportersCount") val supportersCount: Int?,
+    @SerializedName("isSupported") val isSupported: Boolean?,
 ) {
     fun toDomain(): Reply = Reply(
         id = this.id ?: 0,

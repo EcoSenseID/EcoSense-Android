@@ -2,22 +2,23 @@ package com.ecosense.android.featForums.data.model
 
 import com.ecosense.android.core.data.model.SharedCampaignDto
 import com.ecosense.android.core.domain.model.Story
+import com.google.gson.annotations.SerializedName
 
 data class GetStoryDetailDto(
-    val attachedPhotoUrl: String?,
-    val avatarUrl: String?,
-    val caption: String?,
-    val createdAt: Long?,
-    val error: Boolean?,
-    val id: Int?,
-    val userId: Int?,
-    val isSupported: Boolean?,
-    val message: String?,
-    val name: String?,
-    val repliesCount: Int?,
-    val sharedCampaign: SharedCampaignDto?,
-    val supportersAvatarsUrl: List<String>?,
-    val supportersCount: Int?,
+    @SerializedName("attachedPhotoUrl") val attachedPhotoUrl: String?,
+    @SerializedName("avatarUrl") val avatarUrl: String?,
+    @SerializedName("caption") val caption: String?,
+    @SerializedName("createdAt") val createdAt: Long?,
+    @SerializedName("error") val error: Boolean?,
+    @SerializedName("id") val id: Int?,
+    @SerializedName("userId") val userId: Int?,
+    @SerializedName("isSupported") val isSupported: Boolean?,
+    @SerializedName("message") val message: String?,
+    @SerializedName("name") val name: String?,
+    @SerializedName("repliesCount") val repliesCount: Int?,
+    @SerializedName("sharedCampaign") val sharedCampaign: SharedCampaignDto?,
+    @SerializedName("supportersAvatarsUrl") val supportersAvatarsUrl: List<String>?,
+    @SerializedName("supportersCount") val supportersCount: Int?,
 ) {
     fun toDomain() = Story(
         id = this.id ?: 0,

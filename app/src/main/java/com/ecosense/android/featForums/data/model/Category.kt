@@ -1,6 +1,8 @@
 package com.ecosense.android.featForums.data.model
 
+import com.google.gson.annotations.SerializedName
+
 data class Category(
-    val colorHex: String,
-    val name: String
+    @SerializedName("colorHex") val colorHex: String,
+    @SerializedName("name") val name: String
 )

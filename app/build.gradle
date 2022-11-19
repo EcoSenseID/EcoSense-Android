@@ -1,6 +1,5 @@
 plugins {
     id 'com.android.application'
-    id 'com.google.gms.google-services'
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-kapt'
     id 'dagger.hilt.android.plugin'
@@ -21,14 +20,14 @@ kotlin {
 }
 
 android {
-    compileSdk 32
+    compileSdk 33
 
     defaultConfig {
         applicationId "com.ecosense.android"
         minSdk 21
-        targetSdk 32
-        versionCode 1
-        versionName "1.0"
+        targetSdk 33
+        versionCode 20221120
+        versionName "2022.11.20"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -38,7 +37,12 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+
+        debug {
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
@@ -99,7 +103,7 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines_version"
 
-    //Dagger - Hilt
+    // Dagger - Hilt
     def dagger_hilt_version = "2.41"
     def hilt_version = "1.0.0"
     implementation "com.google.dagger:hilt-android:$dagger_hilt_version"
@@ -190,3 +194,5 @@ dependencies {
     testImplementation "app.cash.turbine:turbine:$turbine_version"
     androidTestImplementation "app.cash.turbine:turbine:$turbine_version"
 }
+
+apply plugin: 'com.google.gms.google-services'
