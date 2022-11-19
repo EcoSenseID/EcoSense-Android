@@ -74,7 +74,7 @@ fun RewardsScreen(
 
     var requestIndex by remember { mutableStateOf(0) }
 
-    var tempPointsNeeded: Int
+    var tempPointsNeeded by remember { mutableStateOf(0) }
 
     var expanded by remember { mutableStateOf(false) }
     val sortByList = listOf(
@@ -95,6 +95,10 @@ fun RewardsScreen(
 
     val context = LocalContext.current
     val focusManager = LocalFocusManager.current
+
+    if (totalPoints < tempPointsNeeded) {
+        viewModel.onSheetConditionalValueChange(2)
+    }
 
     LaunchedEffect(key1 = true) {
         viewModel.eventFlow.collectLatest { event ->
@@ -736,7 +740,7 @@ fun RewardsScreen(
                                     horizontal = MaterialTheme.spacing.medium,
                                     vertical = MaterialTheme.spacing.small
                                 )
-                                .shadow(elevation = 2.dp, shape = RoundedCornerShape(8.dp))
+                                .shadow(elevation = 2.dp, shape = RoundedCornerShape(20.dp))
                                 .clip(shape = RoundedCornerShape(20.dp))
                                 .clickable(onClick = {
                                     navigator.navigate(
@@ -806,9 +810,7 @@ fun RewardsScreen(
                                             GradientButton(
                                                 onClick = {
                                                     tempPointsNeeded = reward[i].pointsNeeded
-                                                    if (totalPoints < tempPointsNeeded) {
-                                                        viewModel.onSheetConditionalValueChange(2)
-                                                    }
+
                                                     when (reward[i].category) {
                                                         "e-wallet" -> {
                                                             coroutineScope.launch {
