@@ -26,8 +26,8 @@ android {
         applicationId "com.ecosense.android"
         minSdk 21
         targetSdk 33
-        versionCode 20221119
-        versionName "2022.11.19"
+        versionCode 20221120
+        versionName "2022.11.20"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
