@@ -315,7 +315,7 @@ fun RewardHomepageScreen(
                                 .width(180.dp)
                                 .shadow(elevation = 2.dp, shape = RoundedCornerShape(20.dp))
                                 .background(MaterialTheme.colors.surface)
-                                .clip(shape = RoundedCornerShape(8.dp))
+                                .clip(shape = RoundedCornerShape(20.dp))
                                 .clickable(onClick = {
                                     navigator.navigate(
                                         RewardDetailScreenDestination(
@@ -485,7 +485,7 @@ fun RewardHomepageScreen(
                                 .width(180.dp)
                                 .shadow(elevation = 2.dp, shape = RoundedCornerShape(20.dp))
                                 .background(MaterialTheme.colors.surface)
-                                .clip(shape = RoundedCornerShape(8.dp))
+                                .clip(shape = RoundedCornerShape(20.dp))
                                 .clickable(onClick = {
                                     navigator.navigate(
                                         RewardDetailScreenDestination(

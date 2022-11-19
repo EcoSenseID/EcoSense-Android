@@ -131,8 +131,8 @@ fun MyRewardsScreen(
                                         horizontal = MaterialTheme.spacing.medium,
                                         vertical = MaterialTheme.spacing.small
                                     )
-                                    .shadow(elevation = 2.dp, shape = RoundedCornerShape(8.dp))
-                                    .clip(shape = RoundedCornerShape(8.dp))
+                                    .shadow(elevation = 2.dp, shape = RoundedCornerShape(20.dp))
+                                    .clip(shape = RoundedCornerShape(20.dp))
                                     .clickable(onClick = {
                                         navigator.navigate(
                                             MyRewardDetailScreenDestination(claimId = myReward[i].claimId)
