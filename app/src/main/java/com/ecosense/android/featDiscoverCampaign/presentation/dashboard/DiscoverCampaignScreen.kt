@@ -92,13 +92,13 @@ fun DiscoverCampaignScreen(
             })
         }, scaffoldState = scaffoldState
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(vertical = MaterialTheme.spacing.medium)
-                .verticalScroll(verticalScrollState)
-        ) {
-            if (!state.isLoadingDashboard) {
+        if (!state.isLoadingDashboard) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .verticalScroll(verticalScrollState)
+                    .padding(vertical = MaterialTheme.spacing.medium)
+            ) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.Center
@@ -428,7 +428,13 @@ fun DiscoverCampaignScreen(
                     categories = dashboard.categories,
                     isLoading = state.isLoadingCategories
                 )
-            } else {
+            }
+        } else {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(vertical = MaterialTheme.spacing.medium)
+            ) {
                 Row(
                     modifier = Modifier.fillMaxSize(),
                     horizontalArrangement = Arrangement.Center,
