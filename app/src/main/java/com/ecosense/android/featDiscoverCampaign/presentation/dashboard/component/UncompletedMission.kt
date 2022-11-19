@@ -4,8 +4,9 @@ import android.os.Build
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -36,17 +37,20 @@ fun UncompletedMission(
     campaignSize: Int,
     modifier: Modifier = Modifier
 ) {
+    val verticalScrollState = rememberScrollState()
+
     if (campaigns.uncompletedMissions.isNotEmpty()) {
         if (campaignSize == 1) {
-            LazyColumn(
+            Column(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(225.dp)
                     .padding(MaterialTheme.spacing.medium)
                     .shadow(elevation = 2.dp, shape = RoundedCornerShape(20.dp))
                     .clip(shape = RoundedCornerShape(20.dp))
+                    .verticalScroll(verticalScrollState)
             ) {
-                items(campaigns.uncompletedMissions.size) { i ->
+                campaigns.uncompletedMissions.forEach { uncompletedMission ->
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                         modifier = modifier
@@ -69,7 +73,7 @@ fun UncompletedMission(
                                     verticalArrangement = Arrangement.SpaceEvenly
                                 ) {
                                     Text(
-                                        text = campaigns.uncompletedMissions[i].name,
+                                        text = uncompletedMission.name,
                                         style = MaterialTheme.typography.body1,
                                         fontWeight = FontWeight.Bold,
                                         color = MaterialTheme.colors.primary
@@ -119,15 +123,16 @@ fun UncompletedMission(
                 }
             }
         } else {
-            LazyColumn(
+            Column(
                 modifier = Modifier
                     .width(350.dp)
                     .height(225.dp)
                     .padding(MaterialTheme.spacing.medium)
                     .shadow(elevation = 2.dp, shape = RoundedCornerShape(20.dp))
                     .clip(shape = RoundedCornerShape(20.dp))
+                    .verticalScroll(verticalScrollState)
             ) {
-                items(campaigns.uncompletedMissions.size) { i ->
+                campaigns.uncompletedMissions.forEach { uncompletedMission ->
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                         modifier = modifier
@@ -150,7 +155,7 @@ fun UncompletedMission(
                                     verticalArrangement = Arrangement.SpaceEvenly
                                 ) {
                                     Text(
-                                        text = campaigns.uncompletedMissions[i].name,
+                                        text = uncompletedMission.name,
                                         style = MaterialTheme.typography.body1,
                                         fontWeight = FontWeight.Bold,
                                         color = MaterialTheme.colors.primary
@@ -209,7 +214,8 @@ fun UncompletedMission(
                     .padding(MaterialTheme.spacing.medium)
                     .shadow(elevation = 2.dp, shape = RoundedCornerShape(20.dp))
                     .background(color = MintGreen)
-                    .clip(shape = RoundedCornerShape(20.dp)),
+                    .clip(shape = RoundedCornerShape(20.dp))
+                    .clickable { navigator.navigate(CampaignDetailScreenDestination(id = campaigns.id)) },
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
@@ -257,7 +263,8 @@ fun UncompletedMission(
                     .padding(MaterialTheme.spacing.medium)
                     .shadow(elevation = 2.dp, shape = RoundedCornerShape(20.dp))
                     .background(color = MintGreen)
-                    .clip(shape = RoundedCornerShape(20.dp)),
+                    .clip(shape = RoundedCornerShape(20.dp))
+                    .clickable { navigator.navigate(CampaignDetailScreenDestination(id = campaigns.id)) },
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {

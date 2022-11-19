@@ -1,9 +1,7 @@
 package com.ecosense.android.featDiscoverCampaign.presentation.dashboard
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
@@ -55,6 +53,9 @@ fun DiscoverCampaignScreen(
     val context = LocalContext.current
     val focusManager = LocalFocusManager.current
 
+    val verticalScrollState = rememberScrollState()
+    val horizontalScrollState = rememberScrollState()
+
     OnLifecycleEvent {
         if (it == Lifecycle.Event.ON_RESUME)
             viewModel.getDashboard()
@@ -95,6 +96,7 @@ fun DiscoverCampaignScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(vertical = MaterialTheme.spacing.medium)
+                .verticalScroll(verticalScrollState)
         ) {
             if (!state.isLoadingDashboard) {
                 Row(
@@ -290,10 +292,12 @@ fun DiscoverCampaignScreen(
                             campaignSize = dashboard.campaigns.size
                         )
                     } else {
-                        LazyRow(modifier = Modifier.fillMaxWidth()) {
-                            items(dashboard.campaigns.size) { i ->
+                        Row(modifier = Modifier
+                            .fillMaxWidth()
+                            .horizontalScroll(horizontalScrollState)) {
+                            dashboard.campaigns.forEach { campaign ->
                                 Column(modifier = Modifier.fillMaxWidth()) {
-                                    if (dashboard.campaigns[i].completionStatus != CampaignCompletionStatus.TIMEOUT) {
+                                    if (campaign.completionStatus != CampaignCompletionStatus.TIMEOUT) {
                                         Row(
                                             modifier = Modifier
                                                 .width(350.dp)
@@ -307,7 +311,7 @@ fun DiscoverCampaignScreen(
                                                 .background(MintGreen)
                                                 .clickable {
                                                     navigator.navigate(
-                                                        CampaignDetailScreenDestination(id = dashboard.campaigns[i].id)
+                                                        CampaignDetailScreenDestination(id = campaign.id)
                                                     )
                                                 },
                                             horizontalArrangement = Arrangement.SpaceEvenly
@@ -320,7 +324,7 @@ fun DiscoverCampaignScreen(
                                                     horizontalArrangement = Arrangement.Center
                                                 ) {
                                                     Text(
-                                                        text = dashboard.campaigns[i].name,
+                                                        text = campaign.name,
                                                         textAlign = TextAlign.Center,
                                                         style = MaterialTheme.typography.subtitle1,
                                                         color = MaterialTheme.colors.primary,
@@ -344,7 +348,7 @@ fun DiscoverCampaignScreen(
                                                         verticalArrangement = Arrangement.Center
                                                     ) {
                                                         Text(
-                                                            text = dashboard.campaigns[i].missionLeft.toString(),
+                                                            text = campaign.missionLeft.toString(),
                                                             textAlign = TextAlign.Center,
                                                             fontSize = 40.sp,
                                                             color = MaterialTheme.colors.onPrimary,
@@ -374,7 +378,7 @@ fun DiscoverCampaignScreen(
                                                         verticalArrangement = Arrangement.Center
                                                     ) {
                                                         Text(
-                                                            text = dashboard.campaigns[i].missionCompleted.toString(),
+                                                            text = campaign.missionCompleted.toString(),
                                                             textAlign = TextAlign.Center,
                                                             fontSize = 40.sp,
                                                             color = MaterialTheme.colors.onPrimary,
@@ -393,7 +397,7 @@ fun DiscoverCampaignScreen(
                                         }
                                         UncompletedMission(
                                             navigator = navigator,
-                                            campaigns = dashboard.campaigns[i],
+                                            campaigns = campaign,
                                             campaignSize = dashboard.campaigns.size
                                         )
                                     }
