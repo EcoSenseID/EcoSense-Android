@@ -1,20 +1,21 @@
 package com.ecosense.android.featReward.data.model
 
 import com.ecosense.android.featReward.domain.model.MyRewards
+import com.google.gson.annotations.SerializedName
 
 data class MyRewardsDto(
-    val error: Boolean?,
-    val message: String?,
-    val myRewards: List<MyRewardsItem>?
+    @SerializedName("error") val error: Boolean?,
+    @SerializedName("message") val message: String?,
+    @SerializedName("myRewards") val myRewards: List<MyRewardsItem>?
 )
 
 data class MyRewardsItem(
-    val partner: String?,
-    val bannerUrl: String?,
-    val claimId: Int?,
-    val claimStatus: Int?,
-    val title: String?,
-    val category: String?
+    @SerializedName("partner") val partner: String?,
+    @SerializedName("bannerUrl") val bannerUrl: String?,
+    @SerializedName("claimId") val claimId: Int?,
+    @SerializedName("claimStatus") val claimStatus: Int?,
+    @SerializedName("title") val title: String?,
+    @SerializedName("category") val category: String?
 ) {
     fun toMyRewards() = MyRewards(
         partner = partner ?: "",

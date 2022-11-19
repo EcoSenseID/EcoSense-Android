@@ -6,6 +6,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Environment
+import android.util.Log
 import androidx.core.content.FileProvider
 import com.ecosense.android.R
 import com.ecosense.android.core.domain.api.AuthApi
@@ -53,11 +54,15 @@ class ForumsRepositoryImpl(
             )
 
             return when {
-                response.error == true -> Resource.Error(uiText = response.message?.let {
-                    UIText.DynamicString(it)
-                } ?: UIText.StringResource(R.string.em_unknown))
+                response.error == true -> {
+                    Log.d("TAG", "getStories: response.error == true")
+                    Resource.Error(uiText = response.message?.let {
+                        UIText.DynamicString(it)
+                    } ?: UIText.StringResource(R.string.em_unknown))
+                }
 
                 response.stories == null -> {
+                    Log.d("TAG", "getStories: stories == null")
                     Resource.Error(UIText.StringResource(R.string.em_unknown))
                 }
 
@@ -65,6 +70,7 @@ class ForumsRepositoryImpl(
             }
 
         } catch (e: Exception) {
+            Log.d("TAG", "getStories: ${e.stackTraceToString()}")
             logcat { e.asLog() }
             when (e) {
                 is IOException -> UIText.StringResource(R.string.em_io_exception)

@@ -1,7 +1,9 @@
 package com.ecosense.android.featDiscoverCampaign.data.model
 
+import com.google.gson.annotations.SerializedName
+
 data class CompleteCampaignDto(
-    val error: Boolean?,
-    val message: String?
+    @SerializedName("error") val error: Boolean?,
+    @SerializedName("message") val message: String?,
 )
 

@@ -1,8 +1,10 @@
 package com.ecosense.android.featRecognition.data.model
 
+import com.google.gson.annotations.SerializedName
+
 data class RecognisableDto(
-    val id: Int?,
-    val label: String?,
-    val confidencePercent: Int?,
-    val savedAt: Int?
+    @SerializedName("id") val id: Int?,
+    @SerializedName("label") val label: String?,
+    @SerializedName("confidencePercent") val confidencePercent: Int?,
+    @SerializedName("savedAt") val savedAt: Int?
 )

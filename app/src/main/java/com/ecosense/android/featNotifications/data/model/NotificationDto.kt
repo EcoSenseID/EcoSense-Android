@@ -1,13 +1,14 @@
 package com.ecosense.android.featNotifications.data.model
 
 import com.ecosense.android.featNotifications.domain.model.Notification
+import com.google.gson.annotations.SerializedName
 
 data class NotificationDto(
-    val content: String?,
-    val deeplink: String?,
-    val iconUrl: String?,
-    val id: Int?,
-    val timestamp: Long?,
+    @SerializedName("content") val content: String?,
+    @SerializedName("deeplink") val deeplink: String?,
+    @SerializedName("iconUrl") val iconUrl: String?,
+    @SerializedName("id") val id: Int?,
+    @SerializedName("timestamp") val timestamp: Long?,
 ) {
     fun toDomain() = Notification(
         content = this.content ?: "",

@@ -1,16 +1,17 @@
 package com.ecosense.android.core.data.model
 
 import com.ecosense.android.core.domain.model.SharedCampaign
+import com.google.gson.annotations.SerializedName
 
 data class SharedCampaignDto(
-    val id: Int?,
-    val posterUrl: String?,
-    val title: String?,
-    val endAt: Long?,
-    val categories: List<CategoryDto>?,
-    val participantsCount: Int?,
-    val isTrending: Boolean?,
-    val isNew: Boolean?
+    @SerializedName("id") val id: Int?,
+    @SerializedName("posterUrl") val posterUrl: String?,
+    @SerializedName("title") val title: String?,
+    @SerializedName("endAt") val endAt: Long?,
+    @SerializedName("categories") val categories: List<CategoryDto>?,
+    @SerializedName("participantsCount") val participantsCount: Int?,
+    @SerializedName("isTrending") val isTrending: Boolean?,
+    @SerializedName("isNew") val isNew: Boolean?
 ) {
     fun toDomain(): SharedCampaign = SharedCampaign(
         id = this.id ?: 0,

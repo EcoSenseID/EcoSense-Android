@@ -2,13 +2,14 @@ package com.ecosense.android.featProfile.data.model
 
 import com.ecosense.android.core.data.model.StoryDto
 import com.ecosense.android.featProfile.domain.model.Profile
+import com.google.gson.annotations.SerializedName
 
 data class ProfileDto(
-    val error: Boolean?,
-    val message: String?,
-    val totalEcoPoints: Int?,
-    val recentStories: List<StoryDto>?,
-    val recentCampaigns: List<RecentCampaignDto>?
+    @SerializedName("error") val error: Boolean?,
+    @SerializedName("message") val message: String?,
+    @SerializedName("totalEcoPoints") val totalEcoPoints: Int?,
+    @SerializedName("recentStories") val recentStories: List<StoryDto>?,
+    @SerializedName("recentCampaigns") val recentCampaigns: List<RecentCampaignDto>?
 ) {
     fun toDomain(): Profile = Profile(
         totalEcoPoints = this.totalEcoPoints ?: 0,

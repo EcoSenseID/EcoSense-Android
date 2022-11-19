@@ -2,23 +2,24 @@ package com.ecosense.android.featDiscoverCampaign.data.model
 
 import com.ecosense.android.core.domain.model.Campaign
 import com.ecosense.android.featDiscoverCampaign.domain.model.BrowseCategory
+import com.google.gson.annotations.SerializedName
 
 data class BrowseCampaignDto(
-    val error: Boolean?,
-    val message: String?,
-    val campaigns: List<CampaignsItem>?
+    @SerializedName("error") val error: Boolean?,
+    @SerializedName("message") val message: String?,
+    @SerializedName("campaigns") val campaigns: List<CampaignsItem>?
 )
 
 data class CampaignsItem(
-    val id: Int?,
-    val posterUrl: String?,
-    val title: String?,
-    val endDate: String?,
-    val startDate: String?,
-    val categories: List<BrowseCategoriesItem>?,
-    val participantsCount: Int?,
-    val isTrending: Boolean?,
-    val isNew: Boolean?
+    @SerializedName("id") val id: Int?,
+    @SerializedName("posterUrl") val posterUrl: String?,
+    @SerializedName("title") val title: String?,
+    @SerializedName("endDate") val endDate: String?,
+    @SerializedName("startDate") val startDate: String?,
+    @SerializedName("categories") val categories: List<BrowseCategoriesItem>?,
+    @SerializedName("participantsCount") val participantsCount: Int?,
+    @SerializedName("isTrending") val isTrending: Boolean?,
+    @SerializedName("isNew") val isNew: Boolean?
 ) {
     fun toCampaign() = Campaign(
         id = id ?: 0,
@@ -34,12 +35,10 @@ data class CampaignsItem(
 }
 
 data class BrowseCategoriesItem(
-    val name: String?,
-    val colorHex: String?
+    @SerializedName("name") val name: String?,
+    @SerializedName("colorHex") val colorHex: String?,
 ) {
     fun toBrowseCategory() = BrowseCategory(
-        name = name ?: "",
-        colorHex = colorHex ?: ""
+        name = name ?: "", colorHex = colorHex ?: ""
     )
 }
-

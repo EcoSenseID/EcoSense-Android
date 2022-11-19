@@ -1,7 +1,9 @@
 package com.ecosense.android.featNotifications.data.model
 
+import com.google.gson.annotations.SerializedName
+
 data class GetNotificationsDto(
-    val error: Boolean?,
-    val message: String?,
-    val notifications: List<NotificationDto>?,
+    @SerializedName("error") val error: Boolean?,
+    @SerializedName("message") val message: String?,
+    @SerializedName("notifications") val notifications: List<NotificationDto>?,
 )
