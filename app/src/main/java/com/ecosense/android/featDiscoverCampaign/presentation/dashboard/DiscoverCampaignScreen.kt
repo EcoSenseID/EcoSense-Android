@@ -57,8 +57,7 @@ fun DiscoverCampaignScreen(
     val horizontalScrollState = rememberScrollState()
 
     OnLifecycleEvent {
-        if (it == Lifecycle.Event.ON_RESUME)
-            viewModel.getDashboard()
+        if (it == Lifecycle.Event.ON_RESUME) viewModel.getDashboard()
     }
 
     LaunchedEffect(key1 = true) {
@@ -100,8 +99,7 @@ fun DiscoverCampaignScreen(
                     .padding(vertical = MaterialTheme.spacing.medium)
             ) {
                 Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Center
+                    modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center
                 ) {
                     Text(
                         text = stringResource(R.string.dashboard_current_progress),
@@ -130,8 +128,7 @@ fun DiscoverCampaignScreen(
                         textAlign = TextAlign.Center,
                         fontWeight = FontWeight.Bold,
                         style = MaterialTheme.typography.h6,
-                        modifier = Modifier
-                            .fillMaxWidth()
+                        modifier = Modifier.fillMaxWidth()
                     )
                     GradientButton(
                         onClick = {
@@ -140,8 +137,7 @@ fun DiscoverCampaignScreen(
                                     LoginScreenDestination()
                                 )
                             }
-                        },
-                        modifier = Modifier
+                        }, modifier = Modifier
                             .fillMaxWidth()
                             .padding(MaterialTheme.spacing.medium)
                     ) {
@@ -195,17 +191,18 @@ fun DiscoverCampaignScreen(
                                 .height(145.dp)
                                 .padding(horizontal = MaterialTheme.spacing.medium)
                                 .shadow(
-                                    elevation = 2.dp,
-                                    shape = RoundedCornerShape(20.dp)
+                                    elevation = 2.dp, shape = RoundedCornerShape(20.dp)
                                 )
                                 .clip(shape = RoundedCornerShape(20.dp))
                                 .background(MintGreen)
                                 .clickable {
                                     navigator.navigate(
-                                        CampaignDetailScreenDestination(id = dashboard.campaigns[0].id)
+                                        CampaignDetailScreenDestination(
+                                            id = dashboard.campaigns[0].id,
+                                            recordId = null,
+                                        )
                                     )
-                                },
-                            horizontalArrangement = Arrangement.SpaceEvenly
+                                }, horizontalArrangement = Arrangement.SpaceEvenly
                         ) {
                             Column(modifier = Modifier.fillMaxWidth()) {
                                 Row(
@@ -292,9 +289,11 @@ fun DiscoverCampaignScreen(
                             campaignSize = dashboard.campaigns.size
                         )
                     } else {
-                        Row(modifier = Modifier
-                            .fillMaxWidth()
-                            .horizontalScroll(horizontalScrollState)) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .horizontalScroll(horizontalScrollState)
+                        ) {
                             dashboard.campaigns.forEach { campaign ->
                                 Column(modifier = Modifier.fillMaxWidth()) {
                                     if (campaign.completionStatus != CampaignCompletionStatus.TIMEOUT) {
@@ -311,10 +310,12 @@ fun DiscoverCampaignScreen(
                                                 .background(MintGreen)
                                                 .clickable {
                                                     navigator.navigate(
-                                                        CampaignDetailScreenDestination(id = campaign.id)
+                                                        CampaignDetailScreenDestination(
+                                                            id = campaign.id,
+                                                            recordId = null,
+                                                        )
                                                     )
-                                                },
-                                            horizontalArrangement = Arrangement.SpaceEvenly
+                                                }, horizontalArrangement = Arrangement.SpaceEvenly
                                         ) {
                                             Column(modifier = Modifier.fillMaxWidth()) {
                                                 Row(
@@ -441,8 +442,7 @@ fun DiscoverCampaignScreen(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     CircularProgressIndicator(
-                        modifier = Modifier.wrapContentSize(),
-                        strokeWidth = 3.dp
+                        modifier = Modifier.wrapContentSize(), strokeWidth = 3.dp
                     )
                 }
             }

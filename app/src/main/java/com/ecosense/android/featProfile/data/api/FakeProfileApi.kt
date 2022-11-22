@@ -65,6 +65,7 @@ class FakeProfileApi : ProfileApi {
             recentCampaigns = listOf(
                 RecentCampaignDto(
                     id = 1,
+                    recordId = 1,
                     posterUrl = "https://cdn.statically.io/og/theme=dark/food_waste_1.jpg",
                     title = "No More Food Waste: Hassle-Free Compost",
                     earnedPoints = 300,
@@ -78,6 +79,7 @@ class FakeProfileApi : ProfileApi {
                 ),
                 RecentCampaignDto(
                     id = 1,
+                    recordId = 1,
                     posterUrl = "https://cdn.statically.io/og/theme=dark/food_waste_1.jpg",
                     title = "No More Food Waste: Hassle-Free Compost",
                     earnedPoints = 300,
@@ -91,6 +93,7 @@ class FakeProfileApi : ProfileApi {
                 ),
                 RecentCampaignDto(
                     id = 1,
+                    recordId = 1,
                     posterUrl = "https://cdn.statically.io/og/theme=dark/food_waste_1.jpg",
                     title = "No More Food Waste: Hassle-Free Compost",
                     earnedPoints = 300,
@@ -169,6 +172,7 @@ class FakeProfileApi : ProfileApi {
             recentCampaigns = listOf(
                 RecentCampaignDto(
                     id = 1,
+                    recordId = 1,
                     posterUrl = "https://cdn.statically.io/og/theme=dark/food_waste_1.jpg",
                     title = "No More Food Waste: Hassle-Free Compost",
                     earnedPoints = 300,
@@ -182,6 +186,7 @@ class FakeProfileApi : ProfileApi {
                 ),
                 RecentCampaignDto(
                     id = 1,
+                    recordId = 1,
                     posterUrl = "https://cdn.statically.io/og/theme=dark/food_waste_1.jpg",
                     title = "No More Food Waste: Hassle-Free Compost",
                     earnedPoints = 300,
@@ -195,6 +200,7 @@ class FakeProfileApi : ProfileApi {
                 ),
                 RecentCampaignDto(
                     id = 1,
+                    recordId = 1,
                     posterUrl = "https://cdn.statically.io/og/theme=dark/food_waste_1.jpg",
                     title = "No More Food Waste: Hassle-Free Compost",
                     earnedPoints = 300,
@@ -262,6 +268,7 @@ class FakeProfileApi : ProfileApi {
             campaigns = listOf(
                 RecentCampaignDto(
                     id = 1,
+                    recordId = 1,
                     posterUrl = "https://cdn.statically.io/og/theme=dark/food_waste_1.jpg",
                     title = "No More Food Waste: Hassle-Free Compost",
                     earnedPoints = 300,
@@ -275,6 +282,7 @@ class FakeProfileApi : ProfileApi {
                 ),
                 RecentCampaignDto(
                     id = 1,
+                    recordId = 1,
                     posterUrl = "https://cdn.statically.io/og/theme=dark/food_waste_1.jpg",
                     title = "No More Food Waste: Hassle-Free Compost",
                     earnedPoints = 300,
@@ -288,6 +296,7 @@ class FakeProfileApi : ProfileApi {
                 ),
                 RecentCampaignDto(
                     id = 1,
+                    recordId = 1,
                     posterUrl = "https://cdn.statically.io/og/theme=dark/food_waste_1.jpg",
                     title = "No More Food Waste: Hassle-Free Compost",
                     earnedPoints = 300,

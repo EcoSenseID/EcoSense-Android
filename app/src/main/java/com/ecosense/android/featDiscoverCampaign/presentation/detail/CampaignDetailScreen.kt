@@ -48,7 +48,6 @@ import com.ecosense.android.featDiscoverCampaign.data.util.dateFormatter
 import com.ecosense.android.featDiscoverCampaign.data.util.unixCountdown
 import com.ecosense.android.featDiscoverCampaign.presentation.component.DiscoverTopBar
 import com.ecosense.android.featDiscoverCampaign.presentation.detail.component.UploadTaskProof
-import com.ecosense.android.featReward.data.util.ecopointsFormatter
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlinx.coroutines.delay
@@ -59,9 +58,12 @@ import kotlinx.coroutines.flow.collectLatest
 fun CampaignDetailScreen(
     navigator: DestinationsNavigator,
     id: Int,
+    recordId: Int?,
     viewModel: CampaignDetailViewModel = hiltViewModel()
 ) {
-    remember { viewModel.setCampaignId(id = id) }
+    remember {
+        viewModel.setCampaignId(id = id, recordId = recordId)
+    }
 
     val scaffoldState = rememberScaffoldState()
     val scrollState = rememberScrollState()

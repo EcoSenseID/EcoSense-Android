@@ -114,14 +114,12 @@ fun ForumsScreen(
                 items(count = viewModel.stories.size) { i ->
                     if (i >= viewModel.stories.size - 1 && !viewModel.feedState.isEndReached && !viewModel.feedState.isLoading) viewModel.onLoadNextStoriesFeed()
 
-                    StoryItem(
-                        story = { viewModel.stories[i] },
+                    StoryItem(story = { viewModel.stories[i] },
                         onClickSupport = { viewModel.onClickSupport(viewModel.stories[i].id) },
                         onClickReply = { navigator.navigate(StoryDetailScreenDestination(viewModel.stories[i].id)) },
                         onClickShare = {
                             val shareText = context.getString(
-                                R.string.format_share_message,
-                                viewModel.stories[i].id
+                                R.string.format_share_message, viewModel.stories[i].id
                             )
 
                             Intent(Intent.ACTION_SEND).let { intent ->
@@ -136,17 +134,23 @@ fun ForumsScreen(
                             )
                         },
                         onClickSharedCampaign = { campaign: SharedCampaignPresentation ->
-                            navigator.navigate(CampaignDetailScreenDestination(id = campaign.id))
+                            navigator.navigate(
+                                CampaignDetailScreenDestination(
+                                    id = campaign.id,
+                                    recordId = null,
+                                )
+                            )
                         },
                         modifier = Modifier.clickable {
                             navigator.navigate(StoryDetailScreenDestination(viewModel.stories[i].id))
                         },
                         onClickProfile = {
-                            navigator.navigate(OthersProfileScreenDestination(
-                                userId = viewModel.stories[i].userId,
-                            ))
-                        }
-                    )
+                            navigator.navigate(
+                                OthersProfileScreenDestination(
+                                    userId = viewModel.stories[i].userId,
+                                )
+                            )
+                        })
 
                     Divider()
                 }

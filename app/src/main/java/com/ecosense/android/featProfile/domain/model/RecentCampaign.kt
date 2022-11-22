@@ -4,6 +4,7 @@ import com.ecosense.android.core.domain.model.Category
 
 data class RecentCampaign(
     val id: Int,
+    val recordId: Int?,
     val posterUrl: String,
     val title: String,
     val earnedPoints: Int,

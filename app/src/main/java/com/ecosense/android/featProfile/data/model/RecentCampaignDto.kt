@@ -6,6 +6,7 @@ import com.google.gson.annotations.SerializedName
 
 data class RecentCampaignDto(
     @SerializedName("id") val id: Int?,
+    @SerializedName("recordId") val recordId: Int?,
     @SerializedName("posterUrl") val posterUrl: String?,
     @SerializedName("title") val title: String?,
     @SerializedName("earnedPoints") val earnedPoints: Int?,
@@ -16,6 +17,7 @@ data class RecentCampaignDto(
 ) {
     fun toDomain(): RecentCampaign = RecentCampaign(
         id = this.id ?: 0,
+        recordId = this.recordId,
         posterUrl = this.posterUrl ?: "",
         title = this.title ?: "",
         earnedPoints = this.earnedPoints ?: 0,

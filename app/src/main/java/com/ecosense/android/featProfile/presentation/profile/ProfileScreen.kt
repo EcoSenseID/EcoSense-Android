@@ -41,9 +41,9 @@ import com.ecosense.android.core.presentation.util.UIEvent
 import com.ecosense.android.core.presentation.util.asString
 import com.ecosense.android.core.util.OnLifecycleEvent
 import com.ecosense.android.destinations.*
+import com.ecosense.android.featProfile.presentation.component.RecentCampaignItem
 import com.ecosense.android.featProfile.presentation.component.RecentStoryItem
 import com.ecosense.android.featProfile.presentation.profile.component.ProfileTopBar
-import com.ecosense.android.featProfile.presentation.component.RecentCampaignItem
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlinx.coroutines.flow.collectLatest
@@ -310,7 +310,12 @@ fun ProfileScreen(
                                 )
                             },
                             onClickSharedCampaign = { campaign ->
-                                navigator.navigate(CampaignDetailScreenDestination(id = campaign.id))
+                                navigator.navigate(
+                                    CampaignDetailScreenDestination(
+                                        id = campaign.id,
+                                        recordId = null,
+                                    )
+                                )
                             },
                             modifier = Modifier
                                 .clip(RoundedCornerShape(16.dp))
@@ -387,7 +392,12 @@ fun ProfileScreen(
                         Card(
                             shape = RoundedCornerShape(16.dp),
                             onClick = {
-                                navigator.navigate(CampaignDetailScreenDestination(campaign.id))
+                                navigator.navigate(
+                                    CampaignDetailScreenDestination(
+                                        id = campaign.id,
+                                        recordId = campaign.recordId,
+                                    )
+                                )
                             },
                             modifier = Modifier.fillMaxWidth(),
                         ) {

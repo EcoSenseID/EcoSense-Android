@@ -2,7 +2,9 @@ package com.ecosense.android.featDiscoverCampaign.presentation.detail
 
 import android.net.Uri
 import androidx.compose.runtime.State
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ecosense.android.R
@@ -24,6 +26,9 @@ class CampaignDetailViewModel @Inject constructor(
     private val authRepository: AuthRepository,
     private val discoverCampaignRepository: DiscoverCampaignRepository
 ) : ViewModel() {
+
+    private var campaignRecordId by mutableStateOf<Int?>(null)
+
     val isLoggedIn: StateFlow<Boolean?> = authRepository.isLoggedIn
         .stateIn(viewModelScope, SharingStarted.Eagerly, null)
 
@@ -34,11 +39,15 @@ class CampaignDetailViewModel @Inject constructor(
     val eventFlow = _eventFlow.receiveAsFlow()
 
     private var setCampaignIdJob: Job? = null
-    fun setCampaignId(id: Int) {
+    fun setCampaignId(id: Int, recordId: Int?) {
         setCampaignIdJob?.cancel()
         _state.value = state.value.copy(proofPhotoUrl = null)
         setCampaignIdJob = viewModelScope.launch {
-            discoverCampaignRepository.getCampaignDetail(id = id).onEach { result ->
+            campaignRecordId = recordId
+            discoverCampaignRepository.getCampaignDetail(
+                id = id,
+                recordId = recordId,
+            ).onEach { result ->
                 when (result) {
                     is Resource.Error -> {
                         _state.value = state.value.copy(isLoadingCampaignDetail = false)
@@ -83,7 +92,7 @@ class CampaignDetailViewModel @Inject constructor(
                     is Resource.Success -> {
                         _state.value = state.value.copy(isLoadingUploadProof = false)
                         _eventFlow.send(UIEvent.ShowSnackbar(UIText.StringResource(R.string.upload_proof_success)))
-                        setCampaignId(id = campaignId)
+                        setCampaignId(id = campaignId, recordId = campaignRecordId)
                     }
                 }
             }.launchIn(this)
@@ -106,7 +115,7 @@ class CampaignDetailViewModel @Inject constructor(
                     is Resource.Success -> {
                         _state.value = state.value.copy(isLoadingJoinCampaign = false)
                         _eventFlow.send(UIEvent.ShowSnackbar(UIText.StringResource(R.string.join_campaign_success)))
-                        setCampaignId(id = campaignId)
+                        setCampaignId(id = campaignId, recordId = campaignRecordId)
                     }
                 }
             }.launchIn(this)
@@ -130,7 +139,7 @@ class CampaignDetailViewModel @Inject constructor(
                         is Resource.Success -> {
                             _state.value = state.value.copy(isLoadingCompleteCampaign = false)
                             _eventFlow.send(UIEvent.ShowSnackbar(UIText.StringResource(R.string.submit_campaign_success)))
-                            setCampaignId(id = campaignId)
+                            setCampaignId(id = campaignId, recordId = campaignRecordId)
                         }
                     }
                 }.launchIn(this)

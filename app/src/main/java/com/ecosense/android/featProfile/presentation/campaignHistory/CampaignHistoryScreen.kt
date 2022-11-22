@@ -112,7 +112,12 @@ fun CampaignHistoryScreen(
                 Card(
                     shape = RoundedCornerShape(16.dp),
                     onClick = {
-                        navigator.navigate(CampaignDetailScreenDestination(viewModel.campaigns[i].id))
+                        navigator.navigate(
+                            CampaignDetailScreenDestination(
+                                id = viewModel.campaigns[i].id,
+                                recordId = viewModel.campaigns[i].recordId,
+                            )
+                        )
                     },
                     modifier = Modifier
                         .fillMaxWidth()

@@ -29,6 +29,13 @@ interface DiscoverApi {
         @Query("id") id: Int
     ): CampaignDetailDto
 
+    @GET("detail")
+    suspend fun getCampaignDetail(
+        @Header("Authorization") bearerToken: String,
+        @Query("id") id: Int,
+        @Query("recordId") recordId: Int,
+    ): CampaignDetailDto
+
     @Multipart
     @POST("proof")
     suspend fun setCompletionProof(

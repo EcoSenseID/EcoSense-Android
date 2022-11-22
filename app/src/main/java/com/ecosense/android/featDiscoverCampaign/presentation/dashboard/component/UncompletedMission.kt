@@ -51,21 +51,25 @@ fun UncompletedMission(
                     .verticalScroll(verticalScrollState)
             ) {
                 campaigns.uncompletedMissions.forEach { uncompletedMission ->
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
+                    Row(verticalAlignment = Alignment.CenterVertically,
                         modifier = modifier
                             .background(MaterialTheme.colors.surface)
-                            .clickable { navigator.navigate(CampaignDetailScreenDestination(id = campaigns.id)) }
+                            .clickable {
+                                navigator.navigate(
+                                    CampaignDetailScreenDestination(
+                                        id = campaigns.id,
+                                        recordId = null,
+                                    )
+                                )
+                            }
                             .padding(
                                 top = MaterialTheme.spacing.small,
                                 start = MaterialTheme.spacing.medium,
                                 end = MaterialTheme.spacing.medium
                             )
-                            .fillMaxWidth()
-                    ) {
+                            .fillMaxWidth()) {
                         Column(
-                            modifier = Modifier
-                                .wrapContentSize()
+                            modifier = Modifier.wrapContentSize()
                         ) {
                             Box(modifier = Modifier.fillMaxSize()) {
                                 Column(
@@ -91,14 +95,11 @@ fun UncompletedMission(
                                         horizontalArrangement = Arrangement.SpaceBetween
                                     ) {
                                         Text(
-                                            text =
-                                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                            text = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                                                 stringResource(
-                                                    R.string.days_left,
-                                                    countDays(campaigns.endDate)
+                                                    R.string.days_left, countDays(campaigns.endDate)
                                                 )
-                                            } else
-                                                "",
+                                            } else "",
                                             style = MaterialTheme.typography.caption,
                                             fontWeight = FontWeight.Bold
                                         )
@@ -133,21 +134,25 @@ fun UncompletedMission(
                     .verticalScroll(verticalScrollState)
             ) {
                 campaigns.uncompletedMissions.forEach { uncompletedMission ->
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
+                    Row(verticalAlignment = Alignment.CenterVertically,
                         modifier = modifier
                             .background(MaterialTheme.colors.surface)
-                            .clickable { navigator.navigate(CampaignDetailScreenDestination(id = campaigns.id)) }
+                            .clickable {
+                                navigator.navigate(
+                                    CampaignDetailScreenDestination(
+                                        id = campaigns.id,
+                                        recordId = null,
+                                    )
+                                )
+                            }
                             .padding(
                                 top = MaterialTheme.spacing.small,
                                 start = MaterialTheme.spacing.medium,
                                 end = MaterialTheme.spacing.medium
                             )
-                            .fillMaxWidth()
-                    ) {
+                            .fillMaxWidth()) {
                         Column(
-                            modifier = Modifier
-                                .wrapContentSize()
+                            modifier = Modifier.wrapContentSize()
                         ) {
                             Box(modifier = Modifier.fillMaxSize()) {
                                 Column(
@@ -173,14 +178,11 @@ fun UncompletedMission(
                                         horizontalArrangement = Arrangement.SpaceBetween
                                     ) {
                                         Text(
-                                            text =
-                                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                            text = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                                                 stringResource(
-                                                    R.string.days_left,
-                                                    countDays(campaigns.endDate)
+                                                    R.string.days_left, countDays(campaigns.endDate)
                                                 )
-                                            } else
-                                                "",
+                                            } else "",
                                             style = MaterialTheme.typography.caption,
                                             fontWeight = FontWeight.Bold
                                         )
@@ -215,7 +217,14 @@ fun UncompletedMission(
                     .shadow(elevation = 2.dp, shape = RoundedCornerShape(20.dp))
                     .background(color = MintGreen)
                     .clip(shape = RoundedCornerShape(20.dp))
-                    .clickable { navigator.navigate(CampaignDetailScreenDestination(id = campaigns.id)) },
+                    .clickable {
+                        navigator.navigate(
+                            CampaignDetailScreenDestination(
+                                id = campaigns.id,
+                                recordId = null,
+                            )
+                        )
+                    },
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
@@ -264,7 +273,14 @@ fun UncompletedMission(
                     .shadow(elevation = 2.dp, shape = RoundedCornerShape(20.dp))
                     .background(color = MintGreen)
                     .clip(shape = RoundedCornerShape(20.dp))
-                    .clickable { navigator.navigate(CampaignDetailScreenDestination(id = campaigns.id)) },
+                    .clickable {
+                        navigator.navigate(
+                            CampaignDetailScreenDestination(
+                                id = campaigns.id,
+                                recordId = null,
+                            )
+                        )
+                    },
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
