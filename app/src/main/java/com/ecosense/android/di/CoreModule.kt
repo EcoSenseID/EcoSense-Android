@@ -1,7 +1,6 @@
 package com.ecosense.android.di
 
 import android.content.Context
-import com.ecosense.android.BuildConfig
 import com.ecosense.android.core.data.api.FirebaseAuthApi
 import com.ecosense.android.core.data.api.FirebaseStorageApi
 import com.ecosense.android.core.data.repository.AuthRepositoryImpl
@@ -61,7 +60,7 @@ object CoreModule {
 
         return Retrofit.Builder().baseUrl("https://ecosense-bangkit.uc.r.appspot.com/")
 //            .baseUrl("https://devapi-dot-ecosense-bangkit.uc.r.appspot.com/")
-            .apply { if (BuildConfig.DEBUG) client(interceptedClient) }
+//            .apply { if (BuildConfig.DEBUG) client(interceptedClient) }
             .addConverterFactory(GsonConverterFactory.create()).build()
     }
 }
