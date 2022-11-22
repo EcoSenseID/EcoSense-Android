@@ -195,7 +195,10 @@ fun StoryDetailScreen(
                                             .clip(RoundedCornerShape(16.dp))
                                             .clickable {
                                                 navigator.navigate(
-                                                    CampaignDetailScreenDestination(id = it.id)
+                                                    CampaignDetailScreenDestination(
+                                                        id = it.id,
+                                                        recordId = null,
+                                                    )
                                                 )
                                             },
                                     )

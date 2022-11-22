@@ -138,7 +138,12 @@ fun StoryHistoryScreen(
                         navigator.navigate(StorySupportersScreenDestination(viewModel.stories[i].id))
                     },
                     onClickSharedCampaign = { campaign ->
-                        navigator.navigate(CampaignDetailScreenDestination(id = campaign.id))
+                        navigator.navigate(
+                            CampaignDetailScreenDestination(
+                                id = campaign.id,
+                                recordId = null,
+                            )
+                        )
                     },
                     modifier = Modifier
                         .padding(horizontal = MaterialTheme.spacing.medium)

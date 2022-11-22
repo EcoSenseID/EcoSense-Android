@@ -12,7 +12,10 @@ import kotlinx.coroutines.flow.Flow
 interface DiscoverCampaignRepository {
     fun getCampaigns(q: String?, categoryId: Int?): Flow<Resource<List<Campaign>>>
 
-    fun getCampaignDetail(id: Int): Flow<Resource<CampaignDetail>>
+    fun getCampaignDetail(
+        id: Int,
+        recordId: Int?,
+    ): Flow<Resource<CampaignDetail>>
 
     fun getCategories(): Flow<Resource<List<Category>>>
 

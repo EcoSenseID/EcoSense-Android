@@ -60,10 +60,8 @@ fun BrowseCampaignScreen(
 
     var textFieldSize by remember { mutableStateOf(Size.Zero) }
 
-    val icon = if (expanded)
-        Icons.Filled.KeyboardArrowUp
-    else
-        Icons.Filled.KeyboardArrowDown
+    val icon = if (expanded) Icons.Filled.KeyboardArrowUp
+    else Icons.Filled.KeyboardArrowDown
 
     val context = LocalContext.current
     val focusManager = LocalFocusManager.current
@@ -90,19 +88,16 @@ fun BrowseCampaignScreen(
             DiscoverTopBar(
                 onBackClick = {
                     navigator.popBackStack()
-                },
-                screenName = categoryName
+                }, screenName = categoryName
             )
-        },
-        scaffoldState = scaffoldState
+        }, scaffoldState = scaffoldState
     ) {
         Column(modifier = Modifier.fillMaxSize()) {
             Row {
                 if (search != null) {
                     Text(
                         text = stringResource(R.string.showing_search_result, search),
-                        modifier = Modifier
-                            .padding(
+                        modifier = Modifier.padding(
                                 top = MaterialTheme.spacing.medium,
                                 start = MaterialTheme.spacing.medium,
                                 end = MaterialTheme.spacing.medium
@@ -114,8 +109,7 @@ fun BrowseCampaignScreen(
             }
             Row {
                 Column(Modifier.padding(MaterialTheme.spacing.medium)) { // Sort DropDown
-                    OutlinedTextField(
-                        value = selectedSort,
+                    OutlinedTextField(value = selectedSort,
                         onValueChange = { selectedSort = it },
                         enabled = false,
                         shape = RoundedCornerShape(20.dp),
@@ -129,13 +123,11 @@ fun BrowseCampaignScreen(
                         label = { Text(stringResource(R.string.sort_by)) },
                         trailingIcon = {
                             Icon(icon, stringResource(R.string.show_hide_dropdown))
-                        }
-                    )
+                        })
                     DropdownMenu(
                         expanded = expanded,
                         onDismissRequest = { expanded = false },
-                        modifier = Modifier
-                            .width(with(LocalDensity.current) { textFieldSize.width.toDp() })
+                        modifier = Modifier.width(with(LocalDensity.current) { textFieldSize.width.toDp() })
                     ) {
                         sortByList.forEach { label ->
                             DropdownMenuItem(onClick = {
@@ -157,20 +149,20 @@ fun BrowseCampaignScreen(
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         CircularProgressIndicator(
-                            modifier = Modifier.wrapContentSize(),
-                            strokeWidth = 3.dp
+                            modifier = Modifier.wrapContentSize(), strokeWidth = 3.dp
                         )
                     }
                 }
                 LazyColumn(modifier = Modifier.fillMaxWidth()) {
                     items(state.campaigns.size) { i ->
-                        CampaignItem(
-                            campaign = state.campaigns[i],
-                            sort = selectedSort,
-                            onClick = {
-                                navigator.navigate(CampaignDetailScreenDestination(id = state.campaigns[i].id))
-                            }
-                        )
+                        CampaignItem(campaign = state.campaigns[i], sort = selectedSort, onClick = {
+                            navigator.navigate(
+                                CampaignDetailScreenDestination(
+                                    id = state.campaigns[i].id,
+                                    recordId = null,
+                                ),
+                            )
+                        })
                     }
                 }
             }

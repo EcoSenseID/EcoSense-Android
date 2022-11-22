@@ -9,6 +9,7 @@ import java.util.*
 
 data class RecentCampaignPresentation(
     val id: Int,
+    val recordId: Int?,
     val posterUrl: String,
     val title: String,
     val earnedPoints: Int,
@@ -20,6 +21,7 @@ data class RecentCampaignPresentation(
 
 fun RecentCampaign.toPresentation() = RecentCampaignPresentation(
     id = this.id,
+    recordId = this.recordId,
     posterUrl = this.posterUrl,
     title = this.title,
     earnedPoints = this.earnedPoints,

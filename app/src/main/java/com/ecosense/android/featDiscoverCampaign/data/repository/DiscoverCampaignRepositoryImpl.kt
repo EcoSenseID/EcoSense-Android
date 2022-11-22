@@ -52,10 +52,11 @@ class DiscoverCampaignRepositoryImpl(
                 discoverApi.getCampaigns(bearerToken = bearerToken, q = q, categoryId = categoryId)
 
             when {
-                response.error == true -> emit(Resource.Error(
-                    uiText = response.message?.let { UIText.DynamicString(it) }
-                        ?: UIText.StringResource(R.string.em_unknown))
-                )
+                response.error == true -> emit(Resource.Error(uiText = response.message?.let {
+                    UIText.DynamicString(
+                        it
+                    )
+                } ?: UIText.StringResource(R.string.em_unknown)))
 
                 response.campaigns == null -> {
                     emit(Resource.Error(UIText.StringResource(R.string.em_unknown)))
@@ -89,19 +90,28 @@ class DiscoverCampaignRepositoryImpl(
         }
     }
 
-    override fun getCampaignDetail(id: Int): Flow<Resource<CampaignDetail>> = flow {
+    override fun getCampaignDetail(
+        id: Int,
+        recordId: Int?,
+    ): Flow<Resource<CampaignDetail>> = flow {
         emit(Resource.Loading())
 
         try {
             val idToken = authApi.getIdToken(true)
             val bearerToken = "Bearer $idToken"
-            val response = discoverApi.getCampaignDetail(bearerToken = bearerToken, id = id)
+            val response = if (recordId != null) discoverApi.getCampaignDetail(
+                bearerToken = bearerToken,
+                id = id,
+                recordId = recordId,
+            ) else discoverApi.getCampaignDetail(
+                bearerToken = bearerToken,
+                id = id,
+            )
+
 
             when (response.error) {
-                true -> emit(Resource.Error(
-                    uiText = response.message?.let { UIText.DynamicString(it) }
-                        ?: UIText.StringResource(R.string.em_unknown))
-                )
+                true -> emit(Resource.Error(uiText = response.message?.let { UIText.DynamicString(it) }
+                    ?: UIText.StringResource(R.string.em_unknown)))
                 else -> emit(Resource.Success(response.toCampaignDetails()))
             }
 
@@ -137,10 +147,11 @@ class DiscoverCampaignRepositoryImpl(
             val response = discoverApi.getCategories(bearerToken = bearerToken)
 
             when {
-                response.error == true -> emit(Resource.Error(
-                    uiText = response.message?.let { UIText.DynamicString(it) }
-                        ?: UIText.StringResource(R.string.em_unknown))
-                )
+                response.error == true -> emit(Resource.Error(uiText = response.message?.let {
+                    UIText.DynamicString(
+                        it
+                    )
+                } ?: UIText.StringResource(R.string.em_unknown)))
 
                 response.categories == null -> {
                     emit(Resource.Error(UIText.StringResource(R.string.em_unknown)))
@@ -183,22 +194,20 @@ class DiscoverCampaignRepositoryImpl(
             val response = discoverApi.getDashboard(bearerToken = bearerToken)
 
             when {
-                response.error == true -> emit(Resource.Error(
-                    uiText = response.message?.let { UIText.DynamicString(it) }
-                        ?: UIText.StringResource(R.string.em_unknown))
-                )
+                response.error == true -> emit(Resource.Error(uiText = response.message?.let {
+                    UIText.DynamicString(
+                        it
+                    )
+                } ?: UIText.StringResource(R.string.em_unknown)))
 
-                response.campaigns == null ||
-                        response.categories == null -> {
+                response.campaigns == null || response.categories == null -> {
                     emit(Resource.Error(UIText.StringResource(R.string.em_unknown)))
                 }
 
                 else -> emit(
                     Resource.Success(
-                        Dashboard(
-                            campaigns = response.campaigns.map { it.toDashboardCampaign() },
-                            categories = response.categories.map { it.toCategories() }
-                        )
+                        Dashboard(campaigns = response.campaigns.map { it.toDashboardCampaign() },
+                            categories = response.categories.map { it.toCategories() })
                     )
                 )
             }
@@ -227,9 +236,7 @@ class DiscoverCampaignRepositoryImpl(
     }
 
     override fun setCompletionProof(
-        photo: String?,
-        caption: String?,
-        missionId: Int
+        photo: String?, caption: String?, missionId: Int
     ): Flow<SimpleResource> = flow {
         emit(Resource.Loading())
 
@@ -378,9 +385,7 @@ class DiscoverCampaignRepositoryImpl(
     override suspend fun getNewTempJpegUri(): Uri = withContext(Dispatchers.IO) {
         val tempJpeg = getNewTempJpeg()
         return@withContext FileProvider.getUriForFile(
-            appContext,
-            appContext.packageName,
-            tempJpeg
+            appContext, appContext.packageName, tempJpeg
         )
     }
 
@@ -399,8 +404,7 @@ class DiscoverCampaignRepositoryImpl(
         val filenameFormat = "dd-MMM-yyyy"
 
         val timeStamp: String = SimpleDateFormat(
-            filenameFormat,
-            Locale.US
+            filenameFormat, Locale.US
         ).format(System.currentTimeMillis())
 
         val storageDir: File? = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
