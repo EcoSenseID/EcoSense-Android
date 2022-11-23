@@ -21,6 +21,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import logcat.logcat
 import javax.inject.Inject
 
 @HiltViewModel
@@ -47,12 +48,17 @@ class ForumsViewModel @Inject constructor(
     private val feedPaginator = DefaultPaginator(
         initialKey = feedState.page,
         getNextKey = { feedState.page + 1 },
-        onRequest = { nextPage -> forumsRepository.getStories(nextPage, 20) },
+        onRequest = { nextPage ->
+            feedState = feedState.copy(errorMessage = null)
+            forumsRepository.getStories(nextPage, 20)
+        },
         onLoadUpdated = { isLoading -> feedState = feedState.copy(isLoading = isLoading) },
         onError = { message: UIText? ->
-            feedState = feedState.copy(errorMessage = message)
+            feedState = feedState.copy(
+                isLoading = false,
+                errorMessage = message,
+            )
             if (isRefreshingFeed) isRefreshingFeed = false
-            onLoadNextStoriesFeed()
         },
         onSuccess = { items: List<Story>?, newKey: Int ->
             val newStories = items?.map { it.toPresentation() } ?: emptyList()
@@ -64,6 +70,7 @@ class ForumsViewModel @Inject constructor(
             feedState = feedState.copy(
                 page = newKey,
                 isEndReached = newStories.isEmpty(),
+                errorMessage = null,
             )
         },
     )

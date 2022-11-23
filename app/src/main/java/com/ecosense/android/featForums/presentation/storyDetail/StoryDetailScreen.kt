@@ -8,15 +8,13 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -128,12 +126,24 @@ fun StoryDetailScreen(
                 .padding(scaffoldPadding)
         ) {
             Column(modifier = Modifier.fillMaxSize()) {
+
+                val lazyListState = rememberLazyListState()
+                LaunchedEffect(viewModel.replies.size) {
+                    snapshotFlow { lazyListState.firstVisibleItemIndex }.collect {
+                        val visibleItemsSize = lazyListState.layoutInfo.visibleItemsInfo.size
+                        if (it + visibleItemsSize >= viewModel.replies.size && !viewModel.repliesState.isEndReached && !viewModel.repliesState.isLoading) {
+                            viewModel.onLoadNextRepliesFeed()
+                        }
+                    }
+                }
+
                 LazyColumn(
+                    state = lazyListState,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .weight(1f)
+                        .weight(1f),
                 ) {
-                    item {
+                    if (viewModel.errorMessage == null) item {
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -324,12 +334,47 @@ fun StoryDetailScreen(
                         }
                     }
 
-                    item { Divider() }
+                    if (viewModel.errorMessage == null) item { Divider() }
 
-                    val repliesState = viewModel.repliesState
+                    item {
+                        viewModel.errorMessage?.let {
+                            Card(
+                                shape = RoundedCornerShape(16.dp),
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(MaterialTheme.spacing.medium),
+                            ) {
+                                Column(
+                                    horizontalAlignment = Alignment.CenterHorizontally,
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(MaterialTheme.spacing.medium),
+                                ) {
+                                    Text(
+                                        text = it.asString(),
+                                        color = MaterialTheme.colors.primary,
+                                        style = MaterialTheme.typography.h6,
+                                        fontWeight = FontWeight.Bold,
+                                    )
+
+                                    Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
+
+                                    GradientButton(
+                                        onClick = { viewModel.onLoadStoryDetail() },
+                                        modifier = Modifier.fillMaxWidth(),
+                                    ) {
+                                        Text(
+                                            text = stringResource(R.string.retry),
+                                            fontWeight = FontWeight.SemiBold,
+                                            color = MaterialTheme.colors.onPrimary,
+                                        )
+                                    }
+                                }
+                            }
+                        }
+                    }
+
                     items(count = viewModel.replies.size) { i ->
-                        if (i >= viewModel.replies.lastIndex && !repliesState.isEndReached && !repliesState.isLoading) viewModel.onLoadNextRepliesFeed()
-
                         if (i == 0) Spacer(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -358,14 +403,59 @@ fun StoryDetailScreen(
                     }
 
                     item {
-                        if (repliesState.isLoading) {
-                            Row(
+                        if (viewModel.repliesState.isLoading) {
+                            Card(
+                                shape = RoundedCornerShape(16.dp),
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .padding(8.dp),
-                                horizontalArrangement = Arrangement.Center
+                                    .padding(MaterialTheme.spacing.medium),
                             ) {
-                                CircularProgressIndicator()
+                                Row(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(MaterialTheme.spacing.medium),
+                                    horizontalArrangement = Arrangement.Center,
+                                ) {
+                                    CircularProgressIndicator()
+                                }
+                            }
+                        }
+                    }
+
+                    item {
+                        viewModel.repliesState.errorMessage?.let {
+                            Card(
+                                shape = RoundedCornerShape(16.dp),
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(MaterialTheme.spacing.medium),
+                            ) {
+                                Column(
+                                    horizontalAlignment = Alignment.CenterHorizontally,
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(MaterialTheme.spacing.medium),
+                                ) {
+                                    Text(
+                                        text = it.asString(),
+                                        color = MaterialTheme.colors.primary,
+                                        style = MaterialTheme.typography.h6,
+                                        fontWeight = FontWeight.Bold,
+                                    )
+
+                                    Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
+
+                                    GradientButton(
+                                        onClick = { viewModel.onLoadNextRepliesFeed() },
+                                        modifier = Modifier.fillMaxWidth(),
+                                    ) {
+                                        Text(
+                                            text = stringResource(R.string.retry),
+                                            fontWeight = FontWeight.SemiBold,
+                                            color = MaterialTheme.colors.onPrimary,
+                                        )
+                                    }
+                                }
                             }
                         }
                     }

@@ -268,4 +268,5 @@
     <string name="campaign_ended_at">Kampanye berakhir pada</string>
     <string name="my_ecorewards_empty">Kamu belum pernah memakai EcoPoints-mu</string>
     <string name="my_ecorewards_empty_description">Ayo dapatkan reward-mu!</string>
+    <string name="retry">Coba lagi</string>
 </resources>

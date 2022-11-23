@@ -24,12 +24,17 @@ class StorySupportersViewModel @Inject constructor(
 
     private var storyId: Int? = null
 
+    var isRefreshing by mutableStateOf(false)
+        private set
+
     var state by mutableStateOf(StorySupportersState.defaultValue)
         private set
 
-    private val paginator = DefaultPaginator(initialKey = state.page,
+    private val paginator = DefaultPaginator(
+        initialKey = state.page,
         getNextKey = { state.page + 1 },
         onRequest = { nextPage: Int ->
+            state = state.copy(errorMessage = null)
             storyId?.let { id ->
                 forumsRepository.getStorySupporters(
                     storyId = id,
@@ -39,15 +44,29 @@ class StorySupportersViewModel @Inject constructor(
             } ?: Resource.Error(uiText = UIText.StringResource(R.string.em_comments))
         },
         onLoadUpdated = { isLoading -> state = state.copy(isLoading = isLoading) },
-        onError = { message: UIText? -> state = state.copy(errorMessage = message) },
+        onError = { message: UIText? ->
+            state = state.copy(
+                isLoading = false,
+                errorMessage = message,
+            )
+            if (isRefreshing) isRefreshing = false
+        },
         onSuccess = { items: List<Supporter>?, newKey: Int ->
             val newItems = items?.map { it.toPresentation() }
+
+            if (isRefreshing) {
+                state = state.copy(supporters = emptyList())
+                isRefreshing = false
+            }
+
             state = state.copy(
                 supporters = state.supporters + (newItems ?: emptyList()),
                 page = newKey,
                 isEndReached = items?.isEmpty() ?: false,
+                errorMessage = null,
             )
-        })
+        },
+    )
 
     fun setStoryId(storyId: Int) {
         this.storyId = storyId
@@ -58,5 +77,12 @@ class StorySupportersViewModel @Inject constructor(
         viewModelScope.launch {
             paginator.loadNextItems()
         }
+    }
+
+    fun onRefresh() {
+        isRefreshing = true
+        state = StorySupportersState.defaultValue
+        paginator.reset()
+        onLoadNextSupporters()
     }
 }

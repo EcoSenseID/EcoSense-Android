@@ -283,4 +283,5 @@
     <string name="my_ecorewards_empty">You have never used your EcoPoints</string>
     <string name="my_ecorewards_empty_description">Go get your rewards!</string>
     <string name="url_ecosense_privacy_policy" translatable="false">https://ecosense.id/privacy-policy</string>
+    <string name="retry">Retry</string>
 </resources>
