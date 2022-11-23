@@ -886,52 +886,54 @@ fun CampaignDetailScreen(
                             }
                         }
                     } else {
-                        OutlinedButton(
-                            border = BorderStroke(1.dp, MaterialTheme.colors.primary),
-                            shape = RoundedCornerShape(20.dp),
-                            colors = ButtonDefaults.buttonColors(MaterialTheme.colors.surface),
-                            onClick = {
-                                navigator.navigate(
-                                    StoryComposerScreenDestination(
-                                        caption = context.resources.getString(R.string.share_campaign_caption),
-                                        campaign = SharedCampaignPresentation(
-                                            id = id,
-                                            posterUrl = campaign.posterUrl,
-                                            title = campaign.title,
-                                            endAt = campaign.endDate,
-                                            categories = campaign.categories.map {
-                                                CategoryPresentation(
-                                                    name = it.name,
-                                                    colorHex = it.colorHex
-                                                )
-                                            },
-                                            participantsCount = campaign.participantsCount,
-                                            isTrending = campaign.isTrending,
-                                            isNew = campaign.isNew
+                        if (viewModel.isLoggedIn.collectAsState().value == true) {
+                            OutlinedButton(
+                                border = BorderStroke(1.dp, MaterialTheme.colors.primary),
+                                shape = RoundedCornerShape(20.dp),
+                                colors = ButtonDefaults.buttonColors(MaterialTheme.colors.surface),
+                                onClick = {
+                                    navigator.navigate(
+                                        StoryComposerScreenDestination(
+                                            caption = context.resources.getString(R.string.share_campaign_caption),
+                                            campaign = SharedCampaignPresentation(
+                                                id = id,
+                                                posterUrl = campaign.posterUrl,
+                                                title = campaign.title,
+                                                endAt = campaign.endDate,
+                                                categories = campaign.categories.map {
+                                                    CategoryPresentation(
+                                                        name = it.name,
+                                                        colorHex = it.colorHex
+                                                    )
+                                                },
+                                                participantsCount = campaign.participantsCount,
+                                                isTrending = campaign.isTrending,
+                                                isNew = campaign.isNew
+                                            )
                                         )
                                     )
-                                )
-                            },
-                            modifier = Modifier.fillMaxWidth()
-                        ) {
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.Center
+                                },
+                                modifier = Modifier.fillMaxWidth()
                             ) {
-                                AsyncImage(
-                                    model = R.drawable.ic_share_campaign,
-                                    contentDescription = stringResource(R.string.share_campaign),
-                                    colorFilter = ColorFilter.tint(MaterialTheme.colors.primary),
-                                    modifier = Modifier.size(16.dp)
-                                )
-                                Spacer(modifier = Modifier.width(MaterialTheme.spacing.small))
-                                Text(
-                                    text = stringResource(R.string.share_campaign),
-                                    fontWeight = FontWeight.SemiBold,
-                                    color = MaterialTheme.colors.primary,
-                                    style = MaterialTheme.typography.button
-                                )
+                                Row(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.Center
+                                ) {
+                                    AsyncImage(
+                                        model = R.drawable.ic_share_campaign,
+                                        contentDescription = stringResource(R.string.share_campaign),
+                                        colorFilter = ColorFilter.tint(MaterialTheme.colors.primary),
+                                        modifier = Modifier.size(16.dp)
+                                    )
+                                    Spacer(modifier = Modifier.width(MaterialTheme.spacing.small))
+                                    Text(
+                                        text = stringResource(R.string.share_campaign),
+                                        fontWeight = FontWeight.SemiBold,
+                                        color = MaterialTheme.colors.primary,
+                                        style = MaterialTheme.typography.button
+                                    )
+                                }
                             }
                         }
                     }
