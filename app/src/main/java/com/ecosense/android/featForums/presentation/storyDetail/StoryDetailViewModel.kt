@@ -55,6 +55,9 @@ class StoryDetailViewModel @Inject constructor(
     private val _eventFlow = Channel<UIEvent>()
     val eventFlow = _eventFlow.receiveAsFlow()
 
+    var errorMessage by mutableStateOf<UIText?>(null)
+        private set
+
     var isRefreshing by mutableStateOf(false)
         private set
 
@@ -62,6 +65,7 @@ class StoryDetailViewModel @Inject constructor(
         initialKey = repliesState.page,
         getNextKey = { repliesState.page + 1 },
         onRequest = { nextPage: Int ->
+            repliesState = repliesState.copy(errorMessage = null)
             forumsRepository.getStoryReplies(
                 storyId = storyDetail.id,
                 page = nextPage,
@@ -70,9 +74,11 @@ class StoryDetailViewModel @Inject constructor(
         },
         onLoadUpdated = { isLoading -> repliesState = repliesState.copy(isLoading = isLoading) },
         onError = { message: UIText? ->
-            repliesState = repliesState.copy(errorMessage = message)
+            repliesState = repliesState.copy(
+                errorMessage = message,
+                isLoading = false,
+            )
             if (isRefreshing) isRefreshing = false
-            onLoadNextRepliesFeed()
         },
         onSuccess = { items: List<Reply>?, newKey: Int ->
             val newReplies = items?.map { it.toPresentation() } ?: emptyList()
@@ -127,6 +133,7 @@ class StoryDetailViewModel @Inject constructor(
                     is Resource.Error -> {
                         replyComposerState = replyComposerState.copy(isUploading = false)
                         result.uiText?.let { _eventFlow.send(UIEvent.ShowSnackbar(it)) }
+
                     }
 
                     is Resource.Loading -> {
@@ -231,20 +238,23 @@ class StoryDetailViewModel @Inject constructor(
     }
 
     private var onLoadStoryDetailJob: Job? = null
-    private fun onLoadStoryDetail() {
+    fun onLoadStoryDetail() {
         onLoadStoryDetailJob?.cancel()
         onLoadStoryDetailJob = viewModelScope.launch {
             forumsRepository.getStoryDetail(storyDetail.id).onEach { result ->
                 when (result) {
                     is Resource.Error -> {
                         isLoadingStoryDetail = false
-                        result.uiText?.let { _eventFlow.send(UIEvent.ShowSnackbar(it)) }
-                        onLoadStoryDetail()
+                        errorMessage = result.uiText
                     }
-                    is Resource.Loading -> isLoadingStoryDetail = true
+                    is Resource.Loading -> {
+                        isLoadingStoryDetail = true
+                        errorMessage = null
+                    }
                     is Resource.Success -> {
                         isLoadingStoryDetail = false
                         result.data?.let { storyDetail = it.toPresentation() }
+                        errorMessage = null
                     }
                 }
             }.launchIn(this)

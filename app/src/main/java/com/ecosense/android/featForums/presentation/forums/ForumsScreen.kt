@@ -5,12 +5,15 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
@@ -21,8 +24,10 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import com.ecosense.android.R
+import com.ecosense.android.core.presentation.component.GradientButton
 import com.ecosense.android.core.presentation.model.SharedCampaignPresentation
 import com.ecosense.android.core.presentation.theme.GradientForButtons
+import com.ecosense.android.core.presentation.theme.spacing
 import com.ecosense.android.core.presentation.util.UIEvent
 import com.ecosense.android.core.presentation.util.asString
 import com.ecosense.android.core.util.OnLifecycleEvent
@@ -110,10 +115,21 @@ fun ForumsScreen(
             onRefresh = { viewModel.refreshStoriesFeed() },
             modifier = Modifier.padding(scaffoldPadding),
         ) {
-            LazyColumn(modifier = Modifier.fillMaxSize()) {
-                items(count = viewModel.stories.size) { i ->
-                    if (i >= viewModel.stories.size - 1 && !viewModel.feedState.isEndReached && !viewModel.feedState.isLoading) viewModel.onLoadNextStoriesFeed()
+            val storiesLazyListState = rememberLazyListState()
+            LaunchedEffect(viewModel.stories.size) {
+                snapshotFlow { storiesLazyListState.firstVisibleItemIndex }.collect {
+                    val visibleItemsSize = storiesLazyListState.layoutInfo.visibleItemsInfo.size
+                    if (it + visibleItemsSize >= viewModel.stories.size && !viewModel.feedState.isEndReached && !viewModel.feedState.isLoading) {
+                        viewModel.onLoadNextStoriesFeed()
+                    }
+                }
+            }
 
+            LazyColumn(
+                state = storiesLazyListState,
+                modifier = Modifier.fillMaxSize(),
+            ) {
+                items(count = viewModel.stories.size) { i ->
                     StoryItem(story = { viewModel.stories[i] },
                         onClickSupport = { viewModel.onClickSupport(viewModel.stories[i].id) },
                         onClickReply = { navigator.navigate(StoryDetailScreenDestination(viewModel.stories[i].id)) },
@@ -157,13 +173,58 @@ fun ForumsScreen(
 
                 item {
                     if (viewModel.feedState.isLoading) {
-                        Row(
+                        Card(
+                            shape = RoundedCornerShape(16.dp),
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(8.dp),
-                            horizontalArrangement = Arrangement.Center
+                                .padding(MaterialTheme.spacing.medium),
                         ) {
-                            CircularProgressIndicator()
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(MaterialTheme.spacing.medium),
+                                horizontalArrangement = Arrangement.Center,
+                            ) {
+                                CircularProgressIndicator()
+                            }
+                        }
+                    }
+                }
+
+                item {
+                    viewModel.feedState.errorMessage?.let {
+                        Card(
+                            shape = RoundedCornerShape(16.dp),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(MaterialTheme.spacing.medium),
+                        ) {
+                            Column(
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(MaterialTheme.spacing.medium),
+                            ) {
+                                Text(
+                                    text = it.asString(),
+                                    color = MaterialTheme.colors.primary,
+                                    style = MaterialTheme.typography.h6,
+                                    fontWeight = FontWeight.Bold,
+                                )
+
+                                Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
+
+                                GradientButton(
+                                    onClick = { viewModel.onLoadNextStoriesFeed() },
+                                    modifier = Modifier.fillMaxWidth(),
+                                ) {
+                                    Text(
+                                        text = stringResource(R.string.retry),
+                                        fontWeight = FontWeight.SemiBold,
+                                        color = MaterialTheme.colors.onPrimary,
+                                    )
+                                }
+                            }
                         }
                     }
                 }
