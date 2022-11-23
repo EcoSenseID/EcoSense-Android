@@ -174,10 +174,16 @@ fun AttachImageDialog(viewModel: CampaignDetailViewModel, openPickImageDialog: (
                                             context.startActivity(this)
                                         }
                                     },
-                                    modifier = Modifier.padding(
-                                        bottom = MaterialTheme.spacing.extraSmall,
-                                        end = MaterialTheme.spacing.extraSmall
-                                    )
+                                    modifier = Modifier
+                                        .padding(
+                                            bottom = MaterialTheme.spacing.extraSmall,
+                                            end = MaterialTheme.spacing.extraSmall
+                                        )
+                                        .clip(
+                                            shape = RoundedCornerShape(
+                                                20.dp
+                                            )
+                                        )
                                 ) {
                                     Text(stringResource(R.string.open_app_settings))
                                 }
@@ -187,7 +193,13 @@ fun AttachImageDialog(viewModel: CampaignDetailViewModel, openPickImageDialog: (
                                     onClick = {
                                         openGoToSettingsDialog.value = false
                                     },
-                                    modifier = Modifier.padding(bottom = MaterialTheme.spacing.extraSmall)
+                                    modifier = Modifier
+                                        .padding(bottom = MaterialTheme.spacing.extraSmall)
+                                        .clip(
+                                            shape = RoundedCornerShape(
+                                                20.dp
+                                            )
+                                        )
                                 ) {
                                     Text(stringResource(R.string.cancel))
                                 }
