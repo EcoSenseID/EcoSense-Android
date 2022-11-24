@@ -41,7 +41,6 @@
     <string name="cd_profile_picture">Profile picture</string>
     <string name="cd_options_menu">Options menu</string>
     <string name="ecosense_user">EcoFriend</string>
-    <string name="history">History</string>
     <string name="choose_category">Choose a Category</string>
     <string name="missions_to_go">Missions To Go</string>
     <string name="browse_categories">Browse categories</string>
@@ -72,7 +71,6 @@
     <string name="submitting">Submitting…</string>
     <string name="sort_by">Sort by</string>
     <string name="show_hide_dropdown">Show or hide the drop down</string>
-    <string name="back">Back</string>
     <string name="days_left">%s days left</string>
     <string name="close_search_bar">Close Search Bar</string>
     <string name="open_search_bar">Open Search Bar</string>
@@ -89,27 +87,10 @@
     <string name="email_is_verified">Email is verified</string>
     <string name="email_is_unverified">Email is unverified</string>
     <string name="content_type_image" translatable="false">image/*</string>
-    <string name="permission_request_message">Hi! I\'m the plant disease recognizer robot. Please give me permission to your camera so I can look at your plants!</string>
-    <string name="permission_request_rationale">Camera permission is needed for plant disease recognition feature. Please give me access to it</string>
-    <string name="permission_request_denied_permanently">Beep boop! Camera permission was permanently denied. If you change your mind, please enable it manually in the app settings</string>
     <string name="upload_permission_request_denied_permanently">Looks like your camera permission was permanently denied. To use camera, please enable the camera permission manually in the app settings</string>
-    <string name="grant_permission">Grant permission</string>
     <string name="open_app_settings">Open app settings</string>
-    <string name="recognising">I\'m trying to recognise this one…</string>
-    <string name="recognition_tip">Tip: move the camera close enough to the plant and make sure it is well lit</string>
-    <string name="save_result">Save Result</string>
-    <string name="recognised_title">Hmm, I think this is</string>
-    <string name="sm_saved_successfully">Saved successfully</string>
-    <string name="saved_recognition_results">Saved Recognition Results</string>
     <string name="continue_with_google">Continue with Google</string>
     <string name="em_name_blank">Name can not be blank</string>
-    <string name="empty_saved_recognition_results">There\'s no saved recognition results yet</string>
-    <string name="saving">Saving…</string>
-    <string name="recognition_result_detail">Recognition Result Detail</string>
-    <string name="learn_more">Learn More</string>
-    <string name="symptoms">Symptoms</string>
-    <string name="preventive_measures">Preventive Measures</string>
-    <string name="treatments">Treatments</string>
     <string name="dash" translatable="false">-</string>
     <string name="my_profile">My Profile</string>
     <string name="ecobot" translatable="false">EcoBot</string>
@@ -124,23 +105,11 @@
     <string name="attach_proof_photo">Attach Proof Photo</string>
     <string name="choose_image_from">Choose Image From…</string>
     <string name="whoops">Whoops!</string>
-    <string name="cd_support">Support</string>
-    <string name="cd_reply">Reply</string>
-    <string name="cd_share">Share</string>
-    <string name="whats_happening">What\'s happening?</string>
-    <string name="em_comments">Couldn\'t load comments</string>
     <string name="ecoworld" translatable="false">EcoWorld</string>
     <string name="ecoreward" translatable="false">EcoReward</string>
     <string name="notifications">Notifications</string>
     <string name="use_reward_success">Reward used successfully!</string>
-    <string name="cd_add_story">Create new story</string>
-    <string name="supported_by">Supported by</string>
     <string name="cd_back">Back</string>
-    <string name="story">Story</string>
-    <string name="cd_attach_photo">Attach photo</string>
-    <string name="post">Post</string>
-    <string name="reply_to_this_story">Reply to this story</string>
-    <string name="create_a_story">Create a story</string>
     <string name="login_title">Enjoy all features\nby logging in!</string>
     <string name="welcome">Welcome</string>
     <string name="full_name">Full Name</string>
@@ -157,11 +126,9 @@
     <string name="check_your_email_caption">We have sent a password recover instructions to your email</string>
     <string name="get_rewards">Get Rewards</string>
     <string name="total_ecopoints">Total EcoPoints</string>
-    <string name="my_stories">My Stories</string>
     <string name="see_all">See All</string>
     <string name="my_campaign_history">My Campaign History</string>
     <string name="em_empty_campaign_history">You haven\'t joined any campaigns.\nLet\'s join one!</string>
-    <string name="em_empty_story_history">You haven\'t uploaded anything.\nLet\'s make one!</string>
     <string name="ecopoints" translatable="false">EcoPoints</string>
     <string name="campaign_finished_at">Campaign finished at</string>
     <string name="campaign_will_end_at">Campaign will end at</string>
@@ -192,19 +159,11 @@
     <string name="yes_exclamation">Yes!</string>
     <string name="application_language">Application Language</string>
     <string name="language">Language</string>
-    <string name="em_caption_blank">Caption can not be blank!</string>
-    <string name="posting">Posting…</string>
     <string name="em_please_login_first">Please login first to continue</string>
-    <string name="login_to_join_this_conversation">Login to join this conversation</string>
-    <string name="attached_photo">Attached photo</string>
     <string name="filter_view_http_ecosense_deeplinks">Open app</string>
-    <string name="format_share_message">Hi, check this out!\nhttps://ecosense.id/deeplinks/storydetail/%1$d</string>
     <string name="intent_type_plain_text" translatable="false">text/plain</string>
-    <string name="stories">Stories</string>
-    <string name="stories_history">Stories History</string>
     <string name="campaign_history">Campaign History</string>
     <string name="this_user_has_not_joined_any_campaigns">This user has not joined any campaigns</string>
-    <string name="this_user_has_not_uploaded_anything">This user has not uploaded anything</string>
     <string name="today">Today</string>
     <string name="yesterday">Yesterday</string>
     <string name="last_week">Last Week</string>
@@ -263,8 +222,6 @@
     <string name="coming_soon">Coming soon!</string>
     <string name="campaign_will_start_at">Campaign will start at</string>
     <string name="placeholder_countdown">%1$d Days %2$d Hrs %3$d Mins %4$d Secs</string>
-    <string name="share_campaign_caption">You all should join this campaign! So exciting!</string>
-    <string name="share_campaign_accomplishment_caption">I\'ve finished this campaign! Come on, now it\'s your turn!</string>
     <string name="in_verification">In Verification</string>
     <string name="finish_campaign">Finish Campaign</string>
     <string name="finishing_campaign">Finishing Campaign…</string>
@@ -283,5 +240,7 @@
     <string name="my_ecorewards_empty">You have never used your EcoPoints</string>
     <string name="my_ecorewards_empty_description">Go get your rewards!</string>
     <string name="url_ecosense_privacy_policy" translatable="false">https://ecosense.id/privacy-policy</string>
-    <string name="retry">Retry</string>
+    <string name="get_ready">Get Ready…</string>
+    <string name="something_really_cool_is_coming">Something really cool is coming!</string>
+    <string name="format_share_text">Hi check this out! %1$s</string>
 </resources>
