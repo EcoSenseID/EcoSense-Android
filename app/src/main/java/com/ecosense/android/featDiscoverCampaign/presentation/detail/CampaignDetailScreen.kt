@@ -1,5 +1,6 @@
 package com.ecosense.android.featDiscoverCampaign.presentation.detail
 
+import android.content.Intent
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -35,26 +36,30 @@ import coil.size.Scale
 import com.ecosense.android.R
 import com.ecosense.android.core.domain.constants.CampaignCompletionStatus
 import com.ecosense.android.core.presentation.component.GradientButton
-import com.ecosense.android.core.presentation.model.CategoryPresentation
-import com.ecosense.android.core.presentation.model.SharedCampaignPresentation
 import com.ecosense.android.core.presentation.theme.*
 import com.ecosense.android.core.presentation.util.UIEvent
 import com.ecosense.android.core.presentation.util.asString
 import com.ecosense.android.destinations.LoginScreenDestination
-import com.ecosense.android.destinations.StoryComposerScreenDestination
 import com.ecosense.android.featDiscoverCampaign.data.util.campaignEndedStatus
 import com.ecosense.android.featDiscoverCampaign.data.util.campaignNotStartedStatus
 import com.ecosense.android.featDiscoverCampaign.data.util.dateFormatter
 import com.ecosense.android.featDiscoverCampaign.data.util.unixCountdown
 import com.ecosense.android.featDiscoverCampaign.presentation.component.DiscoverTopBar
 import com.ecosense.android.featDiscoverCampaign.presentation.detail.component.UploadTaskProof
+import com.ramcosta.composedestinations.annotation.DeepLink
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable
-@Destination
+@Destination(
+    route = Destination.ROOT_NAV_GRAPH_ROUTE,
+    deepLinks = [
+        DeepLink(uriPattern = "http://ecosense.id/deeplinks/campaigndetail/{id}"),
+        DeepLink(uriPattern = "https://ecosense.id/deeplinks/campaigndetail/{id}"),
+    ],
+)
 fun CampaignDetailScreen(
     navigator: DestinationsNavigator,
     id: Int,
@@ -112,19 +117,18 @@ fun CampaignDetailScreen(
                 is UIEvent.HideKeyboard -> {
                     focusManager.clearFocus()
                 }
+                else -> {}
             }
         }
     }
 
-    Scaffold(
-        topBar = {
-            DiscoverTopBar(
-                onBackClick = {
-                    navigator.popBackStack()
-                },
-                screenName = stringResource(R.string.detail_campaign)
-            )
-        },
+    Scaffold(topBar = {
+        DiscoverTopBar(
+            onBackClick = {
+                navigator.popBackStack()
+            }, screenName = stringResource(R.string.detail_campaign)
+        )
+    },
         scaffoldState = scaffoldState,
         floatingActionButtonPosition = FabPosition.Center,
         floatingActionButton = {
@@ -151,15 +155,14 @@ fun CampaignDetailScreen(
                     }
                 } else {
                     if (campaignNotStarted) {
-                        ExtendedFloatingActionButton(
-                            text = {
-                                Text(
-                                    text = stringResource(R.string.coming_soon),
-                                    style = MaterialTheme.typography.body1,
-                                    color = White,
-                                    fontWeight = FontWeight.SemiBold
-                                )
-                            },
+                        ExtendedFloatingActionButton(text = {
+                            Text(
+                                text = stringResource(R.string.coming_soon),
+                                style = MaterialTheme.typography.body1,
+                                color = White,
+                                fontWeight = FontWeight.SemiBold
+                            )
+                        },
                             backgroundColor = SuperDarkGrey,
                             onClick = {},
                             modifier = Modifier
@@ -169,15 +172,14 @@ fun CampaignDetailScreen(
                     } else {
                         if (campaignEndedStatus(campaign.endDate)) {
                             campaignEnded = true
-                            ExtendedFloatingActionButton(
-                                text = {
-                                    Text(
-                                        text = stringResource(R.string.campaign_ended),
-                                        style = MaterialTheme.typography.body1,
-                                        color = White,
-                                        fontWeight = FontWeight.SemiBold
-                                    )
-                                },
+                            ExtendedFloatingActionButton(text = {
+                                Text(
+                                    text = stringResource(R.string.campaign_ended),
+                                    style = MaterialTheme.typography.body1,
+                                    color = White,
+                                    fontWeight = FontWeight.SemiBold
+                                )
+                            },
                                 backgroundColor = SuperDarkGrey,
                                 onClick = {},
                                 modifier = Modifier
@@ -187,15 +189,14 @@ fun CampaignDetailScreen(
                         } else {
                             when (campaign.completionStatus) {
                                 CampaignCompletionStatus.IN_VERIFICATION -> {
-                                    ExtendedFloatingActionButton(
-                                        text = {
-                                            Text(
-                                                text = stringResource(R.string.in_verification),
-                                                style = MaterialTheme.typography.body1,
-                                                color = White,
-                                                fontWeight = FontWeight.SemiBold
-                                            )
-                                        },
+                                    ExtendedFloatingActionButton(text = {
+                                        Text(
+                                            text = stringResource(R.string.in_verification),
+                                            style = MaterialTheme.typography.body1,
+                                            color = White,
+                                            fontWeight = FontWeight.SemiBold
+                                        )
+                                    },
                                         backgroundColor = CustardYellow,
                                         onClick = {},
                                         modifier = Modifier
@@ -207,26 +208,7 @@ fun CampaignDetailScreen(
                                 CampaignCompletionStatus.COMPLETED -> {
                                     GradientButton(
                                         onClick = {
-                                            navigator.navigate(
-                                                StoryComposerScreenDestination(
-                                                    caption = context.resources.getString(R.string.share_campaign_accomplishment_caption),
-                                                    campaign = SharedCampaignPresentation(
-                                                        id = id,
-                                                        posterUrl = campaign.posterUrl,
-                                                        title = campaign.title,
-                                                        endAt = campaign.endDate,
-                                                        categories = campaign.categories.map {
-                                                            CategoryPresentation(
-                                                                name = it.name,
-                                                                colorHex = it.colorHex
-                                                            )
-                                                        },
-                                                        participantsCount = campaign.participantsCount,
-                                                        isTrending = campaign.isTrending,
-                                                        isNew = campaign.isNew
-                                                    )
-                                                )
-                                            )
+                                            // TODO: implement this
                                         },
                                         modifier = Modifier
                                             .fillMaxWidth()
@@ -244,15 +226,14 @@ fun CampaignDetailScreen(
                                 CampaignCompletionStatus.REJECTED -> {
                                     if (state.allMissionIsReadyToSend) {
                                         if (!state.isLoadingCompleteCampaign) {
-                                            ExtendedFloatingActionButton(
-                                                text = {
-                                                    Text(
-                                                        text = stringResource(R.string.resubmit),
-                                                        style = MaterialTheme.typography.body1,
-                                                        color = White,
-                                                        fontWeight = FontWeight.SemiBold
-                                                    )
-                                                },
+                                            ExtendedFloatingActionButton(text = {
+                                                Text(
+                                                    text = stringResource(R.string.resubmit),
+                                                    style = MaterialTheme.typography.body1,
+                                                    color = White,
+                                                    fontWeight = FontWeight.SemiBold
+                                                )
+                                            },
                                                 backgroundColor = DarkBlue,
                                                 onClick = { viewModel.onCompleteCampaign(campaignId = id) },
                                                 modifier = Modifier
@@ -260,15 +241,14 @@ fun CampaignDetailScreen(
                                                     .padding(horizontal = MaterialTheme.spacing.medium)
                                             )
                                         } else {
-                                            ExtendedFloatingActionButton(
-                                                text = {
-                                                    Text(
-                                                        text = stringResource(R.string.submitting),
-                                                        style = MaterialTheme.typography.body1,
-                                                        color = White,
-                                                        fontWeight = FontWeight.SemiBold
-                                                    )
-                                                },
+                                            ExtendedFloatingActionButton(text = {
+                                                Text(
+                                                    text = stringResource(R.string.submitting),
+                                                    style = MaterialTheme.typography.body1,
+                                                    color = White,
+                                                    fontWeight = FontWeight.SemiBold
+                                                )
+                                            },
                                                 backgroundColor = DarkGrey,
                                                 onClick = {},
                                                 modifier = Modifier
@@ -296,15 +276,14 @@ fun CampaignDetailScreen(
                                                 )
                                             }
                                         } else {
-                                            ExtendedFloatingActionButton(
-                                                text = {
-                                                    Text(
-                                                        text = stringResource(R.string.joining_campaign),
-                                                        style = MaterialTheme.typography.body1,
-                                                        color = White,
-                                                        fontWeight = FontWeight.SemiBold
-                                                    )
-                                                },
+                                            ExtendedFloatingActionButton(text = {
+                                                Text(
+                                                    text = stringResource(R.string.joining_campaign),
+                                                    style = MaterialTheme.typography.body1,
+                                                    color = White,
+                                                    fontWeight = FontWeight.SemiBold
+                                                )
+                                            },
                                                 backgroundColor = DarkGrey,
                                                 onClick = {},
                                                 modifier = Modifier
@@ -333,15 +312,14 @@ fun CampaignDetailScreen(
                                                     )
                                                 }
                                             } else {
-                                                ExtendedFloatingActionButton(
-                                                    text = {
-                                                        Text(
-                                                            text = stringResource(R.string.finishing_campaign),
-                                                            style = MaterialTheme.typography.body1,
-                                                            color = White,
-                                                            fontWeight = FontWeight.SemiBold
-                                                        )
-                                                    },
+                                                ExtendedFloatingActionButton(text = {
+                                                    Text(
+                                                        text = stringResource(R.string.finishing_campaign),
+                                                        style = MaterialTheme.typography.body1,
+                                                        color = White,
+                                                        fontWeight = FontWeight.SemiBold
+                                                    )
+                                                },
                                                     backgroundColor = DarkGrey,
                                                     onClick = {},
                                                     modifier = Modifier
@@ -357,8 +335,7 @@ fun CampaignDetailScreen(
                     }
                 }
             }
-        }
-    ) {
+        }) {
         if (state.isLoadingCampaignDetail) {
             Column(
                 modifier = Modifier.fillMaxSize(),
@@ -366,8 +343,7 @@ fun CampaignDetailScreen(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 CircularProgressIndicator(
-                    modifier = Modifier.wrapContentSize(),
-                    strokeWidth = 3.dp
+                    modifier = Modifier.wrapContentSize(), strokeWidth = 3.dp
                 )
             }
         } else {
@@ -391,14 +367,10 @@ fun CampaignDetailScreen(
                     ) {
                         Box(modifier = Modifier.fillMaxSize()) {
                             AsyncImage(
-                                model = ImageRequest.Builder(context)
-                                    .data(campaign.posterUrl)
-                                    .crossfade(true)
-                                    .scale(Scale.FILL)
-                                    .build(),
+                                model = ImageRequest.Builder(context).data(campaign.posterUrl)
+                                    .crossfade(true).scale(Scale.FILL).build(),
                                 contentDescription = stringResource(
-                                    R.string.poster_of_campaign,
-                                    campaign.title
+                                    R.string.poster_of_campaign, campaign.title
                                 ),
                                 contentScale = ContentScale.FillWidth,
                                 modifier = Modifier.fillMaxSize()
@@ -409,8 +381,7 @@ fun CampaignDetailScreen(
                                     .background(
                                         Brush.verticalGradient(
                                             colors = listOf(
-                                                Color.Transparent,
-                                                MaterialTheme.colors.primary
+                                                Color.Transparent, MaterialTheme.colors.primary
                                             )
                                         )
                                     )
@@ -447,7 +418,9 @@ fun CampaignDetailScreen(
                                                 style = MaterialTheme.typography.overline,
                                                 color = White,
                                                 modifier = Modifier
-                                                    .clip(shape = RoundedCornerShape(20.dp))
+                                                    .clip(
+                                                        shape = RoundedCornerShape(20.dp)
+                                                    )
                                                     .background(Color(campaignCategory.colorHex.toColorInt()))
                                                     .padding(
                                                         horizontal = MaterialTheme.spacing.small,
@@ -483,8 +456,7 @@ fun CampaignDetailScreen(
                         .padding(MaterialTheme.spacing.small)
                 ) {
                     Column(
-                        modifier = Modifier
-                            .fillMaxSize()
+                        modifier = Modifier.fillMaxSize()
                     ) {
                         Box(modifier = Modifier.fillMaxSize()) {
                             Column(
@@ -583,8 +555,7 @@ fun CampaignDetailScreen(
                                 }
 
                                 Row(
-                                    modifier = Modifier
-                                        .padding(MaterialTheme.spacing.small),
+                                    modifier = Modifier.padding(MaterialTheme.spacing.small),
                                     horizontalArrangement = Arrangement.Start,
                                     verticalAlignment = Alignment.Top
                                 ) {
@@ -595,8 +566,7 @@ fun CampaignDetailScreen(
                                                 fontSize = 16.sp,
                                                 fontWeight = FontWeight.ExtraBold,
                                                 style = TextStyle(textDecoration = TextDecoration.Underline),
-                                                modifier = Modifier
-                                                    .padding(bottom = MaterialTheme.spacing.small)
+                                                modifier = Modifier.padding(bottom = MaterialTheme.spacing.small)
                                             )
                                         }
                                         Row {
@@ -610,8 +580,7 @@ fun CampaignDetailScreen(
                                 }
 
                                 Row(
-                                    modifier = Modifier
-                                        .padding(MaterialTheme.spacing.small),
+                                    modifier = Modifier.padding(MaterialTheme.spacing.small),
                                     horizontalArrangement = Arrangement.Start,
                                     verticalAlignment = Alignment.Top
                                 ) {
@@ -622,8 +591,7 @@ fun CampaignDetailScreen(
                                                 fontSize = 16.sp,
                                                 fontWeight = FontWeight.ExtraBold,
                                                 style = TextStyle(textDecoration = TextDecoration.Underline),
-                                                modifier = Modifier
-                                                    .padding(bottom = MaterialTheme.spacing.small)
+                                                modifier = Modifier.padding(bottom = MaterialTheme.spacing.small)
                                             )
                                         }
                                         Row {
@@ -650,11 +618,8 @@ fun CampaignDetailScreen(
                                                             } else {
                                                                 Icon(
                                                                     imageVector = Icons.Filled.CheckCircle,
-                                                                    tint =
-                                                                    if (mission.completionStatus == CampaignCompletionStatus.COMPLETED || mission.completionStatus == CampaignCompletionStatus.IN_VERIFICATION)
-                                                                        MaterialTheme.colors.secondary
-                                                                    else
-                                                                        DarkerGrey,
+                                                                    tint = if (mission.completionStatus == CampaignCompletionStatus.COMPLETED || mission.completionStatus == CampaignCompletionStatus.IN_VERIFICATION) MaterialTheme.colors.secondary
+                                                                    else DarkerGrey,
                                                                     contentDescription = stringResource(
                                                                         R.string.mission_completion_mark
                                                                     ),
@@ -668,8 +633,7 @@ fun CampaignDetailScreen(
                                                                 ),
                                                                 style = MaterialTheme.typography.body1,
                                                                 fontWeight = FontWeight.Bold,
-                                                                color =
-                                                                when (mission.completionStatus) {
+                                                                color = when (mission.completionStatus) {
                                                                     CampaignCompletionStatus.COMPLETED, CampaignCompletionStatus.IN_VERIFICATION -> MaterialTheme.colors.secondary
                                                                     CampaignCompletionStatus.REJECTED -> DarkRed
                                                                     else -> DarkerGrey
@@ -699,11 +663,9 @@ fun CampaignDetailScreen(
                                                                 AsyncImage(
                                                                     model = ImageRequest.Builder(
                                                                         context
-                                                                    )
-                                                                        .data(mission.proofPhotoUrl)
+                                                                    ).data(mission.proofPhotoUrl)
                                                                         .crossfade(true)
-                                                                        .scale(Scale.FILL)
-                                                                        .build(),
+                                                                        .scale(Scale.FILL).build(),
                                                                     contentDescription = stringResource(
                                                                         R.string.proof_completion,
                                                                         mission.name
@@ -818,15 +780,11 @@ fun CampaignDetailScreen(
                         .fillMaxWidth()
                         .padding(
                             top = MaterialTheme.spacing.medium,
-                            bottom =
-                            if (campaign.completionStatus == CampaignCompletionStatus.REJECTED)
-                                MaterialTheme.spacing.medium
-                            else
-                                96.dp,
+                            bottom = if (campaign.completionStatus == CampaignCompletionStatus.REJECTED) MaterialTheme.spacing.medium
+                            else 96.dp,
                             start = MaterialTheme.spacing.large,
                             end = MaterialTheme.spacing.large
-                        ),
-                    horizontalArrangement = Arrangement.Center
+                        ), horizontalArrangement = Arrangement.Center
                 ) {
                     if (campaign.completionStatus == CampaignCompletionStatus.COMPLETED) {
                         Column(
@@ -892,26 +850,17 @@ fun CampaignDetailScreen(
                                 shape = RoundedCornerShape(20.dp),
                                 colors = ButtonDefaults.buttonColors(MaterialTheme.colors.surface),
                                 onClick = {
-                                    navigator.navigate(
-                                        StoryComposerScreenDestination(
-                                            caption = context.resources.getString(R.string.share_campaign_caption),
-                                            campaign = SharedCampaignPresentation(
-                                                id = id,
-                                                posterUrl = campaign.posterUrl,
-                                                title = campaign.title,
-                                                endAt = campaign.endDate,
-                                                categories = campaign.categories.map {
-                                                    CategoryPresentation(
-                                                        name = it.name,
-                                                        colorHex = it.colorHex
-                                                    )
-                                                },
-                                                participantsCount = campaign.participantsCount,
-                                                isTrending = campaign.isTrending,
-                                                isNew = campaign.isNew
-                                            )
-                                        )
+                                    val shareText = context.getString(
+                                        R.string.format_share_text,
+                                        "https://ecosense.id/deeplinks/campaigndetail/$id",
                                     )
+
+                                    Intent(Intent.ACTION_SEND).let { intent ->
+                                        intent.type =
+                                            context.getString(R.string.intent_type_plain_text)
+                                        intent.putExtra(Intent.EXTRA_TEXT, shareText)
+                                        context.startActivity(intent)
+                                    }
                                 },
                                 modifier = Modifier.fillMaxWidth()
                             ) {
@@ -948,12 +897,10 @@ fun CampaignDetailScreen(
                                 bottom = 96.dp,
                                 start = MaterialTheme.spacing.medium,
                                 end = MaterialTheme.spacing.large
-                            ),
-                        horizontalArrangement = Arrangement.Center
+                            ), horizontalArrangement = Arrangement.Center
                     ) {
                         Column(
-                            modifier = Modifier
-                                .fillMaxWidth(),
+                            modifier = Modifier.fillMaxWidth(),
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
                             Text(
