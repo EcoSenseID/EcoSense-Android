@@ -19,9 +19,15 @@ import com.ecosense.android.NavGraphs
 import com.ecosense.android.appCurrentDestinationAsState
 import com.ecosense.android.core.presentation.component.BottomBar
 import com.ecosense.android.core.presentation.component.BottomBarDestination
+import com.ecosense.android.core.presentation.theme.DarkGreen
 import com.ecosense.android.core.presentation.theme.EcoSenseTheme
+import com.ecosense.android.core.presentation.theme.ElectricGreen
+import com.ecosense.android.core.presentation.theme.LightGrey
 import com.ecosense.android.destinations.DiscoverCampaignScreenDestination
+import com.ecosense.android.destinations.RewardHomepageScreenDestination
+import com.ecosense.android.destinations.RewardsScreenDestination
 import com.ecosense.android.startAppDestination
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.ramcosta.composedestinations.DestinationsNavHost
 import com.ramcosta.composedestinations.navigation.navigateTo
 import com.ramcosta.composedestinations.rememberNavHostEngine
@@ -43,6 +49,15 @@ class MainActivity : ComponentActivity() {
             EcoSenseTheme {
                 val engine = rememberNavHostEngine()
                 val navController = engine.rememberNavController()
+                val systemUiController = rememberSystemUiController()
+
+                val currentDestination = navController.appCurrentDestinationAsState().value
+                    ?: NavGraphs.root.startAppDestination
+
+                systemUiController.setSystemBarsColor(
+                    color = if (currentDestination == RewardHomepageScreenDestination) DarkGreen
+                    else LightGrey
+                )
 
                 LaunchedEffect(key1 = true) {
                     viewModel.isLoggedIn.collect {
@@ -69,9 +84,6 @@ class MainActivity : ComponentActivity() {
                             navController = navController,
                             modifier = Modifier.weight(1f),
                         )
-
-                        val currentDestination = navController.appCurrentDestinationAsState().value
-                            ?: NavGraphs.root.startAppDestination
 
                         if (BottomBarDestination.values()
                                 .any { it.direction == currentDestination }

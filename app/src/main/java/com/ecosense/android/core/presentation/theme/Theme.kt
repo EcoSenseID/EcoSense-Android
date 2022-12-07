@@ -31,12 +31,6 @@ fun EcoSenseTheme(
     darkTheme: Boolean = false, /* isSystemInDarkTheme() */
     content: @Composable () -> Unit,
 ) {
-    val systemUiController = rememberSystemUiController()
-
-    systemUiController.setSystemBarsColor(
-        color = LightGrey /* if (darkTheme) Color.Black else Color.White */
-    )
-
     CompositionLocalProvider(LocalSpacing provides Spacing()) {
         MaterialTheme(
             colors = LightColorPalette /* if (darkTheme) DarkColorPalette else LightColorPalette */,
