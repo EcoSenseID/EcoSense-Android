@@ -89,7 +89,7 @@
     <string name="see_all">Lihat Semua</string>
     <string name="my_campaign_history">Riwayat Kampanye Saya</string>
     <string name="em_empty_campaign_history">Kamu belum pernah mengikuti kampanye apa pun. Yuk segera ikut!</string>
-    <string name="campaign_finished_at">Kampanye telah selesai pada</string>
+    <string name="campaign_finished_at">Kampanye telah diselesaikan pada</string>
     <string name="campaign_will_end_at">Kampanye akan selesai pada</string>
     <string name="completion_is_being_verified">Ketuntasan sedang diverifikasi</string>
     <string name="settings">Pengaturan</string>
@@ -170,7 +170,7 @@
     <string name="reward_form">Formulir Hadiah</string>
     <string name="email_address">Alamat Email</string>
     <string name="enter_email_address">Masukkan alamat email</string>
-    <string name="select_destination_ewallet">Pilih e-wallet tujuan</string>
+    <string name="select_preferred_ewallet">Pilih e-wallet yang diinginkan</string>
     <string name="choose_ewallet">Pilih jenis e-wallet</string>
     <string name="ewallet_number">Nomor E-Wallet</string>
     <string name="enter_ewallet_number">Masukkan nomor e-wallet terkait</string>
@@ -227,5 +227,6 @@
     <string name="my_ecorewards_empty_description">Ayo dapatkan reward-mu!</string>
     <string name="get_ready">Bersiaplah…</string>
     <string name="something_really_cool_is_coming">Sesuatu yang keren akan datang!</string>
-    <string name="format_share_text">Hai! Coba lihat ini deh %1$s</string>
+    <string name="format_share_campaign_text">Kamu harus ikut kampanye ini deh! Seru banget!\n%1$s</string>
+    <string name="format_share_campaign_accomplishment_text">Saya telah menyelesaikan kampanye ini! Ayo, sekarang giliranmu!\n%1$s</string>
 </resources>
