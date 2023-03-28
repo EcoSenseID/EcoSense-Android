@@ -219,12 +219,6 @@
     <string name="login_to_see_missions">Login to see your missions</string>
     <string name="participated">participated</string>
     <string name="campaign_ended">Campaign ended</string>
-    <string name="coming_soon">Coming soon!</string>
-    <string name="campaign_will_start_at">Campaign will start at</string>
-    <string name="placeholder_countdown">%1$d Days %2$d Hrs %3$d Mins %4$d Secs</string>
-    <string name="in_verification">In Verification</string>
-    <string name="finish_campaign">Finish Campaign</string>
-    <string name="finishing_campaign">Finishing Campaign…</string>
     <string name="resubmit">Resubmit</string>
     <string name="share_accomplishment">Share your accomplishment</string>
     <string name="rejected">Rejected</string>
@@ -237,10 +231,34 @@
     <string name="campaign_list_date_format">MMMM d, yyyy \'at\' HH:mm</string>
     <string name="question_mark" translatable="false">\?</string>
     <string name="campaign_ended_at">Campaign ended at</string>
+    <string name="cd_support">Support</string>
+    <string name="em_caption_blank">Caption can not be blank!</string>
+    <string name="coming_soon">Coming soon!</string>
+    <string name="campaign_will_start_at">Campaign will start at</string>
+    <string name="placeholder_countdown">%1$d Days %2$d Hrs %3$d Mins %4$d Secs</string>
+    <string name="in_verification">In Verification</string>
+    <string name="finish_campaign">Finish Campaign</string>
+    <string name="finishing_campaign">Finishing Campaign…</string>
     <string name="my_ecorewards_empty">You have never used your EcoPoints</string>
     <string name="my_ecorewards_empty_description">Go get your rewards!</string>
     <string name="url_ecosense_privacy_policy" translatable="false">https://ecosense.id/privacy-policy</string>
-    <string name="get_ready">Get Ready…</string>
-    <string name="something_really_cool_is_coming">Something really cool is coming!</string>
     <string name="format_share_text">Hi check this out! %1$s</string>
+    <string name="cd_reply">Reply</string>
+    <string name="cd_share">Share</string>
+    <string name="whats_happening">What\'s happening?</string>
+    <string name="em_comments">Couldn\'t load comments</string>
+    <string name="cd_add_story">Create new story</string>
+    <string name="supported_by">Supported by</string>
+    <string name="story">Story</string>
+    <string name="cd_attach_photo">Attach photo</string>
+    <string name="post">Post</string>
+    <string name="reply_to_this_story">Reply to this story</string>
+    <string name="create_a_story">Create a story</string>
+    <string name="posting">Posting…</string>
+    <string name="login_to_join_this_conversation">Login to join this conversation</string>
+    <string name="attached_photo">Attached photo</string>
+    <string name="format_share_message">Hi, check this out!\nhttps://ecosense.id/deeplinks/storydetail/%1$d</string>
+    <string name="stories_history">Stories History</string>
+    <string name="this_user_has_not_uploaded_anything">This user has not uploaded anything</string>
+    <string name="retry">Retry</string>
 </resources>
