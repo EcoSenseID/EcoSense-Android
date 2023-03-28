@@ -170,26 +170,10 @@ fun CampaignDetailScreen(
                                 .padding(horizontal = MaterialTheme.spacing.medium)
                         )
                     } else {
-                        if (campaignEndedStatus(campaign.endDate)) {
-                            campaignEnded = true
-                            ExtendedFloatingActionButton(text = {
-                                Text(
-                                    text = stringResource(R.string.campaign_ended),
-                                    style = MaterialTheme.typography.body1,
-                                    color = White,
-                                    fontWeight = FontWeight.SemiBold
-                                )
-                            },
-                                backgroundColor = SuperDarkGrey,
-                                onClick = {},
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(horizontal = MaterialTheme.spacing.medium)
-                            )
-                        } else {
-                            when (campaign.completionStatus) {
-                                CampaignCompletionStatus.IN_VERIFICATION -> {
-                                    ExtendedFloatingActionButton(text = {
+                        when (campaign.completionStatus) {
+                            CampaignCompletionStatus.IN_VERIFICATION -> {
+                                ExtendedFloatingActionButton(
+                                    text = {
                                         Text(
                                             text = stringResource(R.string.in_verification),
                                             style = MaterialTheme.typography.body1,
@@ -197,36 +181,47 @@ fun CampaignDetailScreen(
                                             fontWeight = FontWeight.SemiBold
                                         )
                                     },
-                                        backgroundColor = CustardYellow,
-                                        onClick = {},
-                                        modifier = Modifier
-                                            .fillMaxWidth()
-                                            .padding(horizontal = MaterialTheme.spacing.medium)
+                                    backgroundColor = CustardYellow,
+                                    onClick = {},
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(horizontal = MaterialTheme.spacing.medium)
+                                )
+                            }
+
+                            CampaignCompletionStatus.COMPLETED -> {
+                                GradientButton(
+                                    onClick = {
+                                        val shareText = context.getString(
+                                            R.string.format_share_campaign_accomplishment_text,
+                                            "https://ecosense.id/deeplinks/campaigndetail/$id",
+                                        )
+
+                                        Intent(Intent.ACTION_SEND).let { intent ->
+                                            intent.type =
+                                                context.getString(R.string.intent_type_plain_text)
+                                            intent.putExtra(Intent.EXTRA_TEXT, shareText)
+                                            context.startActivity(intent)
+                                        }
+                                    },
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(horizontal = MaterialTheme.spacing.medium)
+                                ) {
+                                    Text(
+                                        text = stringResource(R.string.share_accomplishment),
+                                        style = MaterialTheme.typography.body1,
+                                        color = White,
+                                        fontWeight = FontWeight.SemiBold
                                     )
                                 }
+                            }
 
-                                CampaignCompletionStatus.COMPLETED -> {
-                                    GradientButton(
-                                        onClick = {
-                                            // TODO: implement this
-                                        },
-                                        modifier = Modifier
-                                            .fillMaxWidth()
-                                            .padding(horizontal = MaterialTheme.spacing.medium)
-                                    ) {
-                                        Text(
-                                            text = stringResource(R.string.share_accomplishment),
-                                            style = MaterialTheme.typography.body1,
-                                            color = White,
-                                            fontWeight = FontWeight.SemiBold
-                                        )
-                                    }
-                                }
-
-                                CampaignCompletionStatus.REJECTED -> {
-                                    if (state.allMissionIsReadyToSend) {
-                                        if (!state.isLoadingCompleteCampaign) {
-                                            ExtendedFloatingActionButton(text = {
+                            CampaignCompletionStatus.REJECTED -> {
+                                if (state.allMissionIsReadyToSend) {
+                                    if (!state.isLoadingCompleteCampaign) {
+                                        ExtendedFloatingActionButton(
+                                            text = {
                                                 Text(
                                                     text = stringResource(R.string.resubmit),
                                                     style = MaterialTheme.typography.body1,
@@ -234,14 +229,15 @@ fun CampaignDetailScreen(
                                                     fontWeight = FontWeight.SemiBold
                                                 )
                                             },
-                                                backgroundColor = DarkBlue,
-                                                onClick = { viewModel.onCompleteCampaign(campaignId = id) },
-                                                modifier = Modifier
-                                                    .fillMaxWidth()
-                                                    .padding(horizontal = MaterialTheme.spacing.medium)
-                                            )
-                                        } else {
-                                            ExtendedFloatingActionButton(text = {
+                                            backgroundColor = DarkBlue,
+                                            onClick = { viewModel.onCompleteCampaign(campaignId = id) },
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .padding(horizontal = MaterialTheme.spacing.medium)
+                                        )
+                                    } else {
+                                        ExtendedFloatingActionButton(
+                                            text = {
                                                 Text(
                                                     text = stringResource(R.string.submitting),
                                                     style = MaterialTheme.typography.body1,
@@ -249,17 +245,35 @@ fun CampaignDetailScreen(
                                                     fontWeight = FontWeight.SemiBold
                                                 )
                                             },
-                                                backgroundColor = DarkGrey,
-                                                onClick = {},
-                                                modifier = Modifier
-                                                    .fillMaxWidth()
-                                                    .padding(horizontal = MaterialTheme.spacing.medium)
-                                            )
-                                        }
+                                            backgroundColor = DarkGrey,
+                                            onClick = {},
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .padding(horizontal = MaterialTheme.spacing.medium)
+                                        )
                                     }
                                 }
+                            }
 
-                                else -> {
+                            else -> {
+                                if (campaignEndedStatus(campaign.endDate)) {
+                                    campaignEnded = true
+                                    ExtendedFloatingActionButton(
+                                        text = {
+                                            Text(
+                                                text = stringResource(R.string.campaign_ended),
+                                                style = MaterialTheme.typography.body1,
+                                                color = White,
+                                                fontWeight = FontWeight.SemiBold
+                                            )
+                                        },
+                                        backgroundColor = SuperDarkGrey,
+                                        onClick = {},
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .padding(horizontal = MaterialTheme.spacing.medium)
+                                    )
+                                } else {
                                     if (!campaign.joined) {
                                         if (!state.isLoadingJoinCampaign) {
                                             GradientButton(
@@ -276,14 +290,15 @@ fun CampaignDetailScreen(
                                                 )
                                             }
                                         } else {
-                                            ExtendedFloatingActionButton(text = {
-                                                Text(
-                                                    text = stringResource(R.string.joining_campaign),
-                                                    style = MaterialTheme.typography.body1,
-                                                    color = White,
-                                                    fontWeight = FontWeight.SemiBold
-                                                )
-                                            },
+                                            ExtendedFloatingActionButton(
+                                                text = {
+                                                    Text(
+                                                        text = stringResource(R.string.joining_campaign),
+                                                        style = MaterialTheme.typography.body1,
+                                                        color = White,
+                                                        fontWeight = FontWeight.SemiBold
+                                                    )
+                                                },
                                                 backgroundColor = DarkGrey,
                                                 onClick = {},
                                                 modifier = Modifier
@@ -312,14 +327,15 @@ fun CampaignDetailScreen(
                                                     )
                                                 }
                                             } else {
-                                                ExtendedFloatingActionButton(text = {
-                                                    Text(
-                                                        text = stringResource(R.string.finishing_campaign),
-                                                        style = MaterialTheme.typography.body1,
-                                                        color = White,
-                                                        fontWeight = FontWeight.SemiBold
-                                                    )
-                                                },
+                                                ExtendedFloatingActionButton(
+                                                    text = {
+                                                        Text(
+                                                            text = stringResource(R.string.finishing_campaign),
+                                                            style = MaterialTheme.typography.body1,
+                                                            color = White,
+                                                            fontWeight = FontWeight.SemiBold
+                                                        )
+                                                    },
                                                     backgroundColor = DarkGrey,
                                                     onClick = {},
                                                     modifier = Modifier
@@ -851,7 +867,7 @@ fun CampaignDetailScreen(
                                 colors = ButtonDefaults.buttonColors(MaterialTheme.colors.surface),
                                 onClick = {
                                     val shareText = context.getString(
-                                        R.string.format_share_text,
+                                        R.string.format_share_campaign_text,
                                         "https://ecosense.id/deeplinks/campaigndetail/$id",
                                     )
 

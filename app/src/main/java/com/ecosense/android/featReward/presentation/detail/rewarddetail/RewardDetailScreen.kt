@@ -157,7 +157,7 @@ fun RewardDetailScreen(
                             Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
 
                             Text(
-                                text = stringResource(R.string.select_destination_ewallet),
+                                text = stringResource(R.string.select_preferred_ewallet),
                                 fontWeight = FontWeight.ExtraBold,
                                 style = MaterialTheme.typography.subtitle1,
                                 modifier = Modifier

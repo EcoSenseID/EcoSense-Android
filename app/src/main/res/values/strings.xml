@@ -183,7 +183,7 @@
     <string name="reward_form">Reward Form</string>
     <string name="email_address">Email Address</string>
     <string name="enter_email_address">Enter your email address</string>
-    <string name="select_destination_ewallet">Select the destination e-wallet</string>
+    <string name="select_preferred_ewallet">Select the preferred e-wallet</string>
     <string name="choose_ewallet">Choose your type of e-wallet</string>
     <string name="ewallet_number">E-Wallet Number</string>
     <string name="enter_ewallet_number">Enter the associated e-wallet number</string>
@@ -223,7 +223,7 @@
     <string name="share_accomplishment">Share your accomplishment</string>
     <string name="rejected">Rejected</string>
     <string name="rejected_description">You can retake the failed mission. Once you’ve done, you can resubmit.</string>
-    <string name="congrats_campaign_finished">Congratulation! You have finished this campaign!</string>
+    <string name="congrats_campaign_finished">Congratulations! You have finished this campaign!</string>
     <string name="youve_got">You\'ve got</string>
     <string name="no_active_campaign">You haven\'t joined any active campaigns yet</string>
     <string name="lets_join_one">Let\'s join one!</string>
@@ -242,6 +242,10 @@
     <string name="my_ecorewards_empty">You have never used your EcoPoints</string>
     <string name="my_ecorewards_empty_description">Go get your rewards!</string>
     <string name="url_ecosense_privacy_policy" translatable="false">https://ecosense.id/privacy-policy</string>
+    <string name="get_ready">Get Ready…</string>
+    <string name="something_really_cool_is_coming">Something really cool is coming!</string>
+    <string name="format_share_campaign_text">You should join this campaign! So exciting!\n%1$s</string>
+    <string name="format_share_campaign_accomplishment_text">I\'ve finished this campaign! Come on, now it\'s your turn!\n%1$s</string>
     <string name="format_share_text">Hi check this out! %1$s</string>
     <string name="cd_reply">Reply</string>
     <string name="cd_share">Share</string>

@@ -263,7 +263,7 @@ fun ShowItem(
             } else {
                 if (campaignEndedStatus(campaign.endDate)) {
                     Text(
-                        text = stringResource(R.string.campaign_finished_at),
+                        text = stringResource(R.string.campaign_ended_at),
                         style = MaterialTheme.typography.caption
                     )
                 } else {
