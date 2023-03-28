@@ -225,7 +225,25 @@
     <string name="campaign_ended_at">Kampanye berakhir pada</string>
     <string name="my_ecorewards_empty">Kamu belum pernah memakai EcoPoints-mu</string>
     <string name="my_ecorewards_empty_description">Ayo dapatkan reward-mu!</string>
-    <string name="get_ready">Bersiaplah…</string>
-    <string name="something_really_cool_is_coming">Sesuatu yang keren akan datang!</string>
     <string name="format_share_text">Hai! Coba lihat ini deh %1$s</string>
+    <string name="cd_support">Dukung</string>
+    <string name="cd_reply">Balas</string>
+    <string name="cd_share">Bagikan</string>
+    <string name="whats_happening">Apa yang terjadi?</string>
+    <string name="em_comments">Tidak dapat memuat komentar</string>
+    <string name="cd_add_story">Buat cerita baru</string>
+    <string name="supported_by">Didukung oleh</string>
+    <string name="story">Cerita</string>
+    <string name="cd_attach_photo">Lampirkan foto</string>
+    <string name="post">Unggah</string>
+    <string name="reply_to_this_story">Balas cerita ini</string>
+    <string name="create_a_story">Buat sebuah cerita</string>
+    <string name="em_caption_blank">Caption tidak boleh kosong!</string>
+    <string name="posting">Mengunggah…</string>
+    <string name="login_to_join_this_conversation">Masuk untuk bergabung ke percakapan ini</string>
+    <string name="attached_photo">Foto terlampir</string>
+    <string name="format_share_message">Hai, coba lihat ini! https://ecosense.id/deeplinks/storydetail/%1$d</string>
+    <string name="stories_history">Riwayat Cerita</string>
+    <string name="this_user_has_not_uploaded_anything">Pengguna ini belum pernah mengunggah apa pun</string>
+    <string name="retry">Coba lagi</string>
 </resources>
