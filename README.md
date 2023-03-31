@@ -6,6 +6,19 @@ Android application client for EcoSense.
 EcoSense is a mobile application designed to increase public awareness towards the  environment.
 We aim to amplify positive environmental actions by being a connector between campaign initiators and the society while also supporting a green lifestyle.
 
+## Instructions
+1. Clone the repository by running the following command in your terminal or Git Bash:
+  ```bash
+  git clone https://github.com/EcoSenseID/EcoSense-Android.git
+  ```
+2. Open Android Studio and click on "Open an existing Android Studio project". Navigate to the directory where you cloned the repository and select the "EcoSense-Android" folder.
+3. Wait for the Gradle build to finish. This may take a few minutes.
+4. Connect an Android device to your computer or start an emulator.
+5. In Android Studio, click on the "Run" button (the green triangle) in the toolbar. Select the device you want to run the app on and click "OK".
+6. Wait for the app to be installed and launched on your device. You should now be able to use the EcoSense app!
+
+If you encounter any errors or issues, you can refer to the "Issues" section of the repository or contact the repository's maintainer for help.
+
 ## Technologies
 
 [![Android Studio](https://img.shields.io/badge/-Android_Studio-black?style=for-the-badge&logo=androidstudio)](https://github.com/EcoSenseID?tab=repositories&language=html)
